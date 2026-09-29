@@ -1,6 +1,6 @@
 /* 몸짱소울 서비스 워커: 한 번 열어 두면 오프라인에서도 열려요.
    앱을 수정해서 다시 올릴 때는 아래 VERSION 숫자를 올려 주세요. */
-var VERSION = 'momjjang-soul-v5';
+var VERSION = 'momjjang-soul-v7';
 var SHELL = ['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 
 self.addEventListener('install', function(e){
@@ -17,7 +17,8 @@ self.addEventListener('fetch', function(e){
   var url = new URL(req.url);
   var sameOrigin = url.origin===self.location.origin;
   var isFont = /(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
-  if(!sameOrigin && !isFont) return;
+  var isFb = url.hostname==='www.gstatic.com' && url.pathname.indexOf('/firebasejs/')===0;
+  if(!sameOrigin && !isFont && !isFb) return;
   e.respondWith(
     caches.open(VERSION).then(function(cache){
       return cache.match(req, {ignoreSearch:true}).then(function(hit){

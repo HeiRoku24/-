@@ -327,6 +327,18 @@ svg.chart{width:100%; height:auto; display:block;}
 .clmsg.err{color:var(--boss); font-weight:700;}
 .cluser{font-size:14px; margin:0 0 4px;}
 .cluser b{font-family:var(--disp); font-weight:400; font-size:17px;}
+
+/* 중간보스 이름 · 단계형 업적 */
+.qtitle{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:2px 0 0;}
+.qtitle h1{margin:0;}
+.bchip{font-family:var(--disp); font-size:15px; padding:2px 12px; border-radius:999px; background:var(--soft); border:2px solid var(--boss); color:var(--boss); line-height:1.5; white-space:nowrap;}
+.bchip.god{border-color:var(--gold); color:var(--link);}
+.tiers{display:flex; gap:4px; margin-top:8px;}
+.tiers i{flex:1; height:6px; border-radius:3px; background:var(--soft); border:1px solid var(--line);}
+.tiers i.on{background:var(--gold); border-color:var(--gold);}
+.pbar{display:block; height:6px; border-radius:3px; background:var(--soft); margin-top:6px; overflow:hidden;}
+.pbar i{display:block; height:100%; background:var(--clear); border-radius:3px;}
+.ach.max{border-color:var(--clear);}
 </style>
 </head>
 <body>
@@ -603,7 +615,7 @@ function vidLink(name){
 }
 
 /* ---------- 게임 규칙 ---------- */
-var XP_SET = 10, XP_RUN = 30, XP_MEAL = 10, XP_CLEAR = 50, BOSS_WIN_XP = 150;
+var XP_SET = 10, XP_RUN = 30, XP_MEAL = 10, XP_CLEAR = 50, BOSS_WIN_XP = 150, MID_XP = 20;
 var QN = {mon:'상체 요새',tue:'하체의 숲',wed:'코어 성채',thu:'등어깨 협곡',fri:'하체·코어 던전',sat:'마왕성',sun:'회복의 신전'};
 var TITLES = [[1,'신입 모험가'],[3,'견습 러너'],[5,'홈트 전사'],[8,'코어 기사'],[12,'철인 용사'],[16,'전설의 러너']];
 function titleOf(L){var t=TITLES[0][1]; TITLES.forEach(function(x){if(L>=x[0]) t=x[1];}); return t;}
@@ -854,32 +866,22 @@ function mMino(e){
   s+=mFace(e,-52,11,-25,8,{fang:null});
   return s;
 }
-/* ===== 토 근손실의 마왕 (앙상한 마왕) ===== */
+/* ===== 토 전신짱 마왕 (전신이 튼실한 보디빌더 마왕) ===== */
 function mDemon(e){
-  var sk='#9B87BE', sd='#7A66A0', s='';
-  s+=pth('M-46,-22 Q-64,30 -42,48 L42,48 Q64,30 46,-22 Q0,-38 -46,-22 Z','#3B2C5A');
-  s+=bLimb(-7,26,-10,42,8,sk)+bLimb(7,26,10,42,8,sk)+ell(-12,45,8,4.5,OL,0)+ell(12,45,8,4.5,OL,0);
-  s+=pth('M-16,-20 Q-19,8 -11,28 L11,28 Q19,8 16,-20 Q0,-28 -16,-20 Z',sk);
-  s+='<path d="M-9,-10 Q0,-6 9,-10 M-9,-2 Q0,2 9,-2 M-8,6 Q0,10 8,6" stroke="'+sd+'" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
-  var A=e==='dead'?[[-58,-30],[58,-24]]:(e==='smug'?[[-56,-40],[60,-50]]:[[-40,20],[40,20]]);
-  [[-16,-16,A[0]],[16,-16,A[1]]].forEach(function(a){
-    s+=bLimb(a[0],a[1],a[2][0],a[2][1],6,sk)+circ(a[2][0],a[2][1],5,sk,2.2);
-  });
-  if(e==='smug'){ s+='<g transform="translate(62,-30)"><rect x="-2.5" y="-46" width="5" height="96" rx="2" fill="#5B3A28" stroke="'+OL+'" stroke-width="2.5"/>'+circ(0,-52,10,'#fff',2.6)+circ(-3.5,-53,2.5,OL,0)+circ(3.5,-53,2.5,OL,0)+'</g>'; }
-  s+=pth('M-14,-56 Q-44,-62 -38,-98 Q-24,-76 -9,-62 Z','#FFE9B8',3)+pth('M14,-56 Q44,-62 38,-98 Q24,-76 9,-62 Z','#FFE9B8',3);
-  s+=ell(0,-42,17,21,'#A794C8');
-  s+=ell(-11,-36,5,7,sd,0)+ell(11,-36,5,7,sd,0);
-  s+=pth('M-11,-62 L-11,-74 L-5,-67 L0,-77 L5,-67 L11,-74 L11,-62 Z','#F6C445',2.4);
-  if(e==='dead'){
-    [-7,7].forEach(function(x){s+='<path d="M'+(x-5)+',-52 L'+(x+5)+',-42 M'+(x+5)+',-52 L'+(x-5)+',-42" stroke="'+OL+'" stroke-width="3.5" stroke-linecap="round"/>';});
-    s+=pth('M-6,-30 Q0,-18 6,-30 Z','#3B1D2E',2.2)+ell(2,-24,3,4,'#FF8FA3',1.8);
-  }else if(e==='smug'){
-    [-7,7].forEach(function(x){s+='<path d="M'+(x-5)+',-45 Q'+x+',-54 '+(x+5)+',-45" stroke="#FF6A5B" stroke-width="3.8" fill="none" stroke-linecap="round"/>';});
-    s+=pth('M-9,-31 Q0,-20 9,-31 Z','#3B1D2E',2.2)+pth('M-6,-31 l2,4 l2,-4 M2,-31 l2,4 l2,-4','#fff',0);
-  }else{
-    [-7,7].forEach(function(x,i){s+=circ(x,-46,4.6,'#FF6A5B',2)+'<path d="M'+(x-(i?-6:6))+',-55 L'+(x+(i?-4:4))+',-51" stroke="'+OL+'" stroke-width="3" stroke-linecap="round"/>';});
-    s+='<path d="M-8,-30 L-4,-33 L0,-30 L4,-33 L8,-30" stroke="'+OL+'" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
-  }
+  var sk='#9A62C8', sd='#6C3F98', s='';
+  s+=pth('M-42,-20 Q-70,22 -48,52 L48,52 Q70,22 42,-20 Z','#3B1F5C');
+  s+=bLimb(-12,20,-16,38,17,sk)+bLimb(12,20,16,38,17,sk)+pth('M-29,38 h23 l-3,9 h-17 Z M6,38 h23 l-3,9 h-17 Z','#2B2138',2.4);
+  var A=e==='dead'?[[-62,-40,-58,-14],[62,-34,58,-10]]:(e==='smug'?[[-60,-46,-56,-16],[60,-46,56,-16]]:[[-42,22,-38,6],[42,22,38,6]]);
+  s+=mTorso(sk,sd);
+  s+=pth('M-23,13 L23,13 L21,34 L0,27 L-21,34 Z','#2B2138')+'<rect x="-23" y="11" width="46" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
+  s+=mArm(-30,-10,A[0][0],A[0][1],A[0][2],A[0][3],{f:sk,w:18,fr:9.5})+mArm(30,-10,A[1][0],A[1][1],A[1][2],A[1][3],{f:sk,w:18,fr:9.5});
+  [-1,1].forEach(function(g){ s+=circ(g*33,-15,10,'#3B1F5C',2.6)+pth('M'+(g*33-5)+',-22 L'+(g*33)+',-34 L'+(g*33+5)+',-22 Z','#F6C445',2.2); });
+  s+=pth('M-16,-58 Q-46,-58 -42,-90 Q-28,-72 -12,-62 Z','#FFE9B8',3)+pth('M16,-58 Q46,-58 42,-90 Q28,-72 12,-62 Z','#FFE9B8',3);
+  s+=ell(-24,-46,7,9,sk,2.6)+ell(24,-46,7,9,sk,2.6);
+  s+=ell(0,-46,22,21,sk);
+  s+='<path d="M13,-54 l7,7 M20,-54 l-7,7" stroke="'+OL+'" stroke-width="2" stroke-linecap="round"/>';
+  s+=mFace(e,-52,10,-35,10,{ec:'#FFB3A3',pc:OL});
+  s+='<ellipse cx="-16" cy="-39" rx="4.5" ry="3" fill="#FF8FA3" opacity=".55"/><ellipse cx="16" cy="-39" rx="4.5" ry="3" fill="#FF8FA3" opacity=".55"/>';
   return s;
 }
 /* ===== 몸짱신 (그리스·로마풍) ===== */
@@ -902,6 +904,8 @@ function godArt(o){
   s+='<ellipse cx="-19" cy="-38" rx="5" ry="3.2" fill="#FF8FA3" opacity=".6"/><ellipse cx="19" cy="-38" rx="5" ry="3.2" fill="#FF8FA3" opacity=".6"/>';
   return s;
 }
+
+function eul(n){var c=n.charCodeAt(n.length-1); return (c>=0xAC00&&c<=0xD7A3&&((c-0xAC00)%28)!==0)?'을':'를';}
 
 /* ---------- 모험 지도 일러스트 ---------- */
 var MW=360, MH=1370;
@@ -1032,7 +1036,7 @@ function mapPath(pts,upto){
   return d;
 }
 /* st: [{kind:'ok'|'star'|'draw'|'lose'|null}] x7, t: 오늘 스테이지 번호 */
-function mapSvg(st,t){
+function mapSvg(st,t,dead){
   var pts=[[240,8]].concat(MPOS.map(function(p,i){return [p[0],p[1]+(i===6?20:36)];}));
   var s='<svg class="mapsvg" viewBox="0 0 '+MW+' '+MH+'" aria-hidden="true">';
   s+='<rect width="'+MW+'" height="'+MH+'" fill="#BFE3B4"/>';
@@ -1051,7 +1055,8 @@ function mapSvg(st,t){
     if(i===t) s+='<ellipse cx="'+cx+'" cy="'+(cy+42)+'" rx="'+(i===5?74:60)+'" ry="12" fill="rgba(246,196,69,.4)" stroke="#F6C445" stroke-width="3" stroke-dasharray="7 5" class="a-twk"/>';
     s+='<g transform="translate('+cx+','+cy+')">'+LMS[i]()+'</g>';
     var bsc=[.5,.4,.5,.5,.5,.56,.5][i], bx=cx+(cx<180?-72:70)*(i===5?1.12:1);
-    s+='<g transform="translate('+bx+','+(cy+42-46*bsc)+') scale('+bsc+')">'+bossArtBy(BKEY[i],'idle')+'</g>';
+    var dd=!!(dead&&dead[i]);
+    s+='<g transform="translate('+bx+','+(cy+42-46*bsc+(dd?5:0))+') '+(dd?'rotate(18) ':'')+'scale('+bsc+')">'+bossArtBy(BKEY[i],dd?'dead':'idle')+'</g>';
     if(st[i]) s+=mBadge(st[i],cx+(i===5?60:44),cy-(i===5?70:36));
   }
   if(t>=0&&t<7){
@@ -1064,12 +1069,12 @@ function mapSvg(st,t){
 
 /* ===== 장면 그림 (승리·패배·가호·설명창) ===== */
 var MONS={
-  ogre:{sc:.76,n:'오우거',win:'우억!',lose:'크하하!',bg:'#D9E4F5',gd:'#B4C6E3'},
-  spider:{sc:.68,n:'거미괴물',win:'찌익!',lose:'키키킥!',bg:'#D3F0D0',gd:'#A8D9A2'},
-  golem:{sc:.82,n:'골렘',win:'와르르!',lose:'쿵쿵!',bg:'#F5E8CE',gd:'#E6CF9F'},
-  wolf:{sc:.8,n:'워울프',win:'깨갱!',lose:'아우~!',bg:'#F6DDC8',gd:'#E6BB98'},
-  mino:{sc:.88,n:'미노타우르스',win:'음머어!',lose:'음머~!',bg:'#DAD6F0',gd:'#B9B2DE'},
-  demon:{sc:.86,n:'근손실의 마왕',win:'으아악!',lose:'크크크…',bg:'#E4D3F2',gd:'#C3A8DD'}
+  ogre:{sc:.76,n:'상체짱 오우거',win:'우억!',lose:'크하하!',bg:'#D9E4F5',gd:'#B4C6E3'},
+  spider:{sc:.68,n:'하체짱 왕거미',win:'찌익!',lose:'키키킥!',bg:'#D3F0D0',gd:'#A8D9A2'},
+  golem:{sc:.82,n:'코어짱 골렘',win:'와르르!',lose:'쿵쿵!',bg:'#F5E8CE',gd:'#E6CF9F'},
+  wolf:{sc:.8,n:'어깨짱 워울프',win:'깨갱!',lose:'아우~!',bg:'#F6DDC8',gd:'#E6BB98'},
+  mino:{sc:.88,n:'벅지짱 미노타우르스',win:'음머어!',lose:'음머~!',bg:'#DAD6F0',gd:'#B9B2DE'},
+  demon:{sc:.86,n:'전신짱 마왕',win:'으아악!',lose:'크하하!',bg:'#E4D3F2',gd:'#C3A8DD'}
 };
 function monArt(key,e){return ({ogre:mOgre,spider:mSpider,golem:mGolem,wolf:mWolf,mino:mMino,demon:mDemon})[key](e);}
 function sceneFrame(bg,gd,inner,label,tint){
@@ -1089,7 +1094,7 @@ function battleScene(key,res){
     s+='<g transform="translate(88,124)"><g class="a-bob">'+heroPose('cheer')+'</g></g>';
     s+='<g class="a-twk">'+bStar(40,42,7,'#F6C445')+bStar(140,90,5,'#F6C445')+'</g>';
     s+='<circle cx="30" cy="104" r="4" fill="#FF6A5B"/><circle cx="168" cy="72" r="4" fill="#5CC8FF"/><circle cx="60" cy="24" r="3.5" fill="#FF6A5B"/><circle cx="296" cy="40" r="3.5" fill="#5CC8FF"/>';
-    return sceneFrame(M.bg,M.gd,s,'몸짱용사가 '+M.n+'을(를) 쓰러뜨리고 환호하는 그림');
+    return sceneFrame(M.bg,M.gd,s,'몸짱용사가 '+M.n+eul(M.n)+' 쓰러뜨리고 환호하는 그림');
   }
   s+='<ellipse cx="96" cy="178" rx="54" ry="7" fill="#000" opacity=".15"/><ellipse cx="238" cy="176" rx="50" ry="7" fill="#000" opacity=".15"/>';
   s+='<g transform="translate(96,158) rotate(-90)">'+heroPose('ko')+'</g>';
@@ -1148,7 +1153,7 @@ function introScene(n){
     s+=bubble(206,10,100,44,'화이팅!',214);
     s+='<g class="a-twk">'+bStar(50,60,8,'#F6C445')+bStar(270,110,7,'#FF6A5B')+bStar(80,130,6,'#46E0A5')+'</g>';
   }else if(n===3){
-    lb='몸짱용사와 근손실의 마왕이 대치하는 그림'; bg='#C9BFE0'; gd='#A99AD0';
+    lb='몸짱용사와 전신짱 마왕이 대치하는 그림'; bg='#C9BFE0'; gd='#A99AD0';
     s+='<g fill="#5B4B7A" opacity=".8"><ellipse cx="70" cy="34" rx="56" ry="18"/><ellipse cx="240" cy="28" rx="66" ry="20"/></g>';
     s+='<polyline points="164,30 150,80 170,80 152,128" fill="none" stroke="#FFD95E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><polyline points="164,30 150,80 170,80 152,128" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
     s+='<ellipse cx="80" cy="176" rx="34" ry="6" fill="#000" opacity=".18"/><ellipse cx="244" cy="176" rx="50" ry="7" fill="#000" opacity=".18"/>';
@@ -1176,7 +1181,7 @@ function introScene(n){
 }
 
 /* ---------- 결과 판정 (중간보스 · 마왕 · 몸짱신) ---------- */
-var BOSSES={mon:{k:'ogre',n:'오우거'},tue:{k:'spider',n:'거미괴물'},wed:{k:'golem',n:'골렘'},thu:{k:'wolf',n:'워울프'},fri:{k:'mino',n:'미노타우르스'},sat:{k:'demon',n:'근손실의 마왕'}};
+var BOSSES={mon:{k:'ogre',n:'상체짱 오우거'},tue:{k:'spider',n:'하체짱 왕거미'},wed:{k:'golem',n:'코어짱 골렘'},thu:{k:'wolf',n:'어깨짱 워울프'},fri:{k:'mino',n:'벅지짱 미노타우르스'},sat:{k:'demon',n:'전신짱 마왕'}};
 var SAT_GOAL=1000;
 function weekdayXP(d){
   var mon=new Date(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7)), t=0, i;
@@ -1206,11 +1211,11 @@ function resultPopup(d,r){
   var dk=DK[d.getDay()], B=BOSSES[dk];
   if(dk==='sun') return {k:'BLESSING',t:'몸짱신의 가호',b:godScene()+'<p class="bnote">용사는 몸짱신의 가호를 받았습니다</p>',mode:'win'};
   if(r.res==='win'){
-    return {k:'BOSS DEFEATED',t:dk==='sat'?'근손실의 마왕 토벌!':B.n+' 토벌 완료!',
-      b:battleScene(B.k,'win')+'<p class="bnote">'+(dk==='sat'?'월~금 누적 '+r.xp+' XP로 마왕성을 돌파! 마왕을 쓰러뜨렸어요. 승리 보너스 +150 XP':'몸짱용사가 '+B.n+'을(를) 쓰러뜨렸어요!')+'</p>',mode:'win'};
+    return {k:'BOSS DEFEATED',t:dk==='sat'?B.n+' 토벌!':B.n+' 토벌 완료!',
+      b:battleScene(B.k,'win')+'<p class="bnote">'+(dk==='sat'?'월~금 누적 '+r.xp+' XP로 마왕성을 돌파! '+B.n+eul(B.n)+' 쓰러뜨렸어요. 승리 보너스 +150 XP':'몸짱용사가 '+B.n+eul(B.n)+' 쓰러뜨렸어요! 토벌 보너스 +'+MID_XP+' XP')+'</p>',mode:'win'};
   }
   var why;
-  if(dk==='sat') why=(r.why==='ended')?'마왕성 메인 퀘스트를 다 채우지 못하고 모험을 마쳤어요. 마왕에게 패배했어요...':'월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에 못 미쳐 마왕의 저주에 걸렸어요...';
+  if(dk==='sat') why=(r.why==='ended')?'마왕성 메인 퀘스트를 다 채우지 못하고 모험을 마쳤어요. '+B.n+'에게 패배했어요...':'월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에 못 미쳐 마왕의 저주에 걸렸어요...';
   else why='메인 퀘스트를 다 채우지 못하고 모험을 마쳐서 '+B.n+'에게 졌어요...';
   return {k:'DEFEAT',t:dk==='sat'?'패배...':'토벌 실패...',b:battleScene(B.k,'lose')+'<p class="bnote">'+why+'</p>',mode:'lose'};
 }
@@ -1283,7 +1288,7 @@ function dayXP(k){
   var d=parse(k), xp=0;
   idsFor(DK[d.getDay()]).forEach(function(id){ if(L.done[id]) xp += (id==='run'?XP_RUN:XP_SET); });
   if(L.diet){ if(L.diet.lunch) xp+=XP_MEAL; if(L.diet.post) xp+=XP_MEAL; if(L.diet.water) xp+=XP_MEAL; }
-  if(isDone(d)){ xp+=XP_CLEAR; if(DK[d.getDay()]==='sat' && satWin(d)) xp+=BOSS_WIN_XP; }
+  if(isDone(d)){ xp+=XP_CLEAR; var dkk=DK[d.getDay()]; if(dkk==='sat'){ if(satWin(d)) xp+=BOSS_WIN_XP; } else if(dkk!=='sun'){ xp+=MID_XP; } }
   return xp;
 }
 function totalXP(){var t=0; Object.keys(S.log).forEach(function(k){t+=dayXP(k);}); return t;}
@@ -1299,14 +1304,6 @@ function bestStreak(){
 }
 var ACH = [
   {id:'first',n:'첫 클리어',d:'하루 퀘스트를 처음으로 모두 클리어',t:function(c){return c.days>=1;}},
-  {id:'s3',n:'3일 연속',d:'3일 연속으로 클리어',t:function(c){return c.best>=3;}},
-  {id:'s7',n:'일주일 개근',d:'7일 연속으로 클리어',t:function(c){return c.best>=7;}},
-  {id:'boss',n:'마왕 토벌',d:'근손실의 마왕을 토벌 (마왕성 승리)',b:'demon',t:function(c){return c.boss>=1;}},
-  {id:'k_mon',n:'오우거 사냥꾼',d:'월요일 오우거를 처음 토벌',b:'ogre',t:function(c){return c.kills.mon>=1;}},
-  {id:'k_tue',n:'거미괴물 소탕',d:'화요일 거미괴물을 처음 토벌',b:'spider',t:function(c){return c.kills.tue>=1;}},
-  {id:'k_wed',n:'골렘 파괴자',d:'수요일 골렘을 처음 토벌',b:'golem',t:function(c){return c.kills.wed>=1;}},
-  {id:'k_thu',n:'워울프 사냥꾼',d:'목요일 워울프를 처음 토벌',b:'wolf',t:function(c){return c.kills.thu>=1;}},
-  {id:'k_fri',n:'미노타우르스 정복',d:'금요일 미노타우르스를 처음 토벌',b:'mino',t:function(c){return c.kills.fri>=1;}},
   {id:'all5',n:'중간보스 5종 토벌',d:'다섯 중간보스를 모두 한 번씩 토벌',t:function(c){var k=c.kills;return k.mon>=1&&k.tue>=1&&k.wed>=1&&k.thu>=1&&k.fri>=1;}},
   {id:'week5',n:'평일 전승',d:'한 주의 월~금 중간보스를 모두 토벌',t:function(c){return c.weekAll;}},
   {id:'kill10',n:'토벌 10회',d:'중간보스를 누적 10회 토벌',t:function(c){return c.killTotal>=10;}},
@@ -1319,6 +1316,32 @@ var ACH = [
   {id:'d14',n:'14일 클리어',d:'퀘스트를 14일 클리어',t:function(c){return c.days>=14;}},
   {id:'w3',n:'몸 기록 3회',d:'체중을 3번 기록',t:function(c){return c.weights>=3;}}
 ];
+/* 단계형 업적: 한 칸에서 다음 목표가 순서대로 나와요 */
+var BSTEPS=[1,5,10,30,50,100];
+function bossChain(id,key,dk,nm){
+  return {id:id,b:key,steps:BSTEPS,unit:'회',count:function(c){return dk==='sat'?c.boss:c.kills[dk];},name:function(n){return nm+' 토벌 '+n+'회';}};
+}
+var CHAINS=[
+  {id:'streak',b:null,steps:[3,7,30,100,300,365],unit:'일',count:function(c){return c.best;},
+   name:function(n){return ({3:'3일 연속 클리어',7:'일주일 개근',30:'한 달 개근',100:'100일 개근',300:'300일 개근',365:'1년 개근'})[n];}},
+  bossChain('c_demon','demon','sat','전신짱 마왕'),
+  bossChain('c_mon','ogre','mon','상체짱 오우거'),
+  bossChain('c_tue','spider','tue','하체짱 왕거미'),
+  bossChain('c_wed','golem','wed','코어짱 골렘'),
+  bossChain('c_thu','wolf','thu','어깨짱 워울프'),
+  bossChain('c_fri','mino','fri','벅지짱 미노타우르스')
+];
+function achState(c){
+  var out=[];
+  CHAINS.forEach(function(ch){
+    var cur=ch.count(c), done=0;
+    ch.steps.forEach(function(st){ if(cur>=st) done++; });
+    var all=(done===ch.steps.length);
+    out.push({kind:'chain',ch:ch,cur:cur,done:done,all:all,next:all?ch.steps[ch.steps.length-1]:ch.steps[done],total:ch.steps.length});
+  });
+  ACH.forEach(function(a){ out.push({kind:'one',a:a,on:!!a.t(c)}); });
+  return out;
+}
 function gstats(){
   var ks=clearedKeys(), sets=0, runs=0, boss=0;
   Object.keys(S.log).forEach(function(k){
@@ -1337,7 +1360,12 @@ function gstats(){
   return {days:ks.length,best:bestStreak(),sets:sets,runs:runs,boss:boss,kills:kills,killTotal:killTotal,weekAll:weekAll,bless:bless,km:kmSum(),lv:lvInfo(totalXP()).L,
           weights:S.body.filter(function(b){return b.weight!=null;}).length};
 }
-function unlocked(){var c=gstats(), o={}; ACH.forEach(function(a){ if(a.t(c)) o[a.id]=1; }); return o;}
+function unlocked(){
+  var c=gstats(), o={};
+  ACH.forEach(function(a){ if(a.t(c)) o[a.id]=a.n; });
+  CHAINS.forEach(function(ch){ var cur=ch.count(c); ch.steps.forEach(function(st){ if(cur>=st) o[ch.id+':'+st]=ch.name(st); }); });
+  return o;
+}
 function snap(){var xp=totalXP(); return {xp:xp, lv:lvInfo(xp).L, ach:unlocked(), done:isDone(sel)};}
 
 /* ---------- 화면 ---------- */
@@ -1388,10 +1416,10 @@ function viewToday(){
       '<div class="xpbar big" aria-hidden="true"><i style="width:'+wp+'%"></i></div>'+
       '<p>'+SAT_GOAL+' XP 이상이면 마왕성에서 승리할 수 있어요 (+150 XP 보너스). 못 미치거나 오늘 메인 퀘스트를 못 채우고 모험을 마치면 패배해요.</p></div>';
   }
-  var maxXp = XP_RUN+(c.total-1)*XP_SET+3*XP_MEAL+XP_CLEAR+(p.circuit?BOSS_WIN_XP:0);
+  var maxXp = XP_RUN+(c.total-1)*XP_SET+3*XP_MEAL+XP_CLEAR+(p.circuit?BOSS_WIN_XP:(p.rest?0:MID_XP));
   var h='<p class="eyebrow">'+longDate(d)+(isToday?' · 오늘':'')+'</p>'+hud();
   h+='<section class="quest'+(p.circuit?' boss':'')+(rs?' res r-'+rs.res:'')+'">'+
-    '<div class="qtop"><div class="qtext"><p class="qk">'+(p.circuit?'보스전':(p.rest?'회복의 신전':'오늘의 퀘스트'))+(rs?'<span class="stamp r-'+rs.res+'">'+resLabel(dk,rs.res)+'</span>':'')+'</p><h1>'+QN[dk]+'</h1>'+
+    '<div class="qtop"><div class="qtext"><p class="qk">'+(p.circuit?'보스전':(p.rest?'회복의 신전':'오늘의 퀘스트'))+(rs?'<span class="stamp r-'+rs.res+'">'+resLabel(dk,rs.res)+'</span>':'')+'</p><div class="qtitle"><h1>'+QN[dk]+'</h1><span class="bchip'+(dk==='sun'?' god':'')+'">'+(BOSSES[dk]?BOSSES[dk].n:'몸짱신')+'</span></div>'+
     '<p class="qs">'+p.theme+' · <b>'+weekNo()+'주차</b> · '+stageText(st)+'</p></div></div>'+lmIcon(ORDER.indexOf(dk))+
     '<div class="segs" role="progressbar" aria-label="퀘스트 진행" aria-valuemin="0" aria-valuemax="'+c.total+'" aria-valuenow="'+c.done+'">'+
     ids.map(function(id){return '<i'+(L.done[id]?' class="on"':'')+'></i>';}).join('')+'</div>'+
@@ -1447,7 +1475,7 @@ function viewToday(){
 }
 
 function viewWeek(){
-  var ws=weekStart(), h='', doneDays=0, wxp=0, i, d, st=[], btn='', t=(TODAY.getDay()+6)%7;
+  var ws=weekStart(), h='', doneDays=0, wxp=0, i, d, st=[], dead=[], btn='', t=(TODAY.getDay()+6)%7;
   for(i=0;i<7;i++){ d=addDays(ws,i); if(isDone(d)) doneDays++; wxp+=dayXP(fmt(d)); }
   h+='<p class="eyebrow">이번 주</p>'+hud()+'<h1 class="ph">모험 지도</h1>';
   h+='<div class="stats"><div class="stat"><b>'+doneDays+' / 7</b><span>클리어한 스테이지</span></div>'+
@@ -1456,6 +1484,7 @@ function viewWeek(){
     d=addDays(ws,i);
     var dk=ORDER[i], p=PLAN[dk], c=count(d), pct=Math.round(c.done*100/c.total), rs=dayResult(d), isT=(i===t);
     st.push(rs?(rs.res==='lose'?'lose':((dk==='sat'||rs.res==='bless')?'star':'ok')):null);
+    dead.push(!!(rs&&rs.res==='win'&&dk!=='sun'));
     var stat=rs?resLabel(dk,rs.res):pct+'%';
     var cls='stg'+((rs&&rs.res==='win')?' clr':'')+((rs&&rs.res==='lose')?' lose':'')+((rs&&rs.res==='bless')?' draw':'')+(isT?' now':'')+(p.circuit?' boss':'');
     var w=(i===5?184:144), hh=(i===5?218:158), top=MPOS[i][1]-(i===5?122:62);
@@ -1463,7 +1492,7 @@ function viewWeek(){
       'aria-label="'+QN[dk]+', '+p.k+'요일 '+(d.getMonth()+1)+'/'+d.getDate()+', '+stat+(isT?', 오늘':'')+'">'+
       '<span class="plate"><b>'+QN[dk]+'</b><small>'+p.k+' '+(d.getMonth()+1)+'/'+d.getDate()+' · '+stat+(isT?' · 오늘':'')+'</small></span></button>';
   }
-  h+='<div class="gmap">'+mapSvg(st,t)+btn+'</div><p class="note">스테이지를 누르면 그날의 퀘스트가 열려요.</p>';
+  h+='<div class="gmap">'+mapSvg(st,t,dead)+btn+'</div><p class="note">스테이지를 누르면 그날의 퀘스트가 열려요.</p>';
   return h;
 }
 
@@ -1593,11 +1622,21 @@ function achIcon(key,on){
 }
 function viewLog(){
   var h='<p class="eyebrow">내 기록</p>'+hud()+'<h1 class="ph">기록</h1>';
-  var un=unlocked(), nUn=Object.keys(un).length;
-  h+='<h2>업적 <span class="cnt">'+nUn+' / '+ACH.length+'</span></h2><div class="achs">';
-  ACH.forEach(function(a){
-    var on=!!un[a.id];
-    h+='<div class="ach'+(on?'':' lock')+'"><span class="ai'+(a.b?' bimg':'')+'" aria-hidden="true">'+(a.b?achIcon(a.b,on):(on?'★':'?'))+'</span><b>'+a.n+'</b><small>'+a.d+'</small></div>';
+  var stt=achState(gstats()), doneN=0, totalN=0;
+  stt.forEach(function(x){ if(x.kind==='one'){ totalN++; if(x.on) doneN++; } else { totalN+=x.total; doneN+=x.done; } });
+  h+='<h2>업적 <span class="cnt">'+doneN+' / '+totalN+'</span></h2><div class="achs">';
+  stt.forEach(function(x){
+    if(x.kind==='one'){
+      var a2=x.a;
+      h+='<div class="ach'+(x.on?'':' lock')+'"><span class="ai'+(a2.b?' bimg':'')+'" aria-hidden="true">'+(a2.b?achIcon(a2.b,x.on):(x.on?'★':'?'))+'</span><b>'+a2.n+'</b><small>'+a2.d+'</small></div>';
+    }else{
+      var ch=x.ch, has=x.done>0, pc=x.all?100:Math.min(100,Math.round(x.cur*100/x.next)), dots='', i;
+      for(i=0;i<x.total;i++){ dots+='<i'+(i<x.done?' class="on"':'')+'></i>'; }
+      h+='<div class="ach chain'+(has?'':' lock')+(x.all?' max':'')+'"><span class="ai'+(ch.b?' bimg':'')+'" aria-hidden="true">'+(ch.b?achIcon(ch.b,has):(has?'★':'?'))+'</span>'+
+         '<b>'+ch.name(x.next)+'</b><small>'+(x.all?'모든 단계 달성!':(x.cur+' / '+x.next+ch.unit))+'</small>'+
+         '<span class="tiers" aria-label="'+x.done+'단계 달성, 전체 '+x.total+'단계">'+dots+'</span>'+
+         '<span class="pbar" aria-hidden="true"><i style="width:'+pc+'%"></i></span></div>';
+    }
   });
   h+='</div>';
   var ke=kmEntries(), tot=kmSum(), ws0=weekStart(), wk=kmSum(fmt(ws0),fmt(addDays(ws0,6))), ym=fmt(TODAY).slice(0,7);
@@ -1734,7 +1773,7 @@ function xpBarHtml(){
 /* 행동 후 보상 처리 */
 function afterAction(before,k){
   var a=snap(), gain=a.xp-before.xp, L=rd(k), d=parse(k), dk=DK[d.getDay()];
-  var newAch=ACH.filter(function(x){return a.ach[x.id] && !before.ach[x.id];});
+  var newAch=Object.keys(a.ach).filter(function(id){return !before.ach[id];}).map(function(id){return {n:a.ach[id]};});
   var justClear=a.done && !before.done && !L.cleared;
   var lvUp=a.lv>before.lv;
   if(justClear){wr(k).cleared=true; save();}
@@ -1879,7 +1918,7 @@ var askEl=document.getElementById('ask'), askYes=document.getElementById('askyes
 askYes.addEventListener('click',function(){askEl.hidden=true; endAdventure();});
 askNo.addEventListener('click',function(){askEl.hidden=true;});
 var INTRO_TXT=[
-  "당신은 몸짱용사입니다. 각 모험지의 적들을 물리치며 '근손실의 마왕'을 토벌할 힘을 기르십시오.",
+  "당신은 몸짱용사입니다. 각 모험지의 적들을 물리치며 '전신짱 마왕'을 토벌할 힘을 기르십시오.",
   "매일 모험지를 돌며 퀘스트를 수행하고 중간보스를 토벌하십시오. 퀘스트 완료시 상응하는 경험치를 획득할 수 있습니다.",
   "하루의 퀘스트 진행은 하단의 오늘의 모험 종료 버튼을 눌러 종료할 수 있습니다. 이 경우 오늘의 퀘스트 사항이 저장되고 기록되며 수정불가해지니 신중히 눌러주세요.",
   "평일 5일간의 퀘스트 진행으로 누적 1000XP 이상 획득 시 마왕성에 도전할 수 있습니다. 하지만 1000XP 미만 획득 시에는 마왕의 저주에 걸려 패배하게 됩니다.",

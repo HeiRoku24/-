@@ -394,16 +394,16 @@ svg.chart{width:100%; height:auto; display:block;}
 .divider{height:0; margin:6px 0;}
 
 /* 시작화면 */
-#title{position:fixed; inset:0; z-index:90; overflow:hidden; cursor:pointer; user-select:none; -webkit-user-select:none; touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+#title{--lift:clamp(0px,calc((100vh - 640px) * .45),140px); position:fixed; inset:0; z-index:90; overflow:hidden; cursor:pointer; user-select:none; -webkit-user-select:none; touch-action:manipulation; -webkit-tap-highlight-color:transparent;
   background:linear-gradient(var(--sk1),var(--sk2) 70%); color:#fff;}
 #title[hidden]{display:none;}
 #title:focus-visible{outline:none;}
 #title.p-sunset{background:linear-gradient(var(--sk1),var(--sk3) 45%,var(--sk2) 72%);}
 .ts-l{position:absolute; left:0; background-repeat:repeat-x; will-change:transform;}
-.ts-cl{bottom:330px; height:150px; width:calc(100% + 560px); background-size:560px 150px; animation:tsS1 90s linear infinite;}
-.ts-mt{bottom:150px; height:210px; width:calc(100% + 640px); background-size:640px 210px; animation:tsS2 70s linear infinite;}
-.ts-hl{bottom:96px; height:150px; width:calc(100% + 420px); background-size:420px 150px; animation:tsS3 26s linear infinite;}
-.ts-rd{bottom:0; height:120px; width:calc(100% + 300px); background-size:300px 120px; animation:tsS4 6s linear infinite;}
+.ts-cl{bottom:calc(330px + var(--lift)); height:150px; width:calc(100% + 560px); background-size:560px 150px; animation:tsS1 90s linear infinite;}
+.ts-mt{bottom:calc(150px + var(--lift)); height:210px; width:calc(100% + 640px); background-size:640px 210px; animation:tsS2 70s linear infinite;}
+.ts-hl{bottom:calc(96px + var(--lift)); height:150px; width:calc(100% + 420px); background-size:420px 150px; animation:tsS3 26s linear infinite;}
+.ts-rd{bottom:0; height:calc(120px + var(--lift)); width:calc(100% + 300px); background-size:300px 120px; background-position:0 0; background-color:#E7C38A; animation:tsS4 6s linear infinite;}
 @keyframes tsS1{to{transform:translate3d(-560px,0,0);}}
 @keyframes tsS2{to{transform:translate3d(-640px,0,0);}}
 @keyframes tsS3{to{transform:translate3d(-420px,0,0);}}
@@ -411,25 +411,25 @@ svg.chart{width:100%; height:auto; display:block;}
 .ts-mt,.ts-hl,.ts-rd,.ts-dest{filter:var(--tsf,none);}
 .ts-orb{position:absolute; border-radius:50%;}
 .ts-stars{position:absolute; inset:0 0 40% 0; width:100%; height:60%;}
-.ts-dest{position:absolute; right:3%; bottom:196px; width:160px; text-align:center;}
+.ts-dest{position:absolute; right:3%; bottom:calc(196px + var(--lift)); width:160px; text-align:center;}
 .ts-dest svg{display:block; width:100%; height:auto;}
 .ts-plate{display:inline-block; margin-bottom:4px; background:#FFFFFF; color:#2B2138; border:2px solid #2B2138; border-radius:12px; padding:1px 10px 3px; box-shadow:0 3px 0 #2B2138; line-height:1.25;}
 .ts-plate small{display:block; font-size:11px; color:#6B5F7A;}
 .ts-plate b{display:block; font-family:var(--disp); font-weight:400; font-size:16px;}
-.ts-hero{position:absolute; left:50%; bottom:58px; width:156px; margin-left:-92px;}
+.ts-hero{position:absolute; left:50%; bottom:calc(58px + var(--lift)); width:156px; margin-left:-92px;}
 .ts-hero svg{display:block; width:100%; height:auto; overflow:visible;}
 .wf{visibility:hidden; animation:wf .72s linear infinite both;}
 @keyframes wf{0%{visibility:visible;}12.5%{visibility:hidden;}100%{visibility:hidden;}}
 .ts-dust{animation:dust .72s linear infinite; opacity:0;}
 @keyframes dust{0%{transform:translate(0,0) scale(.5); opacity:.55;}100%{transform:translate(-26px,-6px) scale(1.4); opacity:0;}}
 .ts-cheer{display:none;}
-.ts-logo{position:absolute; left:0; right:0; top:calc(8vh + env(safe-area-inset-top,0px)); text-align:center; animation:tsDrop .8s cubic-bezier(.3,1.5,.5,1) both;}
+.ts-logo{position:absolute; left:0; right:0; top:calc(12vh + env(safe-area-inset-top,0px)); text-align:center; animation:tsDrop .8s cubic-bezier(.3,1.5,.5,1) both;}
 .ts-logo svg{display:block; width:min(86%,400px); height:auto; margin:0 auto;}
 .ts-sub{display:inline-block; margin-top:2px; font-family:var(--disp); font-size:18px; letter-spacing:.04em; background:#2B2138; color:#FFF3B0; padding:2px 16px 3px; border-radius:999px;}
 @keyframes tsDrop{from{transform:translateY(-40px); opacity:0;}to{transform:none; opacity:1;}}
 .ts-info{position:absolute; top:calc(12px + env(safe-area-inset-top,0px)); font-size:13px; font-weight:700; background:rgba(20,14,34,.35); padding:2px 10px; border-radius:999px;}
 .ts-day{left:14px;} .ts-ver{right:14px; font-weight:500;}
-.ts-tap{position:absolute; left:0; right:0; bottom:calc(16px + env(safe-area-inset-bottom,0px)); text-align:center; font-family:var(--disp); font-size:21px; color:#fff;
+.ts-tap{position:absolute; left:0; right:0; bottom:calc(16px + var(--lift) * .55 + env(safe-area-inset-bottom,0px)); text-align:center; font-family:var(--disp); font-size:21px; color:#fff;
   text-shadow:0 2px 0 #2B2138,0 -2px 0 #2B2138,2px 0 0 #2B2138,-2px 0 0 #2B2138; animation:tsTap 1.6s ease-in-out 1s infinite both;}
 @keyframes tsTap{0%,100%{opacity:1;}50%{opacity:.35;}}
 #title.go .ts-l,#title.go .ts-dust{animation-play-state:paused;}
@@ -748,8 +748,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.15', APP_DATE='2026-10-01', showChg=false;
+var APP_VER='1.16', APP_DATE='2026-10-02', showChg=false;
 var CHANGES=[
+  ['1.16','시작화면 배치 조정(제목 아래로, 용사와 배경 위로), 앱 정보에서 업데이트 내역 버튼 제거'],
   ['1.15','새 버전을 올리면 앱을 다시 열 때 바로 반영되도록 개선'],
   ['1.14','시작화면 추가: 걸어가는 몸짱용사(입은 장비 그대로), 시간대별 하늘, 오늘의 목적지 예고, 터치 연출, 설정에서 켜고 끄기'],
   ['1.13','업적 페이지를 "몸짱 일지"로 바꾸고 달린 거리·체중 기록을 옮김'],
@@ -2007,9 +2008,7 @@ function viewHome(){
     '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="title-show">시작화면 보기</button></div>'+
     '<button type="button" class="ghost" data-a="intro" style="margin-right:8px">시작 안내 다시 보기</button>'+
     '<button type="button" class="ghost'+(armed?' warn':'')+'" data-a="reset">'+(armed?'정말 모든 기록 지우기':'모든 기록 초기화')+'</button></div>';
-  h+='<h2>앱 정보</h2><div class="card" style="padding:12px 16px 14px"><p class="ver"><b>몸짱소울</b> 버전 <span class="vnum">'+APP_VER+'</span> <small>('+APP_DATE+')</small></p>'+
-     '<button type="button" class="ghost" data-a="chg">업데이트 내역 '+(showChg?'접기':'보기')+'</button>';
-  if(showChg){ h+='<ul class="chg">'+CHANGES.map(function(c){return '<li><b>'+c[0]+'</b> '+c[1]+'</li>';}).join('')+'</ul>'; }
+  h+='<h2>앱 정보</h2><div class="card" style="padding:12px 16px 14px"><p class="ver" style="margin:0"><b>몸짱소울</b> 버전 <span class="vnum">'+APP_VER+'</span></p>';
   h+='</div>';
   return h;
 }
@@ -2548,13 +2547,13 @@ function tsSky(per){
     var st='<svg class="ts-stars" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">', k, pts=[[8,10],[18,26],[27,6],[36,18],[47,9],[58,28],[66,12],[74,22],[86,7],[93,30],[12,40],[40,36],[80,42],[52,46],[22,52]];
     for(k=0;k<pts.length;k++) st+='<circle cx="'+pts[k][0]+'" cy="'+pts[k][1]+'" r=".45" fill="#FFF8D6"'+(k%3===0?' class="a-twk" style="animation-delay:-'+(k*.3)+'s"':'')+'/>';
     s+=st+'</svg>';
-    s+='<div class="ts-orb" style="right:14%; top:24%; width:52px; height:52px; background:#FFF3C4; box-shadow:0 0 0 10px rgba(255,243,196,.12),0 0 40px rgba(255,243,196,.5);"><span style="position:absolute; right:-8px; top:-6px; width:46px; height:46px; border-radius:50%; background:#0F1C45;"></span></div>';
+    s+='<div class="ts-orb" style="right:14%; bottom:calc(430px + var(--lift)); width:52px; height:52px; background:#FFF3C4; box-shadow:0 0 0 10px rgba(255,243,196,.12),0 0 40px rgba(255,243,196,.5);"><span style="position:absolute; right:-8px; top:-6px; width:46px; height:46px; border-radius:50%; background:#0F1C45;"></span></div>';
   }else if(per==='sunset'){
-    s+='<div class="ts-orb" style="left:16%; bottom:300px; width:96px; height:96px; background:#FF8A4C; box-shadow:0 0 70px rgba(255,150,80,.75);"></div>';
+    s+='<div class="ts-orb" style="left:16%; bottom:calc(300px + var(--lift)); width:96px; height:96px; background:#FF8A4C; box-shadow:0 0 70px rgba(255,150,80,.75);"></div>';
   }else if(per==='morning'){
-    s+='<div class="ts-orb" style="left:12%; top:30%; width:62px; height:62px; background:#FFD86B; border:3px solid '+OL+'; box-shadow:0 0 48px rgba(255,220,120,.8);"></div>';
+    s+='<div class="ts-orb" style="left:12%; bottom:calc(390px + var(--lift)); width:62px; height:62px; background:#FFD86B; border:3px solid '+OL+'; box-shadow:0 0 48px rgba(255,220,120,.8);"></div>';
   }else{
-    s+='<div class="ts-orb" style="right:12%; top:25%; width:64px; height:64px; background:#F6C445; border:3px solid '+OL+'; box-shadow:0 0 0 12px rgba(246,196,69,.18),0 0 50px rgba(255,230,140,.7);"></div>';
+    s+='<div class="ts-orb" style="right:12%; bottom:calc(430px + var(--lift)); width:64px; height:64px; background:#F6C445; border:3px solid '+OL+'; box-shadow:0 0 0 12px rgba(246,196,69,.18),0 0 50px rgba(255,230,140,.7);"></div>';
   }
   return s;
 }

@@ -691,8 +691,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.11', APP_DATE='2026-10-01', showChg=false;
+var APP_VER='1.12', APP_DATE='2026-10-01', showChg=false;
 var CHANGES=[
+  ['1.12','바뀐 운동의 예전 기록(수건 로우·점프 스쿼트·버피)을 새 운동 기록으로 이어받기'],
   ['1.11','앱 버전 표시와 업데이트 내역 추가'],
   ['1.10','용사의 숙소(옷 입히기), 전리품 상자, 일요일 위로 한마디·휴식 의상, 업적 탭 분리'],
   ['1.9','운동 교체(Y-T-W 레이즈·월 싯·인치웜), 스톱워치 타이머, 쓰러진 보스 그림'],
@@ -1407,11 +1408,24 @@ function parse(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
 function addDays(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);}
 var NOW = new Date();
 var TODAY = new Date(NOW.getFullYear(),NOW.getMonth(),NOW.getDate());
+var OLD_EX={towel:'ytw',jump:'wallsit',burpee:'inchworm'};
+/* 바뀐 운동의 예전 체크를 새 운동 체크로 이어받기 (수건 로우→Y-T-W, 점프 스쿼트→월 싯, 버피→인치웜) */
+function migrateLog(log){
+  var changed=false;
+  Object.keys(log||{}).forEach(function(k){
+    var L=log[k]; if(!L||!L.done) return;
+    Object.keys(L.done).forEach(function(id){
+      var mm=id.match(/^(towel|jump|burpee)-(\d+)$/);
+      if(mm){ if(L.done[id]) L.done[OLD_EX[mm[1]]+'-'+mm[2]]=true; delete L.done[id]; changed=true; }
+    });
+  });
+  return changed;
+}
 function fresh(){return {start:fmt(TODAY),log:{},body:[]};}
 function load(){
   try{
     var raw = localStorage.getItem(KEY);
-    if(raw){var o=JSON.parse(raw); if(o && o.log && o.body && o.start) return o;}
+    if(raw){var o=JSON.parse(raw); if(o && o.log && o.body && o.start){ if(migrateLog(o.log)) o.dirty=true; return o; }}
   }catch(e){}
   return fresh();
 }
@@ -1753,6 +1767,7 @@ function bkParse(text){
       if(L.cleared) log[k].cleared=true;
     }
   });
+  migrateLog(log);
   var body=d.body.filter(function(b){return b&&ok.test(b.date)&&typeof b.weight==='number';}).map(function(b){return {date:b.date,weight:b.weight};});
   var start=(typeof d.start==='string'&&ok.test(d.start))?d.start:fmt(TODAY);
   var inv={}, eqm={}, rl={}, known={}, sl;
@@ -2269,6 +2284,7 @@ function mergeData(a,b){
   return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0)};
 }
 function applyData(x,dirty){
+  if(migrateLog(x.log)) dirty=true;
   noDirty=true;
   S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
   save(); noDirty=false;

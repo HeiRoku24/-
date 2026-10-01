@@ -390,6 +390,8 @@ svg.chart{width:100%; height:auto; display:block;}
 .chg{margin:12px 0 0; padding:0 0 0 18px; font-size:14px; color:var(--muted);}
 .chg li{margin:5px 0;}
 .chg b{font-family:var(--disp); font-weight:400; color:var(--link);}
+
+.divider{height:0; margin:6px 0;}
 </style>
 </head>
 <body>
@@ -404,7 +406,7 @@ svg.chart{width:100%; height:auto; display:block;}
 <nav class="nav" id="nav" aria-label="화면 이동">
   <button type="button" data-tab="today">퀘스트</button>
   <button type="button" data-tab="week">지도</button>
-  <button type="button" data-tab="ach">업적</button>
+  <button type="button" data-tab="ach">일지</button>
   <button type="button" data-tab="home">숙소</button>
 </nav>
 <div class="ov" id="ov" hidden role="dialog" aria-modal="true" aria-labelledby="ovt">
@@ -691,8 +693,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.12', APP_DATE='2026-10-01', showChg=false;
+var APP_VER='1.13', APP_DATE='2026-10-01', showChg=false;
 var CHANGES=[
+  ['1.13','업적 페이지를 "몸짱 일지"로 바꾸고 달린 거리·체중 기록을 옮김'],
   ['1.12','바뀐 운동의 예전 기록(수건 로우·점프 스쿼트·버피)을 새 운동 기록으로 이어받기'],
   ['1.11','앱 버전 표시와 업데이트 내역 추가'],
   ['1.10','용사의 숙소(옷 입히기), 전리품 상자, 일요일 위로 한마디·휴식 의상, 업적 탭 분리'],
@@ -1856,7 +1859,7 @@ function achIcon(key,on){
   return '<svg viewBox="-92 -90 184 144" class="'+(on?'':'sil')+'" aria-hidden="true">'+bossArtBy(key,'idle')+'</svg>';
 }
 function viewAch(){
-  var h='<p class="eyebrow">내 업적</p>'+hud()+'<h1 class="ph">업적</h1>';
+  var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<h1 class="ph">몸짱 일지</h1>';
   var stt=achState(gstats()), doneN=0, totalN=0;
   stt.forEach(function(x){ if(x.kind==='one'){ totalN++; if(x.on) doneN++; } else { totalN+=x.total; doneN+=x.done; } });
   h+='<h2>업적 <span class="cnt">'+doneN+' / '+totalN+'</span></h2><div class="achs">';
@@ -1874,37 +1877,7 @@ function viewAch(){
     }
   });
   h+='</div>';
-  return h;
-}
-var dogSlot='cape';
-function homeHero(){
-  var li=lvInfo(totalXP()), eq=curEq(), worn=[];
-  Object.keys(eq).forEach(function(k){ if(eq[k]) worn.push(eq[k].name); });
-  return '<section class="stage"><div class="stage-pv">'+heroPreview(eq)+'</div><div class="stage-info"><p class="stage-n">몸짱용사</p><p class="stage-t">Lv.'+li.L+' · '+titleOf(li.L)+'</p><p class="stage-w">'+(worn.length?worn.join(' · '):'아직 아무것도 입지 않았어요')+'</p></div></section>';
-}
-function homeChest(){
-  var left=chestsLeft(), earned=chestsEarned();
-  return '<h2>전리품 상자</h2><div class="card chest"><div class="chest-svg">'+chestSvg(false)+'</div><div class="chest-info"><p class="chest-n"><b>'+left+'개</b> 보유</p>'+
-    '<p class="note" style="margin:0 0 8px">마왕을 토벌하면 상자를 1개 받아요. 지금까지 '+earned+'개를 받았어요.</p>'+
-    '<button type="button" class="primary" data-a="chest-open"'+(left?'':' disabled')+'>상자 열기</button></div></div>';
-}
-function homeDogam(){
-  var own=0, slots=LOOT_SLOTS.concat(REST_SLOTS);
-  ITEMS.forEach(function(it){ if(S.inv&&S.inv[it.id]) own++; });
-  var h='<h2>장비 도감 <span class="cnt">'+own+' / '+ITEMS.length+'</span></h2><div class="slots">';
-  slots.forEach(function(sl){ h+='<button type="button" class="slotbtn'+(sl===dogSlot?' on':'')+'" data-a="slot" data-s="'+sl+'">'+SLOTN[sl]+'</button>'; });
-  h+='</div><div class="items">';
-  ITEMS.filter(function(it){return it.slot===dogSlot;}).forEach(function(it){
-    var has=!!(S.inv&&S.inv[it.id]), worn=!!(S.eq&&S.eq[it.slot]===it.id);
-    h+='<button type="button" class="item r-'+it.rar+(has?'':' lock')+(worn?' worn':'')+'" data-a="equip" data-id="'+it.id+'"'+(has?'':' disabled')+'>'+
-       '<span class="ii">'+itemIcon(it,has)+'</span><b>'+(has?it.name:'???')+'</b><small>'+(it.rest?'휴식 의상':RARN[it.rar])+(worn?' · 착용 중':(has?' · 눌러서 입기':''))+'</small></button>';
-  });
-  h+='</div>';
-  if(REST_SLOTS.indexOf(dogSlot)>=0) h+='<p class="note" style="margin:10px 4px 0">일요일에 회복의 신전을 들러 모험을 마치면 휴식 의상을 하나씩 받아요.</p>';
-  return h;
-}
-function viewHome(){
-  var h='<p class="eyebrow">모험을 마치고 돌아온 곳</p>'+hud()+'<h1 class="ph">용사의 숙소</h1>'+homeHero()+homeChest()+homeDogam();
+  h+='<div class="divider"></div>';
   var ke=kmEntries(), tot=kmSum(), ws0=weekStart(), wk=kmSum(fmt(ws0),fmt(addDays(ws0,6))), ym=fmt(TODAY).slice(0,7);
   var mo=0, best=0; ke.forEach(function(e){ if(e.k.slice(0,7)===ym) mo+=e.v; if(e.v>best) best=e.v; });
   var nextM=Math.floor(tot/50)*50+50, recent=ke.slice(-14), kpts=recent.map(function(e){return {v:e.v};});
@@ -1939,6 +1912,37 @@ function viewHome(){
     });
     h+='</div>';
   }
+  return h;
+}
+var dogSlot='cape';
+function homeHero(){
+  var li=lvInfo(totalXP()), eq=curEq(), worn=[];
+  Object.keys(eq).forEach(function(k){ if(eq[k]) worn.push(eq[k].name); });
+  return '<section class="stage"><div class="stage-pv">'+heroPreview(eq)+'</div><div class="stage-info"><p class="stage-n">몸짱용사</p><p class="stage-t">Lv.'+li.L+' · '+titleOf(li.L)+'</p><p class="stage-w">'+(worn.length?worn.join(' · '):'아직 아무것도 입지 않았어요')+'</p></div></section>';
+}
+function homeChest(){
+  var left=chestsLeft(), earned=chestsEarned();
+  return '<h2>전리품 상자</h2><div class="card chest"><div class="chest-svg">'+chestSvg(false)+'</div><div class="chest-info"><p class="chest-n"><b>'+left+'개</b> 보유</p>'+
+    '<p class="note" style="margin:0 0 8px">마왕을 토벌하면 상자를 1개 받아요. 지금까지 '+earned+'개를 받았어요.</p>'+
+    '<button type="button" class="primary" data-a="chest-open"'+(left?'':' disabled')+'>상자 열기</button></div></div>';
+}
+function homeDogam(){
+  var own=0, slots=LOOT_SLOTS.concat(REST_SLOTS);
+  ITEMS.forEach(function(it){ if(S.inv&&S.inv[it.id]) own++; });
+  var h='<h2>장비 도감 <span class="cnt">'+own+' / '+ITEMS.length+'</span></h2><div class="slots">';
+  slots.forEach(function(sl){ h+='<button type="button" class="slotbtn'+(sl===dogSlot?' on':'')+'" data-a="slot" data-s="'+sl+'">'+SLOTN[sl]+'</button>'; });
+  h+='</div><div class="items">';
+  ITEMS.filter(function(it){return it.slot===dogSlot;}).forEach(function(it){
+    var has=!!(S.inv&&S.inv[it.id]), worn=!!(S.eq&&S.eq[it.slot]===it.id);
+    h+='<button type="button" class="item r-'+it.rar+(has?'':' lock')+(worn?' worn':'')+'" data-a="equip" data-id="'+it.id+'"'+(has?'':' disabled')+'>'+
+       '<span class="ii">'+itemIcon(it,has)+'</span><b>'+(has?it.name:'???')+'</b><small>'+(it.rest?'휴식 의상':RARN[it.rar])+(worn?' · 착용 중':(has?' · 눌러서 입기':''))+'</small></button>';
+  });
+  h+='</div>';
+  if(REST_SLOTS.indexOf(dogSlot)>=0) h+='<p class="note" style="margin:10px 4px 0">일요일에 회복의 신전을 들러 모험을 마치면 휴식 의상을 하나씩 받아요.</p>';
+  return h;
+}
+function viewHome(){
+  var h='<p class="eyebrow">모험을 마치고 돌아온 곳</p>'+hud()+'<h1 class="ph">용사의 숙소</h1>'+homeHero()+homeChest()+homeDogam();
   h+=cloudHtml();
   h+=bkHtml();
   h+='<h2>설정</h2><div class="card" style="padding:10px 16px 16px">'+

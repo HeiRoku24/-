@@ -441,6 +441,83 @@ svg.chart{width:100%; height:auto; display:block;}
 #tsflash{position:fixed; inset:0; z-index:95; background:#FFFDF2; opacity:0; pointer-events:none; transition:opacity .35s ease;}
 #tsflash[hidden]{display:none;}
 #tsflash.on{opacity:1;}
+
+/* 모험지·보스 움직임 (.live 안에서만) */
+.an-flag,.an-fire,.an-blink,.an-bridge,.an-breathe,.an-aura,.an-ring,.an-sway,.an-leaf{transform-box:fill-box;}
+.an-leaf,.an-ring,.an-glow{display:none;}
+.live .an-flag{transform-origin:0 50%; animation:anFlag 1.1s ease-in-out infinite alternate;}
+@keyframes anFlag{from{transform:skewY(7deg) scaleX(1);}to{transform:skewY(-7deg) scaleX(.8);}}
+.live .an-fire{transform-origin:50% 100%; animation:anFire .32s ease-in-out infinite alternate;}
+.live .an-fire.b{animation-duration:.27s; animation-delay:-.13s;}
+@keyframes anFire{0%{transform:scale(1,1) skewX(0);}50%{transform:scale(.88,1.16) skewX(5deg);}100%{transform:scale(1.06,.92) skewX(-5deg);}}
+.live .an-glow{display:inline; animation:anGlow .5s ease-in-out infinite alternate;}
+@keyframes anGlow{from{opacity:.25;}to{opacity:.6;}}
+.live .an-blink{transform-origin:50% 50%; animation:anBlink 3.6s ease-in-out infinite;}
+@keyframes anBlink{0%,88%,100%{transform:scaleY(1);}92%{transform:scaleY(.08);}95%{transform:scaleY(1);}97%{transform:scaleY(.1);}}
+.live .an-bridge{transform-origin:50% 0; animation:anBridge 2.4s ease-in-out infinite alternate;}
+@keyframes anBridge{from{transform:rotate(-2.2deg) translateY(0);}to{transform:rotate(2.2deg) translateY(1.5px);}}
+.live .an-water{animation:anWater 1.4s linear infinite;}
+@keyframes anWater{to{stroke-dashoffset:-20;}}
+.live .an-sway{transform-origin:50% 100%; animation:anSway 2.8s ease-in-out infinite alternate;}
+.live .an-sway.b{animation-duration:3.4s; animation-delay:-1.2s;}
+@keyframes anSway{from{transform:rotate(-2deg);}to{transform:rotate(2deg);}}
+.live .an-leaf{display:inline; animation:anLeaf 4.2s linear infinite; opacity:0;}
+@keyframes anLeaf{0%{transform:translate(0,0) rotate(0); opacity:0;}10%{opacity:1;}50%{transform:translate(-7px,22px) rotate(160deg);}85%{opacity:1;}100%{transform:translate(4px,44px) rotate(320deg); opacity:0;}}
+.live .an-bolt{animation:anBolt 3.8s linear infinite;}
+@keyframes anBolt{0%,70%{opacity:0;}72%{opacity:1;}75%{opacity:.2;}78%{opacity:1;}88%,100%{opacity:0;}}
+.live .an-flash{animation:anFlash 3.8s linear infinite;}
+@keyframes anFlash{0%,70%,100%{opacity:0;}72%,78%{opacity:.35;}75%{opacity:.05;}86%{opacity:0;}}
+.an-flash{opacity:0;}
+.live .an-bolt polyline{--b2:inline;}
+.live .an-aura{transform-origin:50% 50%; animation:anAura 2.2s ease-in-out infinite alternate;}
+@keyframes anAura{from{transform:scale(.94); opacity:.5;}to{transform:scale(1.08); opacity:.85;}}
+.live .an-ring{display:inline; transform-origin:50% 50%; animation:anRing 2.6s ease-out infinite;}
+.live .an-ring.b{animation-delay:-1.3s;}
+@keyframes anRing{from{transform:scale(.7); opacity:.9;}to{transform:scale(1.35); opacity:0;}}
+.live .an-breathe{transform-origin:50% 100%; animation:anBreathe 2.6s ease-in-out infinite alternate;}
+@keyframes anBreathe{from{transform:scale(1,1);}to{transform:scale(1.025,1.045);}}
+/* 지도 날씨 */
+.mapwx{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
+.mapwx .ts-bolt{animation-duration:9s;}
+.mapwx .mapfog{position:absolute; inset:0; background:radial-gradient(ellipse 60% 9% at 30% 18%,rgba(245,248,250,.75),transparent 70%),radial-gradient(ellipse 60% 9% at 75% 42%,rgba(245,248,250,.7),transparent 70%),radial-gradient(ellipse 60% 9% at 25% 66%,rgba(245,248,250,.7),transparent 70%),radial-gradient(ellipse 60% 9% at 70% 88%,rgba(245,248,250,.7),transparent 70%); animation:fogDrift 14s ease-in-out infinite alternate;}
+@keyframes fogDrift{from{transform:translateX(-6%);}to{transform:translateX(6%);}}
+@media (prefers-reduced-motion: reduce){
+  .live .an-flag,.live .an-fire,.live .an-glow,.live .an-blink,.live .an-bridge,.live .an-water,.live .an-sway,.live .an-leaf,.live .an-bolt,.live .an-flash,.live .an-aura,.live .an-ring,.live .an-breathe,.mapwx .mapfog{animation:none;}
+  .live .an-leaf,.live .an-ring{display:none;}
+}
+
+/* 시작화면 날씨 */
+.ts-wdim{position:absolute; inset:0; pointer-events:none;}
+#title.w-cloudy .ts-orb,#title.w-fog .ts-orb{opacity:.45;}
+#title.w-snow .ts-orb{opacity:.18;}
+#title.w-rain .ts-orb,#title.w-storm .ts-orb{display:none;}
+#title.w-cloudy .ts-cl,#title.w-rain .ts-cl,#title.w-storm .ts-cl,#title.w-snow .ts-cl,#title.w-fog .ts-cl{filter:grayscale(.6) brightness(.88);}
+.ts-cl2{bottom:calc(470px + var(--lift)); height:170px; width:calc(100% + 600px); background-size:600px 170px; animation:tsS5 60s linear infinite;}
+@keyframes tsS5{to{transform:translate3d(-600px,0,0);}}
+.ts-fall{position:absolute; left:0; pointer-events:none; background-repeat:repeat; will-change:transform;}
+.ts-rain1{top:-140px; width:100%; height:calc(100% + 140px); background-size:140px 140px; animation:rainA .42s linear infinite;}
+.ts-rain2{top:-100px; width:100%; height:calc(100% + 100px); background-size:100px 100px; animation:rainB .62s linear infinite; opacity:.6;}
+#title.w-storm .ts-rain1{animation-duration:.3s;} #title.w-storm .ts-rain2{animation-duration:.45s;}
+@keyframes rainA{to{transform:translate3d(0,140px,0);}}
+@keyframes rainB{to{transform:translate3d(0,100px,0);}}
+.ts-snow1{top:-160px; width:100%; height:calc(100% + 160px); background-size:160px 160px; animation:snowA 7s linear infinite;}
+.ts-snow2{top:-120px; width:100%; height:calc(100% + 120px); background-size:120px 120px; animation:snowB 11s linear infinite; opacity:.7;}
+@keyframes snowA{to{transform:translate3d(0,160px,0);}}
+@keyframes snowB{to{transform:translate3d(0,120px,0);}}
+.ts-sway{position:absolute; inset:0 -20px; animation:sway 3.2s ease-in-out infinite alternate; pointer-events:none;}
+@keyframes sway{from{transform:translateX(-10px);}to{transform:translateX(10px);}}
+.ts-fog{bottom:calc(100px + var(--lift)); height:260px; width:calc(100% + 600px); background-size:600px 260px; animation:tsS6 50s linear infinite; opacity:.85;}
+@keyframes tsS6{to{transform:translate3d(-600px,0,0);}}
+.ts-haze{position:absolute; left:0; right:0; bottom:calc(110px + var(--lift)); height:300px; pointer-events:none;
+  background:linear-gradient(to top,rgba(236,240,244,0),rgba(236,240,244,.62) 35%,rgba(236,240,244,.5) 70%,rgba(236,240,244,0));}
+#title.p-night .ts-haze{background:linear-gradient(to top,rgba(150,160,185,0),rgba(150,160,185,.45) 40%,rgba(150,160,185,0));}
+.ts-bolt{position:absolute; inset:0; background:#F4F7FF; opacity:0; pointer-events:none; animation:bolt 7s linear infinite;}
+@keyframes bolt{0%,90%{opacity:0;}91%{opacity:.75;}92%{opacity:.1;}93.5%{opacity:.6;}96%,100%{opacity:0;}}
+.ts-wx{position:absolute; top:calc(42px + env(safe-area-inset-top,0px)); left:14px; font-size:12px; font-weight:700; background:rgba(20,14,34,.35); padding:1px 10px; border-radius:999px;}
+#title.no-drop .ts-logo{animation:none;}
+@media (prefers-reduced-motion: reduce){
+  .ts-fall,.ts-sway,.ts-fog,.ts-cl2,.ts-bolt{animation:none;}
+}
 @media (prefers-reduced-motion: reduce){
   .ts-l,.ts-dust,.ts-logo,.ts-tap,.ts-burst{animation:none;}
   .wf{animation:none;} .wf.f0{visibility:visible;}
@@ -748,8 +825,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.16', APP_DATE='2026-10-02', showChg=false;
+var APP_VER='1.18', APP_DATE='2026-10-02', showChg=false;
 var CHANGES=[
+  ['1.18','퀘스트·지도의 모험지와 보스에 움직임 추가(깃발·횃불·다리·물·나뭇잎·번개·광채·숨쉬기), 지도에 흘러가는 구름과 현재 날씨 반영'],
+  ['1.17','시작화면에 실제 날씨 반영(맑음·흐림·비·눈·안개·천둥번개), 비 오는 날 우산 쓴 용사, 설정에서 날씨 반영 켜고 끄기'],
   ['1.16','시작화면 배치 조정(제목 아래로, 용사와 배경 위로), 앱 정보에서 업데이트 내역 버튼 제거'],
   ['1.15','새 버전을 올리면 앱을 다시 열 때 바로 반영되도록 개선'],
   ['1.14','시작화면 추가: 걸어가는 몸짱용사(입은 장비 그대로), 시간대별 하늘, 오늘의 목적지 예고, 터치 연출, 설정에서 켜고 끄기'],
@@ -1150,7 +1229,7 @@ function lmFort(){
   [-30,-14,2,18].forEach(function(x){s+='<rect x="'+x+'" y="-10" width="12" height="9" fill="#C7D0E0"/>';});
   s+='<path d="M-12,40 V16 Q0,2 12,16 V40 Z" fill="#8B5A2B"/>';
   s+='<rect x="-46" y="-12" width="7" height="16" rx="3" fill="'+OL+'" stroke="none"/><rect x="39" y="-12" width="7" height="16" rx="3" fill="'+OL+'" stroke="none"/>';
-  s+='<line x1="42" y1="-35" x2="42" y2="-60"/><path d="M42,-60 L64,-52 L42,-44 Z" fill="#FF6A5B"/></g>';
+  s+='<line x1="42" y1="-35" x2="42" y2="-60"/><g class="an-flag"><path d="M42,-60 L64,-52 L42,-44 Z" fill="#FF6A5B"/></g></g>';
   return s;
 }
 function lmCanyon(){
@@ -1158,8 +1237,8 @@ function lmCanyon(){
   s+='<path d="M-60,40 L-60,-18 L-46,-32 L-36,-16 L-25,-24 L-14,40 Z" fill="#E39A63"/>';
   s+='<path d="M60,40 L60,-18 L46,-32 L36,-16 L25,-24 L14,40 Z" fill="#E39A63"/>';
   s+='<path d="M-14,40 L-14,22 Q0,34 14,22 L14,40 Z" fill="#7FD3F5"/>';
-  s+='</g><g stroke="#C9784A" stroke-width="3" stroke-linecap="round" opacity=".8"><path d="M-54,-2 H-34 M-54,14 H-26 M-54,29 H-20 M54,-2 H34 M54,14 H26 M54,29 H20"/></g>';
-  s+='<g stroke="'+OL+'" stroke-width="3" stroke-linecap="round" fill="none"><path d="M-25,-20 Q0,-6 25,-20" stroke="#8B5A2B" stroke-width="4"/><path d="M-16,-11 v6 M-8,-8 v6 M0,-7 v6 M8,-8 v6 M16,-11 v6" stroke="#8B5A2B" stroke-width="3"/></g>';
+  s+='</g><path class="an-water" d="M-11,32 Q-5,29 0,32 T11,31" stroke="#FFFFFF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-dasharray="5 5"/><path class="an-water" d="M-10,37.5 Q-4,35 1,37.5 T10,37" stroke="#D5F2FF" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="4 6" style="animation-duration:1.1s"/><g stroke="#C9784A" stroke-width="3" stroke-linecap="round" opacity=".8"><path d="M-54,-2 H-34 M-54,14 H-26 M-54,29 H-20 M54,-2 H34 M54,14 H26 M54,29 H20"/></g>';
+  s+='<g class="an-bridge" stroke="'+OL+'" stroke-width="3" stroke-linecap="round" fill="none"><path d="M-25,-20 Q0,-6 25,-20" stroke="#8B5A2B" stroke-width="4"/><path d="M-16,-11 v6 M-8,-8 v6 M0,-7 v6 M8,-8 v6 M16,-11 v6" stroke="#8B5A2B" stroke-width="3"/></g>';
   return s;
 }
 function lmCitadel(){
@@ -1171,7 +1250,7 @@ function lmCitadel(){
   s+='<path d="M-9,40 V16 Q0,4 9,16 V40 Z" fill="#3B4F7A"/>';
   s+='<path d="M-5,-8 V-18 Q0,-26 5,-18 V-8 Z" fill="#FFD95E" stroke-width="2"/>';
   s+='<rect x="-45" y="8" width="8" height="12" rx="4" fill="#FFD95E" stroke-width="2"/><rect x="37" y="8" width="8" height="12" rx="4" fill="#FFD95E" stroke-width="2"/>';
-  s+='<line x1="0" y1="-68" x2="0" y2="-86"/><path d="M0,-86 L18,-79 L0,-72 Z" fill="#F6C445"/></g>';
+  s+='<line x1="0" y1="-68" x2="0" y2="-86"/><g class="an-flag"><path d="M0,-86 L18,-79 L0,-72 Z" fill="#F6C445"/></g></g>';
   return s;
 }
 function pine(x,y,k){
@@ -1183,7 +1262,10 @@ function pine(x,y,k){
 }
 function lmForest(){
   var s=lmShadow(62)+'<ellipse cx="0" cy="36" rx="62" ry="12" fill="#7ACB84" stroke="'+OL+'" stroke-width="2.5"/>';
-  s+=pine(-36,10,.9)+pine(38,12,.85)+pine(2,2,1.15);
+  s+='<g class="an-sway">'+pine(-36,10,.9)+'</g><g class="an-sway b">'+pine(38,12,.85)+'</g><g class="an-sway">'+pine(2,2,1.15)+'</g>';
+  [[-40,-6,0],[8,-22,-1.4],[40,-2,-2.6],[-4,-10,-3.4],[-30,-14,-1.9]].forEach(function(l,ix){
+    s+='<path class="an-leaf" style="animation-delay:'+l[2]+'s'+(ix%2?';animation-duration:5s':'')+'" d="M'+l[0]+','+l[1]+' q4,-4 8,0 q-4,4 -8,0 Z" fill="'+(ix%2?'#9AD77A':'#F6C445')+'" stroke="'+OL+'" stroke-width="1.4"/>';
+  });
   s+='<g stroke="'+OL+'" stroke-width="2.5"><rect x="-20" y="32" width="6" height="8" rx="2" fill="#FFF3D6"/><path d="M-27,33 Q-17,19 -7,33 Z" fill="#FF6A5B" stroke-linejoin="round"/></g><circle cx="-20" cy="30" r="1.6" fill="#fff"/><circle cx="-13" cy="29" r="1.4" fill="#fff"/>';
   return s;
 }
@@ -1191,10 +1273,10 @@ function lmDungeon(){
   var s=lmShadow(62)+'<g stroke="'+OL+'" stroke-width="3" stroke-linejoin="round">';
   s+='<path d="M-60,40 Q-62,-26 0,-34 Q62,-26 60,40 Z" fill="#8E8BAF"/>';
   s+='<path d="M-26,40 V2 Q0,-26 26,2 V40 Z" fill="#CFCCE6"/><path d="M-19,40 V5 Q0,-17 19,5 V40 Z" fill="#2B2138"/>';
-  s+='</g><ellipse cx="-6" cy="24" rx="3" ry="4.5" fill="#FFD95E"/><ellipse cx="7" cy="24" rx="3" ry="4.5" fill="#FFD95E"/>';
+  s+='</g><g class="an-blink"><ellipse cx="-6" cy="24" rx="3" ry="4.5" fill="#FFD95E"/><ellipse cx="7" cy="24" rx="3" ry="4.5" fill="#FFD95E"/></g>';
   s+='<g stroke="'+OL+'" stroke-width="2.5" stroke-linejoin="round"><circle cx="0" cy="-22" r="8" fill="#fff"/><rect x="-5" y="-16" width="10" height="6" rx="2" fill="#fff"/><circle cx="-3" cy="-23" r="2" fill="'+OL+'" stroke="none"/><circle cx="3" cy="-23" r="2" fill="'+OL+'" stroke="none"/>';
   [-44,38].forEach(function(x){
-    s+='<rect x="'+x+'" y="6" width="6" height="26" rx="2" fill="#8B5A2B"/><path d="M'+(x+3)+',4 Q'+(x-6)+',-8 '+(x+3)+',-18 Q'+(x+12)+',-8 '+(x+3)+',4 Z" fill="#FF9A3D"/>';
+    s+='<circle class="an-glow" cx="'+(x+3)+'" cy="-6" r="15" fill="#FFB347" stroke="none"/><rect x="'+x+'" y="6" width="6" height="26" rx="2" fill="#8B5A2B"/><g class="an-fire'+(x>0?' b':'')+'"><path d="M'+(x+3)+',4 Q'+(x-6)+',-8 '+(x+3)+',-18 Q'+(x+12)+',-8 '+(x+3)+',4 Z" fill="#FF9A3D"/><path d="M'+(x+3)+',3 Q'+(x-1)+',-4 '+(x+3)+',-10 Q'+(x+7)+',-4 '+(x+3)+',3 Z" fill="#FFE27A" stroke="none"/></g>';
   });
   s+='</g>';
   return s;
@@ -1210,13 +1292,15 @@ function lmDemon(){
   s+='<rect x="-7" y="-38" width="14" height="18" rx="7" fill="#FF6A5B" stroke-width="2"/>';
   s+='<rect x="-57" y="-12" width="9" height="14" rx="4.5" fill="#FF6A5B" stroke-width="2"/><rect x="48" y="-12" width="9" height="14" rx="4.5" fill="#FF6A5B" stroke-width="2"/>';
   [-58,-42,-26,26,42,50].forEach(function(x){s+='<rect x="'+x+'" y="-18" width="8" height="8" fill="#4B3D68" stroke-width="2.5"/>';});
-  s+='<line x1="0" y1="-98" x2="0" y2="-120"/><path d="M0,-120 L22,-112 L0,-104 Z" fill="#FF6A5B"/></g>';
+  s+='<line x1="0" y1="-98" x2="0" y2="-120"/><g class="an-flag"><path d="M0,-120 L22,-112 L0,-104 Z" fill="#FF6A5B"/></g></g>';
   s+='<path d="M-3,10 V40 M3,10 V40" stroke="'+OL+'" stroke-width="2.5"/>';
-  s+='<polyline points="-46,-92 -38,-78 -46,-76 -36,-58" fill="none" stroke="#FFD95E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>';
+  s+='<ellipse class="an-flash" cx="0" cy="-30" rx="80" ry="80" fill="#FFF3B0"/>';
+  s+='<g class="an-bolt"><polyline points="-46,-92 -38,-78 -46,-76 -36,-58" fill="none" stroke="#FFD95E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polyline points="50,-104 44,-90 51,-88 42,-70" fill="none" stroke="#FFD95E" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" style="display:var(--b2,none)"/></g>';
   return s;
 }
 function lmTemple(){
-  var s='<ellipse cx="0" cy="-10" rx="72" ry="58" fill="#FFF3B0" opacity=".6"/>'+lmShadow(66)+'<g stroke="'+OL+'" stroke-width="3" stroke-linejoin="round">';
+  var s='<ellipse class="an-ring" cx="0" cy="-10" rx="70" ry="56" fill="none" stroke="#FFF3B0" stroke-width="4"/><ellipse class="an-ring b" cx="0" cy="-10" rx="70" ry="56" fill="none" stroke="#FFF3B0" stroke-width="4"/>'+
+    '<ellipse class="an-aura" cx="0" cy="-10" rx="72" ry="58" fill="#FFF3B0" opacity=".6"/>'+lmShadow(66)+'<g stroke="'+OL+'" stroke-width="3" stroke-linejoin="round">';
   s+='<rect x="-64" y="32" width="128" height="11" fill="#E9E2CC"/><rect x="-56" y="24" width="112" height="9" fill="#F3ECD6"/>';
   [-46,-22,2,26].forEach(function(x){
     s+='<rect x="'+x+'" y="-8" width="18" height="33" fill="#FBF6E6"/><rect x="'+(x-2)+'" y="-14" width="22" height="7" fill="#F3ECD6"/>';
@@ -1228,18 +1312,19 @@ function lmTemple(){
 }
 var LMS=[lmFort,lmForest,lmCitadel,lmCanyon,lmDungeon,lmDemon,lmTemple];
 var BKEY=['ogre','spider','golem','wolf','mino','demon','god'];
+function bossLive(key,expr){ return '<g class="an-breathe">'+bossArtBy(key,expr)+'</g>'; }
 function bossArtBy(key,expr){
   return ({ogre:mOgre,spider:mSpider,golem:mGolem,wolf:mWolf,mino:mMino,demon:mDemon})[key] ? ({ogre:mOgre,spider:mSpider,golem:mGolem,wolf:mWolf,mino:mMino,demon:mDemon})[key](expr) : godArt();
 }
 /* 퀘스트 배너용: 모험지 + 보스 함께 (가로로 넓은 장면) */
 var LTF=[.98,1.02,.8,.98,1.0,.68,.94];
 var BSC=[.66,.56,.64,.64,.64,.7,.68];
-function lmIcon(i,dead){
+function lmIcon(i,dead,live){
   var ls=LTF[i], bs=BSC[i];
-  return '<svg class="qimg" viewBox="0 0 300 132" role="img" aria-label="'+QN[ORDER[i]]+'와 보스 그림">'+
+  return '<svg class="qimg'+(live?' live':'')+'" viewBox="0 0 300 132" role="img" aria-label="'+QN[ORDER[i]]+'와 보스 그림">'+
     '<rect y="122" width="300" height="10" fill="var(--line)"/>'+
     '<g transform="translate(92,'+(122-42*ls)+') scale('+ls+')">'+LMS[i]()+'</g>'+
-    '<g transform="translate(216,'+(122-46*bs+(dead?5:0))+') '+(dead?'rotate(18) ':'')+'scale('+bs+')">'+bossArtBy(BKEY[i],dead?'dead':'idle')+'</g></svg>';
+    '<g transform="translate(216,'+(122-46*bs+(dead?5:0))+') '+(dead?'rotate(18) ':'')+'scale('+bs+')">'+bossLive(BKEY[i],dead?'dead':'idle')+'</g></svg>';
 }
 function mBush(x,y,s){
   return '<g transform="translate('+x+','+y+') scale('+s+')" stroke="'+OL+'" stroke-width="2.5"><circle cx="-9" cy="0" r="9" fill="#6FC17B"/><circle cx="8" cy="-2" r="11" fill="#7ACB84"/><circle cx="0" cy="-8" r="8" fill="#86D48F"/></g>';
@@ -1267,14 +1352,17 @@ function mapPath(pts,upto){
   return d;
 }
 /* st: [{kind:'ok'|'star'|'draw'|'lose'|null}] x7, t: 오늘 스테이지 번호 */
-function mapSvg(st,t,dead){
+function mapSvg(st,t,dead,live){
   var pts=[[240,8]].concat(MPOS.map(function(p,i){return [p[0],p[1]+(i===6?20:36)];}));
   var s='<svg class="mapsvg" viewBox="0 0 '+MW+' '+MH+'" aria-hidden="true">';
   s+='<rect width="'+MW+'" height="'+MH+'" fill="#BFE3B4"/>';
   [[60,300,70,40],[300,560,60,36],[70,980,80,44],[290,1290,70,34]].forEach(function(e){s+='<ellipse cx="'+e[0]+'" cy="'+e[1]+'" rx="'+e[2]+'" ry="'+e[3]+'" fill="#CDEBC2"/>';});
   s+='<g stroke="'+OL+'" stroke-width="2.5"><ellipse cx="300" cy="452" rx="40" ry="22" fill="#8ED8F6"/></g><path d="M282,452 q8,-5 16,0 M304,458 q8,-5 16,0" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
   [[30,190,1],[334,345,1.1],[32,545,1],[328,760,.9],[30,905,1.1],[330,1120,1],[300,1310,.9],[50,1330,1]].forEach(function(b){s+=mBush(b[0],b[1],b[2]);});
-  [[62,46,1],[300,120,.8],[80,690,.7],[290,905,.75]].forEach(function(c){s+=mCloud(c[0],c[1],c[2]);});
+  [[62,46,1,70,-10],[300,120,.8,90,-55],[80,690,.7,80,-30],[290,905,.75,100,-70],[160,1180,.85,85,-20],[220,350,.6,110,-40]].forEach(function(c){
+    var from=-60-c[0], to=MW+60-c[0];
+    s+='<g>'+mCloud(c[0],c[1],c[2])+'<animateTransform attributeName="transform" type="translate" values="0 0;'+to+' 0;'+to+' 0;'+from+' 0;0 0" keyTimes="0;'+(to/(to-from)).toFixed(3)+';'+(to/(to-from)+0.001).toFixed(3)+';'+(to/(to-from)+0.002).toFixed(3)+';1" dur="'+c[3]+'s" begin="'+c[4]+'s" repeatCount="indefinite"/></g>';
+  });
   var full=mapPath(pts);
   s+='<path d="'+full+'" fill="none" stroke="'+OL+'" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>';
   s+='<path d="'+full+'" fill="none" stroke="#F4E2AE" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>';
@@ -1284,10 +1372,11 @@ function mapSvg(st,t,dead){
   for(i=0;i<7;i++){
     var cx=MPOS[i][0], cy=MPOS[i][1];
     if(i===t) s+='<ellipse cx="'+cx+'" cy="'+(cy+42)+'" rx="'+(i===5?74:60)+'" ry="12" fill="rgba(246,196,69,.4)" stroke="#F6C445" stroke-width="3" stroke-dasharray="7 5" class="a-twk"/>';
-    s+='<g transform="translate('+cx+','+cy+')">'+LMS[i]()+'</g>';
+    var lv=!!(live&&live[i]);
+    s+='<g transform="translate('+cx+','+cy+')"'+(lv?' class="live"':'')+'>'+LMS[i]()+'</g>';
     var bsc=[.5,.4,.5,.5,.5,.56,.5][i], bx=cx+(cx<180?-72:70)*(i===5?1.12:1);
     var dd=!!(dead&&dead[i]);
-    s+='<g transform="translate('+bx+','+(cy+42-46*bsc+(dd?5:0))+') '+(dd?'rotate(18) ':'')+'scale('+bsc+')">'+bossArtBy(BKEY[i],dd?'dead':'idle')+'</g>';
+    s+='<g transform="translate('+bx+','+(cy+42-46*bsc+(dd?5:0))+') '+(dd?'rotate(18) ':'')+'scale('+bsc+')"'+(lv?' class="live"':'')+'>'+bossLive(BKEY[i],dd?'dead':'idle')+'</g>';
     if(st[i]) s+=mBadge(st[i],cx+(i===5?60:44),cy-(i===5?70:36));
   }
   if(t>=0&&t<7){
@@ -1709,7 +1798,7 @@ function viewToday(){
   var h='<p class="eyebrow">'+longDate(d)+(isToday?' · 오늘':'')+'</p>'+hud();
   h+='<section class="quest'+(p.circuit?' boss':'')+(rs?' res r-'+rs.res:'')+'">'+
     '<div class="qtop"><div class="qtext"><p class="qk">'+(p.circuit?'보스전':(p.rest?'회복의 신전':'오늘의 퀘스트'))+(rs?'<span class="stamp r-'+rs.res+'">'+resLabel(dk,rs.res)+'</span>':'')+'</p><div class="qtitle"><h1>'+QN[dk]+'</h1><span class="bchip'+(dk==='sun'?' god':'')+'">'+(BOSSES[dk]?BOSSES[dk].n:'몸짱신')+'</span></div>'+
-    '<p class="qs">'+p.theme+' · <b>'+weekNo()+'주차</b> · '+stageText(st)+'</p></div></div>'+lmIcon(ORDER.indexOf(dk),!!(rs&&rs.res==='win'&&dk!=='sun'))+
+    '<p class="qs">'+p.theme+' · <b>'+weekNo()+'주차</b> · '+stageText(st)+'</p></div></div>'+lmIcon(ORDER.indexOf(dk),!!(rs&&rs.res==='win'&&dk!=='sun'),!rs&&!lock&&k>=fmt(TODAY))+
     '<div class="segs" role="progressbar" aria-label="퀘스트 진행" aria-valuemin="0" aria-valuemax="'+c.total+'" aria-valuenow="'+c.done+'">'+
     ids.map(function(id){return '<i'+(L.done[id]?' class="on"':'')+'></i>';}).join('')+'</div>'+
     '<div class="qm"><span><b>'+c.done+'</b> / '+c.total+' 완료</span><span>보상 최대 +'+maxXp+' XP</span></div>'+bossHtml+
@@ -1764,8 +1853,16 @@ function viewToday(){
   return h;
 }
 
+function mapWeather(){
+  var w=wxKind(); if(!w||w==='clear') return '';
+  var dim={cloudy:'rgba(110,122,140,.16)',rain:'rgba(80,94,116,.24)',storm:'rgba(50,58,80,.32)',snow:'rgba(210,220,235,.22)',fog:'rgba(230,236,242,.18)'}[w];
+  var h='<div class="mapwx" aria-hidden="true"><div style="position:absolute;inset:0;background:'+dim+'"></div>';
+  if(w==='fog') h+='<div class="mapfog"></div>';
+  else h+=tsWeatherFront(w);
+  return h+'</div>';
+}
 function viewWeek(){
-  var ws=weekStart(), h='', doneDays=0, wxp=0, i, d, st=[], dead=[], btn='', t=(TODAY.getDay()+6)%7;
+  var ws=weekStart(), h='', doneDays=0, wxp=0, i, d, st=[], dead=[], live=[], btn='', t=(TODAY.getDay()+6)%7;
   for(i=0;i<7;i++){ d=addDays(ws,i); if(isDone(d)) doneDays++; wxp+=dayXP(fmt(d)); }
   h+='<p class="eyebrow">이번 주</p>'+hud()+'<h1 class="ph">모험 지도</h1>';
   h+='<div class="stats"><div class="stat"><b>'+doneDays+' / 7</b><span>클리어한 스테이지</span></div>'+
@@ -1775,6 +1872,7 @@ function viewWeek(){
     var dk=ORDER[i], p=PLAN[dk], c=count(d), pct=Math.round(c.done*100/c.total), rs=dayResult(d), isT=(i===t);
     st.push(rs?(rs.res==='lose'?'lose':((dk==='sat'||rs.res==='bless')?'star':'ok')):null);
     dead.push(!!(rs&&rs.res==='win'&&dk!=='sun'));
+    live.push(!rs && !rd(fmt(d)).ended && fmt(d)>=fmt(TODAY));
     var stat=rs?resLabel(dk,rs.res):pct+'%';
     var cls='stg'+((rs&&rs.res==='win')?' clr':'')+((rs&&rs.res==='lose')?' lose':'')+((rs&&rs.res==='bless')?' draw':'')+(isT?' now':'')+(p.circuit?' boss':'');
     var w=(i===5?184:144), hh=(i===5?218:158), top=MPOS[i][1]-(i===5?122:62);
@@ -1782,7 +1880,7 @@ function viewWeek(){
       'aria-label="'+QN[dk]+', '+p.k+'요일 '+(d.getMonth()+1)+'/'+d.getDate()+', '+stat+(isT?', 오늘':'')+'">'+
       '<span class="plate"><b>'+QN[dk]+'</b><small>'+p.k+' '+(d.getMonth()+1)+'/'+d.getDate()+' · '+stat+(isT?' · 오늘':'')+'</small></span></button>';
   }
-  h+='<div class="gmap">'+mapSvg(st,t,dead)+btn+'</div><p class="note">스테이지를 누르면 그날의 퀘스트가 열려요.</p>';
+  h+='<div class="gmap">'+mapSvg(st,t,dead,live)+mapWeather()+btn+'</div><p class="note">스테이지를 누르면 그날의 퀘스트가 열려요.</p>';
   return h;
 }
 
@@ -2006,6 +2104,8 @@ function viewHome(){
   h+='<h2>설정</h2><div class="card" style="padding:10px 16px 16px">'+
     '<div class="field"><label>루틴 시작일 (주차 계산 기준)<input type="date" id="startd" value="'+S.start+'"></label></div>'+
     '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="title-show">시작화면 보기</button></div>'+
+    '<div class="bk-btns" style="margin:0 0 6px"><button type="button" class="ghost" data-a="wx-toggle" aria-pressed="'+(wxOn()?'true':'false')+'">날씨 반영 '+(wxOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="wx-check"'+(wxOn()?'':' disabled')+'>지금 날씨 확인</button></div>'+
+    '<p class="note" id="wxstat" style="margin:0 2px 12px">'+wxStatus()+'</p>'+
     '<button type="button" class="ghost" data-a="intro" style="margin-right:8px">시작 안내 다시 보기</button>'+
     '<button type="button" class="ghost'+(armed?' warn':'')+'" data-a="reset">'+(armed?'정말 모든 기록 지우기':'모든 기록 초기화')+'</button></div>';
   h+='<h2>앱 정보</h2><div class="card" style="padding:12px 16px 14px"><p class="ver" style="margin:0"><b>몸짱소울</b> 버전 <span class="vnum">'+APP_VER+'</span></p>';
@@ -2192,7 +2292,7 @@ document.getElementById('tskip').addEventListener('click',stopTimer);
 /* ---------- 이벤트 ---------- */
 document.getElementById('nav').addEventListener('click',function(e){
   var b=e.target.closest('[data-tab]'); if(!b) return;
-  tab=b.getAttribute('data-tab'); armed=false; bkMode=null; bkPending=null; bkErr=''; render(); window.scrollTo(0,0);
+  tab=b.getAttribute('data-tab'); if(tab==='week') wxRefresh(false,wxAfter); armed=false; bkMode=null; bkPending=null; bkErr=''; render(); window.scrollTo(0,0);
 });
 app.addEventListener('click',function(e){
   var t=e.target.closest('[data-a]'); if(!t || t.disabled) return;
@@ -2226,6 +2326,11 @@ app.addEventListener('click',function(e){
     var rr=dayResult(sel); if(rr){ showOverlay(resultPopup(sel,rr)); }
   }else if(a==='title-toggle'){
     titleSet(!titleOn()); render(); toast(titleOn()?'앱을 켤 때 시작화면이 나와요':'시작화면을 건너뛰어요');
+  }else if(a==='wx-toggle'){
+    wxSetOn(!wxOn()); render();
+  }else if(a==='wx-check'){
+    var ws=document.getElementById('wxstat'); if(ws) ws.textContent='날씨를 확인하는 중이에요...';
+    wxRefresh(true,function(){ render(); toast(wxKind()?'지금 날씨: '+WXN[wxKind()]:'날씨를 확인하지 못했어요'); });
   }else if(a==='title-show'){
     titleOpen(false);
   }else if(a==='intro'){
@@ -2505,37 +2610,90 @@ function tsMountains(){
     '<path d="M0,210 L0,160 L60,132 L140,170 L230,106 L320,166 L400,126 L490,176 L570,122 L640,160 L640,210 Z" fill="#86A7CF"/>'+
     '<path d="M0,160 L60,132 L140,170 L230,106 L320,166 L400,126 L490,176 L570,122 L640,160" fill="none" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round" opacity=".45"/>';
 }
-function tsHills(){
-  var top='M0,72 C70,72 140,34 210,42 S350,72 420,72';
-  return '<path d="'+top+' L420,150 L0,150 Z" fill="#8FD18A"/><path d="'+top+'" fill="none" stroke="'+OL+'" stroke-width="3"/>'+
-    pine(92,44,.72)+pine(318,40,.86)+pine(352,52,.6)+mBush(196,44,.8);
+function tsHills(w){
+  var top='M0,72 C70,72 140,34 210,42 S350,72 420,72', sn=(w==='snow');
+  var s='<path d="'+top+' L420,150 L0,150 Z" fill="'+(sn?'#B9D9C4':'#8FD18A')+'"/>';
+  if(sn) s+='<path d="M0,72 C70,72 140,34 210,42 S350,72 420,72 L420,86 S350,86 280,66 S140,48 70,80 L0,86 Z" fill="#F7FAFF"/>';
+  s+='<path d="'+top+'" fill="none" stroke="'+OL+'" stroke-width="3"/>'+pine(92,44,.72)+pine(318,40,.86)+pine(352,52,.6)+mBush(196,44,.8);
+  if(sn){ [[92,44,.72],[318,40,.86],[352,52,.6]].forEach(function(t){ var x=t[0],y=t[1],k=t[2];
+    s+='<path d="M'+x+','+(y-34*k)+' L'+(x-8*k)+','+(y-22*k)+' L'+(x+8*k)+','+(y-22*k)+' Z" fill="#F7FAFF" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>'; }); }
+  return s;
 }
-function tsRoad(){
-  var s='<rect width="300" height="120" fill="#E7C38A"/><rect y="0" width="300" height="24" fill="#7ACB84"/>'+
+function tsRoad(w){
+  var wet=(w==='rain'||w==='storm'), sn=(w==='snow');
+  var s='<rect width="300" height="120" fill="'+(wet?'#D3AE78':'#E7C38A')+'"/><rect y="0" width="300" height="24" fill="'+(sn?'#F2F6FC':'#7ACB84')+'"/>'+
     '<line x1="0" y1="24" x2="300" y2="24" stroke="'+OL+'" stroke-width="3"/><line x1="0" y1="1.5" x2="300" y2="1.5" stroke="'+OL+'" stroke-width="3"/>'+
     '<rect y="64" width="300" height="5" fill="#D6AC6E"/><rect y="96" width="300" height="4" fill="#D6AC6E" opacity=".7"/>';
   [[54,82,7,4],[186,104,9,4.5],[252,74,5,3],[120,112,6,3]].forEach(function(e){ s+='<ellipse cx="'+e[0]+'" cy="'+e[1]+'" rx="'+e[2]+'" ry="'+e[3]+'" fill="#C49A62" stroke="'+OL+'" stroke-width="2"/>'; });
-  [40,150,232].forEach(function(x){ s+='<path d="M'+(x-6)+',22 L'+(x-3)+',10 L'+x+',20 L'+(x+3)+',8 L'+(x+6)+',22" fill="none" stroke="#3F8F55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'; });
+  if(!sn) [40,150,232].forEach(function(x){ s+='<path d="M'+(x-6)+',22 L'+(x-3)+',10 L'+x+',20 L'+(x+3)+',8 L'+(x+6)+',22" fill="none" stroke="#3F8F55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'; });
+  if(wet) [[96,86,24,6],[226,108,18,5],[20,106,10,3.5]].forEach(function(e){ s+='<ellipse cx="'+e[0]+'" cy="'+e[1]+'" rx="'+e[2]+'" ry="'+e[3]+'" fill="#9CC3E6" stroke="'+OL+'" stroke-width="2"/><path d="M'+(e[0]-e[2]*.5)+','+(e[1]-1)+' h'+(e[2]*.5)+'" stroke="#E8F4FF" stroke-width="2" stroke-linecap="round"/>'; });
+  if(sn) [[80,50,26,6],[210,88,30,7],[150,110,16,4]].forEach(function(e){ s+='<ellipse cx="'+e[0]+'" cy="'+e[1]+'" rx="'+e[2]+'" ry="'+e[3]+'" fill="#F7FAFF"/>'; });
   return s;
 }
-function tsWalkFrame(i,n,eq){
+function tsRainTile(n,len,col,w,T){
+  T=T||140; var s='', k, x, y;
+  function ln(x,y){ return '<line x1="'+x.toFixed(1)+'" y1="'+y+'" x2="'+(x-len*.22).toFixed(1)+'" y2="'+(y+len)+'" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round"/>'; }
+  for(k=0;k<n;k++){ x=((k*7)%n+0.5)*(T/n)+((k*31)%5); y=(k*67+11)%T; s+=ln(x,y); if(y+len>T) s+=ln(x,y-T); }
+  return s;
+}
+function tsSnowTile(sz,pts,r){
+  var s=''; pts.forEach(function(p){ s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(p[2]||r)+'" fill="#FFFFFF" opacity=".95"/>'; }); return s;
+}
+function tsWeather(w,per){
+  var h='', dim='';
+  if(w==='cloudy') dim=per==='night'?'rgba(40,46,70,.35)':'linear-gradient(rgba(120,132,150,.5),rgba(170,178,190,.35))';
+  if(w==='rain') dim=per==='night'?'rgba(20,26,46,.45)':'linear-gradient(rgba(90,102,122,.62),rgba(140,150,166,.45))';
+  if(w==='storm') dim=per==='night'?'rgba(12,14,30,.55)':'linear-gradient(rgba(58,64,86,.75),rgba(110,116,136,.55))';
+  if(w==='snow') dim=per==='night'?'rgba(60,70,100,.3)':'linear-gradient(rgba(170,182,200,.55),rgba(220,226,236,.45))';
+  if(w==='fog') dim=per==='night'?'rgba(90,100,125,.35)':'linear-gradient(rgba(200,206,214,.6),rgba(228,232,238,.5))';
+  if(dim) h+='<div class="ts-wdim" style="background:'+dim+'"></div>';
+  if(w && w!=='clear' && w!=='fog') h+='<div class="ts-l ts-cl2" style="background-image:'+tsUri(600,170,mCloud(110,90,2.4)+mCloud(390,60,1.9)+mCloud(520,120,1.5))+';filter:grayscale(.7) brightness('+(w==='storm'?'.62':(w==='rain'?'.78':'.92'))+')"></div>';
+  return h;
+}
+function tsWeatherFront(w){
+  var h='';
+  if(w==='rain'||w==='storm'){
+    h+='<div class="ts-fall ts-rain2" style="background-image:'+tsUri(100,100,tsRainTile(9,14,'rgba(214,232,255,.55)',1.4,100))+'"></div>';
+    h+='<div class="ts-fall ts-rain1" style="background-image:'+tsUri(140,140,tsRainTile(w==='storm'?14:10,22,'rgba(225,240,255,.85)',2))+'"></div>';
+  }
+  if(w==='storm') h+='<div class="ts-bolt"></div>';
+  if(w==='snow'){
+    h+='<div class="ts-sway"><div class="ts-fall ts-snow2" style="background-image:'+tsUri(120,120,tsSnowTile(120,[[14,20],[60,8],[100,40],[34,70],[82,96],[110,110],[8,104]],1.8))+'"></div>';
+    h+='<div class="ts-fall ts-snow1" style="background-image:'+tsUri(160,160,tsSnowTile(160,[[20,30,3.4],[90,12,2.6],[140,60,3.8],[50,100,3],[118,130,2.6],[10,150,3.2],[76,64,2.4]],3))+'"></div></div>';
+  }
+  if(w==='fog'){
+    var f='<defs><filter id="b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter></defs><g filter="url(#b)" fill="#F2F5F8" opacity=".9">'+
+      '<ellipse cx="90" cy="150" rx="150" ry="40"/><ellipse cx="330" cy="110" rx="170" ry="44"/><ellipse cx="520" cy="170" rx="120" ry="36"/><ellipse cx="600" cy="150" rx="60" ry="36"/><ellipse cx="0" cy="150" rx="60" ry="36"/></g>';
+    h+='<div class="ts-haze"></div><div class="ts-l ts-fog" style="background-image:'+tsUri(600,260,f)+'"></div>';
+  }
+  return h;
+}
+function umbrellaArt(){
+  var s='<line x1="-40" y1="-24" x2="-26" y2="-108" stroke="'+OL+'" stroke-width="6" stroke-linecap="round"/><line x1="-40" y1="-24" x2="-26" y2="-108" stroke="#8B5A2B" stroke-width="2.6" stroke-linecap="round"/><g transform="translate(-12,0)">';
+  s+=pth('M-70,-104 Q-66,-152 -14,-154 Q38,-152 42,-104 Q31,-113 20,-104 Q9,-113 -3,-104 Q-14,-113 -25,-104 Q-36,-113 -47,-104 Q-59,-113 -70,-104 Z','#FF6A5B',3);
+  s+=pth('M-25,-104 Q-26,-140 -14,-154 Q-2,-140 -3,-104 Q-14,-113 -25,-104 Z','#F6C445',2.4);
+  s+='<line x1="-14" y1="-154" x2="-14" y2="-164" stroke="'+OL+'" stroke-width="4" stroke-linecap="round"/></g>';
+  return s+circ(-40,-24,9,SKIN,2.5);
+}
+function tsWalkFrame(i,n,eq,um){
   var p=i/n*2*Math.PI, sn=Math.sin(p), lL=Math.max(0,sn)*10, rL=Math.max(0,-sn)*10, bob=-2.6*Math.abs(sn);
   var legs=[[-14-sn*1.5,44-lL],[14-sn*1.5,44-rL]];
-  var arms=[[-37,18-sn*5,-35,3-sn*2],[42,6+bob*.3,47,-5]];
+  var arms=[um?[-40,-24,-48,-6]:[-37,18-sn*5,-35,3-sn*2],[42,6+bob*.3,47,-5]];
   return '<g class="wf f'+i+'" style="animation-delay:'+(-(n-i)*0.09).toFixed(2)+'s"><g transform="translate(0,'+bob.toFixed(1)+')">'+
-    heroArt({expr:'cheer',arms:arms,legs:legs,sword:[42,6,18+sn*3],eq:eq})+'</g></g>';
+    heroArt({expr:'cheer',arms:arms,legs:legs,sword:[42,6,18+sn*3],eq:eq})+(um?umbrellaArt():'')+'</g></g>';
 }
-function tsHero(eq){
-  var n=8, i, s='<svg viewBox="-80 -120 170 176" aria-hidden="true">';
+function tsHero(eq,um){
+  var n=8, i, s='<svg viewBox="-80 -170 170 226" aria-hidden="true">';
   s+='<ellipse cx="0" cy="49" rx="40" ry="6.5" fill="#000" opacity=".2"/>';
   s+='<g fill="#F5E6C8" stroke="'+OL+'" stroke-width="1.6"><circle class="ts-dust" cx="-14" cy="44" r="5"/><circle class="ts-dust" cx="14" cy="44" r="5" style="animation-delay:-.36s"/></g>';
-  s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq); s+='</g>';
+  s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq,um); s+='</g>';
   s+='<g class="ts-cheer">'+heroArt({expr:'cheer',arms:HP.cheer.arms,legs:HP.cheer.legs,sword:HP.cheer.sword,eq:eq})+
     '<g class="ts-burst">'+bStar(60,-96,9,'#FFF3B0')+bStar(-46,-82,7,'#F6C445')+bStar(70,-50,6,'#FFFFFF')+bStar(-62,-40,6,'#FFF3B0')+'</g></g>';
   return s+'</svg>';
 }
 function tsDest(dk,night){
-  var i=ORDER.indexOf(dk), s='<svg viewBox="-80 -130 250 182" aria-hidden="true"><defs><filter id="tsSil"><feColorMatrix type="matrix" values="0 0 0 0 .17  0 0 0 0 .13  0 0 0 0 .24  0 0 0 .62 0"/></filter></defs><g>';
+  var rsT=dayResult(TODAY), lv=!rsT && !rd(fmt(TODAY)).ended;
+  var i=ORDER.indexOf(dk), s='<svg viewBox="-80 -130 250 182" aria-hidden="true"'+(lv?' class="live"':'')+'><defs><filter id="tsSil"><feColorMatrix type="matrix" values="0 0 0 0 .17  0 0 0 0 .13  0 0 0 0 .24  0 0 0 .62 0"/></filter></defs><g>';
   s+='<g transform="scale(.92)">'+LMS[i]()+'</g>';
   if(BOSSES[dk]) s+='<g transform="translate(118,6) scale(.5)" filter="url(#tsSil)"><g class="a-bob">'+bossArtBy(BKEY[i],'idle')+'</g></g>';
   s+='</g></svg>';
@@ -2565,26 +2723,83 @@ function tsLogo(){
     t+' fill="none" stroke="#FFF3B0" stroke-width="2" opacity=".55" transform="translate(-1,-2)">몸짱소울</text></svg>';
 }
 function tsDayNo(){ return Math.max(1,Math.floor((TODAY-parse(S.start))/86400000)+1); }
-function titleBuild(){
-  var per=tsPeriod(), P=TSP[per], eq=curEq(), dk=DK[TODAY.getDay()];
-  titleEl.className='p-'+per;
+
+/* ---------- 날씨 (Open-Meteo, 폰 위치) ---------- */
+var WXKEY='home-training-wx', WXON='home-training-wx-on', WX_TTL=30*60*1000, WX_KEEP=6*3600*1000;
+var WXN={clear:'맑음',cloudy:'흐림',rain:'비',storm:'천둥번개',snow:'눈',fog:'안개'};
+var wxMsg='';
+function wxOn(){ try{ return localStorage.getItem(WXON)!=='off'; }catch(e){ return true; } }
+function wxSetOn(v){ try{ localStorage.setItem(WXON,v?'on':'off'); }catch(e){} }
+function wxLoad(){ try{ return JSON.parse(localStorage.getItem(WXKEY)||'null'); }catch(e){ return null; } }
+function wxSave(o){ try{ localStorage.setItem(WXKEY,JSON.stringify(o)); }catch(e){} }
+function wxFromCode(c){
+  if(c==null) return null;
+  if(c<=1) return 'clear'; if(c<=3) return 'cloudy'; if(c===45||c===48) return 'fog';
+  if((c>=51&&c<=67)||(c>=80&&c<=82)) return 'rain'; if((c>=71&&c<=77)||c===85||c===86) return 'snow';
+  if(c>=95) return 'storm'; return 'cloudy';
+}
+function wxKind(){
+  if(!wxOn()) return null;
+  var o=wxLoad(); if(!o || !o.kind || !o.at || Date.now()-o.at>WX_KEEP) return null;
+  return o.kind;
+}
+function wxRefresh(force,cb){
+  cb=cb||function(){};
+  if(!wxOn()){ cb(false); return; }
+  var o=wxLoad()||{};
+  if(!force && o.kind && o.at && Date.now()-o.at<WX_TTL){ cb(false); return; }
+  if(!navigator.geolocation){ wxMsg='이 폰에서는 위치를 쓸 수 없어 맑은 하늘로 보여요'; cb(false); return; }
+  var before=wxKind();
+  function fetchAt(lat,lon){
+    var url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=weather_code&timezone=auto';
+    var done=false, t=setTimeout(function(){ if(!done){ done=true; wxMsg='날씨를 받아오지 못했어요'; cb(false); } },8000);
+    fetch(url,{cache:'no-store'}).then(function(r){ return r.json(); }).then(function(j){
+      if(done) return; done=true; clearTimeout(t);
+      var k=wxFromCode(j&&j.current&&j.current.weather_code);
+      if(!k){ wxMsg='날씨를 받아오지 못했어요'; cb(false); return; }
+      wxSave({kind:k,at:Date.now(),lat:lat,lon:lon,locAt:o.locAt&&o.lat===lat?o.locAt:Date.now()}); wxMsg='';
+      cb(k!==before);
+    }).catch(function(){ if(done) return; done=true; clearTimeout(t); wxMsg='날씨를 받아오지 못했어요'; cb(false); });
+  }
+  if(!force && o.lat!=null && o.locAt && Date.now()-o.locAt<24*3600*1000){ fetchAt(o.lat,o.lon); return; }
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var lat=Math.round(pos.coords.latitude*100)/100, lon=Math.round(pos.coords.longitude*100)/100;
+    o.locAt=Date.now(); o.lat=lat; o.lon=lon; fetchAt(lat,lon);
+  },function(err){
+    wxMsg=(err&&err.code===1)?'위치 권한이 꺼져 있어 맑은 하늘로 보여요. 폰 설정에서 이 앱의 위치를 허용해 주세요':'위치를 찾지 못했어요';
+    if(o.lat!=null) fetchAt(o.lat,o.lon); else cb(false);
+  },{enableHighAccuracy:false,timeout:10000,maximumAge:6*3600*1000});
+}
+function wxStatus(){
+  if(!wxOn()) return '날씨 반영이 꺼져 있어요';
+  var o=wxLoad(), k=wxKind();
+  if(k){ var d=new Date(o.at); return '지금 날씨: '+WXN[k]+' (마지막 확인 '+pad(d.getHours())+':'+pad(d.getMinutes())+')'+(wxMsg?' · '+wxMsg:''); }
+  return wxMsg||'아직 날씨를 확인하지 않았어요';
+}
+function titleBuild(again){
+  var per=tsPeriod(), P=TSP[per], eq=curEq(), dk=DK[TODAY.getDay()], w=wxKind(), um=(w==='rain'||w==='storm');
+  titleEl.className='p-'+per+(w?' w-'+w:'')+(again?' no-drop':'');
   titleEl.style.setProperty('--sk1',P.sk1); titleEl.style.setProperty('--sk2',P.sk2); if(P.sk3) titleEl.style.setProperty('--sk3',P.sk3);
   titleEl.style.setProperty('--tsf',P.f);
-  var h=tsSky(per);
-  h+='<div class="ts-l ts-cl" style="background-image:'+tsUri(560,150,tsClouds())+(per==='night'?';opacity:.25':'')+'"></div>';
+  var h=tsSky(per)+tsWeather(w,per);
+  h+='<div class="ts-l ts-cl" style="background-image:'+tsUri(560,150,tsClouds())+(per==='night'&&(!w||w==='clear')?';opacity:.25':'')+'"></div>';
   h+='<div class="ts-l ts-mt" style="background-image:'+tsUri(640,210,tsMountains())+'"></div>';
   h+='<div class="ts-dest">'+tsDest(dk)+'</div>';
-  h+='<div class="ts-l ts-hl" style="background-image:'+tsUri(420,150,tsHills())+'"></div>';
-  h+='<div class="ts-l ts-rd" style="background-image:'+tsUri(300,120,tsRoad())+'"></div>';
-  h+='<div class="ts-hero" style="filter:'+P.hf+'">'+tsHero(eq)+'</div>';
+  h+='<div class="ts-l ts-hl" style="background-image:'+tsUri(420,150,tsHills(w))+'"></div>';
+  h+='<div class="ts-l ts-rd" style="background-image:'+tsUri(300,120,tsRoad(w))+(w==='rain'||w==='storm'?';background-color:#D3AE78':'')+'"></div>';
+  h+='<div class="ts-hero" style="filter:'+P.hf+'">'+tsHero(eq,um)+'</div>';
+  h+=tsWeatherFront(w);
   h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
+  if(w) h+='<span class="ts-wx">'+WXN[w]+'</span>';
   h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
   h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
   titleEl.innerHTML=h;
 }
+function wxAfter(changed){ if(changed && tab==='week' && titleEl.hidden) render(); }
 function titleOpen(first){
   tsFirst=!!first; tsBusy=false;
   titleBuild(); titleEl.hidden=false;
+  wxRefresh(false,function(changed){ if(changed && !titleEl.hidden && !tsBusy) titleBuild(true); wxAfter(changed); });
   try{ titleEl.focus({preventScroll:true}); }catch(e){}
 }
 function titleFinish(){
@@ -2610,7 +2825,8 @@ titleEl.addEventListener('click',titleGo);
 titleEl.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); titleGo(); } });
 
 render();
-if(titleOn()) titleOpen(true); else if(!introSeen) introOpen();
+if(titleOn()) titleOpen(true); else { wxRefresh(false,wxAfter); if(!introSeen) introOpen(); }
+document.addEventListener('visibilitychange',function(){ if(!document.hidden) wxRefresh(false,wxAfter); });
 })();
 </script>
 <script>

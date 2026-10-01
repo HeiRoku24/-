@@ -516,7 +516,9 @@ svg.chart{width:100%; height:auto; display:block;}
 .ts-bolt{position:absolute; inset:0; background:#F4F7FF; opacity:0; pointer-events:none; animation:bolt 7s linear infinite;}
 @keyframes bolt{0%,90%{opacity:0;}91%{opacity:.75;}92%{opacity:.1;}93.5%{opacity:.6;}96%,100%{opacity:0;}}
 .volrow{display:flex; align-items:center; gap:12px; margin:0 2px 8px; font-size:13px; color:var(--muted);}
+.volrow label{min-width:68px;}
 .volrow input{flex:1; min-width:0; height:44px; accent-color:var(--gold);}
+.volv{min-width:40px; text-align:right; font-variant-numeric:tabular-nums;}
 .volrow input:disabled{opacity:.45;}
 .ts-wx{position:absolute; top:calc(42px + env(safe-area-inset-top,0px)); left:14px; font-size:12px; font-weight:700; background:rgba(20,14,34,.35); padding:1px 10px; border-radius:999px;}
 #title.no-drop .ts-logo{animation:none;}
@@ -831,8 +833,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.29', APP_DATE='2026-10-02', showChg=false;
+var APP_VER='1.30', APP_DATE='2026-10-02', showChg=false;
 var CHANGES=[
+  ['1.30','설정에 소리 설정 섹션 추가(전체 음향·배경음악·효과음 슬라이더), 설정 섹션 순서를 기본 설정→소리 설정→클라우드→백업→앱 정보로 변경'],
   ['1.29','시작 효과음 전체 길이를 약 1초로 늘리고 마지막 화음이 길게 울리며 자연스럽게 사라지도록 수정'],
   ['1.28','시작 효과음 리듬 변경: 첫 음을 길게, 둘째·셋째 음은 바짝 붙여 "단~ 따단!"'],
   ['1.27','시작 효과음을 0.5초로 줄이고 시작화면 전환 연출도 같은 속도로 단축'],
@@ -2125,19 +2128,22 @@ function bgmNowText(){
   if(!bgmOn()) return '음악이 꺼져 있어요';
   return (T&&BGM.running())?'지금 나오는 곡: '+T.name:'';
 }
-function bgmCardHtml(){
+function volRow(id,label,val,dis){
+  var pc=Math.round(val*100);
+  return '<div class="volrow"><label for="'+id+'">'+label+'</label><input type="range" id="'+id+'" min="0" max="100" value="'+pc+'"'+(dis?' disabled':'')+'><span class="volv" id="'+id+'v">'+pc+'%</span></div>';
+}
+function soundCardHtml(){
   var on=bgmOn();
-  return '<h2>배경음악</h2><div class="card" style="padding:10px 16px 14px">'+
-    '<div class="bk-btns" style="margin:4px 0 8px"><button type="button" class="ghost" data-a="bgm-toggle" aria-pressed="'+(on?'true':'false')+'">배경음악 '+(on?'켜짐':'꺼짐')+'</button></div>'+
-    '<div class="volrow"><label for="bgmvol">음량</label><input type="range" id="bgmvol" min="0" max="100" value="'+Math.round(bgmVol()*100)+'"'+(on?'':' disabled')+'></div>'+
+  return '<h2>소리 설정</h2><div class="card" style="padding:10px 16px 14px">'+
+    volRow('volmaster','전체 음향',sndMaster(),false)+
+    volRow('bgmvol','배경음악',bgmVol(),!on)+
+    volRow('volsfx','효과음',sndSfx(),false)+
+    '<div class="bk-btns" style="margin:6px 0 8px"><button type="button" class="ghost" data-a="bgm-toggle" aria-pressed="'+(on?'true':'false')+'">배경음악 '+(on?'켜짐':'꺼짐')+'</button></div>'+
     '<p class="note" id="bgmnow" style="margin:0 2px 6px">'+bgmNowText()+'</p>'+
     '<p class="note" style="margin:0 2px">아이폰은 무음 스위치가 켜져 있으면 소리가 나지 않아요.</p></div>';
 }
 function viewSettings(){
   var h='<p class="eyebrow">모험을 준비하는 곳</p>'+hud()+'<h1 class="ph">설정</h1>';
-  h+=bgmCardHtml();
-  h+=cloudHtml();
-  h+=bkHtml();
   h+='<h2>기본 설정</h2><div class="card" style="padding:10px 16px 16px">'+
     '<div class="field"><label>루틴 시작일 (주차 계산 기준)<input type="date" id="startd" value="'+S.start+'"></label></div>'+
     '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="title-show">시작화면 보기</button></div>'+
@@ -2145,6 +2151,9 @@ function viewSettings(){
     '<p class="note" id="wxstat" style="margin:0 2px 12px">'+wxStatus()+'</p>'+
     '<button type="button" class="ghost" data-a="intro" style="margin-right:8px">시작 안내 다시 보기</button>'+
     '<button type="button" class="ghost'+(armed?' warn':'')+'" data-a="reset">'+(armed?'정말 모든 기록 지우기':'모든 기록 초기화')+'</button></div>';
+  h+=soundCardHtml();
+  h+=cloudHtml();
+  h+=bkHtml();
   h+='<h2>앱 정보</h2><div class="card" style="padding:12px 16px 14px"><p class="ver" style="margin:0"><b>몸짱소울</b> 버전 <span class="vnum">'+APP_VER+'</span></p>';
   h+='</div>';
   return h;
@@ -2169,6 +2178,7 @@ function reduceMotion(){
 var AC=null;
 function tone(freq,start,len,vol){
   try{
+    vol=vol*sndScale(); if(vol<0.0002) return;
     var C=window.AudioContext||window.webkitAudioContext; if(!C) return;
     if(!AC) AC=new C();
     var o=AC.createOscillator(), g=AC.createGain();
@@ -2731,12 +2741,14 @@ var SFX=(function(){
     chip(C,out,t+0.335,523.25,0.62,0.1,0.5,0,0.25,0.15);
     thump(C,out,t+0.335,0.4); burst(C,out,t+0.335,0.08,0.07,'highpass',5000);
   }
-  return {win:win,lose:lose,start:start};
+  /* 효과음 슬라이더를 놓을 때 크기를 가늠하도록 들려주는 짧은 '띠링' */
+  function blip(C,out,t){ chip(C,out,t,987.77,0.06,0.16,0.25); chip(C,out,t+0.07,1318.5,0.09,0.16,0.25); }
+  return {win:win,lose:lose,start:start,blip:blip};
 })();
 
 /* ---------- 배경음악 (Web Audio로 직접 연주하는 레트로 칩튠) ---------- */
 var BGM=(function(){
-  var ctx=null, master=null, duckG=null, sfxG=null, bus=null, timer=null, cur=null, trk=null, step=0, nextT=0, vol=0.6, on=true, waves={}, noiseBuf=null;
+  var ctx=null, master=null, duckG=null, outG=null, sfxG=null, sfxVolG=null, mvol=1, svol=1, bus=null, timer=null, cur=null, trk=null, step=0, nextT=0, vol=0.6, on=true, waves={}, noiseBuf=null;
   var NI={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
   function hz(n){ var m=/^([A-G])(#|b)?(\d)$/.exec(n); if(!m) return 0; var s=NI[m[1]]+(m[2]==='#'?1:(m[2]==='b'?-1:0)); var midi=(+m[3]+1)*12+s; return 440*Math.pow(2,(midi-69)/12); }
   var CH={ // 코드 구성음 (반음)
@@ -2751,8 +2763,10 @@ var BGM=(function(){
   function init(){
     if(ctx) return true;
     var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false;
-    ctx=new AC(); master=ctx.createGain(); master.gain.value=on?vol:0; duckG=ctx.createGain(); master.connect(duckG); duckG.connect(ctx.destination);
-    sfxG=ctx.createGain(); sfxG.gain.value=0.9; var cmp=ctx.createDynamicsCompressor(); cmp.threshold.value=-16; cmp.knee.value=12; cmp.ratio.value=6; cmp.attack.value=0.003; cmp.release.value=0.2; sfxG.connect(cmp); cmp.connect(ctx.destination);
+    ctx=new AC(); outG=ctx.createGain(); outG.gain.value=mvol; outG.connect(ctx.destination);
+    master=ctx.createGain(); master.gain.value=on?vol:0; duckG=ctx.createGain(); master.connect(duckG); duckG.connect(outG);
+    sfxG=ctx.createGain(); sfxG.gain.value=0.9; var cmp=ctx.createDynamicsCompressor(); cmp.threshold.value=-16; cmp.knee.value=12; cmp.ratio.value=6; cmp.attack.value=0.003; cmp.release.value=0.2;
+    sfxVolG=ctx.createGain(); sfxVolG.gain.value=svol; sfxG.connect(cmp); cmp.connect(sfxVolG); sfxVolG.connect(outG);
     waves.p50=pulse(.5); waves.p25=pulse(.25); waves.p12=pulse(.125);
     noiseBuf=ctx.createBuffer(1,ctx.sampleRate*0.5,ctx.sampleRate); var d=noiseBuf.getChannelData(0); for(var i=0;i<d.length;i++) d[i]=Math.random()*2-1;
     return true;
@@ -2859,9 +2873,11 @@ var BGM=(function(){
     if(ctx.state==='running') go(); else ctx.resume().then(go).catch(function(){});
     return true;
   }
+  function setMaster(v){ mvol=v; if(outG) outG.gain.setTargetAtTime(v,ctx.currentTime,0.03); }
+  function setSfx(v){ svol=v; if(sfxVolG) sfxVolG.gain.setTargetAtTime(v,ctx.currentTime,0.03); }
   function suspend(){ if(ctx&&ctx.state==='running') ctx.suspend(); }
   function resume(){ if(ctx&&ctx.state!=='running') ctx.resume().then(function(){ nextT=Math.max(nextT,ctx.currentTime+0.05); }); }
-  return {play:play,stop:stop,sfx:sfx,duck:duck,unlock:unlock,running:running,setVol:setVol,setOn:setOn,suspend:suspend,resume:resume,current:function(){return cur;}};
+  return {play:play,stop:stop,sfx:sfx,duck:duck,setMaster:setMaster,setSfx:setSfx,unlock:unlock,running:running,setVol:setVol,setOn:setOn,suspend:suspend,resume:resume,current:function(){return cur;}};
 })();
 
 var TRACKS={
@@ -2918,7 +2934,12 @@ function bgmSync(){
   if(!bgmOn()){ BGM.stop(); bgmNowUpdate(); return; }
   BGM.play(bgmWant()); bgmNowUpdate();
 }
-BGM.setVol(bgmVol());
+var VMK='home-training-vol-master', VSK='home-training-vol-sfx';
+function sndLvl(k,d){ try{ var v=parseFloat(localStorage.getItem(k)); return (v>=0&&v<=1)?v:d; }catch(e){ return d; } }
+function sndMaster(){ return sndLvl(VMK,1); }
+function sndSfx(){ return sndLvl(VSK,1); }
+function sndScale(){ return sndMaster()*sndSfx(); }
+BGM.setVol(bgmVol()); BGM.setMaster(sndMaster()); BGM.setSfx(sndSfx());
 function bgmTouch(){
   if(!bgmOn() || BGM.running()) return;
   BGM.unlock().then(function(ok){ if(ok) bgmSync(); });
@@ -2928,7 +2949,15 @@ document.addEventListener('touchend',bgmTouch,{passive:true});
 document.addEventListener('keydown',bgmTouch);
 document.addEventListener('visibilitychange',function(){ if(document.hidden) BGM.suspend(); else if(bgmOn()) BGM.resume(); });
 app.addEventListener('input',function(e){
-  if(e.target && e.target.id==='bgmvol'){ var v=e.target.value/100; BGM.setVol(v); try{ localStorage.setItem(BGMV,String(v)); }catch(x){} }
+  var id=e.target&&e.target.id; if(id!=='bgmvol' && id!=='volmaster' && id!=='volsfx') return;
+  var v=e.target.value/100, lab=document.getElementById(id+'v'); if(lab) lab.textContent=e.target.value+'%';
+  if(id==='bgmvol'){ BGM.setVol(v); try{ localStorage.setItem(BGMV,String(v)); }catch(x){} }
+  else if(id==='volmaster'){ BGM.setMaster(v); try{ localStorage.setItem(VMK,String(v)); }catch(x){} }
+  else{ BGM.setSfx(v); try{ localStorage.setItem(VSK,String(v)); }catch(x){} }
+});
+app.addEventListener('change',function(e){
+  var id=e.target&&e.target.id;
+  if(id==='volmaster' || id==='volsfx'){ if(!BGM.sfx('blip',0.25,0.5)) beep(); }
 });
 
 /* ---------- 시작화면 ---------- */

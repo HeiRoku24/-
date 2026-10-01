@@ -392,6 +392,59 @@ svg.chart{width:100%; height:auto; display:block;}
 .chg b{font-family:var(--disp); font-weight:400; color:var(--link);}
 
 .divider{height:0; margin:6px 0;}
+
+/* 시작화면 */
+#title{position:fixed; inset:0; z-index:90; overflow:hidden; cursor:pointer; user-select:none; -webkit-user-select:none; touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+  background:linear-gradient(var(--sk1),var(--sk2) 70%); color:#fff;}
+#title[hidden]{display:none;}
+#title:focus-visible{outline:none;}
+#title.p-sunset{background:linear-gradient(var(--sk1),var(--sk3) 45%,var(--sk2) 72%);}
+.ts-l{position:absolute; left:0; background-repeat:repeat-x; will-change:transform;}
+.ts-cl{bottom:330px; height:150px; width:calc(100% + 560px); background-size:560px 150px; animation:tsS1 90s linear infinite;}
+.ts-mt{bottom:150px; height:210px; width:calc(100% + 640px); background-size:640px 210px; animation:tsS2 70s linear infinite;}
+.ts-hl{bottom:96px; height:150px; width:calc(100% + 420px); background-size:420px 150px; animation:tsS3 26s linear infinite;}
+.ts-rd{bottom:0; height:120px; width:calc(100% + 300px); background-size:300px 120px; animation:tsS4 6s linear infinite;}
+@keyframes tsS1{to{transform:translate3d(-560px,0,0);}}
+@keyframes tsS2{to{transform:translate3d(-640px,0,0);}}
+@keyframes tsS3{to{transform:translate3d(-420px,0,0);}}
+@keyframes tsS4{to{transform:translate3d(-300px,0,0);}}
+.ts-mt,.ts-hl,.ts-rd,.ts-dest{filter:var(--tsf,none);}
+.ts-orb{position:absolute; border-radius:50%;}
+.ts-stars{position:absolute; inset:0 0 40% 0; width:100%; height:60%;}
+.ts-dest{position:absolute; right:3%; bottom:196px; width:160px; text-align:center;}
+.ts-dest svg{display:block; width:100%; height:auto;}
+.ts-plate{display:inline-block; margin-bottom:4px; background:#FFFFFF; color:#2B2138; border:2px solid #2B2138; border-radius:12px; padding:1px 10px 3px; box-shadow:0 3px 0 #2B2138; line-height:1.25;}
+.ts-plate small{display:block; font-size:11px; color:#6B5F7A;}
+.ts-plate b{display:block; font-family:var(--disp); font-weight:400; font-size:16px;}
+.ts-hero{position:absolute; left:50%; bottom:58px; width:156px; margin-left:-92px;}
+.ts-hero svg{display:block; width:100%; height:auto; overflow:visible;}
+.wf{visibility:hidden; animation:wf .72s linear infinite both;}
+@keyframes wf{0%{visibility:visible;}12.5%{visibility:hidden;}100%{visibility:hidden;}}
+.ts-dust{animation:dust .72s linear infinite; opacity:0;}
+@keyframes dust{0%{transform:translate(0,0) scale(.5); opacity:.55;}100%{transform:translate(-26px,-6px) scale(1.4); opacity:0;}}
+.ts-cheer{display:none;}
+.ts-logo{position:absolute; left:0; right:0; top:calc(8vh + env(safe-area-inset-top,0px)); text-align:center; animation:tsDrop .8s cubic-bezier(.3,1.5,.5,1) both;}
+.ts-logo svg{display:block; width:min(86%,400px); height:auto; margin:0 auto;}
+.ts-sub{display:inline-block; margin-top:2px; font-family:var(--disp); font-size:18px; letter-spacing:.04em; background:#2B2138; color:#FFF3B0; padding:2px 16px 3px; border-radius:999px;}
+@keyframes tsDrop{from{transform:translateY(-40px); opacity:0;}to{transform:none; opacity:1;}}
+.ts-info{position:absolute; top:calc(12px + env(safe-area-inset-top,0px)); font-size:13px; font-weight:700; background:rgba(20,14,34,.35); padding:2px 10px; border-radius:999px;}
+.ts-day{left:14px;} .ts-ver{right:14px; font-weight:500;}
+.ts-tap{position:absolute; left:0; right:0; bottom:calc(16px + env(safe-area-inset-bottom,0px)); text-align:center; font-family:var(--disp); font-size:21px; color:#fff;
+  text-shadow:0 2px 0 #2B2138,0 -2px 0 #2B2138,2px 0 0 #2B2138,-2px 0 0 #2B2138; animation:tsTap 1.6s ease-in-out 1s infinite both;}
+@keyframes tsTap{0%,100%{opacity:1;}50%{opacity:.35;}}
+#title.go .ts-l,#title.go .ts-dust{animation-play-state:paused;}
+#title.go .ts-walk{display:none;}
+#title.go .ts-cheer{display:block;}
+#title.go .ts-tap{animation:none; opacity:0; transition:opacity .2s;}
+.ts-burst{transform-box:fill-box; transform-origin:center; animation:burst .6s ease-out both;}
+@keyframes burst{from{transform:scale(.2); opacity:0;}60%{opacity:1;}to{transform:scale(1); opacity:1;}}
+#tsflash{position:fixed; inset:0; z-index:95; background:#FFFDF2; opacity:0; pointer-events:none; transition:opacity .35s ease;}
+#tsflash[hidden]{display:none;}
+#tsflash.on{opacity:1;}
+@media (prefers-reduced-motion: reduce){
+  .ts-l,.ts-dust,.ts-logo,.ts-tap,.ts-burst{animation:none;}
+  .wf{animation:none;} .wf.f0{visibility:visible;}
+}
 </style>
 </head>
 <body>
@@ -443,6 +496,8 @@ svg.chart{width:100%; height:auto; display:block;}
   </div>
 </div>
 
+<div id="title" hidden role="button" tabindex="0" aria-label="몸짱소울 시작화면. 화면을 누르면 모험을 시작해요"></div>
+<div id="tsflash" hidden aria-hidden="true"></div>
 <script type="module">
 (async function(){
   var V='12.19.0', B='https://www.gstatic.com/firebasejs/'+V+'/';
@@ -693,8 +748,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.13', APP_DATE='2026-10-01', showChg=false;
+var APP_VER='1.14', APP_DATE='2026-10-01', showChg=false;
 var CHANGES=[
+  ['1.14','시작화면 추가: 걸어가는 몸짱용사(입은 장비 그대로), 시간대별 하늘, 오늘의 목적지 예고, 터치 연출, 설정에서 켜고 끄기'],
   ['1.13','업적 페이지를 "몸짱 일지"로 바꾸고 달린 거리·체중 기록을 옮김'],
   ['1.12','바뀐 운동의 예전 기록(수건 로우·점프 스쿼트·버피)을 새 운동 기록으로 이어받기'],
   ['1.11','앱 버전 표시와 업데이트 내역 추가'],
@@ -1947,6 +2003,7 @@ function viewHome(){
   h+=bkHtml();
   h+='<h2>설정</h2><div class="card" style="padding:10px 16px 16px">'+
     '<div class="field"><label>루틴 시작일 (주차 계산 기준)<input type="date" id="startd" value="'+S.start+'"></label></div>'+
+    '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="title-show">시작화면 보기</button></div>'+
     '<button type="button" class="ghost" data-a="intro" style="margin-right:8px">시작 안내 다시 보기</button>'+
     '<button type="button" class="ghost'+(armed?' warn':'')+'" data-a="reset">'+(armed?'정말 모든 기록 지우기':'모든 기록 초기화')+'</button></div>';
   h+='<h2>앱 정보</h2><div class="card" style="padding:12px 16px 14px"><p class="ver"><b>몸짱소울</b> 버전 <span class="vnum">'+APP_VER+'</span> <small>('+APP_DATE+')</small></p>'+
@@ -2167,6 +2224,10 @@ app.addEventListener('click',function(e){
     askEl.hidden=false; askYes.focus();
   }else if(a==='result'){
     var rr=dayResult(sel); if(rr){ showOverlay(resultPopup(sel,rr)); }
+  }else if(a==='title-toggle'){
+    titleSet(!titleOn()); render(); toast(titleOn()?'앱을 켤 때 시작화면이 나와요':'시작화면을 건너뛰어요');
+  }else if(a==='title-show'){
+    titleOpen(false);
   }else if(a==='intro'){
     introOpen();
   }else if(a==='prev'||a==='next'){
@@ -2417,8 +2478,139 @@ document.getElementById('ovb').addEventListener('click',function(e){
   var it=itemById(t.getAttribute('data-id'));
   if(it){ S.eq=S.eq||{}; S.eq[it.slot]=it.id; save(); closeOv(); render(); toast('입었어요!'); }
 });
+
+/* ---------- 시작화면 ---------- */
+var titleEl=document.getElementById('title'), tsFlash=document.getElementById('tsflash'), tsBusy=false, tsFirst=false;
+var TKEY='home-training-title';
+function titleOn(){ try{ return localStorage.getItem(TKEY)!=='off'; }catch(e){ return true; } }
+function titleSet(on){ try{ localStorage.setItem(TKEY,on?'on':'off'); }catch(e){} }
+function tsPeriod(){
+  var h=new Date().getHours()+new Date().getMinutes()/60;
+  if(h>=5 && h<10) return 'morning';
+  if(h>=10 && h<17) return 'day';
+  if(h>=17 && h<20) return 'sunset';
+  return 'night';
+}
+var TSP={
+  morning:{sk1:'#8FD3FF',sk2:'#FFE3B8',f:'saturate(1.05)',hf:'none'},
+  day:{sk1:'#5FB8F5',sk2:'#D4F0FF',f:'none',hf:'none'},
+  sunset:{sk1:'#3E3477',sk3:'#E77C68',sk2:'#FFC27A',f:'sepia(.28) saturate(1.3) hue-rotate(-12deg) brightness(.9)',hf:'sepia(.15) brightness(.97)'},
+  night:{sk1:'#071233',sk2:'#2A3A72',f:'brightness(.48) saturate(.65) hue-rotate(12deg)',hf:'brightness(.88) saturate(.9)'}
+};
+function tsUri(w,h,inner){ return "url('data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'+inner+'</svg>').replace(/'/g,'%27')+"')"; }
+function tsClouds(){ return mCloud(80,60,1.4)+mCloud(300,34,1.0)+mCloud(452,96,1.6); }
+function tsMountains(){
+  return '<path d="M0,210 L0,120 L70,62 L130,108 L210,30 L300,118 L360,82 L440,138 L520,50 L600,112 L640,120 L640,210 Z" fill="#A9C2E2"/>'+
+    '<path d="M196,43 L210,30 L226,46 L216,52 L208,44 L200,50 Z M506,62 L520,50 L534,64 L525,69 L518,62 L511,67 Z" fill="#FFFFFF"/>'+
+    '<path d="M0,210 L0,160 L60,132 L140,170 L230,106 L320,166 L400,126 L490,176 L570,122 L640,160 L640,210 Z" fill="#86A7CF"/>'+
+    '<path d="M0,160 L60,132 L140,170 L230,106 L320,166 L400,126 L490,176 L570,122 L640,160" fill="none" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round" opacity=".45"/>';
+}
+function tsHills(){
+  var top='M0,72 C70,72 140,34 210,42 S350,72 420,72';
+  return '<path d="'+top+' L420,150 L0,150 Z" fill="#8FD18A"/><path d="'+top+'" fill="none" stroke="'+OL+'" stroke-width="3"/>'+
+    pine(92,44,.72)+pine(318,40,.86)+pine(352,52,.6)+mBush(196,44,.8);
+}
+function tsRoad(){
+  var s='<rect width="300" height="120" fill="#E7C38A"/><rect y="0" width="300" height="24" fill="#7ACB84"/>'+
+    '<line x1="0" y1="24" x2="300" y2="24" stroke="'+OL+'" stroke-width="3"/><line x1="0" y1="1.5" x2="300" y2="1.5" stroke="'+OL+'" stroke-width="3"/>'+
+    '<rect y="64" width="300" height="5" fill="#D6AC6E"/><rect y="96" width="300" height="4" fill="#D6AC6E" opacity=".7"/>';
+  [[54,82,7,4],[186,104,9,4.5],[252,74,5,3],[120,112,6,3]].forEach(function(e){ s+='<ellipse cx="'+e[0]+'" cy="'+e[1]+'" rx="'+e[2]+'" ry="'+e[3]+'" fill="#C49A62" stroke="'+OL+'" stroke-width="2"/>'; });
+  [40,150,232].forEach(function(x){ s+='<path d="M'+(x-6)+',22 L'+(x-3)+',10 L'+x+',20 L'+(x+3)+',8 L'+(x+6)+',22" fill="none" stroke="#3F8F55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'; });
+  return s;
+}
+function tsWalkFrame(i,n,eq){
+  var p=i/n*2*Math.PI, sn=Math.sin(p), lL=Math.max(0,sn)*10, rL=Math.max(0,-sn)*10, bob=-2.6*Math.abs(sn);
+  var legs=[[-14-sn*1.5,44-lL],[14-sn*1.5,44-rL]];
+  var arms=[[-37,18-sn*5,-35,3-sn*2],[42,6+bob*.3,47,-5]];
+  return '<g class="wf f'+i+'" style="animation-delay:'+(-(n-i)*0.09).toFixed(2)+'s"><g transform="translate(0,'+bob.toFixed(1)+')">'+
+    heroArt({expr:'cheer',arms:arms,legs:legs,sword:[42,6,18+sn*3],eq:eq})+'</g></g>';
+}
+function tsHero(eq){
+  var n=8, i, s='<svg viewBox="-80 -120 170 176" aria-hidden="true">';
+  s+='<ellipse cx="0" cy="49" rx="40" ry="6.5" fill="#000" opacity=".2"/>';
+  s+='<g fill="#F5E6C8" stroke="'+OL+'" stroke-width="1.6"><circle class="ts-dust" cx="-14" cy="44" r="5"/><circle class="ts-dust" cx="14" cy="44" r="5" style="animation-delay:-.36s"/></g>';
+  s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq); s+='</g>';
+  s+='<g class="ts-cheer">'+heroArt({expr:'cheer',arms:HP.cheer.arms,legs:HP.cheer.legs,sword:HP.cheer.sword,eq:eq})+
+    '<g class="ts-burst">'+bStar(60,-96,9,'#FFF3B0')+bStar(-46,-82,7,'#F6C445')+bStar(70,-50,6,'#FFFFFF')+bStar(-62,-40,6,'#FFF3B0')+'</g></g>';
+  return s+'</svg>';
+}
+function tsDest(dk,night){
+  var i=ORDER.indexOf(dk), s='<svg viewBox="-80 -130 250 182" aria-hidden="true"><defs><filter id="tsSil"><feColorMatrix type="matrix" values="0 0 0 0 .17  0 0 0 0 .13  0 0 0 0 .24  0 0 0 .62 0"/></filter></defs><g>';
+  s+='<g transform="scale(.92)">'+LMS[i]()+'</g>';
+  if(BOSSES[dk]) s+='<g transform="translate(118,6) scale(.5)" filter="url(#tsSil)"><g class="a-bob">'+bossArtBy(BKEY[i],'idle')+'</g></g>';
+  s+='</g></svg>';
+  return '<div class="ts-plate"><small>오늘의 목적지</small><b>'+QN[dk]+'</b></div>'+s;
+}
+function tsSky(per){
+  var s='';
+  if(per==='night'){
+    var st='<svg class="ts-stars" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">', k, pts=[[8,10],[18,26],[27,6],[36,18],[47,9],[58,28],[66,12],[74,22],[86,7],[93,30],[12,40],[40,36],[80,42],[52,46],[22,52]];
+    for(k=0;k<pts.length;k++) st+='<circle cx="'+pts[k][0]+'" cy="'+pts[k][1]+'" r=".45" fill="#FFF8D6"'+(k%3===0?' class="a-twk" style="animation-delay:-'+(k*.3)+'s"':'')+'/>';
+    s+=st+'</svg>';
+    s+='<div class="ts-orb" style="right:14%; top:24%; width:52px; height:52px; background:#FFF3C4; box-shadow:0 0 0 10px rgba(255,243,196,.12),0 0 40px rgba(255,243,196,.5);"><span style="position:absolute; right:-8px; top:-6px; width:46px; height:46px; border-radius:50%; background:#0F1C45;"></span></div>';
+  }else if(per==='sunset'){
+    s+='<div class="ts-orb" style="left:16%; bottom:300px; width:96px; height:96px; background:#FF8A4C; box-shadow:0 0 70px rgba(255,150,80,.75);"></div>';
+  }else if(per==='morning'){
+    s+='<div class="ts-orb" style="left:12%; top:30%; width:62px; height:62px; background:#FFD86B; border:3px solid '+OL+'; box-shadow:0 0 48px rgba(255,220,120,.8);"></div>';
+  }else{
+    s+='<div class="ts-orb" style="right:12%; top:25%; width:64px; height:64px; background:#F6C445; border:3px solid '+OL+'; box-shadow:0 0 0 12px rgba(246,196,69,.18),0 0 50px rgba(255,230,140,.7);"></div>';
+  }
+  return s;
+}
+function tsLogo(){
+  var t='<text x="200" y="92" text-anchor="middle" font-size="96" style="font-family:var(--disp)"';
+  return '<svg viewBox="0 0 400 112" role="img" aria-label="몸짱소울">'+
+    t+' fill="'+OL+'" stroke="'+OL+'" stroke-width="16" stroke-linejoin="round" transform="translate(0,7)">몸짱소울</text>'+
+    t+' fill="#F6C445" stroke="'+OL+'" stroke-width="14" stroke-linejoin="round" paint-order="stroke">몸짱소울</text>'+
+    t+' fill="none" stroke="#FFF3B0" stroke-width="2" opacity=".55" transform="translate(-1,-2)">몸짱소울</text></svg>';
+}
+function tsDayNo(){ return Math.max(1,Math.floor((TODAY-parse(S.start))/86400000)+1); }
+function titleBuild(){
+  var per=tsPeriod(), P=TSP[per], eq=curEq(), dk=DK[TODAY.getDay()];
+  titleEl.className='p-'+per;
+  titleEl.style.setProperty('--sk1',P.sk1); titleEl.style.setProperty('--sk2',P.sk2); if(P.sk3) titleEl.style.setProperty('--sk3',P.sk3);
+  titleEl.style.setProperty('--tsf',P.f);
+  var h=tsSky(per);
+  h+='<div class="ts-l ts-cl" style="background-image:'+tsUri(560,150,tsClouds())+(per==='night'?';opacity:.25':'')+'"></div>';
+  h+='<div class="ts-l ts-mt" style="background-image:'+tsUri(640,210,tsMountains())+'"></div>';
+  h+='<div class="ts-dest">'+tsDest(dk)+'</div>';
+  h+='<div class="ts-l ts-hl" style="background-image:'+tsUri(420,150,tsHills())+'"></div>';
+  h+='<div class="ts-l ts-rd" style="background-image:'+tsUri(300,120,tsRoad())+'"></div>';
+  h+='<div class="ts-hero" style="filter:'+P.hf+'">'+tsHero(eq)+'</div>';
+  h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
+  h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
+  h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
+  titleEl.innerHTML=h;
+}
+function titleOpen(first){
+  tsFirst=!!first; tsBusy=false;
+  titleBuild(); titleEl.hidden=false;
+  try{ titleEl.focus({preventScroll:true}); }catch(e){}
+}
+function titleFinish(){
+  titleEl.hidden=true; titleEl.innerHTML=''; titleEl.className='';
+  if(tsFirst && !introSeen) introOpen();
+}
+function titleGo(){
+  if(tsBusy || titleEl.hidden) return; tsBusy=true;
+  if(reduceMotion()){ titleFinish(); return; }
+  titleEl.classList.add('go');
+  try{ tone(784,0,0.12,0.07); tone(1047,0.1,0.28,0.08); }catch(e){}
+  try{ if(navigator.vibrate) navigator.vibrate(40); }catch(e){}
+  setTimeout(function(){
+    tsFlash.hidden=false; void tsFlash.offsetWidth; tsFlash.classList.add('on');
+    setTimeout(function(){
+      titleFinish();
+      tsFlash.classList.remove('on');
+      setTimeout(function(){ tsFlash.hidden=true; },380);
+    },380);
+  },620);
+}
+titleEl.addEventListener('click',titleGo);
+titleEl.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); titleGo(); } });
+
 render();
-if(!introSeen) introOpen();
+if(titleOn()) titleOpen(true); else if(!introSeen) introOpen();
 })();
 </script>
 <script>

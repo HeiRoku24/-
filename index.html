@@ -20,7 +20,7 @@
 :root{
   --bg:#0C1716; --surface:#14262A; --soft:#1B3236; --edge:#070E0D; --line:#2B4a4E;
   --ink:#EAF5F1; --muted:#8FAEAA; --gold:#F6C445; --gold-ink:#2B2000; --link:#F6C445;
-  --clear:#46E0A5; --clear-ink:#04241A; --boss:#FF6A5B;
+  --clear:#46E0A5; --clear-ink:#04241A; --boss:#FF6A5B; --boss-ink:#2B0A06;
   --accent:var(--gold); --accent-ink:var(--gold-ink); --marker:var(--gold);
   --disp:'Do Hyeon','Noto Sans KR',system-ui,sans-serif;
   box-sizing:border-box;
@@ -31,13 +31,13 @@
   :root:not([data-theme="dark"]){
     --bg:#E8F1EE; --surface:#FFFFFF; --soft:#E2EEEA; --edge:#B7CBC4; --line:#C8DBD4;
     --ink:#10231F; --muted:#4D6964; --gold:#F1B90F; --gold-ink:#2B2000; --link:#8A5A00;
-    --clear:#1FBF86; --clear-ink:#032117; --boss:#DC3E31;
+    --clear:#1FBF86; --clear-ink:#032117; --boss:#DC3E31; --boss-ink:#FFFFFF;
   }
 }
 :root[data-theme="light"]{
   --bg:#E8F1EE; --surface:#FFFFFF; --soft:#E2EEEA; --edge:#B7CBC4; --line:#C8DBD4;
   --ink:#10231F; --muted:#4D6964; --gold:#F1B90F; --gold-ink:#2B2000; --link:#8A5A00;
-  --clear:#1FBF86; --clear-ink:#032117; --boss:#DC3E31;
+  --clear:#1FBF86; --clear-ink:#032117; --boss:#DC3E31; --boss-ink:#FFFFFF;
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px);}
 *,*::before,*::after{box-sizing:inherit;}
@@ -488,6 +488,74 @@ svg.chart{width:100%; height:auto; display:block;}
   .live .an-leaf,.live .an-ring{display:none;}
 }
 
+/* 보스전 타격 연출 */
+.battle{position:fixed; left:50%; top:calc(60px + env(safe-area-inset-top,0px)); transform:translateX(-50%) translateY(-6px); width:calc(100% - 24px); max-width:400px; z-index:45; pointer-events:none;
+  background:var(--surface); border:2px solid var(--line); border-radius:18px; box-shadow:0 6px 0 var(--edge); padding:8px 10px 10px; opacity:0; transition:opacity .15s ease, transform .15s ease;}
+.battle[hidden]{display:none;}
+.battle.on{opacity:1; transform:translateX(-50%) translateY(0);}
+.bt-stage{position:relative; height:112px; margin-top:6px; border-radius:12px; background:var(--soft);}
+.bt-ground{position:absolute; left:0; right:0; bottom:0; height:9px; background:var(--line); border-radius:0 0 12px 12px;}
+.bt-hero{position:absolute; left:7%; bottom:5px; width:66px;}
+.bt-hero>div{position:absolute; left:0; bottom:0; width:100%;}
+.bt-hero>.h-idle{position:relative;}
+.bt-hero svg,.bt-bossi svg{display:block; width:100%; height:auto; overflow:visible;}
+.bt-boss{position:absolute; right:7%; bottom:5px; width:84px;}
+.bt-bossi{position:relative;}
+.bt-bossi .b-dead{position:absolute; left:0; top:0; width:100%; opacity:0;}
+.bt-boom{position:absolute; left:50%; top:42%; width:104px; height:104px; margin:-52px 0 0 -52px; border-radius:50%; opacity:0; pointer-events:none;
+  background:radial-gradient(circle,#FFF6C8 0%,#FFD04D 28%,rgba(255,128,40,.85) 52%,rgba(255,80,40,0) 72%);}
+.battle.go .bt-boom{animation:btBoom .6s ease-out .2s forwards;}
+@keyframes btBoom{0%{opacity:0; transform:scale(.2);}10%{opacity:.95; transform:scale(.8);}100%{opacity:0; transform:scale(1.8);}}
+.bt-slash{position:absolute; left:2%; top:4%; width:96%; height:92%; opacity:0; overflow:visible;}
+.bt-slash path{stroke-dasharray:1; stroke-dashoffset:1; fill:none; stroke-linecap:round;}
+.bt-dmg{position:absolute; left:50%; top:-24px; transform:translateX(-50%); opacity:0; font-family:var(--disp); font-size:28px; line-height:1; color:#fff; white-space:nowrap;
+  text-shadow:0 2px 0 #2B2138,0 -2px 0 #2B2138,2px 0 0 #2B2138,-2px 0 0 #2B2138,2px 2px 0 #2B2138,-2px -2px 0 #2B2138,2px -2px 0 #2B2138,-2px 2px 0 #2B2138;}
+.battle.final .bt-dmg{color:var(--gold); font-size:34px;}
+.battle .h-atk,.battle .h-win{opacity:0;}
+.bt-hp{display:flex; align-items:center; gap:8px; margin-top:8px;}
+.bt-name{font-family:var(--disp); font-size:15px; color:var(--boss); white-space:nowrap;}
+.bt-bar{position:relative; flex:1; height:14px; border-radius:7px; background:var(--soft); border:2px solid var(--line); overflow:hidden;}
+.bt-bar i{position:absolute; left:0; top:0; bottom:0; border-radius:5px;}
+.bt-bar .g{background:#fff; opacity:.9; transition:width .5s ease .5s;}
+.bt-bar .c{background:var(--boss); transition:width .28s ease .22s;}
+.bt-n{font-family:var(--disp); font-weight:400; font-size:15px; min-width:62px; text-align:right; white-space:nowrap;}
+.battle.go .bt-hero{animation:btLunge .62s cubic-bezier(.25,.8,.3,1) both;}
+@keyframes btLunge{0%{transform:translateX(0);}32%{transform:translateX(var(--lunge,120px));}46%{transform:translateX(calc(var(--lunge,120px) + 5px));}100%{transform:translateX(0);}}
+.battle.go .h-atk{animation:btAtk .62s steps(1,end) both;}
+@keyframes btAtk{0%{opacity:0;}14%{opacity:1;}62%{opacity:0;}100%{opacity:0;}}
+.battle.go .h-idle{animation:btIdle .62s steps(1,end) both;}
+@keyframes btIdle{0%{opacity:1;}14%{opacity:0;}62%{opacity:1;}100%{opacity:1;}}
+.battle.go.final .h-idle{animation-name:btIdleF; animation-timing-function:linear;}
+@keyframes btIdleF{0%{opacity:1;}14%{opacity:0;}100%{opacity:0;}}
+.battle.go.final .h-win{animation:btWin .62s linear both;}
+@keyframes btWin{0%,60%{opacity:0;}100%{opacity:1;}}
+.battle.go .bt-bossi{animation:btHit .46s linear .2s both;}
+@keyframes btHit{0%{transform:translateX(0); filter:brightness(1);}10%{transform:translateX(7px); filter:brightness(2.6);}25%{transform:translateX(-6px); filter:brightness(1.6);}45%{transform:translateX(4px); filter:brightness(1);}70%{transform:translateX(-2px);}100%{transform:translateX(0);}}
+.battle.go.final .bt-bossi{animation:btKO 1.5s linear .2s both;}
+@keyframes btKO{0%{transform:translate(0,0) rotate(0); filter:brightness(1);}5%{transform:translateX(9px); filter:brightness(3);}10%{transform:translateX(-7px); filter:brightness(1.6);}18%{transform:translate(5px,0) rotate(2deg); filter:brightness(1);}28%{transform:translate(-5px,0) rotate(-2deg);}40%{transform:translate(4px,0) rotate(2deg);}52%{transform:translate(-4px,0) rotate(-1deg);}64%{transform:translate(3px,0) rotate(3deg);}100%{transform:translate(8px,7px) rotate(14deg); filter:brightness(1);}}
+.battle.go.final .b-idle{animation:btFadeOut .2s linear 1.1s both;}
+.battle.go.final .b-dead{animation:btFadeIn .2s linear 1.1s both;}
+@keyframes btFadeOut{to{opacity:0;}}
+@keyframes btFadeIn{from{opacity:0;}to{opacity:1;}}
+.battle.go .bt-slash{animation:btSlash .3s linear .2s forwards;}
+@keyframes btSlash{0%{opacity:1;}70%{opacity:1;}100%{opacity:0;}}
+.battle.go .bt-slash path{animation:btDraw .2s ease-out .2s forwards;}
+@keyframes btDraw{to{stroke-dashoffset:0;}}
+.battle.go .bt-dmg{animation:btDmg .8s ease-out .22s forwards;}
+.battle.go.final .bt-dmg{animation-duration:1.6s;}
+@keyframes btDmg{0%{opacity:0; transform:translate(-50%,10px) scale(.5);}16%{opacity:1; transform:translate(-50%,-4px) scale(1.25);}30%{transform:translate(-50%,-8px) scale(1);}75%{opacity:1;}100%{opacity:0; transform:translate(-50%,-12px) scale(1);}}
+@media (prefers-reduced-motion: reduce){
+  .battle,.battle *{animation:none !important; transition:none !important;}
+  .battle .bt-dmg{opacity:1;}
+  .battle .bt-slash,.battle .bt-boom{display:none;}
+  .battle.final .b-idle{opacity:0;} .battle.final .b-dead{opacity:1;}
+  .battle.final .h-idle{opacity:0;} .battle.final .h-win{opacity:1;}
+}
+/* 위험한 버튼 · 확인 창 */
+.ghost.danger{border-color:var(--boss); color:var(--boss); font-weight:700; background:transparent;}
+.primary.danger{background:var(--boss); color:var(--boss-ink);}
+.ovc.danger .ovh{color:var(--boss);}
+
 /* 시작화면 날씨 */
 .ts-wdim{position:absolute; inset:0; pointer-events:none;}
 #title.w-cloudy .ts-orb,#title.w-fog .ts-orb{opacity:.45;}
@@ -534,6 +602,7 @@ svg.chart{width:100%; height:auto; display:block;}
 <body>
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast" hidden role="status" aria-live="polite"></div>
+<div class="battle" id="battle" hidden aria-hidden="true"></div>
 <div class="timer" id="timer" hidden role="status" aria-live="polite">
   <span class="tlab">휴식</span>
   <span class="tnum" id="tnum">60</span>
@@ -638,6 +707,7 @@ var X = {
   bulg:{n:'불가리안 스플릿 스쿼트',r:['8~10회(한쪽)','10~12회(한쪽)','12회(한쪽)'],tips:['뒤 발등을 의자 위에 올리기','앞발에 체중 70% 싣기','앞 무릎이 안쪽으로 모이지 않게'],e:'뒤 발을 바닥에 두고',h:'3초 내려가기'},
   wallsit:{n:'월 싯',t:1,r:['20초','30초','40초'],tips:['등과 엉덩이를 벽에 붙이기','무릎은 90도, 발목 바로 위에','숨을 멈추지 말고 편하게 쉬기'],e:'조금 높게 앉아서',h:'더 깊게 앉아서'},
   sideplank:{n:'사이드 플랭크',t:1,r:['20초(한쪽)','30초(한쪽)','40초(한쪽)'],tips:['팔꿈치는 어깨 바로 아래','몸이 옆에서 봤을 때 일자','골반이 내려가지 않게'],e:'무릎을 굽혀서',h:'위쪽 다리 들기'},
+  sidelift:{n:'사이드 라잉 레그 리프트',r:['10회(한쪽)','12~15회(한쪽)','15회(한쪽)'],tips:['몸을 일자로 두고 엉덩이가 뒤로 빠지지 않게','발끝은 정면을 향하고 위쪽 다리만 천천히 올리기','올릴 때 1초, 내릴 때 2초 · 반동 쓰지 않기'],e:'무릎을 굽힌 채 올리기',h:'다리를 올린 채 3초 버티기'},
   inchworm:{n:'인치웜',r:['5~6회','8회','10회'],tips:['무릎은 살짝 굽혀도 괜찮아요','손으로 천천히 걸어 플랭크 자세까지','플랭크에서 1초 멈췄다가 손을 발 쪽으로 걷기'],e:'무릎을 굽힌 채로',h:'플랭크에서 푸시업 1회 추가'},
   s1:{n:'목·어깨 스트레칭',t:1,one:1,r:['30초','30초','30초'],tips:['반동 없이 천천히','아프기 직전까지만']},
   s2:{n:'가슴 스트레칭',t:1,one:1,r:['30초','30초','30초'],tips:['문틀에 팔을 걸고 몸을 앞으로','어깨가 올라가지 않게']},
@@ -651,7 +721,7 @@ var PLAN = {
   tue:{k:'화',theme:'하체',ex:['squat','lunge','bridge','calf']},
   wed:{k:'수',theme:'코어 집중',ex:['crunch','legraise','bicycle','deadbug']},
   thu:{k:'목',theme:'등·어깨 + 코어',ex:['superman','snow','ytw','mtn']},
-  fri:{k:'금',theme:'하체 + 코어',ex:['bulg','wallsit','sideplank']},
+  fri:{k:'금',theme:'하체 + 코어',ex:['bulg','wallsit','sideplank','sidelift']},
   sat:{k:'토',theme:'전신 서킷',ex:['inchworm','pushup','squat','plank'],circuit:1},
   sun:{k:'일',theme:'회복일',ex:['s1','s2','s3','s4'],rest:1}
 };
@@ -763,6 +833,7 @@ var FIG={
   bulg:{props:CHAIR_L,poses:[Q([94,64],90,[[104,50],[100,50]],[[112,108],[62,86]],{ah:[-1,0.5],lh:[[1,0],[0,1]],fd:[[7,0],[-7,1]]}),Q([96,84],90,[[106,70],[102,70]],[[112,108],[62,86]],{ah:[-1,0.5],lh:[[1,0],[0,1]],fd:[[7,0],[-7,1]]})]},
   wallsit:{props:'<line x1="66" y1="10" x2="66" y2="110" stroke="var(--muted)" stroke-width="4"/>',poses:[Q([77,62],90,[[80,58],[78,58]],[[84,108],[86,108]],{ah:[-1,0]}),Q([77,78],90,[[90,76],[92,77]],[[100,106],[103,106]],{ah:[0,1],lh:[[1,0],[1,0]]})],dur:2.6},
   sideplank:{poses:[Q([105,98],168,[[89,107],[77,63]],[[150,108],[152,108]],{ah:[-0.2,1],fd:[[-3,3],[-3,3]]}),Q([105,96],170,[[89,107],[77,63]],[[150,108],[152,108]],{ah:[-0.2,1],fd:[[-3,3],[-3,3]]})]},
+  sidelift:{poses:[Q([112,103],180,[[96,108],[62,105]],[[162,103],[160,106]],{ah:[0.3,1],fd:[[5,0],[5,0]]}),Q([112,103],180,[[96,108],[62,105]],[[145,71],[160,106]],{ah:[0.3,1],fd:[[5,-4],[5,0]]})]},
   inchworm:{poses:[STAND,Q([100,62],-60,[[128,108],[131,108]],[[96,108],[99,108]],{ah:[-1,0],lh:[[1,0],[1,0]]}),PL_A,Q([100,62],-60,[[128,108],[131,108]],[[96,108],[99,108]],{ah:[-1,0],lh:[[1,0],[1,0]]})],dur:4.8}
 };
 
@@ -786,6 +857,7 @@ var D = {
   bulg:'뒤 발을 의자에 올리고 앞다리로 앉았다 일어나는 한 다리 스쿼트예요.',
   wallsit:'벽에 등을 대고 의자에 앉은 자세로 버티는 동작이에요. 허벅지와 엉덩이를 써요.',
   sideplank:'옆으로 누워 팔꿈치로 몸을 받치고 일자로 버티는 동작이에요.',
+  sidelift:'옆으로 누워 몸을 일자로 둔 채, 위쪽 다리를 천천히 들어 올렸다 내리는 동작이에요. 허벅지 바깥과 엉덩이 옆 근육을 써요.',
   inchworm:'서서 허리를 숙여 손으로 바닥을 걸어 플랭크 자세까지 갔다가, 다시 손으로 걸어 돌아와 일어서는 동작이에요.',
   s1:'고개를 옆으로 기울이고 손으로 살짝 눌러 목과 어깨 옆을 늘려요.',
   s2:'문틀에 팔을 걸고 몸을 앞으로 내밀어 가슴 앞쪽을 늘려요.',
@@ -833,8 +905,11 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.30', APP_DATE='2026-10-02', showChg=false;
+var APP_VER='1.33', APP_DATE='2026-10-02', showChg=false;
 var CHANGES=[
+  ['1.33','보스 타격음을 폭발음처럼 약 1초로, 마지막 일격을 길게 떨어지는 비명 포함 약 1.5초로 늘림(폭발 불꽃 효과·팝업 시점도 맞춤)'],
+  ['1.32','금요일 운동에 사이드 라잉 레그 리프트 추가(10/9 금요일부터, 지난 기록은 그대로), 보스 타격음을 아케이드 피격음으로, 마지막 일격을 보스의 비명으로 교체'],
+  ['1.31','보스전 타격 연출 추가(세트·러닝을 체크하면 용사가 보스를 공격, 보스 체력바·마지막 일격), 모든 기록 초기화 버튼 강조와 확인 창'],
   ['1.30','설정에 소리 설정 섹션 추가(전체 음향·배경음악·효과음 슬라이더), 설정 섹션 순서를 기본 설정→소리 설정→클라우드→백업→앱 정보로 변경'],
   ['1.29','시작 효과음 전체 길이를 약 1초로 늘리고 마지막 화음이 길게 울리며 자연스럽게 사라지도록 수정'],
   ['1.28','시작 효과음 리듬 변경: 첫 음을 길게, 둘째·셋째 음은 바짝 붙여 "단~ 따단!"'],
@@ -1622,16 +1697,21 @@ function weekNo(){
   return Math.max(1, Math.floor(diff/7)+1);
 }
 function stageIdx(){var w=weekNo(); return w<=2?0:(w<=4?1:2);}
-function idsFor(dk){
-  var p = PLAN[dk], out=['run'];
-  p.ex.forEach(function(id){
+var FRI4_ID='sidelift', FRI4_FROM='2026-10-03';
+function exFor(dk,k){
+  var l=PLAN[dk].ex;
+  return (dk==='fri' && k && k<FRI4_FROM) ? l.filter(function(id){ return id!==FRI4_ID; }) : l;
+}
+function idsFor(dk,k){
+  var out=['run'];
+  exFor(dk,k).forEach(function(id){
     var n = X[id].one?1:SETS;
     for(var i=1;i<=n;i++) out.push(id+'-'+i);
   });
   return out;
 }
 function count(d){
-  var k=fmt(d), ids=idsFor(DK[d.getDay()]), L=rd(k), n=0;
+  var k=fmt(d), ids=idsFor(DK[d.getDay()],k), L=rd(k), n=0;
   ids.forEach(function(i){if(L.done[i]) n++;});
   return {done:n,total:ids.length};
 }
@@ -1650,7 +1730,7 @@ function stageText(st){return STAGES[st].split(' · ')[1];}
 function dayXP(k){
   var L=S.log[k]; if(!L) return 0;
   var d=parse(k), xp=0;
-  idsFor(DK[d.getDay()]).forEach(function(id){ if(L.done[id]) xp += (id==='run'?XP_RUN:XP_SET); });
+  idsFor(DK[d.getDay()],k).forEach(function(id){ if(L.done[id]) xp += (id==='run'?XP_RUN:XP_SET); });
   if(L.diet){ if(L.diet.lunch) xp+=XP_MEAL; if(L.diet.post) xp+=XP_MEAL; if(L.diet.water) xp+=XP_MEAL; }
   if(isDone(d)){ xp+=XP_CLEAR; var dkk=DK[d.getDay()]; if(dkk==='sat'){ if(satWin(d)) xp+=BOSS_WIN_XP; } else if(dkk!=='sun'){ xp+=MID_XP; } }
   return xp;
@@ -1808,7 +1888,7 @@ function hud(){
 
 function viewToday(){
   var d=sel, k=fmt(d), dk=DK[d.getDay()], p=PLAN[dk], L=rd(k), st=stageIdx(), c=count(d);
-  var isToday=(k===fmt(TODAY)), ids=idsFor(dk), lock=!!L.ended, rs=dayResult(d), bossHtml='';
+  var isToday=(k===fmt(TODAY)), ids=idsFor(dk,k), lock=!!L.ended, rs=dayResult(d), bossHtml='';
   if(p.circuit){
     var wx=weekdayXP(d), wp=Math.min(100,Math.round(wx*100/SAT_GOAL));
     bossHtml='<div class="bossrule"><div class="chart-title" style="padding-top:0"><b>월~금 누적 XP</b><span>'+wx+' / '+SAT_GOAL+'</span></div>'+
@@ -1828,7 +1908,7 @@ function viewToday(){
   var run = p.rest?RUN_REST:RUN;
   h+='<h2>메인 퀘스트</h2><div class="q">'+check(!!L.done.run,run.label,run.sub,'run','',lock,XP_RUN)+kmRow(L,p.rest,lock)+'</div>';
 
-  p.ex.forEach(function(id,ix){
+  exFor(dk,k).forEach(function(id,ix){
     var e=X[id], dose=e.r[st], n=e.one?1:SETS, doneN=0, i;
     for(i=1;i<=n;i++){ if(L.done[id+'-'+i]) doneN++; }
     var exDone=(doneN===n), swBtn='';
@@ -2150,7 +2230,7 @@ function viewSettings(){
     '<div class="bk-btns" style="margin:0 0 6px"><button type="button" class="ghost" data-a="wx-toggle" aria-pressed="'+(wxOn()?'true':'false')+'">날씨 반영 '+(wxOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="wx-check"'+(wxOn()?'':' disabled')+'>지금 날씨 확인</button></div>'+
     '<p class="note" id="wxstat" style="margin:0 2px 12px">'+wxStatus()+'</p>'+
     '<button type="button" class="ghost" data-a="intro" style="margin-right:8px">시작 안내 다시 보기</button>'+
-    '<button type="button" class="ghost'+(armed?' warn':'')+'" data-a="reset">'+(armed?'정말 모든 기록 지우기':'모든 기록 초기화')+'</button></div>';
+    '<button type="button" class="ghost danger" data-a="reset">모든 기록 초기화</button></div>';
   h+=soundCardHtml();
   h+=cloudHtml();
   h+=bkHtml();
@@ -2233,6 +2313,7 @@ function showOverlay(o){
   ovk.textContent=o.k; ovt.textContent=o.t; ovb.innerHTML=o.b;
   ov.querySelector('.ovc').setAttribute('data-mode',mode);
   toastEl.hidden=true;
+  battleHideNow();
   ov.hidden=false; ovx.focus();
   var bossK=(o.k==='BOSS DEFEATED')?'win':(o.k==='DEFEAT'?'lose':'');
   try{
@@ -2257,6 +2338,7 @@ function xpBarHtml(){
 
 /* 행동 후 보상 처리 */
 function afterAction(before,k){
+  var dl=btDelay; btDelay=0;
   var a=snap(), gain=a.xp-before.xp, L=rd(k), d=parse(k), dk=DK[d.getDay()];
   var newAch=Object.keys(a.ach).filter(function(id){return !before.ach[id];}).map(function(id){return {n:a.ach[id]};});
   var justClear=a.done && !before.done && !L.cleared;
@@ -2273,7 +2355,8 @@ function afterAction(before,k){
     if(lvUp) b+='<p class="lvup">Lv.'+before.lv+' → <b>Lv.'+a.lv+'</b> · '+titleOf(a.lv)+'</p>';
     newAch.forEach(function(x){b+='<p class="achl">업적 해금 · '+x.n+'</p>';});
     b+=xpBarHtml();
-    showOverlay({k:kk,t:tt,b:b,mode:mode});
+    if(dl>0){ setTimeout(function(){ showOverlay({k:kk,t:tt,b:b,mode:mode}); },dl); }
+    else showOverlay({k:kk,t:tt,b:b,mode:mode});
     stopTimer();
   }else if(newAch.length){
     toast('업적 해금 · '+newAch[0].n);
@@ -2355,14 +2438,16 @@ app.addEventListener('click',function(e){
   if(a==='sw'){ startHold(parseInt(t.getAttribute('data-sec'),10),t.getAttribute('data-name')); return; }
   if(a==='set'){
     id=t.getAttribute('data-id'); before=snap(); L=wr(k);
+    var hp0=bossHp(sel);
     L.done[id]=!L.done[id]; save();
     var on=!!L.done[id], fin=isDone(sel);
     render(); pop('[data-id="'+id+'"]');
+    btDelay=battleHit(sel,hp0,bossHp(sel),XP_SET);
     if(on && !fin && !t.getAttribute('data-one')) startTimer(60);
     if(!on || fin) stopTimer();
     afterAction(before,k);
   }else if(a==='run'){
-    before=snap(); L=wr(k); L.done.run=!L.done.run; save(); render(); pop('[data-a="run"]'); afterAction(before,k);
+    before=snap(); L=wr(k); var hpr=bossHp(sel); L.done.run=!L.done.run; save(); render(); pop('[data-a="run"]'); btDelay=battleHit(sel,hpr,bossHp(sel),XP_RUN); afterAction(before,k);
   }else if(a==='diet'){
     before=snap(); L=wr(k); var dkey=t.getAttribute('data-k'); L.diet[dkey]=!L.diet[dkey]; save(); render(); pop('[data-k="'+dkey+'"]'); afterAction(before,k);
   }else if(a==='out'){
@@ -2372,7 +2457,7 @@ app.addEventListener('click',function(e){
   }else if(a.indexOf('cl-')===0){
     cloudAction(a);
   }else if(a==='end'){
-    askEl.hidden=false; askYes.focus();
+    askOpen({title:'오늘의 모험을 마치겠습니까?',note:'종료하면 오늘의 기록이 확정되고, 더 이상 수정할 수 없어요.',yes:'예',no:'아니오',act:endAdventure});
   }else if(a==='result'){
     var rr=dayResult(sel); if(rr){ showOverlay(resultPopup(sel,rr)); }
   }else if(a==='title-toggle'){
@@ -2419,8 +2504,7 @@ app.addEventListener('click',function(e){
     var dd=t.getAttribute('data-d');
     S.body=S.body.filter(function(b){return b.date!==dd;}); save(); render();
   }else if(a==='reset'){
-    if(!armed){armed=true; render();}
-    else{var ck=S.cloudTs, cu=S.uid; S=fresh(); S.cloudTs=ck; S.uid=cu; save(); armed=false; sel=TODAY; render();}
+    askOpen({title:'정말로 초기화 하시겠습니까?',note:'운동 기록, 체중 기록, 레벨, 장비가 모두 지워지고 되돌릴 수 없어요. 클라우드에 로그인한 상태라면 클라우드에 저장된 기록도 함께 비워져요. 필요하면 먼저 "백업 만들기"로 저장해 두세요.',yes:'초기화',no:'취소',danger:true,act:doReset});
   }
 });
 app.addEventListener('change',function(e){
@@ -2442,9 +2526,20 @@ app.addEventListener('change',function(e){
 
 
 /* ---------- 모험 종료 확인 · 시작 안내 ---------- */
-var askEl=document.getElementById('ask'), askYes=document.getElementById('askyes'), askNo=document.getElementById('askno');
-askYes.addEventListener('click',function(){askEl.hidden=true; endAdventure();});
-askNo.addEventListener('click',function(){askEl.hidden=true;});
+var askEl=document.getElementById('ask'), askYes=document.getElementById('askyes'), askNo=document.getElementById('askno'),
+    askT=document.getElementById('askt'), askNote=document.querySelector('#ask .bnote'), askBox=document.querySelector('#ask .ovc'), askAct=null;
+function askOpen(o){
+  askT.textContent=o.title; askNote.textContent=o.note; askYes.textContent=o.yes; askNo.textContent=o.no; askAct=o.act;
+  askYes.classList.toggle('danger',!!o.danger); askBox.classList.toggle('danger',!!o.danger);
+  askEl.hidden=false; (o.danger?askNo:askYes).focus();
+}
+function askClose(){ askEl.hidden=true; askAct=null; }
+askYes.addEventListener('click',function(){ var f=askAct; askEl.hidden=true; askAct=null; if(f) f(); });
+askNo.addEventListener('click',askClose);
+document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !askEl.hidden) askClose(); });
+function doReset(){
+  var ck=S.cloudTs, cu=S.uid; S=fresh(); S.cloudTs=ck; S.uid=cu; save(); armed=false; sel=TODAY; render(); toast('모든 기록을 초기화했어요');
+}
 var INTRO_TXT=[
   "당신은 몸짱용사입니다. 각 모험지의 적들을 물리치며 '전신짱 마왕'을 토벌할 힘을 기르십시오.",
   "매일 모험지를 돌며 퀘스트를 수행하고 중간보스를 토벌하십시오. 퀘스트 완료시 상응하는 경험치를 획득할 수 있습니다.",
@@ -2689,7 +2784,7 @@ var SFX=(function(){
   }
   var VOW={a:[[730,9,1],[1090,10,.6],[2440,12,.22]], o:[[500,8,1],[880,9,.6],[2400,12,.16]], u:[[330,7,1],[760,8,.5],[2300,12,.14]]};
   function curve(){ var n=2048, c=new Float32Array(n), i, x; for(i=0;i<n;i++){ x=i*2/(n-1)-1; c[i]=Math.tanh(x*2.6); } return c; }
-  function syl(C,dest,t,f0,f1,dur,vow,v,vib){
+  function syl(C,dest,t,f0,f1,dur,vow,v,vib,fade){
     var env=C.createGain(), sh=C.createWaveShaper(), mix=C.createGain(), src=C.createOscillator(), sub=C.createOscillator(), sg=C.createGain();
     sh.curve=curve(); sh.oversample='2x';
     src.type='sawtooth'; src.frequency.setValueAtTime(f0,t); src.frequency.exponentialRampToValueAtTime(f1,t+dur);
@@ -2701,14 +2796,19 @@ var SFX=(function(){
     });
     sub.connect(sg); sg.connect(mix);
     env.gain.setValueAtTime(0.0001,t); env.gain.linearRampToValueAtTime(v,t+0.035);
-    env.gain.setValueAtTime(v*0.85,t+Math.max(0.04,dur-0.07)); env.gain.exponentialRampToValueAtTime(0.0001,t+dur+0.08);
+    if(fade!=null) env.gain.linearRampToValueAtTime(v*fade,t+Math.max(0.05,dur-0.07)); else env.gain.setValueAtTime(v*0.85,t+Math.max(0.04,dur-0.07));
+    env.gain.exponentialRampToValueAtTime(0.0001,t+dur+0.08);
     mix.connect(sh); sh.connect(env); env.connect(dest);
     src.start(t); sub.start(t); src.stop(t+dur+0.15); sub.stop(t+dur+0.15);
   }
-  function lose(C,out,t){
+  function voiceBus(C,out){
     var dry=C.createGain(), rev=C.createConvolver(), wet=C.createGain(), len=Math.floor(C.sampleRate*0.55), ir=C.createBuffer(1,len,C.sampleRate), d=ir.getChannelData(0), i;
     for(i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);
     rev.buffer=ir; wet.gain.value=0.26; dry.connect(out); dry.connect(rev); rev.connect(wet); wet.connect(out);
+    return dry;
+  }
+  function lose(C,out,t){
+    var dry=voiceBus(C,out);
     var S=[[0.00,72,112,0.30,'u',0.5,0],[0.36,150,100,0.16,'a',0.5,0],[0.58,140,92,0.16,'a',0.48,0],[0.80,124,66,0.65,'a',0.46,1]];
     S.forEach(function(s,k){ syl(C,dry,t+s[0],s[1],s[2],s[3],s[4],s[5]*0.72,s[6]); if(k>0) burst(C,dry,t+s[0],0.08,0.10,'bandpass',1400,0.8); });
   }
@@ -2743,7 +2843,49 @@ var SFX=(function(){
   }
   /* 효과음 슬라이더를 놓을 때 크기를 가늠하도록 들려주는 짧은 '띠링' */
   function blip(C,out,t){ chip(C,out,t,987.77,0.06,0.16,0.25); chip(C,out,t+0.07,1318.5,0.09,0.16,0.25); }
-  return {win:win,lose:lose,start:start,blip:blip};
+  /* ---- 보스전 타격음: 옛 오락실 격투게임 피격음 느낌 ----
+     ① 샘플-홀드 노이즈(해상도 낮은 거친 질감)가 대역을 훑으며 내려가는 '크랙' ② 사각파가 급강하하는 '퍽' ③ 낮은 '쿵' 을 겹치고,
+     전체를 4비트 정도로 뭉개서(양자화) 아케이드 칩 특유의 지글거리는 질감을 낸다. 호출 0.2초 뒤(검이 닿는 순간)에 터짐 */
+  var crunchCache=new WeakMap(), crunchLow=new WeakMap();
+  function crunchBuf(C,low){
+    var M=low?crunchLow:crunchCache, b=M.get(C);
+    if(!b){ var n=Math.floor(C.sampleRate*(low?1.3:0.4)), h=low?11:4, v=0, d, i; b=C.createBuffer(1,n,C.sampleRate); d=b.getChannelData(0); for(i=0;i<n;i++){ if(i%h===0) v=Math.random()*2-1; d[i]=v; } M.set(C,b); }
+    return b;
+  }
+  function crushCurve(){ var n=4097, c=new Float32Array(n), L=14, i, x; for(i=0;i<n;i++){ x=i*2/(n-1)-1; c[i]=Math.round(x*L)/L; } return c; }
+  /* 폭발형 아케이드 피격음(약 1초): ①②는 4비트로 뭉갠 '크랙+급강하 톤'(타격 순간), ③은 해상도 낮은 노이즈가 낮아지며 길게 울리는 폭발 몸통, ④는 깊은 '쿵' */
+  function arcadeHit(C,out,t,big){
+    var crush=C.createWaveShaper(), gc=C.createGain(), dur=1.0;
+    crush.curve=crushCurve(); gc.gain.value=big?1.05:1; crush.connect(gc); gc.connect(out);
+    var s=C.createBufferSource(), f=C.createBiquadFilter(), e=C.createGain();
+    s.buffer=crunchBuf(C); f.type='bandpass'; f.Q.value=0.9; f.frequency.setValueAtTime(3200,t); f.frequency.exponentialRampToValueAtTime(420,t+0.2);
+    e.gain.setValueAtTime(0.0001,t); e.gain.linearRampToValueAtTime(0.45,t+0.004); e.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+    s.connect(f); f.connect(e); e.connect(crush); s.start(t); s.stop(t+0.3);
+    chip(C,crush,t,960,0.16,0.18,0.25,70);
+    var r=C.createBufferSource(), lp=C.createBiquadFilter(), er=C.createGain();
+    r.buffer=crunchBuf(C,true); lp.type='lowpass'; lp.Q.value=0.8; lp.frequency.setValueAtTime(2600,t); lp.frequency.exponentialRampToValueAtTime(260,t+dur);
+    er.gain.setValueAtTime(0.0001,t); er.gain.linearRampToValueAtTime(big?0.6:0.55,t+0.01); er.gain.exponentialRampToValueAtTime(0.05,t+dur*0.92); er.gain.exponentialRampToValueAtTime(0.0001,t+dur+0.12);
+    r.connect(lp); lp.connect(er); er.connect(gc); r.start(t); r.stop(t+dur+0.2);
+    var o=C.createOscillator(), eb=C.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(130,t); o.frequency.exponentialRampToValueAtTime(38,t+0.75);
+    eb.gain.setValueAtTime(big?0.6:0.5,t); eb.gain.exponentialRampToValueAtTime(0.07,t+dur*0.8); eb.gain.exponentialRampToValueAtTime(0.0001,t+dur+0.1);
+    o.connect(eb); eb.connect(gc); o.start(t); o.stop(t+dur+0.2);
+  }
+  function hit(C,out,t){ arcadeHit(C,out,t+0.2,false); }
+  /* 마지막 일격(약 1.5초): 폭발 타격 + 토벌 실패 웃음과 같은 보스 목소리로 '으~아아아악…' (끝이 길게 떨어지며 사라짐) + 쓰러지는 쿵 */
+  function scream(C,out,t){
+    var dry=voiceBus(C,out);
+    syl(C,dry,t,100,170,0.10,'o',0.36,0);
+    syl(C,dry,t+0.10,190,46,1.15,'a',0.4,1,0.3);
+    burst(C,dry,t+0.10,0.09,0.10,'bandpass',1400,0.8);
+  }
+  function finalHit(C,out,t){
+    t+=0.2;
+    arcadeHit(C,out,t,true);
+    scream(C,out,t+0.02);
+    thump(C,out,t+1.34,0.38); burst(C,out,t+1.34,0.22,0.1,'bandpass',500,0.8);
+  }
+  return {win:win,lose:lose,start:start,blip:blip,hit:hit,final:finalHit};
 })();
 
 /* ---------- 배경음악 (Web Audio로 직접 연주하는 레트로 칩튠) ---------- */
@@ -2959,6 +3101,51 @@ app.addEventListener('change',function(e){
   var id=e.target&&e.target.id;
   if(id==='volmaster' || id==='volsfx'){ if(!BGM.sfx('blip',0.25,0.5)) beep(); }
 });
+
+/* ---------- 보스전 타격 연출 ---------- */
+var btEl=document.getElementById('battle'), btHideT=null, btOffT=null, btDelay=0;
+function bossHp(d){
+  var dk=DK[d.getDay()], L=rd(fmt(d)), mx=0, left=0;
+  idsFor(dk,fmt(d)).forEach(function(id){ var v=(id==='run'?XP_RUN:XP_SET); mx+=v; if(!L.done[id]) left+=v; });
+  return {max:mx,left:left};
+}
+function btSvg(vb,inner){ return '<svg viewBox="'+vb+'" aria-hidden="true">'+inner+'</svg>'; }
+function battleHideNow(){
+  clearTimeout(btHideT); clearTimeout(btOffT);
+  btEl.classList.remove('on','go'); btEl.hidden=true;
+}
+function battleFade(){
+  btEl.classList.remove('on');
+  btOffT=setTimeout(function(){ btEl.hidden=true; btEl.classList.remove('go'); },200);
+}
+/* 세트·러닝을 체크하면 용사가 달려가 보스를 벤다. 돌려주는 값: 결과 팝업을 미룰 시간(ms) */
+function battleHit(d,h0,h1,dmg){
+  var dk=DK[d.getDay()], B=BOSSES[dk];
+  if(!B || h1.left>=h0.left) return 0;
+  var i=ORDER.indexOf(dk), key=BKEY[i], fin=(h1.left===0), survive=false;
+  if(fin && dk==='sat' && !satWin(d)){ fin=false; survive=true; }
+  var mx=h1.max, before=Math.round(h0.left*100/mx), after=survive?8:Math.round(h1.left*100/mx), shown=survive?1:h1.left;
+  clearTimeout(btHideT); clearTimeout(btOffT);
+  btEl.className='battle'+(fin?' final':'')+(survive?' survive':'');
+  var HV='-80 -120 170 176', BV='-70 -85 140 135';
+  btEl.innerHTML=
+    '<div class="bt-stage"><div class="bt-ground"></div>'+
+    '<div class="bt-hero"><div class="h-idle">'+btSvg(HV,heroPose('stand'))+'</div><div class="h-atk">'+btSvg(HV,heroPose('fight'))+'</div>'+(fin?'<div class="h-win">'+btSvg(HV,heroPose('cheer'))+'</div>':'')+'</div>'+
+    '<div class="bt-boss"><div class="bt-bossi"><div class="b-idle">'+btSvg(BV,bossArtBy(key,'idle'))+'</div>'+(fin?'<div class="b-dead">'+btSvg(BV,bossArtBy(key,'dead'))+'</div>':'')+'</div>'+
+    '<div class="bt-boom"></div><svg class="bt-slash" viewBox="0 0 80 80" aria-hidden="true"><path pathLength="1" d="M8,8 Q42,26 72,70" stroke="#2B2138" stroke-width="10"/><path pathLength="1" d="M8,8 Q42,26 72,70" stroke="#FFFFFF" stroke-width="5"/><path pathLength="1" d="M30,2 Q60,22 76,50" stroke="#2B2138" stroke-width="8"/><path pathLength="1" d="M30,2 Q60,22 76,50" stroke="#FFF3B0" stroke-width="3.5"/></svg>'+
+    '<span class="bt-dmg">'+(fin?'처치!':(survive?'버텼다!':'−'+dmg))+'</span></div></div>'+
+    '<div class="bt-hp"><span class="bt-name">'+B.n+'</span><div class="bt-bar"><i class="g" style="width:'+before+'%"></i><i class="c" style="width:'+before+'%"></i></div><b class="bt-n">'+shown+' / '+mx+'</b></div>';
+  btEl.hidden=false; void btEl.offsetWidth;
+  btEl.style.setProperty('--lunge',Math.round(btEl.clientWidth*0.36)+'px');
+  btEl.classList.add('on','go');
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){
+    var g=btEl.querySelector('.bt-bar .g'), c=btEl.querySelector('.bt-bar .c'); if(g&&c){ g.style.width=after+'%'; c.style.width=after+'%'; }
+  }); });
+  try{ if(!BGM.sfx(fin?'final':'hit',fin?2.0:1.2,0.4)) tone(fin?180:240,0.2,0.12,0.12); }catch(e){}
+  try{ if(navigator.vibrate) setTimeout(function(){ navigator.vibrate(fin?[30,50,90]:20); },190); }catch(e){}
+  btHideT=setTimeout(battleFade,fin?2100:1500);
+  return fin?1850:(survive?1350:1250);
+}
 
 /* ---------- 시작화면 ---------- */
 var titleEl=document.getElementById('title'), tsFlash=document.getElementById('tsflash'), tsBusy=false, tsFirst=false;

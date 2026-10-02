@@ -208,6 +208,7 @@ svg.chart{width:100%; height:auto; display:block;}
 }
 
 /* 보스전 */
+.bonustag{flex:none; font-family:var(--disp); font-size:13px; padding:0 8px; border-radius:999px; border:2px solid var(--gold); color:var(--link); line-height:20px; white-space:nowrap;}
 .bossrule{margin-top:14px; border-top:2px dashed var(--line); padding-top:12px;}
 .pips{display:flex; gap:6px;}
 .pip{flex:1; text-align:center; font-family:var(--disp); font-size:16px; padding:4px 0; border-radius:10px; background:var(--soft); border:2px solid var(--line); color:var(--muted);}
@@ -930,8 +931,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.34', APP_DATE='2026-10-02', showChg=false;
+var APP_VER='1.35', APP_DATE='2026-10-02', showChg=false;
 var CHANGES=[
+  ['1.35','오늘(10/2) 금요일이 이미 클리어·종료돼 있어도 새 운동이 보너스로 보이고 기록할 수 있게 수정'],
   ['1.34','금요일 새 운동을 오늘(10/2)부터 적용, 퀘스트 카드 이름을 일일 퀘스트로 변경, 경험치바 아래에 주간 퀘스트(월~금 누적 1000XP 달성·마왕성 도전 가능 여부) 추가'],
   ['1.33','보스 타격음을 폭발음처럼 약 1초로, 마지막 일격을 길게 떨어지는 비명 포함 약 1.5초로 늘림(폭발 불꽃 효과·팝업 시점도 맞춤)'],
   ['1.32','금요일 운동에 사이드 라잉 레그 리프트 추가(10/9 금요일부터, 지난 기록은 그대로), 보스 타격음을 아케이드 피격음으로, 마지막 일격을 보스의 비명으로 교체'],
@@ -1724,21 +1726,21 @@ function weekNo(){
 }
 function stageIdx(){var w=weekNo(); return w<=2?0:(w<=4?1:2);}
 var FRI4_ID='sidelift', FRI4_FROM='2026-10-02';
+/* 적용 첫날(10/2): 새 운동이 생기기 전에 이미 클리어·종료해 확정된 기록은 예전 3개 기준 그대로 두고,
+   새 운동은 '보너스'로 보여 준다(클리어 여부엔 영향 없이 XP만 더해짐). 새 운동 3세트를 다 하면 정식 운동으로 합쳐진다. */
+function fri4Legacy(dk,k){
+  if(dk!=='fri' || k!==FRI4_FROM) return false;
+  var L=S.log[k]; if(!L || !(L.cleared||L.ended)) return false;
+  var n=0, i; for(i=1;i<=SETS;i++){ if(L.done && L.done[FRI4_ID+'-'+i]) n++; }
+  return n<SETS;
+}
 function exFor(dk,k){
   var l=PLAN[dk].ex;
   if(dk!=='fri' || !k) return l;
-  var old=l.filter(function(id){ return id!==FRI4_ID; });
-  if(k<FRI4_FROM) return old;
-  if(k===FRI4_FROM){
-    /* 적용 첫날: 이미 클리어·종료해서 확정된 기록(새 운동 기록 없음)은 예전 3개 기준 그대로 둔다 */
-    var L=S.log[k];
-    if(L && (L.cleared||L.ended)){
-      var has=false, i; for(i=1;i<=SETS;i++){ if(L.done && L.done[FRI4_ID+'-'+i]) has=true; }
-      if(!has) return old;
-    }
-  }
-  return l;
+  return (k<FRI4_FROM || fri4Legacy(dk,k)) ? l.filter(function(id){ return id!==FRI4_ID; }) : l;
 }
+function bonusFor(dk,k){ return fri4Legacy(dk,k) ? [FRI4_ID] : []; }
+function isBonusSet(id,k){ return bonusFor(DK[parse(k).getDay()],k).some(function(b){ return String(id).indexOf(b+'-')===0; }); }
 function idsFor(dk,k){
   var out=['run'];
   exFor(dk,k).forEach(function(id){
@@ -1768,6 +1770,7 @@ function dayXP(k){
   var L=S.log[k]; if(!L) return 0;
   var d=parse(k), xp=0;
   idsFor(DK[d.getDay()],k).forEach(function(id){ if(L.done[id]) xp += (id==='run'?XP_RUN:XP_SET); });
+  bonusFor(DK[d.getDay()],k).forEach(function(id){ var bi; for(bi=1;bi<=SETS;bi++){ if(L.done[id+'-'+bi]) xp+=XP_SET; } });
   if(L.diet){ if(L.diet.lunch) xp+=XP_MEAL; if(L.diet.post) xp+=XP_MEAL; if(L.diet.water) xp+=XP_MEAL; }
   if(isDone(d)){ xp+=XP_CLEAR; var dkk=DK[d.getDay()]; if(dkk==='sat'){ if(satWin(d)) xp+=BOSS_WIN_XP; } else if(dkk!=='sun'){ xp+=MID_XP; } }
   return xp;
@@ -1978,20 +1981,22 @@ function viewToday(){
   var run = p.rest?RUN_REST:RUN;
   h+='<h2>메인 퀘스트</h2><div class="q">'+check(!!L.done.run,run.label,run.sub,'run','',lock,XP_RUN)+kmRow(L,p.rest,lock)+'</div>';
 
-  exFor(dk,k).forEach(function(id,ix){
+  var EXL=exFor(dk,k), BON=bonusFor(dk,k);
+  EXL.concat(BON).forEach(function(id,ix){
+    var isB=(ix>=EXL.length), lk=isB?false:lock;
     var e=X[id], dose=e.r[st], n=e.one?1:SETS, doneN=0, i;
     for(i=1;i<=n;i++){ if(L.done[id+'-'+i]) doneN++; }
     var exDone=(doneN===n), swBtn='';
     if(e.t){ var sm=String(dose).match(/(\d+)\s*초/); if(sm){ var side=String(dose).indexOf('한쪽')>=0; swBtn='<button type="button" class="swbtn" data-a="sw" data-sec="'+sm[1]+'" data-name="'+e.n+'">▶ '+(side?'한쪽 ':'')+sm[1]+'초 타이머</button>'; } }
-    h+='<div class="q ex'+(exDone?' ok':'')+'"><div class="ex-head"><span class="idx" aria-hidden="true">'+(ix+1)+'</span><h3 class="ex-name">'+e.n+'</h3>'+rewChip(n*XP_SET,exDone)+'</div>'+
+    h+='<div class="q ex'+(exDone?' ok':'')+'"><div class="ex-head"><span class="idx" aria-hidden="true">'+(ix+1)+'</span><h3 class="ex-name">'+e.n+'</h3>'+(isB?'<span class="bonustag">보너스</span>':'')+rewChip(n*XP_SET,exDone)+'</div>'+
        '<p class="desc">'+(D[id]||'')+'</p>'+
-       '<p class="dose">목표 <b>'+(e.one?dose:(SETS+(p.circuit?'라운드':'세트')+' × '+dose))+'</b></p>'+swBtn;
+       '<p class="dose">목표 <b>'+(e.one?dose:(SETS+(p.circuit?'라운드':'세트')+' × '+dose))+'</b></p>'+swBtn+(isB?'<p class="note" style="margin:6px 0 0">오늘은 이미 확정된 날이라 보너스로 해요. 클리어 여부는 그대로이고 XP만 더해져요.</p>':'');
     if(e.one){
-      h+='<div class="sets"><button type="button" class="set wide" aria-pressed="'+(L.done[id+'-1']?'true':'false')+'" data-a="set" data-id="'+id+'-1" data-one="1"'+(lock?' disabled':'')+'>'+(L.done[id+'-1']?'완료':'했어요')+'</button></div>';
+      h+='<div class="sets"><button type="button" class="set wide" aria-pressed="'+(L.done[id+'-1']?'true':'false')+'" data-a="set" data-id="'+id+'-1" data-one="1"'+(lk?' disabled':'')+'>'+(L.done[id+'-1']?'완료':'했어요')+'</button></div>';
     }else{
       h+='<div class="sets">';
       for(i=1;i<=SETS;i++){
-        h+='<button type="button" class="set" aria-pressed="'+(L.done[id+'-'+i]?'true':'false')+'" data-a="set" data-id="'+id+'-'+i+'" aria-label="'+e.n+' '+i+(p.circuit?'라운드':'세트')+'"'+(lock?' disabled':'')+'>'+i+'</button>';
+        h+='<button type="button" class="set" aria-pressed="'+(L.done[id+'-'+i]?'true':'false')+'" data-a="set" data-id="'+id+'-'+i+'" aria-label="'+e.n+' '+i+(p.circuit?'라운드':'세트')+'"'+(lk?' disabled':'')+'>'+i+'</button>';
       }
       h+='</div>';
     }
@@ -2502,7 +2507,7 @@ app.addEventListener('click',function(e){
   var t=e.target.closest('[data-a]'); if(!t || t.disabled) return;
   var a=t.getAttribute('data-a'), k=fmt(sel), L, id, before;
   var Lc=rd(k);
-  if(Lc.ended && ['set','run','diet','out','end'].indexOf(a)>=0) return;
+  if(Lc.ended && ['set','run','diet','out','end'].indexOf(a)>=0 && !(a==='set' && isBonusSet(t.getAttribute('data-id'),k))) return;
   if(a==='diet' && t.getAttribute('data-k')!=='water' && Lc.out) return;
   if(a==='out' && !Lc.out && Lc.diet.lunch && Lc.diet.post) return;
   if(a==='sw'){ startHold(parseInt(t.getAttribute('data-sec'),10),t.getAttribute('data-name')); return; }

@@ -556,6 +556,31 @@ svg.chart{width:100%; height:auto; display:block;}
 .primary.danger{background:var(--boss); color:var(--boss-ink);}
 .ovc.danger .ovh{color:var(--boss);}
 
+/* 주간 퀘스트 */
+.weekq{background:var(--surface); border:2px solid var(--line); border-radius:20px; padding:12px 14px 12px; box-shadow:0 4px 0 var(--edge); margin:0 0 16px;}
+.weekq.ok{border-color:var(--clear);} .weekq.no{border-color:var(--boss);}
+.wq-top{display:flex; justify-content:space-between; align-items:baseline;}
+.wq-k{font-size:13px; font-weight:700; color:var(--link); margin:0;}
+.wq-range{font-size:12px; color:var(--muted);}
+.wq-xp{display:flex; justify-content:space-between; align-items:baseline; margin-top:4px; font-size:13px; color:var(--muted);}
+.wq-xp b{font-family:var(--disp); font-weight:400; font-size:28px; line-height:1.15; color:var(--ink);}
+.wq-xp b small{font-size:15px; color:var(--muted);}
+.wq-bar{position:relative; height:16px; border-radius:8px; background:var(--soft); border:1px solid var(--line); overflow:hidden; margin:6px 0 8px;}
+.wq-bar i{position:absolute; left:0; top:0; bottom:0; border-radius:8px; transition:width .4s ease;}
+.wq-bar .pot{background:repeating-linear-gradient(135deg,var(--line) 0 5px,transparent 5px 10px);}
+.wq-bar .cur{background:var(--gold);}
+.weekq.ok .wq-bar .cur{background:var(--clear);}
+.wq-st{font-size:15px; font-weight:700; margin:0; line-height:1.4;}
+.wq-st:before{content:''; display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:8px; background:var(--gold); vertical-align:1px;}
+.weekq.ok .wq-st:before{background:var(--clear);} .weekq.no .wq-st:before{background:var(--boss);}
+.wq-sub{font-size:13px; color:var(--muted); margin:2px 0 0; line-height:1.4;}
+.wq-days{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:10px;}
+.wq-day{text-align:center; border-radius:10px; background:var(--soft); border:2px solid var(--line); padding:3px 0 4px; line-height:1.2;}
+.wq-day small{display:block; font-size:12px; color:var(--muted);}
+.wq-day b{font-family:var(--disp); font-weight:400; font-size:16px; color:var(--ink);}
+.wq-day.done{border-color:var(--clear);} .wq-day.cur{border-color:var(--gold);}
+.wq-day.fut b{color:var(--muted);}
+
 /* 시작화면 날씨 */
 .ts-wdim{position:absolute; inset:0; pointer-events:none;}
 #title.w-cloudy .ts-orb,#title.w-fog .ts-orb{opacity:.45;}
@@ -905,8 +930,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.33', APP_DATE='2026-10-02', showChg=false;
+var APP_VER='1.34', APP_DATE='2026-10-02', showChg=false;
 var CHANGES=[
+  ['1.34','금요일 새 운동을 오늘(10/2)부터 적용, 퀘스트 카드 이름을 일일 퀘스트로 변경, 경험치바 아래에 주간 퀘스트(월~금 누적 1000XP 달성·마왕성 도전 가능 여부) 추가'],
   ['1.33','보스 타격음을 폭발음처럼 약 1초로, 마지막 일격을 길게 떨어지는 비명 포함 약 1.5초로 늘림(폭발 불꽃 효과·팝업 시점도 맞춤)'],
   ['1.32','금요일 운동에 사이드 라잉 레그 리프트 추가(10/9 금요일부터, 지난 기록은 그대로), 보스 타격음을 아케이드 피격음으로, 마지막 일격을 보스의 비명으로 교체'],
   ['1.31','보스전 타격 연출 추가(세트·러닝을 체크하면 용사가 보스를 공격, 보스 체력바·마지막 일격), 모든 기록 초기화 버튼 강조와 확인 창'],
@@ -1697,10 +1723,21 @@ function weekNo(){
   return Math.max(1, Math.floor(diff/7)+1);
 }
 function stageIdx(){var w=weekNo(); return w<=2?0:(w<=4?1:2);}
-var FRI4_ID='sidelift', FRI4_FROM='2026-10-03';
+var FRI4_ID='sidelift', FRI4_FROM='2026-10-02';
 function exFor(dk,k){
   var l=PLAN[dk].ex;
-  return (dk==='fri' && k && k<FRI4_FROM) ? l.filter(function(id){ return id!==FRI4_ID; }) : l;
+  if(dk!=='fri' || !k) return l;
+  var old=l.filter(function(id){ return id!==FRI4_ID; });
+  if(k<FRI4_FROM) return old;
+  if(k===FRI4_FROM){
+    /* 적용 첫날: 이미 클리어·종료해서 확정된 기록(새 운동 기록 없음)은 예전 3개 기준 그대로 둔다 */
+    var L=S.log[k];
+    if(L && (L.cleared||L.ended)){
+      var has=false, i; for(i=1;i<=SETS;i++){ if(L.done && L.done[FRI4_ID+'-'+i]) has=true; }
+      if(!has) return old;
+    }
+  }
+  return l;
 }
 function idsFor(dk,k){
   var out=['run'];
@@ -1886,19 +1923,52 @@ function hud(){
     '<div class="xpt"><span>'+li.cur+' / '+li.need+' XP</span><span>다음 레벨까지 '+(li.need-li.cur)+'</span></div></div></section>';
 }
 
+/* ---------- 주간 퀘스트: 월~금 누적 XP로 이번 주 마왕성 도전 가능 여부 확인 ---------- */
+function dayMaxXP(d){ return XP_RUN+(count(d).total-1)*XP_SET+3*XP_MEAL+XP_CLEAR+MID_XP; }
+function weekQuest(d){
+  var mon=addDays(d,-((d.getDay()+6)%7)), tk=fmt(TODAY), cur=0, mx=0, days=[], i, allOver=true;
+  for(i=0;i<5;i++){
+    var x=addDays(mon,i), k=fmt(x), L=rd(k), xp=dayXP(k), over=!!(L.ended || k<tk);
+    cur+=xp; mx+=over?xp:Math.max(xp,dayMaxXP(x));
+    if(!over) allOver=false;
+    days.push({lab:DAYS[x.getDay()], xp:xp, isT:(k===tk), done:isDone(x), fut:(k>tk && !xp)});
+  }
+  return {mon:mon, fri:addDays(mon,4), cur:cur, mx:mx, days:days, allOver:allOver};
+}
+function weeklyHtml(d){
+  var W=weekQuest(d), G=SAT_GOAL, pc=Math.min(100,Math.round(W.cur*100/G)), pot=Math.min(100,Math.round(W.mx*100/G)),
+      st=(W.cur>=G)?'ok':(W.mx>=G?'go':'no'), msg, sub='', need=Math.max(0,G-W.cur),
+      sp=(fmt(addDays(W.mon,5))<fmt(TODAY));   /* 그 주 토요일이 이미 지났는지 */
+  if(st==='ok'){
+    msg=sp?(G+' XP 달성 · 마왕성 도전 자격을 얻은 주였어요'):(W.allOver?(G+' XP 달성 · 마왕성에 도전할 수 있어요'):(G+' XP 달성! 토요일 마왕성에 도전할 수 있어요'));
+    sub=sp?'':'마왕성에서 이기려면 토요일 퀘스트도 모두 완료해야 해요.';
+  }else if(st==='go'){
+    msg=need+' XP 더 필요해요';
+    sub='남은 날을 모두 채우면 최대 +'+(W.mx-W.cur)+' XP · 마왕성 도전이 가능해요.';
+  }else{
+    msg=W.allOver?(W.cur+' XP로 '+G+' XP에 못 미'+(sp?'친 주였어요':'쳤어요')):('이번 주는 최대 '+W.mx+' XP라 마왕성 도전이 어려워요');
+    sub=W.allOver?(sp?'마왕의 저주로 마왕성에서 패배한 주였어요.':'마왕의 저주로 마왕성에서는 패배하는 주예요.'):'남은 날을 모두 채워도 '+G+' XP에 닿지 못해요.';
+  }
+  var dd=W.days.map(function(x){
+    return '<div class="wq-day'+(x.done?' done':'')+(x.isT?' cur':'')+(x.fut?' fut':'')+'"><small>'+x.lab+(x.isT?' · 오늘':'')+'</small><b>'+(x.fut?'–':x.xp)+'</b></div>';
+  }).join('');
+  return '<section class="weekq '+st+'" aria-label="주간 퀘스트"><div class="wq-top"><p class="wq-k">주간 퀘스트</p><span class="wq-range">'+(W.mon.getMonth()+1)+'/'+W.mon.getDate()+' ~ '+(W.fri.getMonth()+1)+'/'+W.fri.getDate()+'</span></div>'+
+    '<div class="wq-xp"><span>월~금 누적 XP</span><b>'+W.cur+' <small>/ '+G+'</small></b></div>'+
+    '<div class="wq-bar" role="progressbar" aria-label="주간 경험치" aria-valuemin="0" aria-valuemax="'+G+'" aria-valuenow="'+Math.min(W.cur,G)+'"><i class="pot" style="width:'+pot+'%"></i><i class="cur" style="width:'+pc+'%"></i></div>'+
+    '<p class="wq-st">'+msg+'</p>'+(sub?'<p class="wq-sub">'+sub+'</p>':'')+'<div class="wq-days">'+dd+'</div></section>';
+}
+
 function viewToday(){
   var d=sel, k=fmt(d), dk=DK[d.getDay()], p=PLAN[dk], L=rd(k), st=stageIdx(), c=count(d);
   var isToday=(k===fmt(TODAY)), ids=idsFor(dk,k), lock=!!L.ended, rs=dayResult(d), bossHtml='';
   if(p.circuit){
-    var wx=weekdayXP(d), wp=Math.min(100,Math.round(wx*100/SAT_GOAL));
-    bossHtml='<div class="bossrule"><div class="chart-title" style="padding-top:0"><b>월~금 누적 XP</b><span>'+wx+' / '+SAT_GOAL+'</span></div>'+
-      '<div class="xpbar big" aria-hidden="true"><i style="width:'+wp+'%"></i></div>'+
+    bossHtml='<div class="bossrule">'+
       '<p>'+SAT_GOAL+' XP 이상이면 마왕성에서 승리할 수 있어요 (+150 XP 보너스). 못 미치거나 오늘 메인 퀘스트를 못 채우고 모험을 마치면 패배해요.</p></div>';
   }
   var maxXp = XP_RUN+(c.total-1)*XP_SET+3*XP_MEAL+XP_CLEAR+(p.circuit?BOSS_WIN_XP:(p.rest?0:MID_XP));
-  var h='<p class="eyebrow">'+longDate(d)+(isToday?' · 오늘':'')+'</p>'+hud();
+  var h='<p class="eyebrow">'+longDate(d)+(isToday?' · 오늘':'')+'</p>'+hud()+weeklyHtml(d);
   h+='<section class="quest'+(p.circuit?' boss':'')+(rs?' res r-'+rs.res:'')+'">'+
-    '<div class="qtop"><div class="qtext"><p class="qk">'+(p.circuit?'보스전':(p.rest?'회복의 신전':'오늘의 퀘스트'))+(rs?'<span class="stamp r-'+rs.res+'">'+resLabel(dk,rs.res)+'</span>':'')+'</p><div class="qtitle"><h1>'+QN[dk]+'</h1><span class="bchip'+(dk==='sun'?' god':'')+'">'+(BOSSES[dk]?BOSSES[dk].n:'몸짱신')+'</span></div>'+
+    '<div class="qtop"><div class="qtext"><p class="qk">'+(p.circuit?'보스전':(p.rest?'회복의 신전':'일일 퀘스트'))+(rs?'<span class="stamp r-'+rs.res+'">'+resLabel(dk,rs.res)+'</span>':'')+'</p><div class="qtitle"><h1>'+QN[dk]+'</h1><span class="bchip'+(dk==='sun'?' god':'')+'">'+(BOSSES[dk]?BOSSES[dk].n:'몸짱신')+'</span></div>'+
     '<p class="qs">'+p.theme+' · <b>'+weekNo()+'주차</b> · '+stageText(st)+'</p></div></div>'+lmIcon(ORDER.indexOf(dk),!!(rs&&rs.res==='win'&&dk!=='sun'),!rs&&!lock&&k>=fmt(TODAY))+
     '<div class="segs" role="progressbar" aria-label="퀘스트 진행" aria-valuemin="0" aria-valuemax="'+c.total+'" aria-valuenow="'+c.done+'">'+
     ids.map(function(id){return '<i'+(L.done[id]?' class="on"':'')+'></i>';}).join('')+'</div>'+

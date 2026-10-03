@@ -411,7 +411,9 @@ svg.chart{width:100%; height:auto; display:block;}
 @keyframes tsS2{to{transform:translate3d(-640px,0,0);}}
 @keyframes tsS3{to{transform:translate3d(-420px,0,0);}}
 @keyframes tsS4{to{transform:translate3d(-300px,0,0);}}
-.ts-mt,.ts-hl,.ts-rd,.ts-dest{filter:var(--tsf,none);}
+.ts-mt,.ts-hl,.ts-bd,.ts-rd,.ts-dest{filter:var(--tsf,none);}
+.ts-bd{bottom:calc(112px + var(--lift)); height:150px; width:calc(100% + 900px); background-size:900px 150px; animation:tsS7 30s linear infinite;}
+@keyframes tsS7{to{transform:translate3d(-900px,0,0);}}
 .ts-orb{position:absolute; border-radius:50%;}
 .ts-stars{position:absolute; inset:0 0 40% 0; width:100%; height:60%;}
 .ts-dest{position:absolute; right:3%; bottom:calc(196px + var(--lift)); width:160px; text-align:center;}
@@ -419,7 +421,7 @@ svg.chart{width:100%; height:auto; display:block;}
 .ts-plate{display:inline-block; margin-bottom:4px; background:#FFFFFF; color:#2B2138; border:2px solid #2B2138; border-radius:12px; padding:1px 10px 3px; box-shadow:0 3px 0 #2B2138; line-height:1.25;}
 .ts-plate small{display:block; font-size:11px; color:#6B5F7A;}
 .ts-plate b{display:block; font-family:var(--disp); font-weight:400; font-size:16px;}
-.ts-hero{position:absolute; left:50%; bottom:calc(58px + var(--lift)); width:156px; margin-left:-92px;}
+.ts-hero{position:absolute; left:50%; bottom:calc(46px + var(--lift)); width:204px; margin-left:-115px;}
 .ts-hero svg{display:block; width:100%; height:auto; overflow:visible;}
 .wf{visibility:hidden; animation:wf .72s linear infinite both;}
 @keyframes wf{0%{visibility:visible;}12.5%{visibility:hidden;}100%{visibility:hidden;}}
@@ -863,6 +865,10 @@ svg.chart{width:100%; height:auto; display:block;}
 .trgo{flex:none; min-width:78px; min-height:46px; padding:0 16px; border-radius:14px; border:2px solid var(--gold); background:var(--gold); color:var(--gold-ink); font-family:var(--disp); font-size:18px; box-shadow:0 3px 0 var(--edge);}
 .trgo:active{transform:translateY(2px); box-shadow:0 1px 0 var(--edge);}
 .swbtn.sm{display:inline-block; min-height:36px; margin-top:6px; padding:0 12px; font-size:14px; box-shadow:0 2px 0 var(--edge);}
+/* ---------- 마지막 훈련 취소 (v1.38.9) ---------- */
+.trundo{display:flex; align-items:center; gap:10px; margin:0 0 10px;}
+.trundo .ghost{min-height:40px; padding:0 14px; font-size:14px;}
+.trundo small{font-size:12px; color:var(--muted); line-height:1.35;}
 </style>
 </head>
 <body>
@@ -1171,8 +1177,15 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.38.8', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.38.15', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.38.15','시작화면 용사를 약 30% 키우고 조금 더 아래(앞)로 내려 배경과의 원근감 강화'],
+  ['1.38.14','퀘스트 탭 배경음악: 보스 토벌 성공 시 승리의 노래, 실패 시 패배의 그림자 추가 / 시작화면 배경에 현재 재건 상태의 훈련장·대장간·여관·성·성벽이 지나가도록 추가'],
+  ['1.38.13','일요일 회복의 신전 화면에서만 느긋하고 성스러운 성가풍 레트로 배경음악(회복의 신전)이 나오도록 추가'],
+  ['1.38.12','일일 러닝 섹션을 메인 퀘스트 위로 이동'],
+  ['1.38.11','퀘스트 화면에서 러닝을 \'일일 러닝\' 섹션으로 분리(메인 퀘스트에는 홈트레이닝 운동만, 일일 러닝은 메인 퀘스트 아래·사이드 퀘스트 위)'],
+  ['1.38.10','훈련장 \'마지막 훈련 취소\' 버튼을 러닝 5km 위로 이동'],
+  ['1.38.9','훈련장 \'마지막 훈련 취소\' 버튼 추가(세트·러닝 모두 한 번씩 되돌림), NPC(여주인·교관·대장장이)가 오늘 퀘스트 진행·마왕 토벌·재료 상황에 맞는 대사를 하도록 추가'],
   ['1.38.8','벅지짱 미노타우르스 상체(몸통·팔)를 처음 크기로 되돌림(굵은 다리와 근육 선은 유지)'],
   ['1.38.7','벅지짱 미노타우르스 다리를 굵게 키우고 허벅지 근육 선 표시(둥글게 부풀린 모양은 되돌림)'],
   ['1.38.6','벅지짱 미노타우르스 디자인 변경: 허벅지를 크고 단단하게, 상체는 조금 작게'],
@@ -1964,8 +1977,8 @@ function resultPopup(d,r){
       b:battleScene(B.k,'win')+rewardNote(d,'win')+'<p class="bnote">'+(dk==='sat'?'월~금 누적 '+r.xp+' XP로 마왕성을 돌파! '+B.n+eul(B.n)+' 쓰러뜨렸어요. 승리 보너스 +150 XP · 전리품 상자 1개 획득! 여관에서 열어 보세요':'몸짱용사가 '+B.n+eul(B.n)+' 쓰러뜨렸어요! 토벌 보너스 +'+MID_XP+' XP')+'</p>',mode:'win'};
   }
   var why;
-  if(dk==='sat') why=(r.why==='ended')?'마왕성 메인 퀘스트를 다 채우지 못하고 모험을 마쳤어요. '+B.n+'에게 패배했어요...':'월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에 못 미쳐 마왕의 저주에 걸렸어요...';
-  else why='메인 퀘스트를 다 채우지 못하고 모험을 마쳐서 '+B.n+'에게 졌어요...';
+  if(dk==='sat') why=(r.why==='ended')?'마왕성 퀘스트(메인 퀘스트와 일일 러닝)를 다 채우지 못하고 모험을 마쳤어요. '+B.n+'에게 패배했어요...':'월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에 못 미쳐 마왕의 저주에 걸렸어요...';
+  else why='메인 퀘스트와 일일 러닝을 다 채우지 못하고 모험을 마쳐서 '+B.n+'에게 졌어요...';
   return {k:'DEFEAT',t:dk==='sat'?'패배...':'토벌 실패...',b:battleScene(B.k,'lose')+'<p class="bnote">'+why+'</p>'+rewardNote(d,'lose'),mode:'lose'};
 }
 
@@ -2275,9 +2288,13 @@ function trAdd(id,delta){
   var e=S.trainLog[k]; if(!e) e=S.trainLog[k]={sets:{},run:0,es:0,er:0};
   var cur=e.sets[id]||0, nx=cur+delta;
   if(nx<0 || nx>TR_MAX) return false;
-  if(delta>0 && trainEarnNow()) e.es=(e.es||0)+1;
+  var earned=(delta>0 && trainEarnNow());
+  if(earned) e.es=(e.es||0)+1;
   if(nx===0) delete e.sets[id]; else e.sets[id]=nx;
   if(delta<0) e.es=Math.min(e.es||0,trSetCount(e));
+  if(!e.h) e.h=[];
+  if(delta>0){ e.h.push(id+':'+(earned?1:0)); if(e.h.length>80) e.h.shift(); }
+  else { var hi=e.h.map(function(x){return x.split(':')[0];}).lastIndexOf(id); if(hi>=0) e.h.splice(hi,1); }
   save(); return true;
 }
 function trRun(){
@@ -2286,8 +2303,23 @@ function trRun(){
   if(!S.trainLog) S.trainLog={};
   var e=S.trainLog[k]; if(!e) e=S.trainLog[k]={sets:{},run:0,es:0,er:0};
   if(e.run>=TR_MAX) return false;
-  e.run=(e.run||0)+1; if(trainEarnNow()) e.er=(e.er||0)+1;
+  var earnedRun=trainEarnNow();
+  e.run=(e.run||0)+1; if(earnedRun) e.er=(e.er||0)+1;
+  if(!e.h) e.h=[]; e.h.push('run:'+(earnedRun?1:0)); if(e.h.length>80) e.h.shift();
   save(); return true;
+}
+function trLast(){
+  var e=S.trainLog && S.trainLog[fmt(TODAY)]; if(!e || !e.h || !e.h.length) return null;
+  var p=e.h[e.h.length-1].split(':'), id=p[0];
+  return {id:id,name:(id==='run'?'러닝 5km':(X[id]?X[id].n:id)),unit:(id==='run'?'회':'세트')};
+}
+function trUndo(){
+  var k=fmt(TODAY), e=S.trainLog && S.trainLog[k]; if(!e || !e.h || !e.h.length) return null;
+  var last=e.h.pop(), p=last.split(':'), id=p[0], earned=(p[1]==='1'), n;
+  if(id==='run'){ e.run=Math.max(0,(e.run||0)-1); if(earned) e.er=Math.max(0,(e.er||0)-1); }
+  else { n=(e.sets[id]||0)-1; if(n>0) e.sets[id]=n; else delete e.sets[id]; if(earned) e.es=Math.max(0,(e.es||0)-1); }
+  e.es=Math.min(e.es||0,trSetCount(e)); e.er=Math.min(e.er||0,e.run||0);
+  save(); return id;
 }
 function trainWeekInfo(){
   var mon=weekMonOf(TODAY), raw=0, i;
@@ -2507,6 +2539,8 @@ function trainPanel(){
      '<p class="wq-sub">'+(wi.raw>wi.g?'합계가 '+SAT_GOAL+'을 넘은 '+(wi.raw-wi.g)+' XP는 기록만 남았어요. ':'')+
      (!open?'일요일은 회복의 신전에서 쉬는 날이에요. 훈련장은 월~토에 열려요.':(earn?'오늘 한 훈련은 XP로 인정돼요 (세트 '+XP_SET+', 러닝 '+XP_RUN+').':'마왕성 판정이 끝나서 오늘 훈련은 기록만 남아요.'))+'</p></section>';
   if(!open) return h;
+  var lh=trLast();
+  if(lh) h+='<div class="trundo"><button type="button" class="ghost" data-a="trundo">↶ 마지막 훈련 취소</button><small>'+lh.name+' 1'+lh.unit+' 기록을 지워요</small></div>';
   h+='<div class="q"><div class="trrow"><div class="trn"><b>러닝 5km</b><small>'+(te.run?'오늘 '+te.run+'회 · ':'')+'한 번 뛸 때마다 눌러요'+(earn?' (회당 '+XP_RUN+' XP)':'')+'</small></div><button type="button" class="trgo" data-a="trrun" aria-label="러닝 5km 훈련 기록">훈련</button></div></div>';
   TGR.forEach(function(g,gi){
     var on=!!trOpen[gi], cnt=0;
@@ -3027,15 +3061,57 @@ function npcPick(arr,id){
   do{ i=Math.floor(Math.random()*arr.length); k++; }while(arr.length>1 && npcLast[id]===arr[i] && k<10);
   npcLast[id]=arr[i]; return arr[i];
 }
+function npcQ(){
+  var d=TODAY, c=count(d), dk=DK[d.getDay()], wk=weekdayXP(d), done=(c.done===c.total);
+  return {dk:dk,done:done,none:(c.done===0),left:c.total-c.done,wk:wk,goal:SAT_GOAL,win:(dk==='sat'&&done&&wk>=SAT_GOAL),lose:(dk==='sat'&&done&&wk<SAT_GOAL)};
+}
+function npcQLines(id){
+  var q=npcQ(), o=[];
+  if(id==='inn'){
+    if(q.dk==='sun'){
+      if(q.done) o.push('스트레칭까지 모두 마치셨군요. 몸짱신의 가호가 함께할 거예요.','쉬는 날인데도 스트레칭을 다 하셨네요! 푹 쉬고 가세요.');
+      else if(q.none) o.push('오늘은 쉬는 날이에요. 스트레칭부터 가볍게 해 볼까요?','일요일엔 무리하지 말고 스트레칭만 천천히 해요.');
+      else o.push('스트레칭이 '+q.left+'개 남았어요. 천천히 마저 해요.');
+    }else if(q.dk==='sat'){
+      if(q.win) o.push('마왕을 쓰러뜨렸다고요?! 여관 사람들이 모두 환호하고 있어요!','마왕 토벌 축하드려요, 용사님! 오늘은 제가 크게 한턱 낼게요.');
+      else if(q.lose) o.push('마왕성에서 아쉽게 졌지만, 용사님은 분명 더 강해지고 있어요. 푹 쉬고 다시 도전해요.');
+      else if(q.wk>=q.goal) o.push('이번 주 평일 누적이 목표를 넘겼네요! 마왕을 만날 준비는 끝났어요.','오늘은 마왕과 싸우는 날이죠? 준비는 완벽해 보여요!');
+      else o.push('오늘은 마왕과 싸우는 날인데, 평일 누적이 '+q.wk+' / '+q.goal+' XP예요. 훈련장에서 더 채울 수 있다던데요?');
+    }else{
+      if(q.done) o.push('오늘 퀘스트를 다 끝내셨네요! 정말 대단해요. 오늘은 푹 쉬어도 좋아요.','퀘스트 완료! 따뜻한 수프는 제가 쏠게요.','역시 용사님! 오늘도 해내셨군요.');
+      else if(q.none) o.push('오늘의 퀘스트는 아직 시작 전이네요. 가볍게 몸부터 풀어 볼까요?','오늘 퀘스트가 기다리고 있어요. 첫 세트만 해 보면 금방 탄력이 붙어요!');
+      else o.push('벌써 시작하셨군요! 남은 퀘스트 '+q.left+'개, 조금만 더 힘내요.','시작이 반이라고 했죠? 남은 퀘스트도 끝까지 해내 봐요!');
+    }
+  }else if(id==='train'){
+    if(q.dk==='sun') o.push('일요일은 쉬는 날이다. 훈련장은 월~토에 열려 있지!');
+    else if(q.dk==='sat'){
+      if(q.win) o.push('마왕을 쓰러뜨렸다고? 내 제자답군! 오늘은 푹 쉬어라.');
+      else if(q.lose) o.push('졌다고 고개 숙이지 마라. 다음에 이기면 된다!');
+      else if(q.wk>=q.goal) o.push('평일 누적이 충분하군. 마왕성에서 당당히 싸워라!');
+      else o.push('마왕성 자격까지 '+(q.goal-q.wk)+' XP가 부족하다. 지금이라도 여기서 채워라!');
+    }else{
+      if(q.done) o.push('오늘 퀘스트를 마쳤군, 훌륭하다! 이제 추가 훈련으로 한계를 넘어 보자.');
+      else if(q.none) o.push('오늘 퀘스트부터 끝내고 오는 게 순서다! 추가 훈련은 그다음이다.');
+      else o.push('퀘스트가 '+q.left+'개 남았군. 마저 끝내고 단련하러 오게.');
+      o.push(q.wk>=q.goal?'이번 주 목표는 이미 채웠군. 이제부터는 기록만 남지만, 근육은 정직하다!':'마왕성 자격까지 '+(q.goal-q.wk)+' XP 남았다. 지금 채워 두게!');
+    }
+  }else if(id==='forge'){
+    var can=ITEMS.some(function(it){ return it.craft && craftable(it); });
+    o.push(can?'재료가 충분하군! 만들고 싶은 장비를 골라 보게.':'아직 재료가 모자라네. 보스를 쓰러뜨리면 재료가 나온다네.');
+    if(q.dk==='sat' && q.win) o.push('마왕을 쓰러뜨렸다고?! 오늘은 귀한 재료가 나왔을지도 모르겠군!');
+    else if(q.dk!=='sun') o.push(q.done?'오늘 퀘스트를 마쳤군! 보스를 쓰러뜨린 날은 재료를 챙겨 가게.':'퀘스트를 끝내고 보스를 쓰러뜨리면 재료를 얻을 수 있다네. 어서 다녀오게!');
+  }
+  return o;
+}
 function npcCtx(id){
   var n=NPCS[id], per=tsPeriod(), wk=wxKind(), o=[];
   if(n.ctxP && n.ctxP[per]) o=o.concat(n.ctxP[per]);
   if(n.ctxW && wk && n.ctxW[wk]) o=o.concat(n.ctxW[wk]);
-  return o;
+  return o.concat(npcQLines(id));
 }
 function npcLine(id){
   var n=NPCS[id], c=npcCtx(id);
-  if(c.length && Math.random()<0.45) return npcPick(c,id);
+  if(c.length && Math.random()<0.55) return npcPick(c,id);
   return npcPick(n.lines,id);
 }
 function npcTalk(id){
@@ -3333,7 +3409,7 @@ function viewToday(){
   var isToday=(k===fmt(TODAY)), ids=idsFor(dk,k), lock=isEnded(k), rs=dayResult(d), bossHtml='';
   if(p.circuit){
     bossHtml='<div class="bossrule">'+
-      '<p>'+SAT_GOAL+' XP 이상이면 마왕성에서 승리할 수 있어요 (+150 XP 보너스). 못 미치거나 오늘 메인 퀘스트를 못 채우고 모험을 마치면 패배해요.</p></div>';
+      '<p>'+SAT_GOAL+' XP 이상이면 마왕성에서 승리할 수 있어요 (+150 XP 보너스). 못 미치거나 오늘 메인 퀘스트와 일일 러닝을 못 채우고 모험을 마치면 패배해요.</p></div>';
   }
   var maxXp = XP_RUN+(c.total-1)*XP_SET+3*XP_MEAL+XP_CLEAR+(p.circuit?BOSS_WIN_XP:(p.rest?0:MID_XP));
   var h='<p class="eyebrow">'+longDate(d)+(isToday?' · 오늘':'')+'</p>'+hud()+weeklyHtml(d);
@@ -3346,7 +3422,8 @@ function viewToday(){
     (rs?'<button type="button" class="ghost" style="margin-top:12px" data-a="result">결과 다시 보기</button>':'')+'</section>';
 
   var run = p.rest?RUN_REST:RUN;
-  h+='<h2>메인 퀘스트</h2><div class="q">'+check(!!L.done.run,run.label,run.sub,'run','',lock,XP_RUN)+kmRow(L,p.rest,lock)+'</div>';
+  h+='<h2>일일 러닝</h2><div class="q">'+check(!!L.done.run,run.label,run.sub,'run','',lock,XP_RUN)+kmRow(L,p.rest,lock)+'</div>';
+  h+='<h2>메인 퀘스트</h2>';
 
   var EXL=exFor(dk,k), BON=bonusFor(dk,k);
   EXL.concat(BON).forEach(function(id,ix){
@@ -3484,6 +3561,7 @@ function bkParse(text){
     var o={sets:{},run:Math.max(0,Math.min(parseInt(e.run,10)||0,TR_MAX)),es:0,er:0};
     if(e.sets&&typeof e.sets==='object') Object.keys(e.sets).forEach(function(id){ var n=parseInt(e.sets[id],10); if(X[id]&&n>0) o.sets[id]=Math.min(n,TR_MAX); });
     o.es=Math.max(0,Math.min(parseInt(e.es,10)||0,trSetCount(o))); o.er=Math.max(0,Math.min(parseInt(e.er,10)||0,o.run));
+    o.h=[]; if(Array.isArray(e.h)) e.h.slice(-80).forEach(function(x){ var m=/^(\w+):([01])$/.exec(String(x)); if(m && (m[1]==='run' || X[m[1]])) o.h.push(m[1]+':'+m[2]); });
     tlog[k4]=o;
   });
   return {data:{start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog}};
@@ -3675,7 +3753,7 @@ function viewHome(){
 }
 
 function bgmNowText(){
-  var T=TRACKS[TABTRK[tab]];
+  var T=TRACKS[bgmWant()];
   if(!bgmOn()) return '음악이 꺼져 있어요';
   return (T&&BGM.running())?'지금 나오는 곡: '+T.name:'';
 }
@@ -3987,6 +4065,9 @@ app.addEventListener('click',function(e){
   }else if(a==='trset'){
     var tb1=snap(), tid=t.getAttribute('data-id');
     if(trAdd(tid,1)){ kRefresh(); pop('.trgo[data-id="'+tid+'"]'); try{ if(navigator.vibrate) navigator.vibrate(18); }catch(e){} trainAfter(tb1,true); }
+  }else if(a==='trundo'){
+    var tb3=snap();
+    if(trUndo()){ kRefresh(); var g3=snap().xp-tb3.xp; toast('마지막 훈련을 취소했어요'+(g3?' · '+g3+' XP':'')); }
   }else if(a==='trrun'){
     var tb2=snap();
     if(trRun()){ kRefresh(); pop('.trgo[data-a="trrun"]'); try{ if(navigator.vibrate) navigator.vibrate(18); }catch(e){} trainAfter(tb2,true); }
@@ -4531,6 +4612,9 @@ var BGM=(function(){
   return {play:play,stop:stop,sfx:sfx,duck:duck,setMaster:setMaster,setSfx:setSfx,unlock:unlock,running:running,setVol:setVol,setOn:setOn,suspend:suspend,resume:resume,current:function(){return cur;}};
 })();
 
+var TEMPLE_LEAD=['E5 - - - G5 - - - C6 - - - B5 - A5 -','A5 - - - G5 - - - E5 - - - C5 - D5 -','F5 - - - A5 - - - C6 - - - A5 - - -','G5 - - - E5 - - - D5 - - - C5 - - -',
+  'D5 - - - G5 - - - B5 - - - A5 - G5 -','G5 - - - B5 - - - E6 - - - D6 - B5 -','C6 - - - A5 - - - E5 - - - A5 - - -','A5 - - - F5 - C6 - A5 - - - F5 - - -',
+  'D6 - - - A5 - - - F5 - - - A5 - - -','B5 - - - D6 - - - G6 - - - E6 - D6 -','E6 - - - C6 - - - G5 - - - E5 - - -','D5 - - - . - - - G5 - - - B5 - - -'];
 var TRACKS={
   /* 시작화면: 활기차고 발랄하게 (C장조, 150) */
   title:{name:'모험의 시작',bpm:150,chords:['C','G','Am','F','C','G','F','G'],
@@ -4568,7 +4652,26 @@ var TRACKS={
     lead:['F#5 - A5 - D6 - - - C#6 - A5 - - - - -','D6 - - - B5 - F#5 - - - A5 - - - - -','G5 - B5 - D6 - - - E6 - D6 - B5 - - -','C#6 - - - A5 - - - E5 - - - - - - -',
           'A5 - F#5 - A5 - D6 - - - E6 - F#6 - - -','E6 - D6 - B5 - - - F#5 - - - A5 - - -','B5 - - - G5 - B5 - D6 - - - C#6 - B5 -','A5 - - - - - - - . . . . . . . .'],
     leadW:'p12',leadRel:0.35,bass:'whole',bassOct:2,arp:{every:2,up:true},arpOct:4,arpW:'sine',
-    mix:{lead:0.12,bass:0.13,arp:0.06}}
+    mix:{lead:0.12,bass:0.13,arp:0.06}},
+  /* 회복의 신전(일요일): 느긋하고 성스러운 성가 (C장조, 72) — 오르간 같은 삼각파 + 옥타브 아래 겹침 + 맑은 종소리 아르페지오 */
+  temple:{name:'회복의 신전',bpm:72,chords:['C','Am','F','C','G','Em','Am','F','Dm','G','C','G'],
+    lead:TEMPLE_LEAD,
+    lead2:TEMPLE_LEAD.map(function(l){ return l.replace(/([A-G][#b]?)(\d)/g,function(m,n,o){ return n+(parseInt(o,10)-1); }); }),
+    leadW:'tri',lead2W:'p25',leadRel:0.34,bass:'whole',bassOct:2,arp:{every:2,up:true},arpOct:5,arpW:'sine',
+    drums:['k...............','....h...h...h...'],mix:{lead:0.2,lead2:0.045,bass:0.14,arp:0.045,kick:0.1,hat:0.02}},
+  /* 보스 토벌 성공: 발랄하고 신나는 승리의 노래 (G장조, 144) */
+  victory:{name:'승리의 노래',bpm:144,chords:['G','C','D','G','Em','C','D','G'],
+    lead:['D6 . G6 - D6 . B5 . G5 . B5 . D6 - - .','E6 . G6 - E6 . C6 . G5 . C6 . E6 - - .','F#6 . A6 - F#6 . D6 . A5 . D6 . F#6 - - .','B5 . D6 . G6 - - . D6 - B5 - G5 - - -',
+          'G6 . E6 . B5 . E6 . G6 . B5 . E6 - - .','C6 . E6 . G6 . E6 . C6 . E6 . G6 - - .','D6 . D6 . F#6 . A6 . F#6 . D6 . A5 . D6 .','G6 - - - D6 - B5 - G5 - D6 - G6 - - -'],
+    leadW:'p25',bass:'bounce',bassOct:2,arp:{every:2,up:true},arpOct:4,arpW:'p12',
+    drums:['k...s...k.k.s...','h.h.h.h.h.h.h.hh'],mix:{lead:0.13,bass:0.22,arp:0.04,kick:0.45,snare:0.16,hat:0.05}},
+  /* 보스전 패배: 느리고 우울한 곡 (D단조, 60) */
+  defeat:{name:'패배의 그림자',bpm:60,chords:['Dm','Bb','Gm','A7','Dm','Bb','Gm','A7'],
+    lead:['A5 - - - - - G5 - F5 - - - E5 - - -','F5 - - - D5 - - - Bb4 - - - D5 - - -','G5 - - - Bb5 - - - A5 - - - G5 - - -','E5 - - - A5 - - - G5 - - - E5 - - -',
+          'F5 - - - A5 - - - D6 - - - C6 - A5 -','Bb5 - - - A5 - - - F5 - - - D5 - - -','D5 - - - G5 - - - F5 - - - Eb5 - - -','C#5 - - - E5 - - - A4 - - - . . . .'],
+    lead2:['D4 - - - - - - - - - - - - - - -','Bb3 - - - - - - - - - - - - - - -','G3 - - - - - - - - - - - - - - -','A3 - - - - - - - - - - - - - - -','D4 - - - - - - - - - - - - - - -','Bb3 - - - - - - - - - - - - - - -','G3 - - - - - - - - - - - - - - -','A3 - - - - - - - - - - - - - - -'],
+    leadW:'p12',lead2W:'tri',leadRel:0.42,bass:'whole',bassOct:2,arp:{every:4},arpOct:4,arpW:'sine',
+    drums:['k.......k.......','................'],mix:{lead:0.15,lead2:0.12,bass:0.12,arp:0.035,kick:0.12}}
 };
 
 /* ---------- 배경음악 연결 ---------- */
@@ -4578,7 +4681,16 @@ var bgmReady=false, tsSoundTried=false;
 function bgmOn(){ try{ return localStorage.getItem(BGMK)!=='off'; }catch(e){ return true; } }
 function bgmSetOn(v){ try{ localStorage.setItem(BGMK,v?'on':'off'); }catch(e){} }
 function bgmVol(){ try{ var v=parseFloat(localStorage.getItem(BGMV)); return (v>=0&&v<=1)?v:0.5; }catch(e){ return 0.5; } }
-function bgmWant(){ return titleEl.hidden ? TABTRK[tab] : 'title'; }
+function bgmWant(){
+  if(!titleEl.hidden) return 'title';
+  if(tab==='today'){
+    if(DK[sel.getDay()]==='sun') return 'temple';        /* 일요일 회복의 신전에서만 */
+    var rs=dayResult(sel);
+    if(rs && rs.res==='win') return 'victory';            /* 보스 토벌 직후부터 승리의 노래 */
+    if(rs && rs.res==='lose') return 'defeat';            /* 토벌 실패하면 우울한 곡 */
+  }
+  return TABTRK[tab];
+}
 function bgmNowUpdate(){ var el=document.getElementById('bgmnow'); if(el) el.textContent=bgmNowText(); }
 function bgmSync(){
   if(!bgmReady) return;
@@ -4681,6 +4793,41 @@ function tsMountains(){
     '<path d="M196,43 L210,30 L226,46 L216,52 L208,44 L200,50 Z M506,62 L520,50 L534,64 L525,69 L518,62 L511,67 Z" fill="#FFFFFF"/>'+
     '<path d="M0,210 L0,160 L60,132 L140,170 L230,106 L320,166 L400,126 L490,176 L570,122 L640,160 L640,210 Z" fill="#86A7CF"/>'+
     '<path d="M0,160 L60,132 L140,170 L230,106 L320,166 L400,126 L490,176 L570,122 L640,160" fill="none" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round" opacity=".45"/>';
+}
+/* 시작화면 풍경용 성벽 한 토막 (재건 단계 반영) */
+function tsWallSeg(W,gy,ah){
+  var st=bState('wall'), p=bProg('wall'), s='', i, stone='#9AA2B6', cap='#C3CAD6';
+  function seg(x0,x1,h){
+    var t=gy-h, o=sR(x0,t,x1-x0,h,stone,0,2), x, k;
+    for(k=1;k*14<h;k++) o+=sL(x0,t+k*14,x1,t+k*14,'rgba(43,33,56,.26)',1.3);
+    for(x=x0+8;x<x1-6;x+=22) o+=sR(x,t-9,12,9,cap,1,1.6);
+    return o;
+  }
+  if(st==='done'){
+    s+=seg(-2,W+2,ah);
+    [[8,0],[W-36,1]].forEach(function(t){
+      s+=sR(t[0],gy-ah-24,28,ah+24,'#A9B1C3',1,2.2)+sR(t[0]-3,gy-ah-32,34,9,cap,1,2)+sR(t[0]+9,gy-ah-6,10,14,'#2B2138',3,0);
+      s+='<line x1="'+(t[0]+14)+'" y1="'+(gy-ah-32)+'" x2="'+(t[0]+14)+'" y2="'+(gy-ah-52)+'" stroke="'+OL+'" stroke-width="2.6" stroke-linecap="round"/>'+sP('M'+(t[0]+14)+','+(gy-ah-52)+' l16,5 l-16,5 z',t[1]?'#3E6FCB':'#E5484D',1.8);
+    });
+  }else if(st==='rest'){
+    var bw=Math.round(W*(0.2+0.55*p));
+    s+=seg(-2,bw,ah);
+    s+=sP('M'+bw+','+(gy-ah)+' L'+(bw+10)+','+(gy-ah+12)+' L'+(bw+4)+','+(gy-ah+22)+' L'+(bw+14)+','+(gy-ah+34)+' L'+bw+','+gy+' Z',stone,2);
+    for(i=0;i<3;i++){ var px=bw+24+i*((W-bw-34)/2.4); s+=sL(px,gy,px,gy-ah-6,'#B9783A',3.4)+sL(px,gy-ah*.55,px+((W-bw)/2.4),gy-ah*.55,'#B9783A',3); }
+  }else{
+    for(i=0;i<6;i++){ var x0=i*(W/5.4)-4, h=Math.max(8,Math.round(ah*(.2+((i*37)%5)*.12+p*.5))); s+=sP('M'+x0+','+gy+' L'+x0+','+(gy-h)+' L'+(x0+8)+','+(gy-h-4)+' L'+(x0+14)+','+(gy-h+3)+' L'+(x0+22)+','+(gy-h-2)+' L'+(x0+26)+','+gy+' Z',stone,2); }
+    for(i=0;i<7;i++) s+=sE((i*41)%W+8,gy+2-(i%3),7+(i%3)*2,3+(i%2),'#8E97AC',1.6);
+  }
+  return s;
+}
+/* 시작화면 뒤로 지나가는 마을: 훈련장·대장간·여관·성(폐허)·성벽이 지금 재건 상태 그대로 나와요 */
+function tsBuildings(w){
+  var H=150, gy=146, s='', k=.62;
+  function put(id,x,kk){ kk=kk||k; return '<g transform="translate('+x+','+(gy-42*kk)+') scale('+kk+')">'+bArt(id,bState(id),bProg(id))+'</g>'; }
+  s+='<g transform="translate(0,0)">'+tsWallSeg(170,gy,34)+'</g>';
+  s+=put('train',246)+pine(336,gy-26,.62)+put('forge',414)+mBush(476,gy-6,.7)+put('inn',548)+pine(624,gy-26,.7)+mBush(650,gy-6,.6)+put('castle',712,.46)+mBush(758,gy-6,.7);
+  s+='<g transform="translate(762,0)">'+tsWallSeg(138,gy,34)+'</g>';
+  return s;
 }
 function tsHills(w){
   var top='M0,72 C70,72 140,34 210,42 S350,72 420,72', sn=(w==='snow');
@@ -4858,6 +5005,7 @@ function titleBuild(again){
   h+='<div class="ts-l ts-mt" style="background-image:'+tsUri(640,210,tsMountains())+'"></div>';
   h+='<div class="ts-dest">'+tsDest(dk)+'</div>';
   h+='<div class="ts-l ts-hl" style="background-image:'+tsUri(420,150,tsHills(w))+'"></div>';
+  h+='<div class="ts-l ts-bd" style="background-image:'+tsUri(900,150,tsBuildings(w))+'"></div>';
   h+='<div class="ts-l ts-rd" style="background-image:'+tsUri(300,120,tsRoad(w))+(w==='rain'||w==='storm'?';background-color:#D3AE78':'')+'"></div>';
   h+='<div class="ts-hero" style="filter:'+P.hf+'">'+tsHero(eq,um)+'</div>';
   h+=tsWeatherFront(w);

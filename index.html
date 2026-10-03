@@ -1243,8 +1243,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.11', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.12', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.12','시작화면 목적지 위의 이름표 삭제, 요일별 풍경 시작화면 추가(요일마다 목적지에 어울리는 배경·소품·분위기 효과) / 설정 > 기본 설정에서 시작화면 배경을 요일별 풍경과 재건 마을 중 선택'],
   ['1.39.11','세로 시작화면: 캐릭터를 더 크게, 길 가운데 세로 점선 삭제(가로 띠는 유지), 목적지에서 보스 실루엣을 지우고 목적지 그림을 정가운데에 더 크게 배치'],
   ['1.39.10','세로 시작화면에서 언덕 뒤 산이 하늘에 떠 보이던 문제 수정: 산 아래 양옆 빈 공간을 산 색으로 채움'],
   ['1.39.9','하단 메뉴 순서를 지도·퀘스트·러닝·왕국·일지·설정으로 변경'],
@@ -4296,6 +4297,7 @@ function viewSettings(){
   h+='<h2>기본 설정</h2><div class="card" style="padding:10px 16px 16px">'+
     '<div class="field"><label>루틴 시작일 (주차 계산 기준)<input type="date" id="startd" value="'+S.start+'"></label></div>'+
     '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="title-show">시작화면 보기</button></div>'+
+    '<div class="bk-btns" style="margin:0 0 6px"><button type="button" class="ghost" data-a="tbg-toggle">시작화면 배경 · '+(titleBgMode()==='town'?'재건 마을':'요일별 풍경')+'</button></div>'+
     '<div class="bk-btns" style="margin:0 0 6px"><button type="button" class="ghost" data-a="wx-toggle" aria-pressed="'+(wxOn()?'true':'false')+'">날씨 반영 '+(wxOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="wx-check"'+(wxOn()?'':' disabled')+'>지금 날씨 확인</button></div>'+
     '<p class="note" id="wxstat" style="margin:0 2px 12px">'+wxStatus()+'</p>'+
     '<div class="bk-btns" style="margin:0"><button type="button" class="ghost" data-a="intro">시작 안내 다시 보기</button>'+
@@ -4598,6 +4600,8 @@ app.addEventListener('click',function(e){
     wxRefresh(true,function(){ render(); toast(wxKind()?'지금 날씨: '+WXN[wxKind()]:'날씨를 확인하지 못했어요'); });
   }else if(a==='upd-check'){
     updCheck();
+  }else if(a==='tbg-toggle'){
+    titleBgSet(titleBgMode()==='town'?'day':'town'); render(); toast('시작화면 배경 · '+(titleBgMode()==='town'?'재건 마을':'요일별 풍경'));
   }else if(a==='title-show'){
     titleOpen(false);
   }else if(a==='intro'){
@@ -5609,7 +5613,7 @@ function titleBuild(again){
   titleEl.innerHTML=h;
 }
 /* ===== 세로 방향 시작화면 (v1.39.6): 캐릭터가 앞모습으로 아래에서 위로 걷고, 길은 언덕 능선 너머로 이어지며, 목적지는 능선 위 높은 언덕에 보여요. 양옆 배경은 재건 상태 그대로 아래로 다가와요. ===== */
-var titleBuildH=null;
+var titleBuildH=null, titleBuildV=null, titleBuildD=null;
 (function(){
   var _tb=titleBuild;
   var YH=40, YB=96, Z0=9, Z1=0.7, NK=18, T=12;   /* 길의 소실점 40vh(능선보다 위 = 오르막), 가까운 기준선 96vh, 한 바퀴 12초 */
@@ -5637,7 +5641,6 @@ var titleBuildH=null;
     '.tv-mt{position:absolute;left:0;right:0;top:30vh;height:26vh;background-repeat:repeat-x,no-repeat;background-size:auto 17vh,100% 10vh;background-position:50% 0,0 16vh;}'+
     '.tv-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.34),rgba(255,255,255,0));pointer-events:none;}'+
     '.tv-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}'+
-    '.tv-dest .ts-plate{white-space:nowrap;margin-bottom:0;}'+
     '.tv-dest svg{display:block;width:100px;height:auto;margin-top:2px;}'+
     '@media (max-height:700px){.tv-dest svg{width:80px;} .tv .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .tv .ts-logo svg{width:min(62%,250px);} .tv .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
     '.tv .ts-cl{bottom:auto;top:15vh;}'+
@@ -5689,7 +5692,7 @@ var titleBuildH=null;
   /* 목적지: 보스 실루엣 없이 풍경만, 정가운데에 크게 */
   function tvDestOnly(dk){
     var i=ORDER.indexOf(dk);
-    return '<div class="ts-plate"><small>오늘의 목적지</small><b>'+QN[dk]+'</b></div><svg viewBox="-70 -128 140 176" aria-hidden="true"><g transform="scale(.92)">'+LMS[i]()+'</g></svg>';
+    return '<svg viewBox="-70 -128 140 176" aria-hidden="true"><g transform="scale(.92)">'+LMS[i]()+'</g></svg>';
   }
   function tvHero(eq,um){
     var n=8, i, s='<svg viewBox="-80 -170 170 226" aria-hidden="true">';
@@ -5742,10 +5745,254 @@ var titleBuildH=null;
     h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
     titleEl.innerHTML=h;
   }
-  titleBuild=function(again){ tvBuild(again); };
+  titleBuildV=tvBuild;
   titleBuildH=_tb;   /* 이전 가로 시작화면은 남겨 둠 */
 
 })();
+
+/* ===== 요일별 시작화면 (v1.39.12): 요일마다 목적지에 어울리는 배경(하늘·먼 풍경·땅·길·양옆 소품·분위기 효과)이 나와요. ===== */
+(function(){
+  var YH=40, YB=96, Z0=9, Z1=0.7, NK=18, T=12, CR=43.6;
+  function dayKey(){ return window.__pvDay||DK[TODAY.getDay()]; }
+  function uri(vb,inner){ return "url('data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+vb+'">'+inner+'</svg>').replace(/'/g,'%27')+"')"; }
+  function kf(name,L,sy){
+    var s='@keyframes '+name+'{', k, z, t;
+    for(k=0;k<=NK;k++){
+      t=k/NK; z=Z0+(Z1-Z0)*t;
+      s+=(t*100).toFixed(2)+'%{opacity:'+(k===0?0:1)+';z-index:'+Math.max(1,Math.round(100/z))+';transform:translate('+(50+L/z).toFixed(2)+'vw,'+(YH+(YB-YH)/z).toFixed(2)+'vh) scale('+(1/z).toFixed(3)+','+(sy?(1/Math.pow(z,1.7)).toFixed(3):(1/z).toFixed(3))+') translate(-50%,-100%);}';
+    }
+    return s+'}';
+  }
+  var css=kf('tdA',-64)+kf('tdB',64)+kf('tdC',-90)+kf('tdD',90)+kf('tdS',0,true);
+  css+='.td .td-s,.td .td-st{position:absolute;left:0;top:0;transform-origin:0 0;opacity:0;pointer-events:none;background-size:100% 100%;background-repeat:no-repeat;animation-duration:'+T+'s;animation-timing-function:linear;animation-iteration-count:infinite;}'+
+    '.td .td-st{width:80vw;height:6.5vh;}'+
+    '.td-world{position:absolute;inset:0;overflow:hidden;}'+
+    '.td-hill{position:absolute;inset:0;width:100%;height:100%;}'+
+    '.td-mt{position:absolute;left:0;right:0;top:30vh;height:26vh;background-repeat:repeat-x,no-repeat;background-size:auto 17vh,100% 10vh;background-position:50% 0,0 16vh;}'+
+    '.td-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;pointer-events:none;}'+
+    '.td-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}'+
+    '.td-dest svg{display:block;width:100px;height:auto;margin-top:2px;}'+
+    '@media (max-height:700px){.td-dest svg{width:80px;} .td .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .td .ts-logo svg{width:min(62%,250px);} .td .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
+    '.td .ts-cl{bottom:auto;top:15vh;}'+
+    '.td .ts-logo{top:calc(5vh + env(safe-area-inset-top,0px));}'+
+    '.td .ts-stars{inset:0 0 auto 0;height:'+YH+'vh;}'+
+    '.td-tint{position:absolute;inset:0;pointer-events:none;z-index:400;}'+
+    '.td.p-night .td-tint{background:rgba(8,16,48,.46);}'+
+    '.td.p-sunset .td-tint{background:linear-gradient(rgba(231,124,104,.10),rgba(255,160,90,.22));}'+
+    '.td.p-morning .td-tint{background:rgba(255,236,200,.06);}'+
+    '.td.w-fog .td-tint{background:rgba(228,232,238,.22);}'+
+    '.td-hero{position:absolute;left:50%;bottom:calc(76px + 2vh);width:clamp(150px,22vh,196px);transform:translateX(-50%);z-index:500;}'+
+    '.td-hero svg{display:block;width:100%;height:auto;overflow:visible;}'+
+    '.td-dust{animation:tdDust .72s linear infinite;opacity:0;}'+
+    '@keyframes tdDust{0%{transform:translate(0,0) scale(.5);opacity:.6;}100%{transform:translate(0,16px) scale(1.5);opacity:0;}}'+
+    '#title.go .td-s,#title.go .td-st,#title.go .td-dust,#title.go .td-fx i{animation-play-state:paused;}'+
+    '.td-fx{position:absolute;inset:0;pointer-events:none;z-index:450;overflow:hidden;}'+
+    '.td-fx i{position:absolute;left:var(--x);top:var(--y);width:var(--s,4px);height:var(--s,4px);border-radius:50%;background:var(--c,#fff);opacity:0;box-shadow:0 0 6px var(--c,#fff);animation-duration:var(--d,6s);animation-delay:var(--dl,0s);animation-iteration-count:infinite;animation-timing-function:linear;}'+
+    '.td-fx.up i{animation-name:tdUp;} .td-fx.fall i{animation-name:tdFall;border-radius:60% 0 60% 0;box-shadow:none;} .td-fx.blink i{animation-name:tdBlink;animation-timing-function:ease-in-out;} .td-fx.drift i{animation-name:tdDrift;border-radius:40%;box-shadow:none;}'+
+    '@keyframes tdUp{0%{opacity:0;transform:translate(0,0);}15%{opacity:.95;}100%{opacity:0;transform:translate(var(--dx,14px),-140px);}}'+
+    '@keyframes tdFall{0%{opacity:0;transform:translate(0,-16px) rotate(0);}10%{opacity:.9;}100%{opacity:0;transform:translate(var(--dx,40px),240px) rotate(320deg);}}'+
+    '@keyframes tdBlink{0%,100%{opacity:0;transform:translate(0,0);}50%{opacity:.95;transform:translate(var(--dx,10px),-14px);}}'+
+    '@keyframes tdDrift{0%{opacity:0;transform:translate(-30px,0);}20%{opacity:.7;}100%{opacity:0;transform:translate(260px,var(--dy,20px));}}'+
+    '@media (prefers-reduced-motion: reduce){.td .td-s,.td .td-st{animation:none;opacity:0;}.td-fx{display:none;}}';
+  var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+
+  /* ---------- 소품 그림 (아래 가운데가 땅에 닿는 점) ---------- */
+  function OLs(w){ return 'stroke="'+OL+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"'; }
+  var SP={
+    /* 공통 */
+    pine:function(){ return ['-26 -36 52 62',pine(0,0,1),3.4]; },
+    pine2:function(){ return ['-26 -36 52 62',pine(0,0,1),4.4]; },
+    bush:function(){ return ['-20 -20 40 36',mBush(0,6,1),2.8]; },
+    rock:function(){ return ['-14 -10 28 18','<ellipse cx="0" cy="0" rx="10" ry="6" fill="#B6BED0" '+OLs()+'/><ellipse cx="-4" cy="-2" rx="3.4" ry="1.8" fill="#D6DCE8"/>',2.6]; },
+    flower:function(){ return ['-18 -14 36 22','<g stroke="'+OL+'" stroke-width="2"><line x1="-8" y1="2" x2="-8" y2="-6"/><line x1="2" y1="3" x2="2" y2="-9"/><line x1="10" y1="2" x2="10" y2="-5"/></g><circle cx="-8" cy="-8" r="3.6" fill="#FF8FA3" stroke="'+OL+'" stroke-width="1.6"/><circle cx="2" cy="-11" r="4" fill="#FFE08A" stroke="'+OL+'" stroke-width="1.6"/><circle cx="10" cy="-7" r="3.4" fill="#fff" stroke="'+OL+'" stroke-width="1.6"/>',2.8]; },
+    /* 요새 */
+    stake:function(){ var s=sR(-26,-22,52,6,'#8B5A2B',1,2.2); [-18,0,18].forEach(function(x){ s+=sP('M'+(x-7)+',0 L'+(x-7)+',-34 L'+x+',-50 L'+(x+7)+',-34 L'+(x+7)+',0 Z','#B9783A',2.4); }); return ['-30 -54 60 58',s,2.8]; },
+    banner:function(){ return ['-22 -86 44 90',ell(0,0,11,4,'#8E97AC',2)+sL(0,0,0,-78,OL,5.4)+sL(0,0,0,-78,'#8B5A2B',2.6)+sP('M1,-78 L28,-70 L1,-58 Z','#E5484D',2.2)+circ(0,-80,3.4,'#F6C445',1.6),2.4]; },
+    barricade:function(){ return ['-28 -40 56 44',sL(-20,0,18,-28,OL,10)+sL(-20,0,18,-28,'#A9743A',6)+sL(20,0,-18,-28,OL,10)+sL(20,0,-18,-28,'#B9844A',6)+sL(-24,-14,24,-14,OL,9)+sL(-24,-14,24,-14,'#8B5A2B',5),2.6]; },
+    watch:function(){ return ['-36 -118 72 122',sL(-20,0,-13,-58,OL,7)+sL(-20,0,-13,-58,'#8B5A2B',3.4)+sL(20,0,13,-58,OL,7)+sL(20,0,13,-58,'#8B5A2B',3.4)+sL(-18,-26,18,-26,'#8B5A2B',3)+sR(-26,-66,52,9,'#8B5A2B',1,2.4)+sR(-19,-96,38,30,'#B9783A',2,2.4)+sR(-6,-86,12,12,'#FFE08A',1,2)+sP('M-26,-96 L0,-118 L26,-96 Z','#C94A4A',2.6)+sL(0,-118,0,-128,OL,2.4),1.9]; },
+    /* 숲 */
+    bigtree:function(){ return ['-46 -100 92 104',sR(-8,-36,16,36,'#7A4E28',3,2.6)+circ(-20,-58,25,'#2F8F5B',2.6)+circ(20,-58,25,'#2F8F5B',2.6)+circ(0,-80,29,'#37A268',2.6)+circ(-8,-86,8,'#52BC84',0)+circ(18,-68,6,'#52BC84',0),2.5]; },
+    mushroom:function(){ return ['-18 -32 36 36',sR(-4.5,-13,9,13,'#F6EAD3',3,2.2)+sP('M-15,-11 Q-15,-31 0,-31 Q15,-31 15,-11 Z','#E5484D',2.4)+circ(-6,-22,2.6,'#fff',0)+circ(5,-19,2.2,'#fff',0)+circ(1,-27,1.8,'#fff',0),2.6]; },
+    log:function(){ return ['-36 -26 72 30',sR(-32,-18,64,18,'#8B5A2B',8,2.5)+ell(32,-9,5,9,'#D6A66B',2)+sL(-24,-12,22,-12,'rgba(43,33,56,.35)',1.6)+sL(-18,-6,26,-6,'rgba(43,33,56,.3)',1.6)+sP('M-16,-18 Q-12,-26 -6,-18 Z','#6FC17B',1.6),2.6]; },
+    fern:function(){ var s=''; [[-14,-26,-8],[0,-34,0],[14,-26,8],[-8,-20,-4],[8,-20,4]].forEach(function(p){ s+=sP('M0,0 Q'+(p[0]*.5)+','+(p[1]*.7)+' '+p[0]+','+p[1]+' Q'+(p[0]*.4+p[2])+','+(p[1]*.4)+' 0,0 Z','#4FB070',2); }); return ['-22 -38 44 42',s,2.8]; },
+    /* 성채 */
+    pillar:function(){ return ['-18 -82 36 86',sR(-13,-6,26,8,'#E9E1CF',1,2.4)+sR(-9,-68,18,62,'#F3ECDD',1,2.4)+sL(-3,-66,-3,-8,'rgba(43,33,56,.18)',2)+sL(3,-66,3,-8,'rgba(43,33,56,.18)',2)+sR(-14,-76,28,9,'#E9E1CF',1,2.4),2.2]; },
+    hedge:function(){ var s=sR(-28,-28,56,28,'#3FA76A',9,2.6); [[-16,-18],[-2,-10],[12,-20],[20,-8],[-8,-24]].forEach(function(p){ s+=circ(p[0],p[1],2.6,'#FF8FA3',0); }); return ['-32 -34 64 38',s,2.5]; },
+    lamp:function(){ return ['-16 -92 32 96',sL(0,0,0,-64,OL,6.4)+sL(0,0,0,-64,'#5A6B88',3.2)+sR(-9,-84,18,22,'#FFE9A8',3,2.4)+sP('M-12,-84 L0,-96 L12,-84 Z','#4A6FB0',2.2)+circ(0,-73,13,'rgba(255,233,168,.35)',0),2.2]; },
+    pennant:function(){ return ['-22 -90 44 94',ell(0,0,11,4,'#B5BDD0',2)+sL(0,0,0,-82,OL,5.4)+sL(0,0,0,-82,'#5A6B88',2.6)+sP('M1,-82 L28,-72 L1,-60 Z','#4A86E0',2.2)+circ(0,-84,3.4,'#F6C445',1.6),2.4]; },
+    wallc:function(){ var s=sR(-40,-26,80,26,'#C9D0DE',0,2.5); for(var x=-38;x<38;x+=18) s+=sR(x,-34,11,9,'#D9DFEA',1,2); s+=sL(-40,-13,40,-13,'rgba(43,33,56,.26)',1.4); return ['-44 -38 88 42',s,2.4]; },
+    statue:function(){ return ['-18 -60 36 64',sR(-13,-14,26,14,'#E9E1CF',1,2.4)+sR(-7,-38,14,26,'#C9D0DE',3,2.4)+circ(0,-46,8,'#D9DFEA',2.4)+sL(8,-34,16,-52,OL,3)+sL(8,-34,16,-52,'#B5BDD0',1.6),2.4]; },
+    /* 협곡 */
+    cactus:function(){ return ['-28 -70 56 74',sR(-7,-64,14,64,'#5FA85A',7,2.6)+sR(-24,-40,17,8,'#5FA85A',4,2.4)+sR(-24,-54,9,22,'#5FA85A',4,2.4)+sR(7,-30,17,8,'#5FA85A',4,2.4)+sR(15,-48,9,26,'#5FA85A',4,2.4)+sL(0,-60,0,-8,'rgba(43,33,56,.22)',1.6),2.6]; },
+    spire:function(){ return ['-26 -116 52 120',sP('M-21,0 L-17,-70 L-9,-98 L2,-114 L12,-88 L20,-52 L23,0 Z','#D9895A',2.8)+sL(-18,-30,20,-34,'#B9683E',2.6)+sL(-16,-56,14,-60,'#B9683E',2.4)+sP('M-9,-98 L2,-114 L6,-100 L-2,-90 Z','#EBA77A',0),2.1]; },
+    boulder:function(){ return ['-22 -24 44 28',sP('M-20,0 Q-22,-18 -6,-22 Q10,-26 18,-10 Q22,-2 20,0 Z','#C98050',2.6)+sP('M-10,-18 Q0,-22 8,-16','none',0)+sL(-10,-14,-2,-18,'#E8A778',2.2),2.6]; },
+    dry:function(){ return ['-26 -34 52 38',sL(0,0,0,-14,OL,4.4)+sL(0,0,0,-14,'#8B6A4A',2)+sL(0,-10,-16,-26,OL,4)+sL(0,-10,-16,-26,'#8B6A4A',1.8)+sL(0,-12,14,-30,OL,4)+sL(0,-12,14,-30,'#8B6A4A',1.8)+sL(-8,-18,-20,-18,'#8B6A4A',1.6)+sL(8,-20,20,-24,'#8B6A4A',1.6),2.8]; },
+    mesa:function(){ return ['-64 -70 128 74',sP('M-60,0 L-54,-46 L-34,-54 L-30,-66 L30,-66 L36,-52 L56,-46 L61,0 Z','#D98A58',2.8)+sL(-56,-22,58,-24,'#B9683E',2.4)+sL(-52,-40,50,-40,'#B9683E',2,2)+sR(-28,-66,56,6,'#EBA77A',1,0),1.5]; },
+    /* 던전 */
+    torch:function(){ return ['-18 -88 36 92',sR(-3.5,-54,7,54,'#5B3A1F',1,2.2)+sP('M-10,-54 L10,-54 L7,-43 L-7,-43 Z','#4B4B58',2.2)+sP('M0,-54 Q-12,-67 -3,-84 Q0,-72 7,-77 Q12,-62 0,-54 Z','#FF8A3D',2.2)+sP('M0,-55 Q-5,-62 -1,-71 Q3,-64 0,-55 Z','#FFD95E',1.2)+circ(0,-66,16,'rgba(255,170,70,.28)',0),2.2]; },
+    stalag:function(){ return ['-32 -70 64 74',sP('M-28,0 L-17,-50 L-6,0 Z','#8896A6',2.6)+sP('M-8,0 L4,-66 L16,0 Z','#97A5B5',2.6)+sP('M12,0 L22,-40 L30,0 Z','#7E8C9C',2.6)+sL(4,-60,4,-10,'rgba(255,255,255,.25)',1.6),2.4]; },
+    bones:function(){ return ['-28 -32 56 36',sL(-22,-4,10,-6,OL,6)+sL(-22,-4,10,-6,'#F2EEE0',3)+sL(-12,-2,22,-9,OL,6)+sL(-12,-2,22,-9,'#F2EEE0',3)+circ(-4,-16,10,'#F2EEE0',2.4)+circ(-8,-17,2.6,OL,0)+circ(0,-17,2.6,OL,0)+sL(-6,-9,-2,-9,OL,1.6),2.6]; },
+    crystal:function(){ return ['-26 -60 52 64',circ(0,-26,26,'rgba(111,214,240,.25)',0)+sP('M-18,0 L-14,-34 L-6,-40 L-2,0 Z','#6FD6F0',2.6)+sP('M-4,0 L2,-56 L10,-50 L12,0 Z','#8FE4F8',2.6)+sP('M10,0 L16,-30 L22,-22 L24,0 Z','#5BC4E0',2.6)+sL(4,-50,6,-20,'rgba(255,255,255,.55)',1.8),2.3]; },
+    deadtree:function(){ return ['-40 -100 80 104',sP('M-6,0 Q-8,-30 -3,-52 Q-12,-62 -24,-64 L-18,-72 Q-6,-68 -1,-58 Q2,-70 -2,-86 L6,-84 Q6,-72 6,-60 Q16,-70 28,-72 L26,-64 Q14,-60 7,-50 Q10,-28 8,0 Z','#4A3A44',2.6)+sL(-6,-30,-18,-38,'#6A5662',2)+sL(6,-34,18,-42,'#6A5662',2),2.3]; },
+    /* 마왕성 */
+    blackrock:function(){ return ['-36 -62 72 66',sP('M-32,0 L-28,-30 L-15,-54 L-5,-30 L8,-58 L19,-34 L31,-42 L33,0 Z','#3A2C4E',2.8)+sL(-15,-52,-9,-28,'#7A5AA8',2)+sL(8,-56,14,-34,'#7A5AA8',2),2.2]; },
+    pcrystal:function(){ return ['-26 -64 52 68',circ(0,-28,26,'rgba(176,74,208,.25)',0)+sP('M-18,0 L-13,-38 L-5,-46 L-1,0 Z','#B04AD0',2.6)+sP('M-3,0 L3,-60 L11,-52 L13,0 Z','#C46AE4',2.6)+sP('M11,0 L17,-34 L23,-26 L24,0 Z','#9A38BC',2.6)+sL(5,-54,7,-24,'rgba(255,255,255,.5)',1.8),2.3]; },
+    brazier:function(){ return ['-24 -80 48 84',sP('M-13,0 L-6,-30 L6,-30 L13,0 Z','#2B2B3A',2.4)+sP('M-16,-30 L16,-30 L11,-20 L-11,-20 Z','#3B3B4C',2.4)+sP('M0,-31 Q-14,-46 -4,-66 Q0,-52 8,-58 Q15,-42 0,-31 Z','#E5484D',2.4)+sP('M0,-32 Q-6,-42 -1,-52 Q4,-44 0,-32 Z','#FFB347',1.4)+circ(0,-48,19,'rgba(229,72,77,.28)',0),2.2]; },
+    skullpole:function(){ return ['-18 -84 36 88',sR(-3,-62,6,62,'#4B3A3A',1,2.2)+circ(0,-68,10,'#EDE6D6',2.4)+circ(-3.6,-69,2.6,OL,0)+circ(3.6,-69,2.6,OL,0)+sR(-4,-60,8,6,'#EDE6D6',2,2),2.3]; },
+    /* 신전 */
+    marble:function(){ return ['-20 -68 40 72',sR(-12,-6,24,8,'#E9E1CF',1,2.4)+sR(-10,-50,20,46,'#F3ECDD',1,2.4)+sP('M-10,-50 L-6,-60 L-1,-52 L5,-64 L10,-54 L10,-50 Z','#F3ECDD',2.4)+sL(-3,-48,-3,-8,'rgba(43,33,56,.18)',2),2.3]; },
+    sakura:function(){ return ['-44 -96 88 100',sR(-6,-34,12,34,'#8B5A2B',3,2.4)+circ(-18,-58,23,'#FFB9D2',2.6)+circ(18,-56,23,'#FFC6DA',2.6)+circ(0,-76,26,'#FFC9DC',2.6)+circ(-6,-82,7,'#FFE0EC',0)+circ(16,-66,5,'#FFE0EC',0),2.5]; },
+    lantern:function(){ return ['-18 -54 36 58',sR(-4,-16,8,16,'#D8D2C4',1,2.2)+sR(-10,-36,20,21,'#E8E2D4',2,2.4)+sR(-5,-31,10,11,'#FFE9A8',1,0)+sP('M-14,-36 L0,-50 L14,-36 Z','#B8B0A0',2.4)+circ(0,-26,15,'rgba(255,233,168,.3)',0),2.4]; },
+    fountain:function(){ return ['-34 -56 68 60',ell(0,-6,28,10,'#EAF4FF',2.6)+ell(0,-10,22,6,'#8ED8F6',1.6)+sR(-4,-34,8,26,'#E9E1CF',2,2.2)+'<path d="M0,-34 Q-14,-44 -20,-18 M0,-34 Q14,-44 20,-18" stroke="#8ED8F6" stroke-width="2.6" fill="none" stroke-linecap="round"/>'+circ(0,-36,3.4,'#EAF4FF',1.6),2.2]; },
+    flowerp:function(){ return ['-18 -14 36 22','<g stroke="'+OL+'" stroke-width="2"><line x1="-8" y1="2" x2="-8" y2="-6"/><line x1="2" y1="3" x2="2" y2="-9"/><line x1="10" y1="2" x2="10" y2="-5"/></g><circle cx="-8" cy="-8" r="3.8" fill="#FFB9D2" stroke="'+OL+'" stroke-width="1.6"/><circle cx="2" cy="-11" r="4.2" fill="#FFF3B0" stroke="'+OL+'" stroke-width="1.6"/><circle cx="10" cy="-7" r="3.6" fill="#D6C8FF" stroke="'+OL+'" stroke-width="1.6"/>',3.2]; }
+  };
+  function sprite(kind){
+    var d=SP[kind](), p=d[0].split(' ').map(Number), w=Math.round(p[2]*d[2]), h=Math.round(p[3]*d[2]);
+    return {bg:uri(d[0],d[1]),w:w,h:h};
+  }
+  function put(kind,lane,ph){
+    var sp=sprite(kind);
+    return '<div class="td-s" style="width:'+sp.w+'px;height:'+sp.h+'px;background-image:'+sp.bg+';animation-name:td'+lane+';animation-delay:-'+(ph*T).toFixed(2)+'s"></div>';
+  }
+  function seq(list,lane,off){ var h=''; list.forEach(function(k,i){ h+=put(k,lane,(off+i/list.length)%1); }); return h; }
+
+  /* ---------- 먼 풍경 (산·절벽 등) ---------- */
+  function back(kind,c1,c2){
+    var s='';
+    if(kind==='mesa'){
+      s+='<path d="M0,210 L0,112 L40,112 L52,84 L120,84 L132,112 L190,112 L204,62 L300,62 L312,112 L380,112 L396,92 L470,92 L484,122 L560,122 L572,86 L630,86 L640,102 L640,210 Z" fill="'+c1+'"/>';
+      s+='<path d="M0,210 L0,164 L60,164 L72,142 L150,142 L162,168 L250,168 L262,136 L350,136 L362,166 L440,166 L452,146 L540,146 L552,170 L640,170 L640,210 Z" fill="'+c2+'"/>';
+      s+='<path d="M0,164 L60,164 L72,142 L150,142 L162,168 L250,168 L262,136 L350,136 L362,166 L440,166 L452,146 L540,146 L552,170 L640,170" fill="none" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round" opacity=".45"/>';
+    }else if(kind==='forest'){
+      function row(base,h,col,off){ var r='<rect y="'+base+'" width="640" height="'+(210-base)+'" fill="'+col+'"/>'; for(var x=-10+off;x<650;x+=34){ r+='<path d="M'+x+','+base+' L'+(x+17)+','+(base-h-((x*7)%13))+' L'+(x+34)+','+base+' Z" fill="'+col+'"/>'; } return r; }
+      s+=row(120,52,c1,0)+row(158,46,c2,17);
+    }else if(kind==='cave'){
+      s+='<rect y="70" width="640" height="140" fill="'+c1+'"/><path d="M0,70 L40,50 L90,66 L150,40 L220,64 L290,36 L360,62 L430,44 L500,66 L570,42 L640,64 L640,70 Z" fill="'+c1+'"/>';
+      [[90,140],[250,150],[400,138],[560,148]].forEach(function(a){ s+='<path d="M'+(a[0]-34)+',210 L'+(a[0]-34)+','+(a[1]+10)+' Q'+a[0]+','+(a[1]-34)+' '+(a[0]+34)+','+(a[1]+10)+' L'+(a[0]+34)+',210 Z" fill="'+c2+'"/>'; });
+      s+='<path d="M0,210 L0,176 L80,168 L170,180 L260,170 L350,182 L450,170 L540,180 L640,170 L640,210 Z" fill="'+c2+'"/>';
+      s+='<path d="M0,70 L40,50 L90,66 L150,40 L220,64 L290,36 L360,62 L430,44 L500,66 L570,42 L640,64" fill="none" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round" opacity=".5"/>';
+    }else if(kind==='jagged'){
+      s+='<defs><linearGradient id="tdgl" x1="0" y1="0" x2="0" y2="1"><stop offset=".3" stop-color="rgba(229,72,77,0)"/><stop offset="1" stop-color="rgba(229,72,77,.55)"/></linearGradient></defs><rect width="640" height="210" fill="url(#tdgl)"/>';
+      s+='<path d="M0,210 L0,110 L30,70 L52,100 L90,24 L124,96 L160,56 L196,110 L240,18 L280,92 L320,46 L360,108 L410,14 L450,98 L490,52 L530,106 L580,28 L620,92 L640,70 L640,210 Z" fill="'+c1+'"/>';
+      s+='<path d="M0,210 L0,164 L50,128 L90,160 L140,120 L190,166 L250,124 L300,164 L360,130 L420,168 L480,126 L540,164 L600,132 L640,160 L640,210 Z" fill="'+c2+'"/>';
+      s+='<path d="M0,164 L50,128 L90,160 L140,120 L190,166 L250,124 L300,164 L360,130 L420,168 L480,126 L540,164 L600,132 L640,160" fill="none" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round" opacity=".55"/>';
+    }else if(kind==='soft'){
+      s+='<path d="M0,210 L0,130 C60,96 120,92 190,128 S320,100 400,120 S560,92 640,126 L640,210 Z" fill="'+c1+'"/>';
+      s+='<path d="M0,210 L0,166 C80,138 150,150 230,168 S380,136 470,160 S590,150 640,164 L640,210 Z" fill="'+c2+'"/>';
+      s+='<path d="M0,166 C80,138 150,150 230,168 S380,136 470,160 S590,150 640,164" fill="none" stroke="'+OL+'" stroke-width="3" opacity=".4"/>';
+    }else if(kind==='towers'){
+      s+='<path d="M0,210 L0,120 L70,66 L130,112 L210,34 L300,120 L360,84 L440,138 L520,54 L600,114 L640,122 L640,210 Z" fill="'+c1+'"/>';
+      [[70,66],[210,34],[520,54],[360,84]].forEach(function(p){ s+='<g fill="#E9E1F5" stroke="'+OL+'" stroke-width="1.6" opacity=".92"><rect x="'+(p[0]-6)+'" y="'+(p[1]-26)+'" width="12" height="26"/><path d="M'+(p[0]-9)+','+(p[1]-26)+' L'+p[0]+','+(p[1]-42)+' L'+(p[0]+9)+','+(p[1]-26)+' Z" fill="#6A8FE0"/></g>'; });
+      s+='<path d="M0,210 L0,164 L60,138 L150,172 L240,112 L330,168 L420,128 L500,178 L580,124 L640,160 L640,210 Z" fill="'+c2+'"/>';
+    }else{ /* peaks */
+      s+='<path d="M0,210 L0,120 L70,62 L130,108 L210,30 L300,118 L360,82 L440,138 L520,50 L600,112 L640,120 L640,210 Z" fill="'+c1+'"/>';
+      s+='<path d="M0,210 L0,160 L60,132 L140,170 L230,106 L320,166 L400,126 L490,176 L570,122 L640,160 L640,210 Z" fill="'+c2+'"/>';
+      s+='<path d="M0,160 L60,132 L140,170 L230,106 L320,166 L400,126 L490,176 L570,122 L640,160" fill="none" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round" opacity=".45"/>';
+    }
+    return s;
+  }
+
+  /* ---------- 요일별 컨셉 ---------- */
+  var TH={
+    mon:{n:'상체 요새',sky:['#6FB7F0','#DDEBFA'],back:['peaks','#A3B0C4','#8D9BB2'],g:['#9EC98E','#7FAE75'],mound:'#A9D09A',road:'#D3BE98',stripe:'rgba(168,140,98,.55)',dash:'#F4E9CF',haze:'rgba(255,255,255,.3)',
+      A:['banner','rock','stake','bush','barricade','pine','rock','banner','bush','stake'],B:['stake','pine','rock','barricade','banner','bush','pine','rock','stake','bush'],C:['watch','pine2','stake','pine2','watch'],D:['pine2','watch','pine2','barricade','pine2'],fx:null},
+    tue:{n:'하체의 숲',sky:['#8FD1B4','#E6F6D8'],back:['forest','#4F9970','#3B7F5C'],g:['#74BE7C','#4F9A5E'],mound:'#6FB878',road:'#CDA871',stripe:'rgba(140,104,60,.5)',dash:'#EEDDB0',haze:'rgba(220,255,200,.34)',
+      A:['fern','mushroom','pine','log','fern','bigtree','mushroom','fern','pine','log'],B:['bigtree','fern','mushroom','pine','log','fern','pine','mushroom','fern','bigtree'],C:['bigtree','bigtree','pine2','bigtree','pine2'],D:['pine2','bigtree','bigtree','pine2','bigtree'],fx:'leaves'},
+    wed:{n:'코어 성채',sky:['#7FB4F5','#E8EEFF'],back:['towers','#B9C9EA','#9DB3E0'],g:['#A9D79A','#86C381'],mound:'#B2DEA4',road:'#DAD3C6',stripe:'rgba(176,168,150,.5)',dash:'#FFFFFF',haze:'rgba(255,255,255,.34)',
+      A:['lamp','hedge','pennant','statue','hedge','lamp','flower','pennant','hedge','statue'],B:['hedge','pennant','lamp','hedge','statue','flower','lamp','hedge','pennant','hedge'],C:['pillar','wallc','pillar','wallc','pillar'],D:['wallc','pillar','wallc','pillar','wallc'],fx:'motes'},
+    thu:{n:'등어깨 협곡',sky:['#F5B87A','#FFE9C8'],back:['mesa','#E2A06E','#C98650'],g:['#DDAA6E','#BE8049'],mound:'#E3B27A',road:'#EBCB98',stripe:'rgba(176,128,70,.5)',dash:'#FFF1D0',haze:'rgba(255,214,170,.34)',
+      A:['cactus','boulder','dry','boulder','cactus','dry','boulder','cactus','dry','boulder'],B:['dry','cactus','boulder','dry','cactus','boulder','dry','cactus','boulder','dry'],C:['spire','mesa','spire','mesa','spire'],D:['mesa','spire','mesa','spire','mesa'],fx:'dust'},
+    fri:{n:'하체·코어 던전',sky:['#6A7A94','#B8C2D2'],back:['cave','#566676','#3E4C5A'],g:['#6F8394','#4C5E6E'],mound:'#7B8FA0',road:'#8E96A6',stripe:'rgba(60,70,90,.45)',dash:'#C8D0E0',haze:'rgba(150,170,200,.34)',
+      A:['torch','stalag','bones','crystal','torch','stalag','bones','crystal','torch','stalag'],B:['stalag','torch','crystal','bones','stalag','torch','crystal','bones','stalag','torch'],C:['stalag','deadtree','stalag','crystal','deadtree'],D:['deadtree','stalag','crystal','stalag','deadtree'],fx:'wisps',cloud:'brightness(.55) saturate(.6)',orb:'none'},
+    sat:{n:'마왕성',sky:['#4A2F6E','#B25A7C'],back:['jagged','#3A2C52','#2A2040'],g:['#4D3C60','#2F2542'],mound:'#5A476E',road:'#5E4B72',stripe:'rgba(30,20,50,.5)',dash:'#B08AD8',haze:'rgba(190,90,150,.3)',
+      A:['brazier','blackrock','skullpole','pcrystal','brazier','deadtree','skullpole','blackrock','pcrystal','brazier'],B:['skullpole','brazier','deadtree','pcrystal','blackrock','skullpole','brazier','deadtree','pcrystal','blackrock'],C:['deadtree','blackrock','deadtree','blackrock','deadtree'],D:['blackrock','deadtree','blackrock','deadtree','blackrock'],fx:'embers',cloud:'brightness(.4) sepia(.5) hue-rotate(250deg)',noSun:true},
+    sun:{n:'회복의 신전',sky:['#BFDDFF','#FFF3D8'],back:['soft','#E7ECF8','#D6E1F4'],g:['#B9E5A8','#93D098'],mound:'#C4EBB4',road:'#F4EEDD',stripe:'rgba(214,204,176,.55)',dash:'#FFFFFF',haze:'rgba(255,248,214,.4)',
+      A:['marble','flowerp','lantern','sakura','flowerp','fountain','marble','flowerp','lantern','sakura'],B:['sakura','flowerp','marble','lantern','flowerp','sakura','fountain','flowerp','marble','lantern'],C:['marble','sakura','marble','sakura','marble'],D:['sakura','marble','sakura','marble','sakura'],fx:'motes2'}
+  };
+
+  function fx(kind){
+    if(!kind) return '';
+    var cls=({embers:'up',leaves:'fall',motes:'blink',motes2:'blink',wisps:'blink',dust:'drift'})[kind], col=({embers:'#FF9A4C',leaves:'#6FC17B',motes:'#FFF6C8',motes2:'#FFF3B0',wisps:'#7FE6F5',dust:'rgba(255,230,190,.8)'})[kind];
+    var n=({embers:18,leaves:12,motes:16,motes2:22,wisps:14,dust:10})[kind], s='<div class="td-fx '+cls+'" aria-hidden="true">', i;
+    for(i=0;i<n;i++){
+      var x=((i*37+11)%96), y=(kind==='embers'?(52+(i*13)%44):(kind==='dust'?(46+(i*11)%40):(8+(i*17)%80))), d=(4+((i*7)%6)*0.9).toFixed(1), dl=(-(i*0.7)).toFixed(1), sz=(kind==='leaves'?8:(kind==='dust'?6:(3+(i%3)))), dx=((i%2?1:-1)*(10+(i*5)%30));
+      s+='<i style="--x:'+x+'%;--y:'+y+'%;--d:'+d+'s;--dl:'+dl+'s;--s:'+sz+'px;--c:'+col+';--dx:'+dx+'px;--dy:'+(i%2?10:-8)+'px"></i>';
+    }
+    return s+'</div>';
+  }
+  function tdSky(per,th){
+    var s='';
+    if(per==='night'){
+      s+='<svg class="ts-stars" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">';
+      [[8,10],[18,26],[27,6],[36,18],[47,9],[58,28],[66,12],[74,22],[86,7],[93,30],[12,40],[40,36],[80,42],[52,46],[22,52]].forEach(function(p,i){ s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r=".45" fill="#FFF8D6"'+(i%3===0?' class="a-twk" style="animation-delay:-'+(i*.3)+'s"':'')+'/>'; });
+      s+='</svg><div class="ts-orb" style="right:12%;top:16vh;width:48px;height:48px;background:#FFF3C4;box-shadow:0 0 0 9px rgba(255,243,196,.12),0 0 34px rgba(255,243,196,.5);"><span style="position:absolute;right:-7px;top:-5px;width:42px;height:42px;border-radius:50%;background:#0F1C45;"></span></div>';
+    }else if(th.orb==='none'){
+      s+='';
+    }else if(th.noSun){
+      s+='<div class="ts-orb" style="left:50%;margin-left:-40px;top:23vh;width:80px;height:80px;background:radial-gradient(circle,#FF6A5B 0%,#C0305A 62%,rgba(160,40,100,0) 72%);box-shadow:0 0 60px rgba(230,70,90,.6);opacity:.75"></div>';
+    }else if(per==='sunset') s+='<div class="ts-orb" style="left:14%;top:30vh;width:88px;height:88px;background:#FF8A4C;box-shadow:0 0 60px rgba(255,150,80,.75);"></div>';
+    else if(per==='morning') s+='<div class="ts-orb" style="left:10%;top:19vh;width:54px;height:54px;background:#FFD86B;border:3px solid '+OL+';box-shadow:0 0 42px rgba(255,220,120,.8);"></div>';
+    else s+='<div class="ts-orb" style="right:10%;top:18vh;width:58px;height:58px;background:#F6C445;border:3px solid '+OL+';box-shadow:0 0 0 11px rgba(246,196,69,.18),0 0 46px rgba(255,230,140,.7);"></div>';
+    return s;
+  }
+  /* 목적지: 보스 실루엣 없이 풍경만, 정가운데에 크게 */
+  function tdDestOnly(dk){
+    var i=ORDER.indexOf(dk);
+    return '<svg viewBox="-70 -128 140 176" aria-hidden="true"><g transform="scale(.92)">'+LMS[i]()+'</g></svg>';
+  }
+  function tdHero(eq,um){
+    var n=8, i, s='<svg viewBox="-80 -170 170 226" aria-hidden="true">';
+    s+='<ellipse cx="0" cy="49" rx="40" ry="6.5" fill="#000" opacity=".22"/>';
+    s+='<g fill="#F5E6C8" stroke="'+OL+'" stroke-width="1.6"><circle class="td-dust" cx="-13" cy="46" r="5"/><circle class="td-dust" cx="13" cy="46" r="5" style="animation-delay:-.36s"/></g>';
+    s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq,um); s+='</g>';
+    s+='<g class="ts-cheer">'+heroArt({expr:'cheer',arms:HP.cheer.arms,legs:HP.cheer.legs,sword:HP.cheer.sword,eq:eq})+
+      '<g class="ts-burst">'+bStar(60,-96,9,'#FFF3B0')+bStar(-46,-82,7,'#F6C445')+bStar(70,-50,6,'#FFFFFF')+bStar(-62,-40,6,'#FFF3B0')+'</g></g>';
+    return s+'</svg>';
+  }
+  function tdBuild(again){
+    var dk=dayKey(), th=TH[dk], per=tsPeriod(), P=TSP[per], eq=curEq(), w=wxKind(), wet=(w==='rain'||w==='storm'), sn=(w==='snow'), um=wet, i;
+    titleEl.className='td p-'+per+(w?' w-'+w:'')+(again?' no-drop':'');
+    var sk=(per==='day'||per==='morning')?th.sky:null;
+    titleEl.style.setProperty('--sk1',sk?sk[0]:P.sk1); titleEl.style.setProperty('--sk2',sk?sk[1]:P.sk2); if(P.sk3) titleEl.style.setProperty('--sk3',P.sk3);
+    titleEl.style.setProperty('--tsf',P.f);
+    var cloudF=th.cloud?(';filter:'+th.cloud):'';
+    var h=tdSky(per,th)+tsWeather(w,per);
+    h+='<div class="ts-l ts-cl" style="background-image:'+tsUri(560,150,tsClouds())+(per==='night'&&(!w||w==='clear')?';opacity:.25':'')+cloudF+'"></div>';
+    h+='<div class="td-world">';
+    h+='<div class="td-mt" style="background-image:'+tsUri(640,210,back(th.back[0],th.back[1],th.back[2]))+',linear-gradient('+th.back[2]+','+th.back[2]+')"></div>';
+    var g1=sn?'#F2F6FC':th.g[0], g2=sn?'#DDE6F2':th.g[1], gm=sn?'#EAF0F8':th.mound, rc=wet?'#B89868':th.road, a=.5, rw=(100-YH)*0.7143;
+    var ridge='M0,51 C18,49 34,44.2 50,'+CR+' C66,44.2 82,49 100,51', mound='M-3,53 C16,45.5 35,38.6 50,38.6 C65,38.6 84,45.5 103,53';
+    h+='<svg class="td-hill" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="'+mound+' L103,70 L-3,70 Z" fill="'+gm+'"/><path d="'+mound+'" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/></svg>';
+    h+='<div class="td-dest">'+tdDestOnly(dk)+'</div>';
+    h+='<svg class="td-hill" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs>'+
+      '<linearGradient id="tdg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+g1+'"/><stop offset="1" stop-color="'+g2+'"/></linearGradient>'+
+      '<clipPath id="tdc"><path d="'+ridge+' L100,100 L0,100 Z"/></clipPath></defs>'+
+      '<path d="'+ridge+' L100,100 L0,100 Z" fill="url(#tdg)"/>'+
+      '<g clip-path="url(#tdc)"><polygon points="'+(50-a)+','+YH+' '+(50+a)+','+YH+' '+(50+rw)+',100 '+(50-rw)+',100" fill="'+rc+'"/>'+
+      '<polyline points="'+(50-a)+','+YH+' '+(50-rw)+',100" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/>'+
+      '<polyline points="'+(50+a)+','+YH+' '+(50+rw)+',100" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/></g>'+
+      '<path d="'+ridge+'" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/></svg>';
+    h+='<div class="td-haze" style="background:linear-gradient(rgba(255,255,255,0),'+th.haze+',rgba(255,255,255,0))"></div>';
+    for(i=0;i<9;i++) h+='<div class="td-st" style="background:'+th.stripe+';animation-name:tdS;animation-delay:-'+((i/9)*T).toFixed(2)+'s"></div>';
+    h+=seq(th.A,'A',0.03)+seq(th.B,'B',0.08)+seq(th.C,'C',0.0)+seq(th.D,'D',0.11);
+    h+='<div class="td-tint"></div></div>';
+    h+=fx(th.fx);
+    h+='<div class="td-hero" style="filter:'+P.hf+'">'+tdHero(eq,um)+'</div>';
+    h+=tsWeatherFront(w);
+    h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
+    if(w) h+='<span class="ts-wx">'+WXN[w]+'</span>';
+    h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
+    h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
+    titleEl.innerHTML=h;
+  }
+  titleBuildD=tdBuild;
+})();
+
+/* 시작화면 배경 고르기: 요일별 풍경(기본) / 재건 마을 */
+var TBGK='home-training-title-bg';
+function titleBgMode(){ try{ return localStorage.getItem(TBGK)==='town'?'town':'day'; }catch(e){ return 'day'; } }
+function titleBgSet(m){ try{ localStorage.setItem(TBGK,m); }catch(e){} }
+titleBuild=function(again){ if(titleBgMode()==='town'&&titleBuildV) titleBuildV(again); else if(titleBuildD) titleBuildD(again); else titleBuildH(again); };
 
 function wxAfter(changed){ if(changed && tab==='week' && titleEl.hidden) render(); }
 function tsTapUpdate(){

@@ -49,6 +49,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .wrap{max-width:560px; margin:0 auto; padding:18px 16px 170px;}
 .eyebrow{color:var(--muted); font-size:14px; margin:0 2px 4px; font-weight:500; min-height:36px; display:flex; align-items:center; padding-right:46px;}
 .wrap{position:relative;}
+body.title-up #app,body.title-up #nav{display:none !important;}   /* 시작화면이 떠 있는 동안 뒤의 앱 화면은 멈춰 둬요(시작화면 움직임이 끊기지 않게) */
 .gearbtn{position:absolute; top:18px; right:16px; z-index:5; width:40px; height:40px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid var(--line); background:var(--surface); color:var(--muted); box-shadow:0 2px 0 var(--edge);}
 .gearbtn svg{width:22px; height:22px; fill:currentColor;}
 .gearbtn:active{background:var(--soft);}
@@ -1238,8 +1239,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.40.0', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.40.1', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.40.1','시작화면이 떠 있는 동안 뒤에 있는 앱 화면을 멈춰 두어 시작화면 움직임의 프레임 드랍을 줄이도록 수정(시작화면을 닫으면 원래 화면과 스크롤 위치로 복귀)'],
   ['1.40.0','탭 개편: 하단 메뉴를 지도·퀘스트·러닝·왕국·일지 5개로 줄이고 설정은 화면 오른쪽 위 톱니바퀴로 이동(설정 화면의 ‹ 돌아가기로 원래 탭 복귀). 앱을 열면 처음 화면이 퀘스트로 바뀜'],
   ['1.39.20','일지의 업적을 달성한 것만 달성한 날짜와 함께 달성 순서대로 쌓이도록 변경(달성 날짜는 지난 기록을 되짚어 채움). 누적 거리·총 달린 거리를 일일 퀘스트 러닝으로 입력한 거리만으로 통일(일요일 걷기 제외)'],
   ['1.39.19','러닝 콘텐츠를 길 위에서 우연히 생기는 이벤트 느낌으로 정리: 러닝 탭의 원정 지도와 다음 지점·남은 거리 표시를 삭제하고, 지나온 여정은 만난 이벤트만 거리 없이 기록. 일지의 달린 거리 섹션을 러닝 탭으로 이동. 지도 탭에 시간대(아침·노을·밤) 반영. 설정의 시작 안내 다시 보기 버튼이 한 줄로 보이도록 정리'],
@@ -5926,8 +5928,10 @@ function tsTapUpdate(){
   if(bgmOn()){ if(tsSoundTried) t='한 번 더 누르면 모험 시작'; else if(!BGM.running()) t='화면을 눌러 음악 켜기'; }
   if(tp.textContent!==t) tp.textContent=t;
 }
+var tsScrollY=0;
 function titleOpen(first){
   tsFirst=!!first; tsBusy=false; tsSoundTried=false;
+  tsScrollY=window.pageYOffset||0; document.body.classList.add('title-up');
   titleBuild(); titleEl.hidden=false;
   bgmSync(); setTimeout(tsTapUpdate,450); setTimeout(tsTapUpdate,1600);
   wxRefresh(false,function(changed){ if(changed && !titleEl.hidden && !tsBusy) titleBuild(true); wxAfter(changed); });
@@ -5935,9 +5939,10 @@ function titleOpen(first){
 }
 function titleFinish(){
   titleEl.hidden=true; titleEl.innerHTML=''; titleEl.className='';
+  document.body.classList.remove('title-up');
   bgmSync();
   if(tsFirst && !introSeen) introOpen();
-  render(); sunPopup(); jnyCheck();
+  render(); if(!tsFirst) window.scrollTo(0,tsScrollY); sunPopup(); jnyCheck();
 }
 function titleGo(){
   if(tsBusy || titleEl.hidden) return;

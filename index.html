@@ -1243,8 +1243,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.9', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.11', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.11','세로 시작화면: 캐릭터를 더 크게, 길 가운데 세로 점선 삭제(가로 띠는 유지), 목적지에서 보스 실루엣을 지우고 목적지 그림을 정가운데에 더 크게 배치'],
+  ['1.39.10','세로 시작화면에서 언덕 뒤 산이 하늘에 떠 보이던 문제 수정: 산 아래 양옆 빈 공간을 산 색으로 채움'],
   ['1.39.9','하단 메뉴 순서를 지도·퀘스트·러닝·왕국·일지·설정으로 변경'],
   ['1.39.8','러닝 탭의 달리는 장면에 날씨(비·눈·안개·흐림·천둥번개) 반영, 왕국 탭의 왕국 전경에 시간대(아침·노을·밤 색, 밤·노을에는 건물 불빛)와 날씨 반영'],
   ['1.39.7','세로 시작화면 안정화: 큰 영역에 거는 화면 효과(filter)를 색 덮개로 바꿔 일부 폰에서 화면이 비어 보일 수 있는 문제를 줄이고, 동작 줄이기 설정에서 배경 그림이 왼쪽 위에 쌓이던 문제 수정'],
@@ -5632,15 +5634,16 @@ var titleBuildH=null;
     '.tv.p-morning .tv-tint{background:rgba(255,236,200,.06);}'+
     '.tv.w-fog .tv-tint{background:rgba(228,232,238,.22);}'+
     '.tv-hill{position:absolute;inset:0;width:100%;height:100%;}'+
-    '.tv-mt{position:absolute;left:0;right:0;bottom:53vh;height:17vh;background-repeat:repeat-x;background-size:auto 100%;background-position:50% 100%;}'+
+    '.tv-mt{position:absolute;left:0;right:0;top:30vh;height:26vh;background-repeat:repeat-x,no-repeat;background-size:auto 17vh,100% 10vh;background-position:50% 0,0 16vh;}'+
     '.tv-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.34),rgba(255,255,255,0));pointer-events:none;}'+
-    '.tv-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);width:132px;margin-left:-66px;text-align:center;}'+
-    '.tv-dest svg{display:block;width:100%;height:auto;}'+
-    '@media (max-height:700px){.tv-dest{width:104px;margin-left:-52px;} .tv .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .tv .ts-logo svg{width:min(62%,250px);} .tv .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
+    '.tv-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}'+
+    '.tv-dest .ts-plate{white-space:nowrap;margin-bottom:0;}'+
+    '.tv-dest svg{display:block;width:100px;height:auto;margin-top:2px;}'+
+    '@media (max-height:700px){.tv-dest svg{width:80px;} .tv .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .tv .ts-logo svg{width:min(62%,250px);} .tv .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
     '.tv .ts-cl{bottom:auto;top:15vh;}'+
     '.tv .ts-cl2{bottom:auto;top:8vh;}'+
     '.tv .ts-logo{top:calc(5vh + env(safe-area-inset-top,0px));}'+
-    '.tv-hero{position:absolute;left:50%;bottom:calc(84px + 3vh);width:140px;margin-left:-70px;z-index:500;}'+
+    '.tv-hero{position:absolute;left:50%;bottom:calc(76px + 2vh);width:clamp(150px,22vh,196px);transform:translateX(-50%);z-index:500;}'+
     '.tv-hero svg{display:block;width:100%;height:auto;overflow:visible;}'+
     '.tv-dust{animation:tvDust .72s linear infinite;opacity:0;}'+
     '@keyframes tvDust{0%{transform:translate(0,0) scale(.5);opacity:.6;}100%{transform:translate(0,16px) scale(1.5);opacity:0;}}'+
@@ -5683,6 +5686,11 @@ var titleBuildH=null;
     else s+='<div class="ts-orb" style="right:10%;top:18vh;width:58px;height:58px;background:#F6C445;border:3px solid '+OL+';box-shadow:0 0 0 11px rgba(246,196,69,.18),0 0 46px rgba(255,230,140,.7);"></div>';
     return s;
   }
+  /* 목적지: 보스 실루엣 없이 풍경만, 정가운데에 크게 */
+  function tvDestOnly(dk){
+    var i=ORDER.indexOf(dk);
+    return '<div class="ts-plate"><small>오늘의 목적지</small><b>'+QN[dk]+'</b></div><svg viewBox="-70 -128 140 176" aria-hidden="true"><g transform="scale(.92)">'+LMS[i]()+'</g></svg>';
+  }
   function tvHero(eq,um){
     var n=8, i, s='<svg viewBox="-80 -170 170 226" aria-hidden="true">';
     s+='<ellipse cx="0" cy="49" rx="40" ry="6.5" fill="#000" opacity=".22"/>';
@@ -5700,14 +5708,14 @@ var titleBuildH=null;
     var h=tvSky(per)+tsWeather(w,per);
     h+='<div class="ts-l ts-cl" style="background-image:'+tsUri(560,150,tsClouds())+(per==='night'&&(!w||w==='clear')?';opacity:.25':'')+'"></div>';
     h+='<div class="tv-world">';
-    h+='<div class="tv-mt" style="background-image:'+tsUri(640,210,tsMountains())+'"></div>';
+    h+='<div class="tv-mt" style="background-image:'+tsUri(640,210,tsMountains())+',linear-gradient(#86A7CF,#86A7CF)"></div>';
     /* 목적지가 서 있는 높은 언덕(능선 너머) */
     var g1=sn?'#F2F6FC':'#8FD18A', g2=sn?'#DDE6F2':'#6FBF73', gm=sn?'#EAF0F8':'#9CDB97', rc=(wet?'#D3AE78':'#E7C38A'), a=.5, rw=(100-YH)*0.7143;
     var ridge='M0,51 C18,49 34,44.2 50,'+CR+' C66,44.2 82,49 100,51', mound='M-3,53 C16,45.5 35,38.6 50,38.6 C65,38.6 84,45.5 103,53';
     h+='<svg class="tv-hill" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+
       '<path d="'+mound+' L103,70 L-3,70 Z" fill="'+gm+'"/><path d="'+mound+'" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/>'+
       '</svg>';
-    h+='<div class="tv-dest">'+tsDest(dk)+'</div>';
+    h+='<div class="tv-dest">'+tvDestOnly(dk)+'</div>';
     /* 앞쪽 언덕(땅) + 길: 길은 능선에서 잘려 언덕 너머로 이어져요 */
     h+='<svg class="tv-hill" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs>'+
       '<linearGradient id="tvg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+g1+'"/><stop offset="1" stop-color="'+g2+'"/></linearGradient>'+
@@ -5720,7 +5728,6 @@ var titleBuildH=null;
     h+='<div class="tv-haze"></div>';
     /* 길 위 가로 띠 · 가운데 점선 (걷는 속도에 맞춰 아래로 흘러요) */
     for(i=0;i<9;i++) h+='<div class="tv-st" style="background:'+(wet?'rgba(168,128,80,.5)':'rgba(214,172,110,.62)')+';animation-name:tvS;animation-delay:-'+((i/9)*T).toFixed(2)+'s"></div>';
-    for(i=0;i<9;i++) h+='<div class="tv-st" style="width:2.4vw;height:7vh;background:'+(sn?'#fff':'#FFF3C4')+';border-radius:3px;animation-name:tvS;animation-delay:-'+(((i+.5)/9)*T).toFixed(2)+'s"></div>';
     /* 양옆 배경 */
     h+=seq(['pine','bush','pine','flower','bush','pine','rock','bush','pine','bush'],'A',0.03);
     h+=seq(['bush','pine','rock','pine','bush','flower','pine','bush','pine','flower'],'B',0.08);
@@ -5731,7 +5738,7 @@ var titleBuildH=null;
     h+=tsWeatherFront(w);
     h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
     if(w) h+='<span class="ts-wx">'+WXN[w]+'</span>';
-    h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">세로 테스트 · v'+APP_VER+'</span>';
+    h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
     h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
     titleEl.innerHTML=h;
   }

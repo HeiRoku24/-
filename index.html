@@ -1243,8 +1243,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.12', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.13', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.13','시작화면 왼쪽 위에 \'무슨 요일 · 목적지 이름\' 줄 추가, 캐릭터와 \'화면을 눌러 모험 시작\' 문구를 조금 위로 이동'],
+  ['1.39.13','시작화면을 넘어가면 처음 나오는 탭을 퀘스트에서 지도로 변경'],
   ['1.39.12','시작화면 목적지 위의 이름표 삭제, 요일별 풍경 시작화면 추가(요일마다 목적지에 어울리는 배경·소품·분위기 효과) / 설정 > 기본 설정에서 시작화면 배경을 요일별 풍경과 재건 마을 중 선택'],
   ['1.39.11','세로 시작화면: 캐릭터를 더 크게, 길 가운데 세로 점선 삭제(가로 띠는 유지), 목적지에서 보스 실루엣을 지우고 목적지 그림을 정가운데에 더 크게 배치'],
   ['1.39.10','세로 시작화면에서 언덕 뒤 산이 하늘에 떠 보이던 문제 수정: 산 아래 양옆 빈 공간을 산 색으로 채움'],
@@ -2247,7 +2249,7 @@ function save(){
 }
 noDirty=true; save(); noDirty=false;
 
-var tab = 'today';
+var tab = 'week';
 var sel = TODAY;
 var openEx = {};
 var armed = false;
@@ -5639,14 +5641,16 @@ var titleBuildH=null, titleBuildV=null, titleBuildD=null;
     '.tv.w-fog .tv-tint{background:rgba(228,232,238,.22);}'+
     '.tv-hill{position:absolute;inset:0;width:100%;height:100%;}'+
     '.tv-mt{position:absolute;left:0;right:0;top:30vh;height:26vh;background-repeat:repeat-x,no-repeat;background-size:auto 17vh,100% 10vh;background-position:50% 0,0 16vh;}'+
+    '.tv .ts-day{top:calc(40px + env(safe-area-inset-top,0px));} .tv .ts-wx{top:calc(68px + env(safe-area-inset-top,0px));}'+
+    '.tv .ts-tap{bottom:calc(16px + var(--lift) * .55 + 4vh + env(safe-area-inset-bottom,0px));}'+
     '.tv-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.34),rgba(255,255,255,0));pointer-events:none;}'+
     '.tv-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}'+
     '.tv-dest svg{display:block;width:100px;height:auto;margin-top:2px;}'+
-    '@media (max-height:700px){.tv-dest svg{width:80px;} .tv .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .tv .ts-logo svg{width:min(62%,250px);} .tv .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
+    '@media (max-height:700px){.tv-dest svg{width:80px;} .tv .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .tv .ts-logo svg{width:min(54%,220px);} .tv .ts-dst,.tv .ts-day,.tv .ts-wx{font-size:11px;padding:1px 8px;} .tv .ts-day{top:calc(36px + env(safe-area-inset-top,0px));} .tv .ts-wx{top:calc(60px + env(safe-area-inset-top,0px));} .tv .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
     '.tv .ts-cl{bottom:auto;top:15vh;}'+
     '.tv .ts-cl2{bottom:auto;top:8vh;}'+
     '.tv .ts-logo{top:calc(5vh + env(safe-area-inset-top,0px));}'+
-    '.tv-hero{position:absolute;left:50%;bottom:calc(76px + 2vh);width:clamp(150px,22vh,196px);transform:translateX(-50%);z-index:500;}'+
+    '.tv-hero{position:absolute;left:50%;bottom:calc(76px + 6vh);width:clamp(150px,22vh,196px);transform:translateX(-50%);z-index:500;}'+
     '.tv-hero svg{display:block;width:100%;height:auto;overflow:visible;}'+
     '.tv-dust{animation:tvDust .72s linear infinite;opacity:0;}'+
     '@keyframes tvDust{0%{transform:translate(0,0) scale(.5);opacity:.6;}100%{transform:translate(0,16px) scale(1.5);opacity:0;}}'+
@@ -5741,7 +5745,7 @@ var titleBuildH=null, titleBuildV=null, titleBuildD=null;
     h+=tsWeatherFront(w);
     h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
     if(w) h+='<span class="ts-wx">'+WXN[w]+'</span>';
-    h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
+    h+='<span class="ts-info ts-dst">'+({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[dk]+'요일 · '+QN[dk]+'</span><span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
     h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
     titleEl.innerHTML=h;
   }
@@ -5769,10 +5773,12 @@ var titleBuildH=null, titleBuildV=null, titleBuildD=null;
     '.td-world{position:absolute;inset:0;overflow:hidden;}'+
     '.td-hill{position:absolute;inset:0;width:100%;height:100%;}'+
     '.td-mt{position:absolute;left:0;right:0;top:30vh;height:26vh;background-repeat:repeat-x,no-repeat;background-size:auto 17vh,100% 10vh;background-position:50% 0,0 16vh;}'+
+    '.td .ts-day{top:calc(40px + env(safe-area-inset-top,0px));} .td .ts-wx{top:calc(68px + env(safe-area-inset-top,0px));}'+
+    '.td .ts-tap{bottom:calc(16px + var(--lift) * .55 + 4vh + env(safe-area-inset-bottom,0px));}'+
     '.td-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;pointer-events:none;}'+
     '.td-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}'+
     '.td-dest svg{display:block;width:100px;height:auto;margin-top:2px;}'+
-    '@media (max-height:700px){.td-dest svg{width:80px;} .td .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .td .ts-logo svg{width:min(62%,250px);} .td .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
+    '@media (max-height:700px){.td-dest svg{width:80px;} .td .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .td .ts-logo svg{width:min(54%,220px);} .td .ts-dst,.td .ts-day,.td .ts-wx{font-size:11px;padding:1px 8px;} .td .ts-day{top:calc(36px + env(safe-area-inset-top,0px));} .td .ts-wx{top:calc(60px + env(safe-area-inset-top,0px));} .td .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
     '.td .ts-cl{bottom:auto;top:15vh;}'+
     '.td .ts-logo{top:calc(5vh + env(safe-area-inset-top,0px));}'+
     '.td .ts-stars{inset:0 0 auto 0;height:'+YH+'vh;}'+
@@ -5781,7 +5787,7 @@ var titleBuildH=null, titleBuildV=null, titleBuildD=null;
     '.td.p-sunset .td-tint{background:linear-gradient(rgba(231,124,104,.10),rgba(255,160,90,.22));}'+
     '.td.p-morning .td-tint{background:rgba(255,236,200,.06);}'+
     '.td.w-fog .td-tint{background:rgba(228,232,238,.22);}'+
-    '.td-hero{position:absolute;left:50%;bottom:calc(76px + 2vh);width:clamp(150px,22vh,196px);transform:translateX(-50%);z-index:500;}'+
+    '.td-hero{position:absolute;left:50%;bottom:calc(76px + 6vh);width:clamp(150px,22vh,196px);transform:translateX(-50%);z-index:500;}'+
     '.td-hero svg{display:block;width:100%;height:auto;overflow:visible;}'+
     '.td-dust{animation:tdDust .72s linear infinite;opacity:0;}'+
     '@keyframes tdDust{0%{transform:translate(0,0) scale(.5);opacity:.6;}100%{transform:translate(0,16px) scale(1.5);opacity:0;}}'+
@@ -5981,7 +5987,7 @@ var titleBuildH=null, titleBuildV=null, titleBuildD=null;
     h+=tsWeatherFront(w);
     h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
     if(w) h+='<span class="ts-wx">'+WXN[w]+'</span>';
-    h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
+    h+='<span class="ts-info ts-dst">'+({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[dk]+'요일 · '+QN[dk]+'</span><span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
     h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
     titleEl.innerHTML=h;
   }

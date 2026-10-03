@@ -50,7 +50,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .eyebrow{color:var(--muted); font-size:14px; margin:0 2px 4px; font-weight:500; min-height:36px; display:flex; align-items:center; padding-right:46px;}
 .wrap{position:relative;}
 body.title-up #app,body.title-up #nav{display:none !important;}   /* 시작화면이 떠 있는 동안 뒤의 앱 화면은 멈춰 둬요(시작화면 움직임이 끊기지 않게) */
-.gearbtn{position:absolute; top:18px; right:16px; z-index:5; width:40px; height:40px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid var(--line); background:var(--surface); color:var(--muted); box-shadow:0 2px 0 var(--edge);}
+.gearbtn{position:absolute; top:5px; right:16px; z-index:5; width:40px; height:40px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid var(--line); background:var(--surface); color:var(--muted); box-shadow:0 2px 0 var(--edge);}
 .gearbtn svg{width:22px; height:22px; fill:currentColor;}
 .gearbtn:active{background:var(--soft);}
 h1{font-family:var(--disp); font-weight:400; font-size:36px; line-height:1.15; margin:0;}
@@ -704,7 +704,8 @@ svg.chart{width:100%; height:auto; display:block;}
 .xch .xt{flex:1; min-width:0;}
 .xch .xt b{display:block; font-family:var(--disp); font-weight:400; font-size:17px;}
 .xch .xt small{display:block; font-size:12px; color:var(--muted); margin-top:2px;}
-.xch button{flex:none; min-height:44px; padding:0 14px; font-size:14px;}
+.xch .xt b{word-break:keep-all;}
+.xch button,.xch .primary,.xch .ghost{flex:none; width:auto; min-width:96px; max-width:46%; margin:0; min-height:46px; padding:0 14px; font-size:15px; line-height:1.25;}
 .dgs.sub{margin:8px 10px 10px; border-width:2px; box-shadow:none;}
 .dgs.lock .dgh{opacity:.6;}
 .dgh{display:flex; justify-content:space-between; align-items:center; width:100%; min-height:54px; padding:0 16px; background:none; border:0; text-align:left; font-family:var(--disp); font-size:19px;}
@@ -1250,8 +1251,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.41.6', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.41.7', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.41.7','몸짱 교역소의 "바꾸기" 버튼이 활성화되면 교환 줄이 세로로 길게 늘어나던 문제 수정(버튼 폭이 줄 전체로 늘어나 글자 칸을 밀어내던 것). 설정 톱니바퀴를 조금 위로 올려 아래 카드와 닿지 않게 조정'],
   ['1.41.6','러닝 돌발 보급 이벤트 "길 위의 행운" 추가: 2026-10-04 이후 일일 퀘스트 러닝으로 달린 거리에서 40~90km 사이의 숨은 간격(평균 약 65km)마다 발생하고 12회가 한 바퀴(일반 보급 6·희귀 보급 4·전설 보급 2, 보급량 일반 6개·희귀 3개·전설 3개, 이후 반복). 남은 거리·다음 이벤트는 어디에도 보이지 않고, 지나온 여정 목록에 이름과 얻은 재료만 기록. 보급 재료는 대장간·교역소에서 사용. 러닝 업적 2개 추가(첫 돌발 보급·행운의 러너). 백업·복원·클라우드 합치기에 반영'],
   ['1.41.5','몸짱 교역소 추가: 왕국에 5번째 건물(복구 비용 건축 자재 2,000, 폐허 → 복구 중 → 완성). 상인 길드 상인 마르코와 재료 교환(희귀2→일반3 · 전설1→희귀2 · 일반5→희귀1 · 희귀4→전설1, 확인 후 교환). 성 둘레에 훈련장·여관·교역소·대장간 4채를 좌우 대칭·균일한 간격으로 다시 배치(그림이 서로 겹치지 않도록 실제 그림 영역으로 계산). 장비 업적 25개 추가(공용장비 6·12·18·24종, 칸별 수집가 4, 제작 장비 24·48·72·96종, 직업별 무기 달인 4·전용장비 완성 4, 첫 전설·전설 16종, 교역소 개업·첫 교환, 모든 장비 수집). 대장간 완성 안내 문구 정리'],
   ['1.41.4','전용 방어구·장식 72종 완성(용사 투구·갑옷·방패 18종 + 드워프 뿔 투구·판금 갑옷·수염 장식 18종 + 엘프 머리띠·튜닉·화살통 18종 + 마법사 뾰족 모자·로브·마법책·구슬 18종, 칸마다 일반 3·희귀 2·전설 1). 대장간에서 제작하고 정면·옆·뒷모습에 반영, 파자마를 입으면 가려져요. 대장간 목록에 직업별 보기 버튼 추가. 다른 직업의 전용 장비를 입으면 \'캐릭터를 바꾸면 보여요\' 안내'],

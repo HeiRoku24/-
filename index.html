@@ -891,6 +891,17 @@ svg.chart{width:100%; height:auto; display:block;}
 .rn-ov{position:absolute; top:10px; z-index:3; margin:0; text-align:left;}
 .rn-l1{left:10px;} .rn-r1{right:10px; text-align:right; max-width:48%;}
 @media (prefers-reduced-motion: reduce){ .rn-sc .ts-l,.rn-dust,.rn-sp,.rf{animation:none;} .rf.f0{visibility:visible;} }
+.rn-sc.w-cloudy .ts-orb,.rn-sc.w-fog .ts-orb{opacity:.45;}
+.rn-sc.w-snow .ts-orb{opacity:.18;}
+.rn-sc.w-rain .ts-orb,.rn-sc.w-storm .ts-orb{display:none;}
+.rn-sc.w-cloudy .ts-cl,.rn-sc.w-rain .ts-cl,.rn-sc.w-storm .ts-cl,.rn-sc.w-snow .ts-cl,.rn-sc.w-fog .ts-cl{filter:grayscale(.6) brightness(.88);}
+.rn-sc .ts-cl2{bottom:auto; top:6px; height:130px; z-index:1;}
+.rn-sc.w-storm .ts-rain1{animation-duration:.3s;} .rn-sc.w-storm .ts-rain2{animation-duration:.45s;}
+.rn-sc .ts-fog{bottom:20px; height:200px; z-index:1;}
+.rn-sc .ts-haze{bottom:60px; height:180px; z-index:1;}
+.rn-sc .ts-wdim{z-index:1;}
+.rn-sc .ts-fall,.rn-sc .ts-sway,.rn-sc .ts-bolt{z-index:3;}
+.rn-sc.p-night .ts-haze{background:linear-gradient(to top,rgba(150,160,185,0),rgba(150,160,185,.45) 40%,rgba(150,160,185,0));}
 .rn-n{margin:0 0 8px; display:flex; justify-content:space-between; align-items:baseline; font-size:14px;}
 .rn-n b{font-family:var(--disp); font-weight:400; font-size:22px; color:var(--link);}
 .rnstat{padding:14px 16px 16px;}
@@ -936,9 +947,9 @@ svg.chart{width:100%; height:auto; display:block;}
   <button type="button" id="tskip">건너뛰기</button>
 </div>
 <nav class="nav" id="nav" aria-label="화면 이동">
+  <button type="button" data-tab="week">지도</button>
   <button type="button" data-tab="today">퀘스트</button>
   <button type="button" data-tab="run">러닝</button>
-  <button type="button" data-tab="week">지도</button>
   <button type="button" data-tab="home">왕국</button>
   <button type="button" data-tab="ach">일지</button>
   <button type="button" data-tab="set">설정</button>
@@ -1232,8 +1243,11 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.6', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.9', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.9','하단 메뉴 순서를 지도·퀘스트·러닝·왕국·일지·설정으로 변경'],
+  ['1.39.8','러닝 탭의 달리는 장면에 날씨(비·눈·안개·흐림·천둥번개) 반영, 왕국 탭의 왕국 전경에 시간대(아침·노을·밤 색, 밤·노을에는 건물 불빛)와 날씨 반영'],
+  ['1.39.7','세로 시작화면 안정화: 큰 영역에 거는 화면 효과(filter)를 색 덮개로 바꿔 일부 폰에서 화면이 비어 보일 수 있는 문제를 줄이고, 동작 줄이기 설정에서 배경 그림이 왼쪽 위에 쌓이던 문제 수정'],
   ['1.39.6','시작화면을 세로 방향으로 변경: 캐릭터가 앞모습으로 아래에서 위로 걷고, 길이 언덕 능선 너머로 이어지며, 능선 위 높은 언덕에 오늘의 모험지가 보임. 양옆의 나무·건물·성벽(재건 상태 그대로)이 아래로 다가오며 지나감'],
   ['1.39.5','일지 업적에 동료 수집 업적 추가(드워프 전사 합류·엘프 궁수 합류·현자 마법사 합류·전원 집결), 동료 그림이 업적 아이콘으로 표시'],
   ['1.39.4','엘프 궁수에게 초록 튜닉과 소매 추가(맨살 가슴 제거) / 보스전과 안내 그림의 공격 모습을 엘프는 활 쏘기(날아가는 화살), 현자 마법사는 마법 쏘기(날아가는 마법 구체)로 변경'],
@@ -2713,10 +2727,23 @@ function matBarHtml(){
     '<span class="mt-l">건축 자재</span><b class="mt-n">'+m.bal+'</b><small class="mt-s">총 '+m.earned+' 획득 · '+m.spent+' 사용</small></div>';
 }
 function backBtn(){ return '<button type="button" class="kback" data-a="kback">‹ 왕국 전경으로</button>'; }
+function mapTime(){
+  var per=tsPeriod(), h='';
+  if(per==='day') return '';
+  var bg=({morning:'rgba(255,236,190,.12)',sunset:'linear-gradient(rgba(255,150,90,.20),rgba(231,124,104,.16))',night:'rgba(10,22,60,.44)'})[per];
+  h+='<div class="mapwx" aria-hidden="true"><div style="position:absolute;inset:0;background:'+bg+'"></div>';
+  if(per==='night'||per==='sunset'){
+    ['train','forge','castle','inn'].forEach(function(id){
+      var q=KPOS[id], x=(q[0]*100/KW), y=(q[1]*100/KH);
+      h+='<div style="position:absolute;left:'+(x-9).toFixed(1)+'%;top:'+(y-9).toFixed(1)+'%;width:18%;height:'+(18*KW/KH).toFixed(1)+'%;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,'+(per==='night'?'.55':'.28')+') 0%,rgba(255,214,120,0) 68%)"></div>';
+    });
+  }
+  return h+'</div>';
+}
 function kingdomMapView(){
   var h=matBarHtml()+'<div class="phrow tab" style="margin-top:14px"><h1 class="ph">몸짱 왕국</h1><span class="phsub">모험으로 되살리는 곳</span></div>';
   var btn=''; ['castle','train','forge','inn','wall'].forEach(function(id){ btn+=kBuildBtn(id); });
-  h+='<div class="gmap kmap">'+kingdomSvg()+btn+'</div>';
+  h+='<div class="gmap kmap">'+kingdomSvg()+mapTime()+mapWeather()+btn+'</div>';
   h+='<p class="note">건물이나 성벽을 누르면 건물 화면으로 들어가요. 평일 퀘스트와 토벌로 얻은 자재는 모험이 종료된 날부터 쌓여요.</p>';
   return h;
 }
@@ -3760,15 +3787,15 @@ function rnSky(per){
   return s;
 }
 function rnScene(t,nx){
-  var per=tsPeriod(), P=TSP[per], eq=curEq(), w=null;
-  var h='<section class="rn-sc p-'+per+'" style="--sk1:'+P.sk1+';--sk2:'+P.sk2+(P.sk3?';--sk3:'+P.sk3:'')+';--tsf:'+P.f+'" aria-label="달리는 '+CHARN[curChar()]+'">';
-  h+=rnSky(per);
+  var per=tsPeriod(), P=TSP[per], eq=curEq(), w=wxKind();
+  var h='<section class="rn-sc p-'+per+(w?' w-'+w:'')+'" style="--sk1:'+P.sk1+';--sk2:'+P.sk2+(P.sk3?';--sk3:'+P.sk3:'')+';--tsf:'+P.f+'" aria-label="달리는 '+CHARN[curChar()]+'">';
+  h+=rnSky(per)+tsWeather(w,per);
   h+='<div class="ts-l ts-cl" style="background-image:'+tsUri(560,150,tsClouds())+(per==='night'?';opacity:.25':'')+'"></div>';
   h+='<div class="ts-l ts-mt" style="background-image:'+tsUri(640,210,tsMountains())+'"></div>';
   h+='<div class="ts-l ts-hl" style="background-image:'+tsUri(420,150,tsHills(w))+'"></div>';
   h+='<div class="ts-l ts-bd" style="background-image:'+tsUri(900,150,tsBuildings(w))+'"></div>';
   h+='<div class="ts-l ts-rd" style="background-image:'+tsUri(300,120,tsRoad(w))+'"></div>';
-  h+='<div class="ts-hero" style="filter:'+P.hf+'">'+runHero(eq)+'</div>';
+  h+='<div class="ts-hero" style="filter:'+P.hf+'">'+runHero(eq)+'</div>'+tsWeatherFront(w);
   h+='<div class="ts-plate rn-ov rn-l1"><small>총 달린 거리</small><b>'+kmFmt(t)+' km</b></div>';
   h+='<div class="ts-plate rn-ov rn-r1"><small>'+(nx?'다음 지점':'원정')+'</small><b>'+(nx?(nx.who?nx.n:'새로운 길'):'모든 지점 도착')+'</b></div>';
   return h+'</section>';
@@ -5596,9 +5623,14 @@ var titleBuildH=null;
   }
   var css='';
   css+=kf('tvA',-64)+kf('tvB',64)+kf('tvC',-90)+kf('tvD',90)+kf('tvS',0,true);
-  css+='.tv .tv-s,.tv .tv-st{position:absolute;left:0;top:0;transform-origin:0 0;opacity:0;pointer-events:none;will-change:transform;background-size:100% 100%;background-repeat:no-repeat;animation-duration:'+T+'s;animation-timing-function:linear;animation-iteration-count:infinite;}'+
+  css+='.tv .tv-s,.tv .tv-st{position:absolute;left:0;top:0;transform-origin:0 0;opacity:0;pointer-events:none;background-size:100% 100%;background-repeat:no-repeat;animation-duration:'+T+'s;animation-timing-function:linear;animation-iteration-count:infinite;}'+
     '.tv .tv-st{width:80vw;height:6.5vh;}'+
-    '.tv-world{position:absolute;inset:0;filter:var(--tsf,none);overflow:hidden;}'+
+    '.tv-world{position:absolute;inset:0;overflow:hidden;}'+
+    '.tv-tint{position:absolute;inset:0;pointer-events:none;z-index:400;}'+
+    '.tv.p-night .tv-tint{background:rgba(8,16,48,.46);}'+
+    '.tv.p-sunset .tv-tint{background:linear-gradient(rgba(231,124,104,.10),rgba(255,160,90,.22));}'+
+    '.tv.p-morning .tv-tint{background:rgba(255,236,200,.06);}'+
+    '.tv.w-fog .tv-tint{background:rgba(228,232,238,.22);}'+
     '.tv-hill{position:absolute;inset:0;width:100%;height:100%;}'+
     '.tv-mt{position:absolute;left:0;right:0;bottom:53vh;height:17vh;background-repeat:repeat-x;background-size:auto 100%;background-position:50% 100%;}'+
     '.tv-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.34),rgba(255,255,255,0));pointer-events:none;}'+
@@ -5614,7 +5646,7 @@ var titleBuildH=null;
     '@keyframes tvDust{0%{transform:translate(0,0) scale(.5);opacity:.6;}100%{transform:translate(0,16px) scale(1.5);opacity:0;}}'+
     '#title.go .tv-s,#title.go .tv-st,#title.go .tv-dust{animation-play-state:paused;}'+
     '.tv .ts-stars{inset:0 0 auto 0;height:'+YH+'vh;}'+
-    '@media (prefers-reduced-motion: reduce){.tv .tv-s,.tv .tv-st{animation:none;opacity:1;}}';
+    '@media (prefers-reduced-motion: reduce){.tv .tv-s,.tv .tv-st{animation:none;opacity:0;}}';
   var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
 
   /* 스프라이트: [viewBox, 안쪽 그림, 가로 px(z=1일 때)] — 아래쪽 가운데가 땅에 닿는 점 */
@@ -5694,7 +5726,7 @@ var titleBuildH=null;
     h+=seq(['bush','pine','rock','pine','bush','flower','pine','bush','pine','flower'],'B',0.08);
     h+=seq(['train','pine2','inn','pine2','wall'],'C',0.0);
     h+=seq(['forge','pine2','castle','pine2','wall'],'D',0.11);
-    h+='</div>';
+    h+='<div class="tv-tint"></div></div>';
     h+='<div class="tv-hero" style="filter:'+P.hf+'">'+tvHero(eq,um)+'</div>';
     h+=tsWeatherFront(w);
     h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';

@@ -1251,8 +1251,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.41.7', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.41.8', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.41.8','일요일 퀘스트의 "가볍게 걷기 30분"에서 걸은 거리를 적는 칸을 없애고 체크만 하도록 변경(이미 적어 둔 일요일 거리 기록은 그대로 보존)'],
   ['1.41.7','몸짱 교역소의 "바꾸기" 버튼이 활성화되면 교환 줄이 세로로 길게 늘어나던 문제 수정(버튼 폭이 줄 전체로 늘어나 글자 칸을 밀어내던 것). 설정 톱니바퀴를 조금 위로 올려 아래 카드와 닿지 않게 조정'],
   ['1.41.6','러닝 돌발 보급 이벤트 "길 위의 행운" 추가: 2026-10-04 이후 일일 퀘스트 러닝으로 달린 거리에서 40~90km 사이의 숨은 간격(평균 약 65km)마다 발생하고 12회가 한 바퀴(일반 보급 6·희귀 보급 4·전설 보급 2, 보급량 일반 6개·희귀 3개·전설 3개, 이후 반복). 남은 거리·다음 이벤트는 어디에도 보이지 않고, 지나온 여정 목록에 이름과 얻은 재료만 기록. 보급 재료는 대장간·교역소에서 사용. 러닝 업적 2개 추가(첫 돌발 보급·행운의 러너). 백업·복원·클라우드 합치기에 반영'],
   ['1.41.5','몸짱 교역소 추가: 왕국에 5번째 건물(복구 비용 건축 자재 2,000, 폐허 → 복구 중 → 완성). 상인 길드 상인 마르코와 재료 교환(희귀2→일반3 · 전설1→희귀2 · 일반5→희귀1 · 희귀4→전설1, 확인 후 교환). 성 둘레에 훈련장·여관·교역소·대장간 4채를 좌우 대칭·균일한 간격으로 다시 배치(그림이 서로 겹치지 않도록 실제 그림 영역으로 계산). 장비 업적 25개 추가(공용장비 6·12·18·24종, 칸별 수집가 4, 제작 장비 24·48·72·96종, 직업별 무기 달인 4·전용장비 완성 4, 첫 전설·전설 16종, 교역소 개업·첫 교환, 모든 장비 수집). 대장간 완성 안내 문구 정리'],
@@ -4535,6 +4536,7 @@ function runRow(on,label,sub,rew){
   return '<div class="row" aria-pressed="'+(on?'true':'false')+'"><span class="box" aria-hidden="true">✓</span><span class="rt">'+label+(sub?'<span class="rs">'+sub+'</span>':'')+'</span>'+rewChip(rew,on)+'</div>';
 }
 function kmRow(L,rest,lock){
+  if(rest) return ''; /* 일요일 걷기는 거리 입력 없이 체크만 */
   return '<div class="kmrow"><label for="kmin">'+(rest?'오늘 걸은 거리':'실제로 뛴 거리')+'</label>'+
     '<input id="kmin" type="number" inputmode="decimal" step="0.01" min="0" max="200" placeholder="5.00" value="'+(L.km>0?L.km:'')+'"'+(lock?' disabled':'')+'><span>km</span></div>'+((!rest&&L.km>0&&L.km<RUN_MIN&&!L.done.run)?'<p class="note" style="margin:-6px 4px 10px">'+RUN_MIN+'km 이상 입력해야 러닝이 완료돼요</p>':'');
 }

@@ -1232,8 +1232,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.4', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.5', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.5','일지 업적에 동료 수집 업적 추가(드워프 전사 합류·엘프 궁수 합류·현자 마법사 합류·전원 집결), 동료 그림이 업적 아이콘으로 표시'],
   ['1.39.4','엘프 궁수에게 초록 튜닉과 소매 추가(맨살 가슴 제거) / 보스전과 안내 그림의 공격 모습을 엘프는 활 쏘기(날아가는 화살), 현자 마법사는 마법 쏘기(날아가는 마법 구체)로 변경'],
   ['1.39.3','현자 마법사에게 보라색 로브와 소매 추가(웃통 맨살 제거, 정면·옆모습·성벽 뒷모습 공통) / 훈련장에서 엘프 궁수는 허수아비에게 화살을 쏘고 현자 마법사는 마법을 쏘도록 변경'],
   ['1.39.2','러닝 탭에서 달리는 캐릭터를 정면이 아닌 옆모습(오른쪽을 보고 달림)으로 변경: 팔다리를 앞뒤로 크게 흔드는 8프레임, 몸짱 용사·드워프 전사·엘프 궁수·현자 마법사 모두 옆모습'],
@@ -2348,7 +2349,11 @@ var ACH = [
   {id:'sets',n:'세트 100개',d:'세트를 누적 100개 완료',t:function(c){return c.sets>=100;}},
   {id:'lv5',n:'홈트 전사',d:'레벨 5 달성',t:function(c){return c.lv>=5;}},
   {id:'d14',n:'14일 클리어',d:'퀘스트를 14일 클리어',t:function(c){return c.days>=14;}},
-  {id:'w3',n:'몸 기록 3회',d:'체중을 3번 기록',t:function(c){return c.weights>=3;}}
+  {id:'w3',n:'몸 기록 3회',d:'체중을 3번 기록',t:function(c){return c.weights>=3;}},
+  {id:'cp_dwarf',n:'드워프 전사 합류',d:'러닝 누적 50km, 드워프의 마을에 도달해 드워프 전사를 동료로 맞이하기',b:'char:dwarf',t:function(c){return c.joined.dwarf;}},
+  {id:'cp_elf',n:'엘프 궁수 합류',d:'러닝 누적 150km, 엘프의 숲에 도달해 엘프 궁수를 동료로 맞이하기',b:'char:elf',t:function(c){return c.joined.elf;}},
+  {id:'cp_mage',n:'현자 마법사 합류',d:'러닝 누적 300km, 현자의 탑에 도달해 현자 마법사를 동료로 맞이하기',b:'char:mage',t:function(c){return c.joined.mage;}},
+  {id:'cp_all',n:'전원 집결',d:'드워프 전사, 엘프 궁수, 현자 마법사를 모두 동료로 맞이하기',t:function(c){return c.joined.dwarf&&c.joined.elf&&c.joined.mage;}}
 ];
 /* 단계형 업적: 한 칸에서 다음 목표가 순서대로 나와요 */
 var BSTEPS=[1,5,10,30,50,100];
@@ -2392,7 +2397,7 @@ function gstats(){
   var bk={}; Object.keys(S.log).concat(Object.keys(S.restLog||{})).forEach(function(k){ bk[k]=1; });
   Object.keys(bk).forEach(function(k){ if(DK[parse(k).getDay()]!=='sun') return; var rr=dayResult(parse(k)); if(rr && rr.res==='bless') bless++; });
   var killTotal=kills.mon+kills.tue+kills.wed+kills.thu+kills.fri;
-  return {days:ks.length,best:bestStreak(),sets:sets,runs:runs,boss:boss,kills:kills,killTotal:killTotal,weekAll:weekAll,bless:bless,km:kmSum(),lv:lvInfo(totalXP()).L,
+  return {joined:{dwarf:jnySeen('dwarf'),elf:jnySeen('elf'),mage:jnySeen('mage')},days:ks.length,best:bestStreak(),sets:sets,runs:runs,boss:boss,kills:kills,killTotal:killTotal,weekAll:weekAll,bless:bless,km:kmSum(),lv:lvInfo(totalXP()).L,
           weights:S.body.filter(function(b){return b.weight!=null;}).length};
 }
 function unlocked(){
@@ -3590,7 +3595,7 @@ function jnyNext(){
 function jnyPopup(n,replay){
   var main=!!n.who;
   return {k:main?'NEW COMPANION':'JOURNEY',t:n.n+' 도달',mode:(main&&!replay)?'win':'calm',
-    b:evScene(n)+'<p class="bnote">'+n.t+'</p>'+(main?'<p class="comfort">'+CHARN[n.who]+'가 합류했어요 · 몸짱 여관에서 캐릭터로 고를 수 있어요</p>':'')+'<p class="note" style="text-align:center">누적 '+n.km+'km</p>'};
+    b:evScene(n)+'<p class="bnote">'+n.t+'</p>'+(main?'<p class="comfort">'+CHARN[n.who]+'가 합류했어요 · 몸짱 여관에서 캐릭터로 고를 수 있어요</p><p class="note" style="text-align:center">업적 달성 · '+CHARN[n.who]+' 합류</p>':'')+'<p class="note" style="text-align:center">누적 '+n.km+'km</p>'};
 }
 function evScene(n){
   var K=({m25:'sign',dwarf:'village',m75:'river',m100:'pass',m125:'forest',elf:'forest',m175:'lake',m200:'ruin',m225:'stars',m250:'clouds',m275:'lights',mage:'tower'})[n.id]||'sign';
@@ -4113,6 +4118,10 @@ function bkHtml(){
   return h+'</div>';
 }
 function achIcon(key,on){
+  if(key.indexOf('char:')===0){
+    var w=key.slice(5);
+    return '<svg viewBox="-62 -98 124 152" class="'+(on?'':'sil')+'" aria-hidden="true"><g>'+heroArt({who:w,expr:'cheer',arms:HP.stand.arms,legs:HP.stand.legs,sword:null,eq:{}})+'</g></svg>';
+  }
   return '<svg viewBox="-92 -90 184 144" class="'+(on?'':'sil')+'" aria-hidden="true">'+bossArtBy(key,'idle')+'</svg>';
 }
 function achPopup(x){

@@ -1243,8 +1243,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.16', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.17', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.17','시작화면 캐릭터 깜빡임 대응 2: 걷는 그림 8장을 미리 한 장의 비트맵으로 만들어 위치만 바꿔 보여주도록 변경, 캐릭터 발밑의 계속 움직이던 먼지 효과 삭제'],
   ['1.39.16','시작화면 캐릭터 깜빡임 대응: 걷는 그림을 CSS 애니메이션 대신 한 장씩 직접 바꿔 보여주고(겹침·빈 순간 없음), 캐릭터 위치 방식과 불씨 효과의 번짐을 줄이고 배경 영역을 분리'],
   ['1.39.15','시작화면 캐릭터가 깜빡이던 문제 수정(배경 소품 움직임에서 겹침 순서 애니메이션을 빼고 걷기 프레임 전환 방식을 가볍게 변경) / 왼쪽 위 표시를 \'모험 N일째 · 요일 · 목적지\' 한 줄로 변경'],
   ['1.39.14','시작화면은 요일별 풍경으로 확정: 설정의 시작화면 배경 선택 버튼과 재건 마을 시작화면 삭제'],
@@ -5651,9 +5652,10 @@ var titleBuildD=null;
     '.td.w-fog .td-tint{background:rgba(228,232,238,.22);}'+
     '.td-hero{position:absolute;left:0;right:0;margin:0 auto;bottom:calc(76px + 6vh);width:clamp(150px,22vh,196px);z-index:500;}'+
     '.td-hero svg{display:block;width:100%;height:auto;overflow:visible;}'+
-    '.td-dust{animation:tdDust .72s linear infinite;opacity:0;}'+
-    '@keyframes tdDust{0%{transform:translate(0,0) scale(.5);opacity:.6;}100%{transform:translate(0,16px) scale(1.5);opacity:0;}}'+
-    '#title.go .td-s,#title.go .td-st,#title.go .td-dust,#title.go .td-fx i{animation-play-state:paused;}'+
+    '.tdspr{position:absolute;left:0;top:0;width:100%;aspect-ratio:170 / 226;background-repeat:no-repeat;background-size:800% 100%;background-position:0% 0;pointer-events:none;display:none;}'+
+    '.td-hero.spr-on .tdspr{display:block;} .td-hero.spr-on .ts-walk{display:none;}'+
+    '#title.go .tdspr{display:none !important;}'+
+    '#title.go .td-s,#title.go .td-st,#title.go .td-fx i{animation-play-state:paused;}'+
     '.td-fx{position:absolute;inset:0;pointer-events:none;z-index:450;overflow:hidden;}'+
     '.td-fx i{position:absolute;left:var(--x);top:var(--y);width:var(--s,4px);height:var(--s,4px);border-radius:50%;background:var(--c,#fff);opacity:0;animation-duration:var(--d,6s);animation-delay:var(--dl,0s);animation-iteration-count:infinite;animation-timing-function:linear;}'+
     '.td-fx.up i{animation-name:tdUp;} .td-fx.fall i{animation-name:tdFall;border-radius:60% 0 60% 0;box-shadow:none;} .td-fx.blink i{animation-name:tdBlink;animation-timing-function:ease-in-out;} .td-fx.drift i{animation-name:tdDrift;border-radius:40%;box-shadow:none;}'+
@@ -5811,23 +5813,57 @@ var titleBuildD=null;
   function tdHero(eq,um){
     var n=8, i, s='<svg viewBox="-80 -170 170 226" aria-hidden="true">';
     s+='<ellipse cx="0" cy="49" rx="40" ry="6.5" fill="#000" opacity=".22"/>';
-    s+='<g fill="#F5E6C8" stroke="'+OL+'" stroke-width="1.6"><circle class="td-dust" cx="-13" cy="46" r="5"/><circle class="td-dust" cx="13" cy="46" r="5" style="animation-delay:-.36s"/></g>';
     s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq,um).replace('class="wf ','class="tdwf ').replace(/style="animation-delay:[^"]*"/,'style="display:none"'); s+='</g>';
     s+='<g class="ts-cheer">'+heroArt({expr:'cheer',arms:HP.cheer.arms,legs:HP.cheer.legs,sword:HP.cheer.sword,eq:eq})+
       '<g class="ts-burst">'+bStar(60,-96,9,'#FFF3B0')+bStar(-46,-82,7,'#F6C445')+bStar(70,-50,6,'#FFFFFF')+bStar(-62,-40,6,'#FFF3B0')+'</g></g>';
-    return s+'</svg>';
+    return s+'</svg><div class="tdspr"></div>';
   }
-  var walkT=null;
-  function walkStart(){
-    if(walkT){ clearInterval(walkT); walkT=null; }
+  var walkT=null, walkSpr=null, walkTok=0;
+  function walkClear(){ if(walkT){ clearInterval(walkT); walkT=null; } if(walkSpr){ clearInterval(walkSpr); walkSpr=null; } }
+  function walkStart(eq,um){
+    walkClear(); var tok=++walkTok;
     var fr=[].slice.call(titleEl.querySelectorAll('.tdwf')), k=0; if(!fr.length) return;
     fr.forEach(function(f,i){ f.style.display=(i===0?'':'none'); });
     if(reduceMotion()) return;
     walkT=setInterval(function(){
-      if(titleEl.hidden){ clearInterval(walkT); walkT=null; return; }
-      if(document.hidden) return;
+      if(titleEl.hidden){ walkClear(); return; }
+      if(document.hidden||titleEl.classList.contains('dg-nowalk')) return;
       fr[k].style.display='none'; k=(k+1)%fr.length; fr[k].style.display='';
     },90);
+    try{ makeSprite(eq,um,tok); }catch(e){}
+  }
+  function makeSprite(eq,um,tok){
+    var hero=titleEl.querySelector('.td-hero'), spr=titleEl.querySelector('.tdspr'); if(!hero||!spr) return;
+    var cssW=hero.getBoundingClientRect().width||160, dpr=Math.min(window.devicePixelRatio||1,2.5), fw=Math.round(cssW*dpr), fh=Math.round(fw*226/170), n=8, left=n, ok=true, i;
+    if(fw<20) return;
+    var cv=document.createElement('canvas'); cv.width=fw*n; cv.height=fh; var cx=cv.getContext('2d'); if(!cx) return;
+    function done(){
+      if(!ok||tok!==walkTok||titleEl.hidden) return;
+      var url; try{ url=cv.toDataURL('image/png'); }catch(e){ return; }
+      var im=new Image();
+      im.onload=function(){
+        if(tok!==walkTok||titleEl.hidden) return;
+        spr.style.backgroundImage='url('+url+')';
+        hero.classList.add('spr-on');
+        if(walkT){ clearInterval(walkT); walkT=null; }
+        var q=0; spr.style.backgroundPosition='0% 0';
+        walkSpr=setInterval(function(){
+          if(titleEl.hidden){ walkClear(); return; }
+          if(document.hidden||titleEl.classList.contains('dg-nowalk')) return;
+          q=(q+1)%n; spr.style.backgroundPosition=(q*100/(n-1)).toFixed(3)+'% 0';
+        },90);
+      };
+      im.src=url;
+    }
+    function load(idx){
+      var f=tsWalkFrame(idx,n,eq,um).replace(/ class="[^"]*"/,'').replace(/ style="[^"]*"/,'');
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="-80 -170 170 226" width="'+fw+'" height="'+fh+'"><ellipse cx="0" cy="49" rx="40" ry="6.5" fill="#000" opacity=".22"/>'+f+'</svg>';
+      var img=new Image();
+      img.onload=function(){ try{ cx.drawImage(img,idx*fw,0,fw,fh); }catch(e){ ok=false; } if(--left===0) done(); };
+      img.onerror=function(){ ok=false; if(--left===0) done(); };
+      img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+    }
+    for(i=0;i<n;i++) load(i);
   }
   function tdBuild(again){
     var dk=dayKey(), th=TH[dk], per=tsPeriod(), P=TSP[per], eq=curEq(), w=wxKind(), wet=(w==='rain'||w==='storm'), sn=(w==='snow'), um=wet, i;
@@ -5864,7 +5900,7 @@ var titleBuildD=null;
     h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째 · '+({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[dk]+'요일 · '+QN[dk]+'</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
     h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
     titleEl.innerHTML=h;
-    walkStart();
+    walkStart(eq,um);
   }
   titleBuildD=tdBuild;
 })();

@@ -696,6 +696,17 @@ svg.chart{width:100%; height:auto; display:block;}
 /* ---------- 장비 도감 토글 · 일지 업적 (v1.37.2) ---------- */
 .dgs{background:var(--surface); border:2px solid var(--line); border-radius:16px; box-shadow:0 3px 0 var(--edge); margin:0 0 10px; overflow:hidden;}
 .dgs.open{border-color:var(--gold);}
+.fgf{display:flex; gap:6px; flex-wrap:wrap; margin:0 0 12px;}
+.fgf button{min-height:38px; padding:0 13px; border-radius:999px; border:2px solid var(--line); background:var(--surface); color:var(--ink); font-size:14px;}
+.fgf button[aria-pressed="true"]{background:var(--gold); border-color:var(--gold); color:var(--gold-ink); font-weight:700;}
+.xch{display:flex; align-items:center; gap:10px; padding:10px 12px; margin:0 0 8px; background:var(--surface); border:2px solid var(--line); border-radius:14px; box-shadow:0 2px 0 var(--edge);}
+.xch.off{opacity:.78;}
+.xch .xt{flex:1; min-width:0;}
+.xch .xt b{display:block; font-family:var(--disp); font-weight:400; font-size:17px;}
+.xch .xt small{display:block; font-size:12px; color:var(--muted); margin-top:2px;}
+.xch button{flex:none; min-height:44px; padding:0 14px; font-size:14px;}
+.dgs.sub{margin:8px 10px 10px; border-width:2px; box-shadow:none;}
+.dgs.lock .dgh{opacity:.6;}
 .dgh{display:flex; justify-content:space-between; align-items:center; width:100%; min-height:54px; padding:0 16px; background:none; border:0; text-align:left; font-family:var(--disp); font-size:19px;}
 .dgh small{font-family:'Noto Sans KR',system-ui,sans-serif; font-size:13px; color:var(--muted);}
 .dgh small i{font-style:normal; margin-left:4px;}
@@ -1239,8 +1250,15 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.40.1', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.41.6', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.41.6','러닝 돌발 보급 이벤트 "길 위의 행운" 추가: 2026-10-04 이후 일일 퀘스트 러닝으로 달린 거리에서 40~90km 사이의 숨은 간격(평균 약 65km)마다 발생하고 12회가 한 바퀴(일반 보급 6·희귀 보급 4·전설 보급 2, 보급량 일반 6개·희귀 3개·전설 3개, 이후 반복). 남은 거리·다음 이벤트는 어디에도 보이지 않고, 지나온 여정 목록에 이름과 얻은 재료만 기록. 보급 재료는 대장간·교역소에서 사용. 러닝 업적 2개 추가(첫 돌발 보급·행운의 러너). 백업·복원·클라우드 합치기에 반영'],
+  ['1.41.5','몸짱 교역소 추가: 왕국에 5번째 건물(복구 비용 건축 자재 2,000, 폐허 → 복구 중 → 완성). 상인 길드 상인 마르코와 재료 교환(희귀2→일반3 · 전설1→희귀2 · 일반5→희귀1 · 희귀4→전설1, 확인 후 교환). 성 둘레에 훈련장·여관·교역소·대장간 4채를 좌우 대칭·균일한 간격으로 다시 배치(그림이 서로 겹치지 않도록 실제 그림 영역으로 계산). 장비 업적 25개 추가(공용장비 6·12·18·24종, 칸별 수집가 4, 제작 장비 24·48·72·96종, 직업별 무기 달인 4·전용장비 완성 4, 첫 전설·전설 16종, 교역소 개업·첫 교환, 모든 장비 수집). 대장간 완성 안내 문구 정리'],
+  ['1.41.4','전용 방어구·장식 72종 완성(용사 투구·갑옷·방패 18종 + 드워프 뿔 투구·판금 갑옷·수염 장식 18종 + 엘프 머리띠·튜닉·화살통 18종 + 마법사 뾰족 모자·로브·마법책·구슬 18종, 칸마다 일반 3·희귀 2·전설 1). 대장간에서 제작하고 정면·옆·뒷모습에 반영, 파자마를 입으면 가려져요. 대장간 목록에 직업별 보기 버튼 추가. 다른 직업의 전용 장비를 입으면 \'캐릭터를 바꾸면 보여요\' 안내'],
+  ['1.41.3','전용무기 18종 추가(드워프 도끼 6·엘프 활 6·마법사 지팡이 6, 용사 검 6종과 합쳐 전용무기 24종 완성): 대장간에서 제작하고 입은 무기가 정면·옆·뒷모습에 반영, 파자마를 입어도 함께 입음. 제작 재료 드랍량 상향(평일 중간보스 1→2개, 마왕 3→6개·희귀 이상 확정 1→2개)은 2026-10-04부터 적용되고 이전에 얻은 재료는 그대로. 대장간에는 만난 직업의 장비만 보임'],
+  ['1.41.2','공용장비에 신발 6종·허리띠 6종 추가(공용 드랍 장비 24종 완성: 망토·깃털·신발·허리띠). 네 직업 모두 정면·옆·뒷모습에 반영, 신발은 일반 3·희귀 2·전설 1(별빛·줄무늬·불꽃 무늬), 허리띠는 주머니 허리띠 포함. 전리품 상자에서 나오고 파자마를 입으면 가려져요'],
+  ['1.41.1','파자마를 입어도 전용 \'무기\'는 함께 입고 보이도록 수정(용사의 검은 정면·옆·뒷모습 모두 반영, 무기를 입어도 파자마가 벗겨지지 않음). 동료의 뒷모습 무기도 파자마 차림에서 보임'],
+  ['1.41.0','장비 체계 개편 1단계: 일요일 휴식 의상(가운·슬리퍼·안대·베개)을 모두 없애고 특별장비 "몸짱 파자마" 1벌로 통합(첫 일요일 신전 방문 시 1회 지급, 입으면 모든 장비 칸을 대신하며 4직업 모두 착용 가능). 공용장비(망토·깃털)를 드워프 전사·엘프 궁수·현자 마법사도 입을 수 있게 하고 정면·옆·뒷모습에 반영. 용사 러닝 옆모습과 성벽 뒷모습에 방패 표시. 용사 검 6종은 상자에서 대장간 제작으로 이동(이미 가진 검은 그대로 인정, 재료 사용 안 함). 여관 장비 도감을 공용장비 / 전용장비(직업별 하위 토글) / 특별장비로 재구성'],
   ['1.40.1','시작화면이 떠 있는 동안 뒤에 있는 앱 화면을 멈춰 두어 시작화면 움직임의 프레임 드랍을 줄이도록 수정(시작화면을 닫으면 원래 화면과 스크롤 위치로 복귀)'],
   ['1.40.0','탭 개편: 하단 메뉴를 지도·퀘스트·러닝·왕국·일지 5개로 줄이고 설정은 화면 오른쪽 위 톱니바퀴로 이동(설정 화면의 ‹ 돌아가기로 원래 탭 복귀). 앱을 열면 처음 화면이 퀘스트로 바뀜'],
   ['1.39.20','일지의 업적을 달성한 것만 달성한 날짜와 함께 달성 순서대로 쌓이도록 변경(달성 날짜는 지난 기록을 되짚어 채움). 누적 거리·총 달린 거리를 일일 퀘스트 러닝으로 입력한 거리만으로 통일(일요일 걷기 제외)'],
@@ -1336,33 +1354,142 @@ var ITEMS=[
  {id:'plume4',slot:'plume',rar:'r',name:'무지개 깃털',pat:'rainbow'},
  {id:'plume5',slot:'plume',rar:'r',name:'은빛 깃털',fill:'#E6EEF8',len:1},
  {id:'plume6',slot:'plume',rar:'l',name:'불꽃 갈기',pat:'flame'},
- {id:'sword1',slot:'sword',rar:'n',name:'구리 검',blade:'#E8A56E',guard:'#F6C445'},
- {id:'sword2',slot:'sword',rar:'n',name:'숲의 검',blade:'#A9EBBB',guard:'#3FA76A'},
- {id:'sword3',slot:'sword',rar:'n',name:'장미 검',blade:'#FFC2D1',guard:'#E5484D'},
- {id:'sword4',slot:'sword',rar:'r',name:'얼음 검',blade:'#C4EEFF',guard:'#7FD3F5',glow:'#8ED8F6'},
- {id:'sword5',slot:'sword',rar:'r',name:'번개 검',blade:'#FFF3A8',guard:'#F6C445',glow:'#F6C445'},
- {id:'sword6',slot:'sword',rar:'l',name:'불꽃 검',blade:'#FFB27A',guard:'#FF6A5B',glow:'#FF6A5B',flame:1},
- {id:'robe',slot:'robe',rar:'n',name:'목욕 가운',rest:1},
- {id:'shoes',slot:'shoes',rar:'n',name:'토끼 슬리퍼',fill:'#FFB3C7',rest:1},
- {id:'mask',slot:'mask',rar:'n',name:'수면 안대',fill:'#7A86E8',rest:1},
- {id:'pillow',slot:'pillow',rar:'n',name:'낮잠 베개',rest:1},
- {id:'helm1',slot:'helm',rar:'n',name:'가죽 투구',craft:1,fill:'#B9783A'},
- {id:'helm2',slot:'helm',rar:'r',name:'청강 투구',craft:1,fill:'#C9D4E3',trim:'#5CC8FF'},
- {id:'helm3',slot:'helm',rar:'l',name:'황금 용투구',craft:1,fill:'#F6C445',trim:'#E5484D'},
- {id:'armor1',slot:'armor',rar:'n',name:'가죽 갑옷',craft:1,fill:'#B9783A'},
- {id:'armor2',slot:'armor',rar:'r',name:'청강 갑옷',craft:1,fill:'#C9D4E3',trim:'#5CC8FF'},
- {id:'armor3',slot:'armor',rar:'l',name:'황금 갑옷',craft:1,fill:'#F6C445',trim:'#E5484D'},
- {id:'shield1',slot:'shield',rar:'n',name:'나무 방패',craft:1,fill:'#B9783A'},
- {id:'shield2',slot:'shield',rar:'r',name:'청강 방패',craft:1,fill:'#C9D4E3',trim:'#5CC8FF'},
- {id:'shield3',slot:'shield',rar:'l',name:'황금 방패',craft:1,fill:'#F6C445',trim:'#E5484D'}
+ {id:'shoes1',slot:'shoes',rar:'n',name:'갈색 장화',fill:'#9A6A3A'},
+ {id:'shoes2',slot:'shoes',rar:'n',name:'파란 장화',fill:'#4C7FE0'},
+ {id:'shoes3',slot:'shoes',rar:'n',name:'초록 장화',fill:'#3FA76A'},
+ {id:'shoes4',slot:'shoes',rar:'r',name:'별빛 장화',fill:'#2B2F6B',pat:'stars'},
+ {id:'shoes5',slot:'shoes',rar:'r',name:'줄무늬 장화',fill:'#F6C445',pat:'stripes'},
+ {id:'shoes6',slot:'shoes',rar:'l',name:'불꽃 장화',fill:'#E5483D',pat:'flame'},
+ {id:'belt1',slot:'belt',rar:'n',name:'가죽 허리띠',fill:'#9A6A3A'},
+ {id:'belt2',slot:'belt',rar:'n',name:'주머니 허리띠',fill:'#4C7FE0',pouch:1},
+ {id:'belt3',slot:'belt',rar:'n',name:'초록 허리띠',fill:'#3FA76A'},
+ {id:'belt4',slot:'belt',rar:'r',name:'별빛 허리띠',fill:'#2B2F6B',pat:'stars'},
+ {id:'belt5',slot:'belt',rar:'r',name:'줄무늬 허리띠',fill:'#F6C445',pat:'stripes'},
+ {id:'belt6',slot:'belt',rar:'l',name:'불꽃 허리띠',fill:'#E5483D',pat:'flame'},
+ {id:'sword1',slot:'sword',craft:1,job:'hero',rar:'n',name:'구리 검',blade:'#E8A56E',guard:'#F6C445'},
+ {id:'sword2',slot:'sword',craft:1,job:'hero',rar:'n',name:'숲의 검',blade:'#A9EBBB',guard:'#3FA76A'},
+ {id:'sword3',slot:'sword',craft:1,job:'hero',rar:'n',name:'장미 검',blade:'#FFC2D1',guard:'#E5484D'},
+ {id:'sword4',slot:'sword',craft:1,job:'hero',rar:'r',name:'얼음 검',blade:'#C4EEFF',guard:'#7FD3F5',glow:'#8ED8F6'},
+ {id:'sword5',slot:'sword',craft:1,job:'hero',rar:'r',name:'번개 검',blade:'#FFF3A8',guard:'#F6C445',glow:'#F6C445'},
+ {id:'sword6',slot:'sword',craft:1,job:'hero',rar:'l',name:'불꽃 검',blade:'#FFB27A',guard:'#FF6A5B',glow:'#FF6A5B',flame:1},
+ {id:'axe1',slot:'axe',craft:1,job:'dwarf',rar:'n',name:'돌 도끼',blade:'#9AA0A8',shaft:'#8B5A2B',gem:'#C9CED6'},
+ {id:'axe2',slot:'axe',craft:1,job:'dwarf',rar:'n',name:'쇠 도끼',blade:'#D3DCE8',shaft:'#6B4423',gem:'#F6C445'},
+ {id:'axe3',slot:'axe',craft:1,job:'dwarf',rar:'n',name:'장작 도끼',blade:'#B7BEC9',shaft:'#C8925C',gem:'#8B5A2B'},
+ {id:'axe4',slot:'axe',craft:1,job:'dwarf',rar:'r',name:'룬 도끼',blade:'#CFD8F5',shaft:'#4B3A8F',gem:'#5CC8FF',glow:'#5CC8FF',fx:'rune'},
+ {id:'axe5',slot:'axe',craft:1,job:'dwarf',rar:'r',name:'서리 도끼',blade:'#C4EEFF',shaft:'#5A7A9C',gem:'#8ED8F6',glow:'#8ED8F6',fx:'frost'},
+ {id:'axe6',slot:'axe',craft:1,job:'dwarf',rar:'l',name:'용암 도끼',blade:'#FFB27A',shaft:'#4A3322',gem:'#FF6A5B',glow:'#FF6A5B',fx:'flame'},
+ {id:'bow1',slot:'bow',craft:1,job:'elf',rar:'n',name:'나무 활',wood:'#B9763A',str:'#FFF3D6',grip:'#5A7A3C'},
+ {id:'bow2',slot:'bow',craft:1,job:'elf',rar:'n',name:'덩굴 활',wood:'#5F8F3C',str:'#FFF3D6',grip:'#8B5A2B',fx:'vine'},
+ {id:'bow3',slot:'bow',craft:1,job:'elf',rar:'n',name:'자작나무 활',wood:'#F0E7D2',str:'#FFF3D6',grip:'#8B5A2B',fx:'birch'},
+ {id:'bow4',slot:'bow',craft:1,job:'elf',rar:'r',name:'달빛 활',wood:'#B8C6F0',str:'#E8F0FF',grip:'#5B6FB8',glow:'#CFE0FF',fx:'moon'},
+ {id:'bow5',slot:'bow',craft:1,job:'elf',rar:'r',name:'이슬 활',wood:'#5FB3C9',str:'#E8FAFF',grip:'#2F7F95',glow:'#9ADFFF',fx:'dew'},
+ {id:'bow6',slot:'bow',craft:1,job:'elf',rar:'l',name:'세계수 활',wood:'#5C8B3A',str:'#FFF3B0',grip:'#B9763A',glow:'#FFE08A',fx:'tree'},
+ {id:'staff1',slot:'staff',craft:1,job:'mage',rar:'n',name:'참나무 지팡이',shaft:'#9A6A3A',curl:'#B9763A',orb:'#D9C79E',fx:'oak'},
+ {id:'staff2',slot:'staff',craft:1,job:'mage',rar:'n',name:'구슬 지팡이',shaft:'#8B5A2B',curl:'#F6C445',orb:'#7FD6FF'},
+ {id:'staff3',slot:'staff',craft:1,job:'mage',rar:'n',name:'초승달 지팡이',shaft:'#8B5A2B',curl:'#F6C445',orb:'#FFF3B0',fx:'moon'},
+ {id:'staff4',slot:'staff',craft:1,job:'mage',rar:'r',name:'얼음 지팡이',shaft:'#6E8FB8',curl:'#C4EEFF',orb:'#C4EEFF',glow:'#8ED8F6',fx:'ice'},
+ {id:'staff5',slot:'staff',craft:1,job:'mage',rar:'r',name:'번개 지팡이',shaft:'#6B4FB8',curl:'#F6C445',orb:'#FFF3A8',glow:'#F6C445',fx:'bolt'},
+ {id:'staff6',slot:'staff',craft:1,job:'mage',rar:'l',name:'은하 지팡이',shaft:'#2B2F6B',curl:'#B9A2FF',orb:'#B9A2FF',glow:'#B9A2FF',fx:'galaxy'},
+ {id:'helm1',slot:'helm',job:'hero',rar:'n',name:'가죽 투구',craft:1,fill:'#B9783A'},
+ {id:'helm2',slot:'helm',job:'hero',rar:'r',name:'청강 투구',craft:1,fill:'#C9D4E3',trim:'#5CC8FF'},
+ {id:'helm3',slot:'helm',job:'hero',rar:'l',name:'황금 용투구',craft:1,fill:'#F6C445',trim:'#E5484D'},
+ {id:'armor1',slot:'armor',job:'hero',rar:'n',name:'가죽 갑옷',craft:1,fill:'#B9783A'},
+ {id:'armor2',slot:'armor',job:'hero',rar:'r',name:'청강 갑옷',craft:1,fill:'#C9D4E3',trim:'#5CC8FF'},
+ {id:'armor3',slot:'armor',job:'hero',rar:'l',name:'황금 갑옷',craft:1,fill:'#F6C445',trim:'#E5484D'},
+ {id:'shield1',slot:'shield',job:'hero',rar:'n',name:'나무 방패',craft:1,fill:'#B9783A'},
+ {id:'shield2',slot:'shield',job:'hero',rar:'r',name:'청강 방패',craft:1,fill:'#C9D4E3',trim:'#5CC8FF'},
+ {id:'shield3',slot:'shield',job:'hero',rar:'l',name:'황금 방패',craft:1,fill:'#F6C445',trim:'#E5484D'},
+ {id:'pajama',slot:'pj',rar:'n',name:'몸짱 파자마',special:1}
 ];
-var SLOTN={cape:'망토',plume:'깃털',sword:'검',robe:'가운',shoes:'슬리퍼',mask:'안대',pillow:'베개',helm:'투구',armor:'갑옷',shield:'방패'};
-var LOOT_SLOTS=['cape','plume','sword'], REST_SLOTS=['robe','shoes','mask','pillow'], CRAFT_SLOTS=['helm','armor','shield'];
+var SLOTN={cape:'망토',plume:'깃털',shoes:'신발',belt:'허리띠',sword:'검',axe:'양손 도끼',bow:'활',staff:'지팡이',dhelm:'뿔 투구',dmail:'판금 갑옷',dbeard:'수염 장식',ehead:'머리띠',etunic:'튜닉',equiver:'화살통',mhat:'뾰족 모자',mrobe:'로브',mbook:'마법책·구슬',helm:'투구',armor:'갑옷',shield:'방패',pj:'파자마'};
+var WEAPON_SLOTS=['sword','axe','bow','staff'];                                  /* 전용 '무기' 칸: 파자마를 입어도 함께 입어요 (동료 무기가 생기면 칸 이름을 여기에 더해요) */
+function isWeaponSlot(sl){ return WEAPON_SLOTS.indexOf(sl)>=0; }
+/* 보이게 입고 있는지: 파자마를 입으면 무기 말고는 가려져서 입은 것으로 보지 않아요 */
+function isWorn(it){ var e=(typeof S!=='undefined'&&S)?S.eq:null; if(!e||e[it.slot]!==it.id) return false; if(e.pj && it.slot!=='pj' && !isWeaponSlot(it.slot)) return false; return true; }
+var COMMON_SLOTS=['cape','plume','shoes','belt'];                         /* 공용장비 칸 (네 캐릭터 모두 입어요) */
+var JOB_SLOTS={hero:['sword','helm','armor','shield'],dwarf:['axe','dhelm','dmail','dbeard'],elf:['bow','ehead','etunic','equiver'],mage:['staff','mhat','mrobe','mbook']};
+var JOBW={hero:'sword',dwarf:'axe',elf:'bow',mage:'staff'};   /* 직업별 무기 칸 */
+(function(){
+  function A(id,slot,job,rar,name,o){ var it={id:id,slot:slot,craft:1,job:job,rar:rar,name:name},k; for(k in o) it[k]=o[k]; ITEMS.push(it); }
+  /* 몸짱 용사: 투구·갑옷·방패 (기존 3종씩 + 6종씩 완성) */
+  A('helm4','helm','hero','n','구리 투구',{fill:'#C8864A',trim:'#8B5A2B',metal:1});
+  A('helm5','helm','hero','n','쇠 투구',{fill:'#9AA5B5',trim:'#5E6878',metal:1});
+  A('helm6','helm','hero','r','은빛 투구',{fill:'#E6EEF8',trim:'#9FB0D8'});
+  A('armor4','armor','hero','n','구리 갑옷',{fill:'#C8864A',trim:'#8B5A2B',metal:1});
+  A('armor5','armor','hero','n','사슬 갑옷',{fill:'#A9B2C0',trim:'#5E6878',metal:1,fx:'chain'});
+  A('armor6','armor','hero','r','은빛 갑옷',{fill:'#E6EEF8',trim:'#9FB0D8'});
+  A('shield4','shield','hero','n','구리 방패',{fill:'#C8864A',trim:'#8B5A2B',metal:1});
+  A('shield5','shield','hero','n','쇠 방패',{fill:'#9AA5B5',trim:'#5E6878',metal:1});
+  A('shield6','shield','hero','r','은빛 방패',{fill:'#E6EEF8',trim:'#9FB0D8'});
+  /* 드워프 전사: 뿔 투구 · 판금 갑옷 · 수염 장식 */
+  A('dhelm1','dhelm','dwarf','n','쇠뿔 투구',{cap:'#9AA5B5',band:'#F6C445',horn:'#F3EAD6'});
+  A('dhelm2','dhelm','dwarf','n','구리뿔 투구',{cap:'#C8864A',band:'#8B5A2B',horn:'#F3EAD6'});
+  A('dhelm3','dhelm','dwarf','n','가죽 뿔 투구',{cap:'#9A6A3A',band:'#6B4423',horn:'#E8D9B8',fx:'stitch'});
+  A('dhelm4','dhelm','dwarf','r','룬 뿔 투구',{cap:'#7C86B8',band:'#5CC8FF',horn:'#CFD8F5',glow:'#5CC8FF',fx:'rune'});
+  A('dhelm5','dhelm','dwarf','r','서리 뿔 투구',{cap:'#B8D4EA',band:'#8ED8F6',horn:'#EAFBFF',glow:'#8ED8F6',fx:'frost'});
+  A('dhelm6','dhelm','dwarf','l','용암 뿔 투구',{cap:'#4A3322',band:'#FF6A5B',horn:'#FF9A5B',glow:'#FF6A5B',fx:'flame'});
+  A('dmail1','dmail','dwarf','n','철판 갑옷',{fill:'#9AA5B5',trim:'#6B7585'});
+  A('dmail2','dmail','dwarf','n','구리 판금 갑옷',{fill:'#C8864A',trim:'#8B5A2B'});
+  A('dmail3','dmail','dwarf','n','가죽 보강 갑옷',{fill:'#9A6A3A',trim:'#6B4423',fx:'stitch'});
+  A('dmail4','dmail','dwarf','r','룬 판금 갑옷',{fill:'#7C86B8',trim:'#5CC8FF',glow:'#5CC8FF',fx:'rune'});
+  A('dmail5','dmail','dwarf','r','서리 판금 갑옷',{fill:'#B8D4EA',trim:'#8ED8F6',glow:'#8ED8F6',fx:'frost'});
+  A('dmail6','dmail','dwarf','l','용암 판금 갑옷',{fill:'#4A3322',trim:'#FF6A5B',glow:'#FF6A5B',fx:'lava'});
+  A('dbeard1','dbeard','dwarf','n','가죽 수염 끈',{ring:'#8B5A2B',style:'band'});
+  A('dbeard2','dbeard','dwarf','n','쇠 수염 고리',{ring:'#B3BAC8',style:'rings'});
+  A('dbeard3','dbeard','dwarf','n','구리 수염 고리',{ring:'#C8864A',style:'rings'});
+  A('dbeard4','dbeard','dwarf','r','은 수염 고리',{ring:'#E6EEF8',style:'rings',fx:'sparkle'});
+  A('dbeard5','dbeard','dwarf','r','룬 수염 땋기',{ring:'#7C86B8',style:'braid',glow:'#5CC8FF'});
+  A('dbeard6','dbeard','dwarf','l','용암 수염 장식',{ring:'#4A3322',style:'rings',fx:'flame'});
+  /* 엘프 궁수: 머리띠 · 튜닉 · 화살통 */
+  A('ehead1','ehead','elf','n','새싹 머리띠',{band:'#8FD16B',fx:'sprout'});
+  A('ehead2','ehead','elf','n','풀잎 머리띠',{band:'#5F8F3C',fx:'grass'});
+  A('ehead3','ehead','elf','n','덩굴 머리띠',{band:'#6B8F3C',fx:'vine'});
+  A('ehead4','ehead','elf','r','이슬 머리띠',{band:'#9ADFFF',fx:'dew',glow:'#9ADFFF'});
+  A('ehead5','ehead','elf','r','달빛 머리띠',{band:'#CFE0FF',fx:'moon',glow:'#CFE0FF'});
+  A('ehead6','ehead','elf','l','세계수 왕관',{band:'#F6C445',fx:'crown',glow:'#FFE08A'});
+  A('etunic1','etunic','elf','n','초록 튜닉',{main:'#4FA86A',low:'#3E8E5A',trim:'#F2DC8B'});
+  A('etunic2','etunic','elf','n','이끼 튜닉',{main:'#6B8F3C',low:'#55742F',trim:'#C8D58A',fx:'moss'});
+  A('etunic3','etunic','elf','n','가죽 튜닉',{main:'#9A6A3A',low:'#7A5230',trim:'#E8C27A',fx:'stitch'});
+  A('etunic4','etunic','elf','r','달빛 튜닉',{main:'#8FA0D8',low:'#7084C8',trim:'#E8F0FF',fx:'moon'});
+  A('etunic5','etunic','elf','r','은빛 잎 튜닉',{main:'#B8D4C8',low:'#8FB8A8',trim:'#FFFFFF',fx:'leaf'});
+  A('etunic6','etunic','elf','l','세계수 튜닉',{main:'#3FA76A',low:'#2F8F55',trim:'#FFE08A',fx:'tree'});
+  A('equiver1','equiver','elf','n','가죽 화살통',{body:'#8B5A2B'});
+  A('equiver2','equiver','elf','n','대나무 화살통',{body:'#C9D86B',fx:'bamboo'});
+  A('equiver3','equiver','elf','n','나무 화살통',{body:'#B9763A'});
+  A('equiver4','equiver','elf','r','은빛 화살통',{body:'#C9D4E3',fl1:'#FFFFFF',fl2:'#E6EEF8',fx:'silver'});
+  A('equiver5','equiver','elf','r','깃털 화살통',{body:'#B9763A',fl1:'#46E0A5',fl2:'#FF6A5B',fx:'feather'});
+  A('equiver6','equiver','elf','l','별빛 화살통',{body:'#2B2F6B',fl1:'#FFF3B0',fl2:'#FFFFFF',fx:'stars',glow:'#FFE08A'});
+  /* 현자 마법사: 뾰족 모자 · 로브 · 마법책·구슬 */
+  A('mhat1','mhat','mage','n','자주 모자',{cone:'#9A4FB8',brim:'#7A3FA0'});
+  A('mhat2','mhat','mage','n','남색 모자',{cone:'#3F4FA8',brim:'#2F3F88'});
+  A('mhat3','mhat','mage','n','별무늬 모자',{cone:'#6B4FB8',brim:'#5B3FA8',fx:'stars'});
+  A('mhat4','mhat','mage','r','달빛 모자',{cone:'#9CA8E8',brim:'#7C88C8',band:'#E8F0FF',star:'#FFFFFF',fx:'moon',glow:'#CFE0FF'});
+  A('mhat5','mhat','mage','r','번개 모자',{cone:'#4B3A8F',brim:'#3A2B7A',fx:'bolt',glow:'#F6C445'});
+  A('mhat6','mhat','mage','l','은하 모자',{cone:'#2B2F6B',brim:'#1F2255',band:'#B9A2FF',star:'#FFF3B0',fx:'galaxy',glow:'#B9A2FF'});
+  A('mrobe1','mrobe','mage','n','보라 로브',{main:'#6B4FB8',low:'#5B3FA8',dark:'#4A2F8F',trim:'#F6C445'});
+  A('mrobe2','mrobe','mage','n','남색 로브',{main:'#3F4FA8',low:'#2F3F88',dark:'#26336E',trim:'#F6C445'});
+  A('mrobe3','mrobe','mage','n','회색 로브',{main:'#8A8FA0',low:'#6F7488',dark:'#565B6E',trim:'#E8E8F0'});
+  A('mrobe4','mrobe','mage','r','별빛 로브',{main:'#4B3A8F',low:'#3A2B7A',dark:'#2B1F66',trim:'#FFF3B0',fx:'stars'});
+  A('mrobe5','mrobe','mage','r','달빛 로브',{main:'#9CA8E8',low:'#7C88C8',dark:'#6270B0',trim:'#FFFFFF',fx:'moon'});
+  A('mrobe6','mrobe','mage','l','은하 로브',{main:'#2B2F6B',low:'#1F2255',dark:'#161A42',trim:'#B9A2FF',fx:'galaxy'});
+  A('mbook1','mbook','mage','n','낡은 마법책',{kind:'book',cover:'#9A6A3A',trim:'#F6C445'});
+  A('mbook2','mbook','mage','n','작은 수정 구슬',{kind:'orb',orb:'#7FD6FF'});
+  A('mbook3','mbook','mage','n','두루마리',{kind:'scroll'});
+  A('mbook4','mbook','mage','r','별빛 마법책',{kind:'book',cover:'#2B2F6B',trim:'#B9C4E8',fx:'stars',glow:'#F6C445'});
+  A('mbook5','mbook','mage','r','얼음 구슬',{kind:'orb',orb:'#C4EEFF',fx:'ice',glow:'#8ED8F6'});
+  A('mbook6','mbook','mage','l','은하의 마도서',{kind:'book',cover:'#2B2F6B',trim:'#B9A2FF',fx:'galaxy',glow:'#B9A2FF'});
+})();
+/* 아이템 정렬: 직업 → 칸 순서 → 등급(일반·희귀·전설) */
+function itemSortKey(it){ var j=it.job||'hero', ji=CHARIDS.indexOf(j), si=(JOB_SLOTS[j]||[]).indexOf(it.slot); return Math.max(0,ji)*1000+Math.max(0,si)*100+({n:0,r:1,l:2})[it.rar]*10; }   /* 전용장비 칸 (직업별) */
 function itemById(id){ if(!id) return null; for(var i=0;i<ITEMS.length;i++){ if(ITEMS[i].id===id) return ITEMS[i]; } return null; }
 function curEq(){
-  var r={}, e=(typeof S!=='undefined'&&S&&S.eq)?S.eq:null, k;
+  var r={}, e=(typeof S!=='undefined'&&S&&S.eq)?S.eq:null, k, it;
   if(!e) return r;
-  for(k in e){ if(e[k] && S.inv && S.inv[e[k]]) r[k]=itemById(e[k]); }
+  if(e.pj && S.inv && S.inv[e.pj]){   /* 파자마는 무기를 뺀 나머지 칸을 모두 입은 것으로 쳐요 */
+    it=itemById(e.pj);
+    if(it){ r.pj=it; for(k in e){ if(isWeaponSlot(k) && e[k] && S.inv[e[k]]){ var w=itemById(e[k]); if(w) r[k]=w; } } return r; }
+  }
+  for(k in e){ if(k!=='pj' && e[k] && S.inv && S.inv[e[k]]){ it=itemById(e[k]); if(it) r[k]=it; } }
   return r;
 }
 function capeArt(it){
@@ -1390,20 +1517,11 @@ function bootArt(x,y,fill,ears){
   if(ears) s+=ell(x-4,y-11,2.8,6.5,'#FFB3C7',2)+ell(x+4,y-11,2.8,6.5,'#FFB3C7',2);
   return s;
 }
-function robeArt(){
-  return pth('M-31,-17 Q-35,8 -28,36 L-3,36 Q-1,10 -11,-12 Z','#FDFDFF',2.8)+pth('M31,-17 Q35,8 28,36 L3,36 Q1,10 11,-12 Z','#FDFDFF',2.8)+
-    '<rect x="-29" y="12" width="58" height="7" rx="3.5" fill="#FF9FB5" stroke="'+OL+'" stroke-width="2.4"/>'+
-    '<path d="M-11,-12 Q-1,10 -3,36 M11,-12 Q1,10 3,36" stroke="#FF9FB5" stroke-width="3" fill="none" stroke-linecap="round"/>';
-}
-function maskArt(it){
-  var f=it&&it.fill?it.fill:'#7A86E8';
-  return '<path d="M-20,-27 L-28,-30 M20,-27 L28,-30" stroke="'+OL+'" stroke-width="2.6" stroke-linecap="round"/>'+
-    '<rect x="-20" y="-35" width="40" height="15" rx="7.5" fill="'+f+'" stroke="'+OL+'" stroke-width="2.6"/>'+
-    '<path d="M-14,-28 Q-9,-23 -4,-28 M4,-28 Q9,-23 14,-28" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
-}
-function pillowArt(x,y){
-  return '<g transform="translate('+x+','+y+') rotate(-18)"><rect x="-17" y="-10" width="34" height="20" rx="9" fill="#FFF6FA" stroke="'+OL+'" stroke-width="2.6"/>'+
-    '<path d="M-9,-3 H9 M-9,3 H9" stroke="#FFC2D1" stroke-width="2.2" stroke-linecap="round"/></g>';
+function pjIconArt(){
+  return pth('M-30,-20 Q-34,6 -24,30 L24,30 Q34,6 30,-20 Q0,-30 -30,-20 Z',PJ.top,3)+
+    '<path d="M-13,-22 L0,-6 L13,-22" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'+
+    circ(0,2,2.4,'#fff',1.4)+circ(0,12,2.4,'#fff',1.4)+circ(0,22,2.4,'#fff',1.4)+bStar(-18,-4,3.6,'#FFF3B0')+bStar(17,8,3.2,'#FFF3B0')+
+    pth('M-12,-30 Q-8,-52 12,-58 Q28,-58 34,-44 Q20,-46 22,-30 Z',PJ.cap,2.6)+circ(34,-43,5,PJ.pom,2.2);
 }
 function itemIcon(it,on){
   var vb, inner;
@@ -1413,10 +1531,21 @@ function itemIcon(it,on){
   else if(it.slot==='helm'){ vb='-48 -88 96 70'; inner=helmArt(it); }
   else if(it.slot==='armor'){ vb='-40 -30 80 46'; inner=armorArt(it); }
   else if(it.slot==='shield'){ vb='-26 -26 52 52'; inner=shieldArt(it,-4,0); }
-  else if(it.slot==='robe'){ vb='-42 -26 84 66'; inner=pth('M-31,-18 Q-35,4 -20,36 L20,36 Q35,4 31,-18 Q0,-29 -31,-18 Z',SKIN)+robeArt(); }
-  else if(it.slot==='shoes'){ vb='-22 -26 44 40'; inner=bootArt(0,0,it.fill,true); }
-  else if(it.slot==='mask'){ vb='-30 -40 60 26'; inner=maskArt(it); }
-  else { vb='-26 -18 52 36'; inner=pillowArt(0,0); }
+  else if(it.slot==='dhelm'){ vb='-52 -92 104 58'; inner=dwarfHelmArt(it); }
+  else if(it.slot==='dmail'){ vb='-40 -30 80 50'; inner=dmailArt(it); }
+  else if(it.slot==='dbeard'){ vb='-36 -34 72 70'; inner=pth('M-26,-27 Q-27,-18 -14,-19 Q0,-15 14,-19 Q27,-18 26,-27 Q32,6 0,17 Q-32,6 -26,-27 Z','#D9822B',3)+pth('M-5,10 Q-8,22 -3,26 Q2,22 -1,10 Z','#D9822B',2.2)+pth('M7,10 Q10,22 5,26 Q0,22 3,10 Z','#D9822B',2.2)+dbeardArt(it,false); }
+  else if(it.slot==='ehead'){ vb='-36 -74 72 38'; inner=eheadArt(it,false); }
+  else if(it.slot==='etunic'){ vb='-42 -26 84 62'; inner=pth('M-21,13 L21,13 L19,34 L10,26 L0,34 L-10,26 L-19,34 Z',it.low,2.6)+pth('M-31,-18 Q-35,6 -22,18 L22,18 Q35,6 31,-18 Q0,-29 -31,-18 Z',it.main,3)+'<path d="M-13,-21 L0,8 L13,-21" stroke="'+it.trim+'" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'+clothFx(it.fx,it.trim,false); }
+  else if(it.slot==='equiver'){ vb='-18 -40 36 92'; inner=compQuiver(it); }
+  else if(it.slot==='mhat'){ vb='-46 -98 92 58'; inner=mageHatArt(it,false); }
+  else if(it.slot==='mrobe'){ vb='-46 -28 92 84'; inner=pth('M-33,-18 Q-44,18 -36,50 L36,50 Q44,18 33,-18 Q0,-28 -33,-18 Z',it.dark,3)+pth('M-31,-18 Q-35,6 -22,18 L22,18 Q35,6 31,-18 Q0,-29 -31,-18 Z',it.main,3)+pth('M-31,-18 Q-38,12 -31,48 L-17,48 L-12,-12 Z',it.main,3)+pth('M31,-18 Q38,12 31,48 L17,48 L12,-12 Z',it.main,3)+'<path d="M-13,-21 L0,8 L13,-21 M-12,-12 L-17,48 M12,-12 L17,48" stroke="'+it.trim+'" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'+clothFx(it.fx,it.trim,false); }
+  else if(it.slot==='mbook'){ vb='-20 -12 40 40'; inner=mbookArt(it); }
+  else if(it.slot==='axe'){ vb='-42 -66 84 128'; inner=compWeaponInner('dwarf',it); }
+  else if(it.slot==='bow'){ vb='-34 -46 52 112'; inner=compWeaponInner('elf',it); }
+  else if(it.slot==='staff'){ vb='-26 -68 52 140'; inner=compWeaponInner('mage',it); }
+  else if(it.slot==='shoes'){ vb='-24 -34 48 48'; inner=bootItemArt(0,0,it,15); }
+  else if(it.slot==='belt'){ vb='-30 -12 60 36'; inner=beltItemArt(it,{w:52,y:2,h:9},false); }
+  else { vb='-42 -66 84 100'; inner=pjIconArt(); }
   return '<svg viewBox="'+vb+'" aria-hidden="true">'+inner+'</svg>';
 }
 function heroPreview(eq,who){
@@ -1503,39 +1632,103 @@ function faceArt(ex){
   }
   return s;
 }
+/* ===== 공용 신발·허리띠 ===== */
+function bootItemArt(x,y,it,lw){
+  var w=(lw||15)+4, f=it.fill, s='';
+  s+=ell(x,y,11.5,7,f,2.5)+'<rect x="'+(x-w/2)+'" y="'+(y-14)+'" width="'+w+'" height="9" rx="3" fill="'+f+'" stroke="'+OL+'" stroke-width="2.5"/>';
+  s+='<path d="M'+(x-w/2+3)+','+(y-10.5)+' H'+(x+w/2-3)+'" stroke="rgba(255,255,255,.4)" stroke-width="1.8" stroke-linecap="round"/>';
+  if(it.pat==='stars') s+=bStar(x,y-9.5,3.2,'#FFF3B0')+bStar(x+5,y+1,2.4,'#FFFFFF');
+  else if(it.pat==='stripes') s+='<path d="M'+(x-w/2+4)+','+(y-13)+' L'+(x-w/2+8)+','+(y-6)+' M'+(x-1)+','+(y-13)+' L'+(x+3)+','+(y-6)+' M'+(x+w/2-8)+','+(y-13)+' L'+(x+w/2-4)+','+(y-6)+'" stroke="#E5484D" stroke-width="2.6" stroke-linecap="round" fill="none"/>';
+  else if(it.pat==='flame') s+='<path d="M'+(x-w/2+1)+','+(y-13)+' Q'+(x-w/2+2)+','+(y-22)+' '+(x-w/2+6)+','+(y-16)+' Q'+(x-2)+','+(y-26)+' '+(x+1)+','+(y-16)+' Q'+(x+5)+','+(y-24)+' '+(x+w/2-4)+','+(y-15)+' L'+(x+w/2-1)+','+(y-13)+' Z" fill="#FFD95E" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
+  return s;
+}
+function footArt(x,y,lw,defFill,eq,pj){
+  if(pj) return bootArt(x,y,PJ.slip,true);
+  if(eq&&eq.shoes) return bootItemArt(x,y,eq.shoes,lw);
+  return bootArt(x,y,defFill,false);
+}
+var BELTX={hero:{w:44,y:10.5,h:7.5},dwarf:{w:48,y:10.5,h:8},elf:{w:44,y:10.5,h:7.5},mage:{w:50,y:10.5,h:7.5}};
+function beltItemArt(it,B,noPouch){
+  var w=B.w, x=-w/2, y=B.y, h=B.h, s='', cx=0, cy=y+h/2;
+  s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3.4" fill="'+it.fill+'" stroke="'+OL+'" stroke-width="2.5"/>';
+  if(it.pat==='stars') s+=bStar(-w/4-2,cy,3,'#FFF3B0')+bStar(w/4+2,cy,3,'#FFF3B0');
+  else if(it.pat==='stripes') s+='<path d="M'+(-w/2+5)+','+(y+1)+' L'+(-w/2+9)+','+(y+h-1)+' M'+(-w/4)+','+(y+1)+' L'+(-w/4+4)+','+(y+h-1)+' M'+(w/4)+','+(y+1)+' L'+(w/4+4)+','+(y+h-1)+' M'+(w/2-9)+','+(y+1)+' L'+(w/2-5)+','+(y+h-1)+'" stroke="#E5484D" stroke-width="2.4" stroke-linecap="round" fill="none"/>';
+  if(it.pat==='flame') s+=pth('M-6,'+(y+h+3)+' Q-9,'+(cy+1)+' -4,'+(y-3)+' Q-2,'+(cy-4)+' 0,'+(y-6)+' Q3,'+(cy-3)+' 4,'+(y-3)+' Q9,'+(cy+1)+' 6,'+(y+h+3)+' Q0,'+(y+h+6)+' -6,'+(y+h+3)+' Z','#FF8A3D',2.2)+pth('M-2.5,'+(y+h+1)+' Q-3.5,'+cy+' 0,'+(y-1)+' Q3.5,'+cy+' 2.5,'+(y+h+1)+' Z','#FFD95E',0);
+  else s+='<rect x="-5" y="'+(y-1.2)+'" width="10" height="'+(h+2.4)+'" rx="2.2" fill="#F6C445" stroke="'+OL+'" stroke-width="2"/><rect x="-1.8" y="'+(y+1.6)+'" width="3.6" height="'+(h-3.2)+'" rx="1" fill="'+it.fill+'" stroke="none"/>';
+  if(it.pouch && !noPouch) s+='<rect x="'+(w/2-16)+'" y="'+(y+h-1)+'" width="12" height="11" rx="3.4" fill="#C8925C" stroke="'+OL+'" stroke-width="2.2"/><path d="M'+(w/2-16)+','+(y+h+3)+' H'+(w/2-4)+'" stroke="'+OL+'" stroke-width="1.6"/>'+circ(w/2-10,y+h+3,1.4,'#F6C445',0);
+  return s;
+}
+/* ===== 몸짱 파자마 (특별장비): 수면 모자 · 수면 안대 · 수면 신발 · 파자마. 네 캐릭터 모두 같은 부품을 써요 ===== */
+var PJ={top:'#8FA0F0',topD:'#6E80DA',pants:'#7F90E8',cap:'#7A86E8',pom:'#FFF3B0',slip:'#FFB3C7',mask:'#A9B5FF'};
+function pjTopFront(){
+  return pth('M-31,-18 Q-36,10 -25,33 L25,33 Q36,10 31,-18 Q0,-29 -31,-18 Z',PJ.top,3)+
+    '<path d="M-12,-22 L0,-8 L12,-22" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'+
+    circ(0,0,2.3,'#fff',1.4)+circ(0,10,2.3,'#fff',1.4)+circ(0,20,2.3,'#fff',1.4)+
+    bStar(-18,2,3.6,'#FFF3B0')+bStar(17,14,3.2,'#FFF3B0')+bStar(-12,24,2.8,'#FFFFFF')+bStar(20,-6,2.8,'#FFFFFF');
+}
+function pjBackTorso(){
+  return '<g class="an-breathe">'+pth('M-31,-18 Q-36,10 -25,33 L25,33 Q36,10 31,-18 Q0,-29 -31,-18 Z',PJ.top,3)+
+    '<path d="M0,-22 V31" stroke="'+PJ.topD+'" stroke-width="2.4" fill="none" stroke-linecap="round"/>'+
+    bStar(-16,0,3.6,'#FFF3B0')+bStar(15,12,3.2,'#FFF3B0')+bStar(-10,22,2.8,'#FFFFFF')+bStar(18,-6,2.8,'#FFFFFF')+'</g>';
+}
+function pjCap(){   /* 머리 자리(translate(0,-11) scale(.93)) 기준, 앞·뒤 공통 */
+  return pth('M-28,-45 Q-26,-72 6,-80 Q32,-82 42,-60 Q24,-66 28,-45 Q0,-38 -28,-45 Z',PJ.cap,3)+
+    '<path d="M-28,-45 Q0,-38 28,-45" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/>'+
+    bStar(-8,-62,3.4,'#FFF3B0')+bStar(14,-70,2.8,'#FFFFFF')+circ(42,-59,6.5,PJ.pom,2.6);
+}
+function pjMask(){  /* 이마 위에 올려 쓴 수면 안대 (정면) */
+  return '<rect x="-21" y="-52" width="42" height="11" rx="5.5" fill="'+PJ.mask+'" stroke="'+OL+'" stroke-width="2.6"/>'+
+    '<path d="M-13,-47 Q-8.5,-42.5 -4,-47 M4,-47 Q8.5,-42.5 13,-47" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/>';
+}
+/* 공용장비(망토·깃털)를 동료에게 입히는 자리표: 직업마다 몸 크기·머리 장비가 달라서 위치를 따로 정해요 */
+var CAPEX={dwarf:'translate(-4,3) scale(1.06)',elf:'translate(-4,-1)',mage:'translate(-12,6) scale(1.16)'};       /* 정면: 몸 뒤 */
+var CAPEBX={dwarf:'translate(0,2) scale(1.04)',elf:'translate(0,-1)',mage:'translate(0,6) scale(1.1)'};          /* 뒷모습 */
+var PLUMEX={dwarf:'translate(0,0)',elf:'translate(2,-2)',mage:'translate(5,-1)'};                                   /* 정면·뒷모습: 머리 장비 위 */
+var SDPLX={dwarf:'translate(0,0)',elf:'translate(0,-2)',mage:'translate(-4,8)'};                                    /* 옆모습 */
+function backCapeArt(eq){
+  var cf=eq.cape?eq.cape.fill:'#F6C445', pat=eq.cape&&eq.cape.pat, s;
+  s='<g class="in-cape">'+pth('M-30,-20 Q-42,12 -35,48 L35,48 Q42,12 30,-20 Q0,-30 -30,-20 Z',cf,3);
+  if(pat==='stars') s+=bStar(-18,2,5,'#FFF3B0')+bStar(14,18,4.4,'#FFF3B0')+bStar(-4,34,4,'#FFFFFF')+bStar(22,-4,3.4,'#FFFFFF');
+  else if(pat==='stripes') s+='<path d="M-24,-6 L-10,14 M-8,-10 L8,14 M8,-10 L24,14 M-26,16 L-12,38 M-8,16 L8,38 M10,16 L26,38" stroke="#E5484D" stroke-width="3.4" stroke-linecap="round" fill="none"/>';
+  else if(pat==='flame') s+='<path d="M-35,48 Q-34,34 -27,28 Q-24,38 -18,36 Q-16,26 -8,22 Q-5,36 2,34 Q6,26 12,24 Q14,36 22,38 Q26,30 30,28 Q36,38 35,48 Z" fill="#FFD95E" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
+  return s+'<path d="M-24,-14 Q0,-8 24,-14" fill="none" stroke="rgba(43,33,56,.28)" stroke-width="2.4" stroke-linecap="round"/></g>';
+}
 /* ===== 몸짱용사 ===== */
 function heroArtBase(o){
-  var s='', i, lg=o.legs, ar=o.arms, ex=o.expr, eq=o.eq||curEq();
-  s+=capeArt(eq.cape);
+  var s='', i, lg=o.legs, ar=o.arms, ex=o.expr, eq=o.eq||curEq(), pj=!!eq.pj;
+  if(!pj) s+=capeArt(eq.cape);
   for(i=0;i<2;i++){
     var hx=(i===0?-10:10);
-    s+=bLimb(hx,20,lg[i][0],lg[i][1],15,SKIN)+
-       bootArt(lg[i][0],lg[i][1],eq.shoes?eq.shoes.fill:'#24356B',!!eq.shoes);
+    s+=bLimb(hx,20,lg[i][0],lg[i][1],15,pj?PJ.pants:SKIN)+footArt(lg[i][0],lg[i][1],15,'#24356B',eq,pj);
   }
-  s+=mTorso(SKIN,SKIN_D);
-  s+=pth('M-21,13 L21,13 L19,32 L0,26 L-19,32 Z','#3F6FCB')+
-     '<rect x="-21" y="11" width="42" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
-  if(eq.robe) s+=robeArt();
-  if(eq.armor) s+=armorArt(eq.armor);
+  if(pj) s+=pjTopFront();
+  else{
+    s+=mTorso(SKIN,SKIN_D);
+    s+=pth('M-21,13 L21,13 L19,32 L0,26 L-19,32 Z','#3F6FCB')+
+       '<rect x="-21" y="11" width="42" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
+    if(eq.armor) s+=armorArt(eq.armor);
+    if(eq.belt) s+=beltItemArt(eq.belt,BELTX.hero);
+  }
   for(i=0;i<2;i++){
     var sx=(i===0?-30:30), a=ar[i];
-    s+=mArm(sx,-10,a[0],a[1],a[2],a[3],{w:18,fr:9});
-    s+='<circle cx="'+(a[0]+(sx>0?0:0))+'" cy="'+a[1]+'" r="3" fill="#F6C445" stroke="none"/>';
+    s+=mArm(sx,-10,a[0],a[1],a[2],a[3],pj?{w:18,fr:9,f:PJ.top}:{w:18,fr:9});
+    s+=pj?circ(a[0],a[1],8,SKIN,2.5):'<circle cx="'+a[0]+'" cy="'+a[1]+'" r="3" fill="#F6C445" stroke="none"/>';
   }
-  for(i=0;i<2;i++){
-    var px=(i===0?-32:32);
-    s+=circ(px,-15,9,eq.armor?eq.armor.fill:'#8FB3EA',2.6)+circ(px,-15,2.6,eq.armor&&eq.armor.trim?eq.armor.trim:'#F6C445',1.8);
+  if(!pj){
+    for(i=0;i<2;i++){
+      var px=(i===0?-32:32);
+      s+=circ(px,-15,9,eq.armor?eq.armor.fill:'#8FB3EA',2.6)+circ(px,-15,2.6,eq.armor&&eq.armor.trim?eq.armor.trim:'#F6C445',1.8);
+    }
+    if(eq.shield) s+=shieldArt(eq.shield,ar[0][0],ar[0][1]);
   }
-  if(eq.pillow) s+=pillowArt(ar[0][0]-2,ar[0][1]+2);
-  if(eq.shield) s+=shieldArt(eq.shield,ar[0][0],ar[0][1]);
   if(o.sword) s+=swordArt(o.sword[0],o.sword[1],o.sword[2],eq.sword);
   s+='<g transform="translate(0,-11) scale(.93)">';
   s+='<circle cx="0" cy="-38" r="27" fill="'+FACE+'" stroke="'+OL+'" stroke-width="3"/>';
-  s+=(eq.helm?helmArt(eq.helm):'<path d="M-28,-40 A28,28 0 0 1 28,-40 Q0,-48 -28,-40 Z" fill="#6E9BD8" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round"/>')+
-     plumeArt(eq.plume);
+  if(pj) s+=pjCap();
+  else s+=(eq.helm?helmArt(eq.helm):'<path d="M-28,-40 A28,28 0 0 1 28,-40 Q0,-48 -28,-40 Z" fill="#6E9BD8" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round"/>')+plumeArt(eq.plume);
   s+=faceArt(ex);
   s+='<ellipse cx="-19" cy="-20" rx="5.5" ry="3.5" fill="#FF8FA3" opacity=".7"/><ellipse cx="19" cy="-20" rx="5.5" ry="3.5" fill="#FF8FA3" opacity=".7"/>';
-  if(eq.mask) s+=maskArt(eq.mask);
+  if(pj) s+=pjMask();
   s+='</g>';
   return s;
 }
@@ -1557,39 +1750,180 @@ function atkOf(c,o){
   return r;
 }
 function heroArt(o){ var c=o.who||curChar(); if(c==='hero') return heroArtBase(o); if(o.atk&&(c==='elf'||c==='mage')) o=atkOf(c,o); return compArt(c,o); }
-function heroBack(eq){ var c=curChar(); return c==='hero'?heroBackBase(eq):compBack(c); }
+function heroBack(eq,kind){ var c=kind||curChar(); return c==='hero'?heroBackBase(eq):compBack(c,eq); }
 var ROBE={mage:'#6B4FB8',elf:'#4FA86A'};
 var CP={
   dwarf:{skin:'#E39A6B',skinD:'#BF7448',face:'#F2B88F',pants:'#6B4423',boot:'#4A3322',armW:21,legW:18,pad:'#9AA5B5'},
   elf:{skin:'#F6D2AE',skinD:'#DDA87E',face:'#FFE6CC',pants:'#3E8E5A',boot:'#5A7A3C',armW:15,legW:14,pad:'#6FBF73'},
   mage:{skin:'#F1B282',skinD:'#D08A58',face:'#FFD9B8',pants:'#5B3FA8',boot:'#8B5A2B',armW:17,legW:15,pad:'#7C5FD0'}
 };
-/* 무기: 손잡이 중심이 (x,y), a도 기울임 (swordArt와 같은 규칙) */
-function compWeapon(kind,x,y,a,flip){
-  var inner='';
+/* 무기: 손잡이 중심이 (x,y), a도 기울임 (swordArt와 같은 규칙). it=제작한 전용무기(없으면 기본 무기) */
+function wGlow(c,x,y,r){ return '<g class="an-glow">'+circ(x,y,r,c,0).replace('stroke="none"','stroke="none" opacity=".32"')+'</g>'; }
+function compWeaponInner(kind,it){
+  var inner='', fx=it&&it.fx;
   if(kind==='dwarf'){
-    inner=pth('M-2.5,-44 L2.5,-44 L2.5,52 L-2.5,52 Z','#8B5A2B',2.4)+
-      pth('M-2,-48 Q-30,-58 -30,-34 Q-30,-14 -2,-20 Q-12,-34 -2,-48 Z','#D3DCE8',2.6)+
-      pth('M2,-48 Q30,-58 30,-34 Q30,-14 2,-20 Q12,-34 2,-48 Z','#D3DCE8',2.6)+
-      circ(0,-34,4.2,'#F6C445',2)+pth('M-4,-6 L4,-6 L4,4 L-4,4 Z','#F6C445',2)+circ(0,54,3.6,'#F6C445',2);
+    var bl=(it&&it.blade)||'#D3DCE8', sh=(it&&it.shaft)||'#8B5A2B', gm=(it&&it.gem)||'#F6C445';
+    inner=(it&&it.glow?wGlow(it.glow,0,-34,26):'')+pth('M-2.5,-44 L2.5,-44 L2.5,52 L-2.5,52 Z',sh,2.4)+
+      pth('M-2,-48 Q-30,-58 -30,-34 Q-30,-14 -2,-20 Q-12,-34 -2,-48 Z',bl,2.6)+
+      pth('M2,-48 Q30,-58 30,-34 Q30,-14 2,-20 Q12,-34 2,-48 Z',bl,2.6);
+    if(fx==='rune') inner+='<path d="M-21,-41 L-17,-32 M-17,-41 L-21,-32 M-21,-37 H-17 M21,-41 L17,-32 M17,-41 L21,-32 M21,-37 H17" stroke="'+it.glow+'" stroke-width="2.2" stroke-linecap="round" fill="none"/>';
+    else if(fx==='frost') inner+=pth('M-30,-44 L-37,-50 L-31,-38 Z M-31,-30 L-39,-30 L-30,-24 Z M30,-44 L37,-50 L31,-38 Z M31,-30 L39,-30 L30,-24 Z','#EAFBFF',1.8);
+    else if(fx==='flame') inner+=pth('M-26,-52 Q-30,-64 -22,-60 Q-20,-70 -14,-58 Q-10,-62 -12,-52 Z M26,-52 Q30,-64 22,-60 Q20,-70 14,-58 Q10,-62 12,-52 Z','#FFD95E',1.8)+'<path d="M-24,-30 L-14,-26 M24,-30 L14,-26" stroke="#E5483D" stroke-width="2.4" stroke-linecap="round"/>';
+    inner+=circ(0,-34,4.2,gm,2)+pth('M-4,-6 L4,-6 L4,4 L-4,4 Z',gm,2)+circ(0,54,3.6,gm,2);
   }else if(kind==='elf'){
-    inner='<path d="M5,-34 Q-24,13 5,60" fill="none" stroke="'+OL+'" stroke-width="8" stroke-linecap="round"/>'+
-      '<path d="M5,-34 Q-24,13 5,60" fill="none" stroke="#B9763A" stroke-width="4.6" stroke-linecap="round"/>'+
-      '<path d="M5,-34 L5,60" stroke="#FFF3D6" stroke-width="1.6"/>'+
-      pth('M-3,8 L-3,18 L3,18 L3,8 Z','#5A7A3C',2);
+    var wd=(it&&it.wood)||'#B9763A', st=(it&&it.str)||'#FFF3D6', gp=(it&&it.grip)||'#5A7A3C', arc='M5,-34 Q-24,13 5,60';
+    inner=(it&&it.glow?wGlow(it.glow,-10,13,34):'')+'<path d="'+arc+'" fill="none" stroke="'+OL+'" stroke-width="8" stroke-linecap="round"/>'+
+      '<path d="'+arc+'" fill="none" stroke="'+wd+'" stroke-width="4.6" stroke-linecap="round"/>';
+    if(fx==='birch') inner+='<path d="M-9,-16 l5,1 M-14,0 l6,1 M-15,24 l6,-1 M-10,40 l5,-1" stroke="#6B5A3C" stroke-width="1.6" stroke-linecap="round"/>';
+    else if(fx==='vine'||fx==='tree'){ var lf=(fx==='tree')?'#8FD16B':'#7FC25A'; inner+=pth('M-3,-18 Q-14,-26 -9,-12 Z M-15,3 Q-26,-2 -19,12 Z M-14,30 Q-26,28 -18,42 Z M-4,46 Q-14,48 -8,36 Z',lf,1.8); }
+    inner+='<path d="M5,-34 L5,60" stroke="'+st+'" stroke-width="1.6"/>'+pth('M-3,8 L-3,18 L3,18 L3,8 Z',gp,2);
+    if(fx==='moon') inner+=pth('M-16,-14 Q-24,-6 -16,2 Q-20,-6 -16,-14 Z','#FFFFFF',1)+bStar(-24,-24,3,'#FFFFFF');
+    if(fx==='dew') inner+=circ(-12,-6,2.2,'#EAFBFF',1.2)+circ(-17,18,2.6,'#EAFBFF',1.2)+circ(-12,38,2,'#EAFBFF',1.2);
+    if(fx==='tree') inner+=bStar(-20,-14,3.2,'#FFF3B0')+bStar(-22,34,2.8,'#FFFFFF');
   }else{
-    inner=pth('M-2.5,-40 L2.5,-40 L2.5,64 L-2.5,64 Z','#8B5A2B',2.4)+
-      '<path d="M-9,-46 Q-14,-30 0,-28 Q14,-30 9,-46" fill="none" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/>'+
-      '<path d="M-9,-46 Q-14,-30 0,-28 Q14,-30 9,-46" fill="none" stroke="#F6C445" stroke-width="3.6" stroke-linecap="round"/>'+
-      '<g class="an-glow">'+circ(0,-44,13,'#B9A2FF',0).replace('stroke="none"','stroke="none" opacity=".35"')+'</g>'+circ(0,-44,8,'#7FD6FF',2.6)+circ(-2.5,-47,2.4,'#fff',0);
+    var sh2=(it&&it.shaft)||'#8B5A2B', cu=(it&&it.curl)||'#F6C445', ob=(it&&it.orb)||'#7FD6FF', gl=(it&&it.glow)||(fx?null:'#B9A2FF');
+    inner=pth('M-2.5,-40 L2.5,-40 L2.5,64 L-2.5,64 Z',sh2,2.4);
+    if(fx==='moon') inner+=pth('M-12,-58 Q-22,-44 -8,-32 Q-16,-44 -12,-58 Z M12,-58 Q22,-44 8,-32 Q16,-44 12,-58 Z',cu,2.4)+pth('M-9,-34 Q0,-26 9,-34 Q0,-32 -9,-34 Z',cu,2.2);
+    else '<path d="M-9,-46 Q-14,-30 0,-28 Q14,-30 9,-46" fill="none" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/>';
+    if(fx!=='moon') inner+='<path d="M-9,-46 Q-14,-30 0,-28 Q14,-30 9,-46" fill="none" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/><path d="M-9,-46 Q-14,-30 0,-28 Q14,-30 9,-46" fill="none" stroke="'+cu+'" stroke-width="3.6" stroke-linecap="round"/>';
+    if(gl) inner+=wGlow(gl,0,-44,13).replace('opacity=".32"','opacity=".35"');
+    if(fx==='ice') inner+=pth('M0,-60 L-4,-52 L4,-52 Z M-14,-44 L-22,-40 L-14,-38 Z M14,-44 L22,-40 L14,-38 Z','#EAFBFF',1.8);
+    inner+=circ(0,-44,8,ob,2.6)+circ(-2.5,-47,2.4,'#fff',0);
+    if(fx==='bolt') inner+=pth('M2,-52 L-3,-44 L1,-44 L-2,-37 L5,-46 L1,-46 Z','#E5A100',1.2);
+    else if(fx==='galaxy') inner+=bStar(-16,-54,3.4,'#FFF3B0')+bStar(15,-36,3,'#FFFFFF')+bStar(0,-64,2.8,'#FFF3B0')+bStar(0,40,3,'#FFF3B0')+bStar(0,18,2.6,'#B9A2FF');
+    else if(fx==='oak') inner+=pth('M8,-30 Q18,-34 15,-24 Z','#8FD16B',1.6);
   }
-  return '<g transform="translate('+x+','+y+')'+(flip?' scale(-1,1)':'')+' rotate('+a+') translate(0,-13)">'+inner+'</g>';
+  return inner;
 }
-function compQuiver(){
-  return pth('M-7,-4 L7,-4 L6,46 L-6,46 Z','#8B5A2B',2.6)+'<path d="M-4,-4 L-6,-22 M0,-4 L0,-26 M4,-4 L6,-22" stroke="'+OL+'" stroke-width="2.4" stroke-linecap="round"/>'+
-    pth('M-8,-22 L-4,-30 L-3,-22 Z','#E5484D',1.6)+pth('M-3,-26 L0,-34 L1,-26 Z','#F6C445',1.6)+pth('M3,-22 L7,-30 L8,-22 Z','#E5484D',1.6);
+function compWeapon(kind,x,y,a,flip,it){
+  return '<g transform="translate('+x+','+y+')'+(flip?' scale(-1,1)':'')+' rotate('+a+') translate(0,-13)">'+compWeaponInner(kind,it)+'</g>';
 }
-function compHead(kind,c,ex,back){
+function compQuiver(it){
+  var bd=(it&&it.body)||'#8B5A2B', f1=(it&&it.fl1)||'#E5484D', f2=(it&&it.fl2)||'#F6C445', fx=it&&it.fx, gl=it&&it.glow;
+  var q=(gl?wGlow(gl,0,12,26):'')+pth('M-7,-4 L7,-4 L6,46 L-6,46 Z',bd,2.6)+'<path d="M-4,-4 L-6,-22 M0,-4 L0,-26 M4,-4 L6,-22" stroke="'+OL+'" stroke-width="2.4" stroke-linecap="round"/>'+
+    pth('M-8,-22 L-4,-30 L-3,-22 Z',f1,1.6)+pth('M-3,-26 L0,-34 L1,-26 Z',f2,1.6)+pth('M3,-22 L7,-30 L8,-22 Z',f1,1.6);
+  if(fx==='bamboo') q+='<path d="M-6,8 H6 M-6,22 H6 M-6,36 H6" stroke="#6F8A22" stroke-width="2.2"/>';
+  else if(fx==='silver') q+='<path d="M-6.5,6 H6.5 M-6.3,34 H6.3" stroke="#8FA2BA" stroke-width="2.4"/>'+circ(0,20,2.4,'#fff',1.2);
+  else if(fx==='feather') q+=pth('M-10,-20 Q-16,-30 -9,-34 Q-8,-26 -5,-22 Z',f2,1.4)+pth('M10,-20 Q16,-30 9,-34 Q8,-26 5,-22 Z',f1,1.4);
+  else if(fx==='stars') q+=bStar(0,12,3.4,'#FFF3B0')+bStar(0,28,2.8,'#FFFFFF');
+  return q;
+}
+/* ===== 전용 방어구·장식 그림 (v1.41.4) ===== */
+function elfCols(eq){ var t=eq&&eq.etunic; return t?{main:t.main,low:t.low,trim:t.trim,fx:t.fx}:{main:ROBE.elf,low:'#3E8E5A',trim:'#F2DC8B',fx:null}; }
+function mageCols(eq){ var t=eq&&eq.mrobe; return t?{main:t.main,low:t.low,dark:t.dark,trim:t.trim||'#F6C445',fx:t.fx}:{main:ROBE.mage,low:'#5B3FA8',dark:'#4A2F8F',trim:'#F6C445',fx:null}; }
+function dwarfHelmArt(it){
+  var cap=(it&&it.cap)||'#9AA5B5', bd=(it&&it.band)||'#F6C445', hn=(it&&it.horn)||'#F3EAD6', fx=it&&it.fx, gl=it&&it.glow, h='';
+  if(gl) h+=wGlow(gl,0,-56,36);
+  h+=pth('M-28,-40 A28,28 0 0 1 28,-40 Q0,-47 -28,-40 Z',cap,3)+'<path d="M-28,-40 Q0,-47 28,-40" stroke="'+bd+'" stroke-width="4.4" fill="none"/>'+
+     pth('M-26,-50 Q-46,-52 -43,-72 Q-35,-58 -21,-57 Z',hn,2.6)+pth('M26,-50 Q46,-52 43,-72 Q35,-58 21,-57 Z',hn,2.6)+circ(0,-52,3,bd,1.8);
+  if(fx==='rune') h+='<path d="M-15,-62 l3,6 M-12,-62 l-3,6 M-13.5,-59 h3 M11,-62 l3,6 M14,-62 l-3,6 M12.5,-59 h3" stroke="'+gl+'" stroke-width="2" stroke-linecap="round" fill="none"/>';
+  else if(fx==='frost') h+=pth('M-21,-42 L-18,-33 L-15,-42 Z M-4,-43 L0,-32 L4,-43 Z M15,-42 L18,-33 L21,-42 Z','#EAFBFF',1.6);
+  else if(fx==='flame') h+=pth('M-43,-72 Q-50,-84 -41,-79 Q-39,-90 -35,-77 Z M43,-72 Q50,-84 41,-79 Q39,-90 35,-77 Z','#FFD95E',1.8);
+  else if(fx==='stitch') h+='<path d="M-19,-58 Q0,-67 19,-58" stroke="#E8C27A" stroke-width="2" stroke-dasharray="3 3.4" fill="none"/>';
+  return h;
+}
+function dwarfHelmSide(it){
+  var cap=(it&&it.cap)||'#9AA5B5', bd=(it&&it.band)||'#F6C445', hn=(it&&it.horn)||'#F3EAD6', fx=it&&it.fx, gl=it&&it.glow, h='';
+  if(gl) h+=wGlow(gl,6,-62,32);
+  h+=pth('M-28,-38 A28,28 0 0 1 28,-42 Q10,-50 -4,-46 Q-16,-40 -28,-38 Z',cap,3)+'<path d="M-28,-40 Q0,-47 28,-43" stroke="'+bd+'" stroke-width="4" fill="none"/>'+pth('M0,-62 Q16,-64 20,-84 Q8,-74 -6,-68 Z',hn,2.6)+circ(2,-54,2.6,bd,1.6);
+  if(fx==='rune') h+='<path d="M-14,-58 l3,6 M-11,-58 l-3,6 M8,-60 l3,6 M11,-60 l-3,6" stroke="'+gl+'" stroke-width="2" stroke-linecap="round" fill="none"/>';
+  else if(fx==='frost') h+=pth('M-18,-41 L-15,-33 L-12,-41 Z M2,-45 L5,-37 L8,-45 Z','#EAFBFF',1.6);
+  else if(fx==='flame') h+=pth('M20,-84 Q26,-96 17,-90 Q14,-100 12,-86 Z','#FFD95E',1.8);
+  else if(fx==='stitch') h+='<path d="M-16,-56 Q2,-62 18,-54" stroke="#E8C27A" stroke-width="2" stroke-dasharray="3 3.4" fill="none"/>';
+  return h;
+}
+function dmailArt(it){
+  var P='M-31,-18 Q-34,2 -22,13 L22,13 Q34,2 31,-18 Q0,-29 -31,-18 Z', t=it.trim, fx=it.fx, h=pth(P,it.fill,3);
+  h+='<path d="M0,-23 V12" stroke="'+t+'" stroke-width="2.6" stroke-linecap="round"/><path d="M-22,-8 Q0,-1 22,-8 M-18,3 Q0,9 18,3" fill="none" stroke="'+t+'" stroke-width="2.2" stroke-linecap="round"/>';
+  if(fx==='rune') h+=pth('M0,-16 L6,-8 L0,0 L-6,-8 Z',it.glow,1.6)+circ(0,-8,1.8,'#fff',0);
+  else if(fx==='frost') h+=pth('M-26,-14 L-30,-22 L-22,-18 Z M26,-14 L30,-22 L22,-18 Z M-8,-20 L-5,-27 L-2,-20 Z','#EAFBFF',1.5);
+  else if(fx==='lava') h+='<path d="M-14,-17 L-8,-8 L-14,2 M12,-15 L6,-5 L13,6" stroke="'+it.glow+'" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>';
+  else if(fx==='stitch') h+='<path d="M-14,-14 L14,-14 M-12,-3 L12,-3" stroke="#E8C27A" stroke-width="1.8" stroke-dasharray="3 3" stroke-linecap="round"/>';
+  else h+=circ(-14,-14,1.8,'#fff',0)+circ(14,-14,1.8,'#fff',0)+circ(-12,6,1.8,'#fff',0)+circ(12,6,1.8,'#fff',0);
+  return h;
+}
+function dmailBack(it){
+  var P='M-31,-18 Q-34,2 -22,13 L22,13 Q34,2 31,-18 Q0,-29 -31,-18 Z', h=pth(P,it.fill,3);
+  h+='<path d="M0,-23 V12" stroke="'+it.trim+'" stroke-width="2.6" stroke-linecap="round"/><path d="M-22,-8 Q0,-1 22,-8" fill="none" stroke="'+it.trim+'" stroke-width="2.2" stroke-linecap="round"/>';
+  if(it.fx==='lava') h+='<path d="M-14,-12 L-8,-3 L-14,6 M12,-10 L6,0 L13,8" stroke="'+it.glow+'" stroke-width="2.4" stroke-linecap="round" fill="none"/>';
+  else if(it.fx==='rune') h+=pth('M0,-12 L5,-5 L0,2 L-5,-5 Z',it.glow,1.4);
+  return h;
+}
+function dbeardArt(it,side){
+  var c=it.ring, fx=it.fx, st=it.style, h='';
+  if(!side){
+    if(st==='band') h+='<path d="M-17,5 Q0,13 17,5" fill="none" stroke="'+OL+'" stroke-width="6.6" stroke-linecap="round"/><path d="M-17,5 Q0,13 17,5" fill="none" stroke="'+c+'" stroke-width="3.8" stroke-linecap="round"/>';
+    if(st==='braid') h+='<path d="M-4,9 l2,4 l-3,4 l3,4 M6,9 l-2,4 l3,4 l-3,4" stroke="'+c+'" stroke-width="2.6" fill="none" stroke-linecap="round"/>'+circ(-4.5,23,3.4,it.glow,1.6)+circ(5.5,23,3.4,it.glow,1.6);
+    if(st==='rings'||st==='band') h+=ell(-4,19.5,5,2.8,c,2)+ell(5.5,19.5,5,2.8,c,2);
+    if(st==='rings') h+=ell(0,8,9,2.8,c,2);
+    if(fx==='flame') h+=pth('M-8,26 Q-9,32 -4,29 Q-2,35 0,27 Z M2,26 Q1,33 6,30 Q9,35 10,27 Z','#FF8A3D',1.6);
+    if(fx==='sparkle') h+=bStar(-9,13,2.6,'#fff')+bStar(10,16,2.2,'#fff');
+  }else{
+    h+=ell(5,20,6.4,2.8,c,2);
+    if(st==='braid') h+=circ(4,25,3,it.glow,1.5);
+    if(fx==='flame') h+=pth('M0,26 Q-1,32 3,29 Q6,34 8,26 Z','#FF8A3D',1.6);
+    if(fx==='sparkle') h+=bStar(14,12,2.4,'#fff');
+  }
+  return h;
+}
+function eheadArt(it,side){
+  var b=it.band, fx=it.fx, g=it.glow, ph=side?'M-27,-47 Q0,-56 26,-48':'M-27,-47 Q0,-58 27,-47', h='', d='';
+  if(g) h+=wGlow(g,0,-54,32);
+  h+='<path d="'+ph+'" stroke="'+b+'" stroke-width="'+(fx==='crown'?5.4:4.4)+'" fill="none"/>';
+  if(fx==='sprout') d=pth('M0,-55 Q-6,-66 -11,-60 Q-5,-57 0,-55 Z','#8FD16B',1.8)+pth('M0,-55 Q6,-68 12,-61 Q5,-57 0,-55 Z','#6FBF55',1.8);
+  else if(fx==='grass') d=pth('M-18,-50 Q-24,-60 -14,-58 Z M-1,-56 Q-8,-67 3,-63 Z M16,-50 Q24,-60 12,-58 Z','#7FC25A',1.6);
+  else if(fx==='vine') d='<path d="M-20,-49 q-5,-9 4,-8 M0,-56 q-1,-9 7,-8 M18,-49 q6,-8 -2,-10" stroke="#4F7A2A" stroke-width="2" fill="none" stroke-linecap="round"/>'+pth('M-3,-56 Q-12,-62 -8,-54 Z M14,-52 Q22,-58 17,-50 Z','#8FD16B',1.4);
+  else if(fx==='dew') d=circ(-14,-52.5,2.8,'#CFF3FF',1.4)+circ(0,-57,3.2,'#CFF3FF',1.4)+circ(14,-52.5,2.8,'#CFF3FF',1.4)+circ(-0.8,-58,1,'#fff',0);
+  else if(fx==='moon') d=pth('M3,-63 A8,8 0 1 0 3,-49 A6,6 0 1 1 3,-63 Z','#EAF0FF',1.6)+bStar(-14,-55,2.4,'#fff')+bStar(14,-55,2.4,'#fff');
+  else if(fx==='crown') d=pth('M-24,-49 L-20,-62 L-14,-51 L-8,-66 L0,-52 L8,-66 L14,-51 L20,-62 L24,-49 Z','#FFE08A',2.2)+circ(0,-54,2.6,'#8FD16B',1.4);
+  if(side&&d) d='<g transform="translate(3,1) scale(.92)">'+d+'</g>';
+  return h+d;
+}
+function clothFx(fx,trim,side){
+  var t=side?'<g transform="translate(4,0) scale(.7)">':'<g>', h='';
+  if(fx==='moss') h=ell(-14,-4,6,3.4,'#4F7A2A',0)+ell(10,6,5,3,'#4F7A2A',0)+ell(-6,13,4,2.6,'#4F7A2A',0);
+  else if(fx==='stitch') h='<path d="M0,-20 V12" stroke="'+trim+'" stroke-width="2" stroke-dasharray="3 3.4" stroke-linecap="round"/>';
+  else if(fx==='stars') h=bStar(-18,-2,3.6,trim)+bStar(16,4,3.2,trim)+bStar(-8,16,2.8,'#fff')+bStar(8,-10,2.6,'#fff');
+  else if(fx==='moon') h=pth('M-16,-10 A7,7 0 1 0 -16,4 A5,5 0 1 1 -16,-10 Z','#EAF0FF',1.4)+bStar(14,0,3,trim)+bStar(-6,14,2.6,'#fff');
+  else if(fx==='leaf') h=pth('M-14,-6 Q-22,-14 -12,-14 Z M10,2 Q18,-6 8,-8 Z M-4,12 Q-12,6 -2,4 Z','#fff',1.2);
+  else if(fx==='tree') h='<path d="M0,12 V-14 M0,-2 L-9,-10 M0,4 L9,-4" stroke="'+trim+'" stroke-width="2.4" stroke-linecap="round" fill="none"/>'+circ(-10,-11,2.2,trim,0)+circ(10,-5,2.2,trim,0);
+  else if(fx==='galaxy') h=bStar(-18,-4,3.8,trim)+bStar(15,6,3,'#fff')+bStar(-6,15,2.6,trim)+bStar(8,-12,2.4,'#fff')+bStar(-22,14,2,'#fff')+bStar(22,-6,2,trim);
+  return h?(t+h+'</g>'):'';
+}
+function mageHatArt(it,side){
+  var br=(it&&it.brim)||'#5B3FA8', co=(it&&it.cone)||'#6B4FB8', bd=(it&&it.band)||'#F6C445', stc=(it&&it.star)||'#F6C445', fx=it&&it.fx, gl=it&&it.glow, h='';
+  if(gl) h+=wGlow(gl,0,-70,34);
+  if(!side){
+    h+=ell(0,-50,38,9,br,3)+pth('M-25,-50 Q-20,-74 4,-92 Q6,-72 25,-50 Z',co,3)+'<path d="M-25,-50 Q0,-43 25,-50" stroke="'+bd+'" stroke-width="4.4" fill="none"/>'+bStar(-2,-68,5.4,stc);
+    if(fx==='stars') h+=bStar(-12,-58,2.6,'#FFF3B0')+bStar(11,-62,2.2,'#fff');
+    else if(fx==='moon') h+=pth('M10,-66 A6,6 0 1 0 10,-54 A4.5,4.5 0 1 1 10,-66 Z','#fff',1.2);
+    else if(fx==='bolt') h+=pth('M8,-70 L2,-60 L6,-60 L1,-52 L11,-63 L6,-63 Z','#F6C445',1.2);
+    else if(fx==='galaxy') h+=bStar(-12,-58,2.6,'#fff')+bStar(11,-62,2.2,'#B9A2FF')+bStar(5,-78,2,'#FFF3B0')+bStar(-8,-74,1.8,'#fff');
+  }else{
+    h+=ell(-2,-52,38,8,br,3)+pth('M-22,-54 Q-20,-84 -50,-96 Q-6,-100 20,-54 Z',co,3)+'<path d="M-24,-52 Q0,-46 22,-52" stroke="'+bd+'" stroke-width="4" fill="none"/>'+bStar(-12,-76,5,stc);
+    if(fx==='stars'||fx==='galaxy') h+=bStar(-20,-64,2.4,'#fff')+bStar(2,-70,2,'#FFF3B0');
+    else if(fx==='moon') h+=pth('M2,-72 A5,5 0 1 0 2,-62 A3.8,3.8 0 1 1 2,-72 Z','#fff',1);
+    else if(fx==='bolt') h+=pth('M2,-72 L-3,-64 L0,-64 L-4,-57 L5,-66 L1,-66 Z','#F6C445',1);
+  }
+  return h;
+}
+function mbookArt(it){
+  var k=it.kind, h='<path d="M0,-8 Q-3,-2 0,4" stroke="'+OL+'" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+  if(it.glow) h+=wGlow(it.glow,0,12,17);
+  if(k==='book'){
+    h+=sR(-8,2,16,19,it.cover,3,2.4)+'<path d="M-8,6 H8 M-8,18 H8" stroke="'+it.trim+'" stroke-width="2"/><rect x="-3" y="9" width="6" height="5" rx="1.4" fill="'+it.trim+'" stroke="none"/>';
+    if(it.fx==='stars') h+=bStar(0,11.5,3,'#FFF3B0');
+    else if(it.fx==='galaxy') h+=bStar(-3,10,2.6,'#fff')+bStar(3,15,2.2,'#FFF3B0')+bStar(0,7,1.8,'#B9A2FF');
+  }else if(k==='orb'){
+    h+=circ(0,11,8,it.orb,2.6)+circ(-2.6,8.4,2.4,'#fff',0);
+    if(it.fx==='ice') h+=pth('M0,0 L-3,3 L3,3 Z M-11,10 L-15,12 L-11,14 Z M11,10 L15,12 L11,14 Z','#EAFBFF',1.6);
+  }else{
+    h+=sR(-9,4,18,14,'#F2E4C0',7,2.4)+'<rect x="-9" y="9" width="18" height="4" fill="#E5484D" stroke="'+OL+'" stroke-width="1.6"/>';
+  }
+  return h;
+}
+function compHead(kind,c,ex,back,eq){
+  eq=eq||{}; var pj=!!eq.pj, pl=(!pj&&eq.plume)?eq.plume:null;
   var s='<g transform="translate(0,-11) scale(.93)">';
   if(back) s+='<g class="in-look">';
   if(kind==='elf'){
@@ -1600,82 +1934,97 @@ function compHead(kind,c,ex,back){
   if(kind==='dwarf'){
     if(!back) s+=pth('M-26,-27 Q-27,-18 -14,-19 Q0,-15 14,-19 Q27,-18 26,-27 Q32,6 0,17 Q-32,6 -26,-27 Z','#D9822B',3)+
       pth('M-5,10 Q-8,22 -3,26 Q2,22 -1,10 Z','#D9822B',2.2)+pth('M7,10 Q10,22 5,26 Q0,22 3,10 Z','#D9822B',2.2);
-    s+=pth('M-28,-40 A28,28 0 0 1 28,-40 Q0,-47 -28,-40 Z','#9AA5B5',3)+'<path d="M-28,-40 Q0,-47 28,-40" stroke="#F6C445" stroke-width="4.4" fill="none"/>'+
-      pth('M-26,-50 Q-46,-52 -43,-72 Q-35,-58 -21,-57 Z','#F3EAD6',2.6)+pth('M26,-50 Q46,-52 43,-72 Q35,-58 21,-57 Z','#F3EAD6',2.6)+
-      circ(0,-52,3,'#F6C445',1.8);
+    if(!back && eq.dbeard) s+=dbeardArt(eq.dbeard,false);
+    if(!pj) s+=dwarfHelmArt(eq.dhelm);
     if(back) s+=pth('M-24,-36 Q-30,0 -12,8 Q0,12 12,8 Q30,0 24,-36 Z','#D9822B',3);
   }else if(kind==='elf'){
     s+=pth('M-28,-42 A28,28 0 0 1 28,-42 Q22,-56 0,-52 Q-22,-56 -28,-42 Z','#F6E7A0',3);
     if(!back) s+=pth('M-28,-42 Q-20,-34 -8,-44 Q0,-32 8,-44 Q20,-34 28,-42 Q22,-56 0,-52 Q-22,-56 -28,-42 Z','#F6E7A0',2.6);
-    s+='<path d="M-27,-47 Q0,-58 27,-47" stroke="#F6C445" stroke-width="4.4" fill="none"/>'+
-      pth('M22,-55 Q36,-76 48,-72 Q42,-60 29,-50 Z','#E5484D',2.4)+'<path d="M26,-54 Q36,-66 44,-70" stroke="#FFD3D6" stroke-width="1.6" fill="none"/>';
+    if(!pj) s+=(eq.ehead?eheadArt(eq.ehead,false):'<path d="M-27,-47 Q0,-58 27,-47" stroke="#F6C445" stroke-width="4.4" fill="none"/>');
+    if(!pj && !pl) s+=pth('M22,-55 Q36,-76 48,-72 Q42,-60 29,-50 Z','#E5484D',2.4)+'<path d="M26,-54 Q36,-66 44,-70" stroke="#FFD3D6" stroke-width="1.6" fill="none"/>';
   }else{
     if(!back) s+=pth('M-24,-26 Q-26,-15 -12,-18 Q0,-13 12,-18 Q26,-15 24,-26 Q30,12 3,38 Q-30,12 -24,-26 Z','#F4F4FA',3)+
       '<path d="M-6,0 Q0,6 2,0 M-2,14 Q3,20 5,13" stroke="#CFCFE0" stroke-width="2" fill="none" stroke-linecap="round"/>';
     if(back) s+=pth('M-24,-34 Q-30,6 -8,20 Q0,24 8,20 Q30,6 24,-34 Z','#F4F4FA',3);
-    s+=ell(0,-50,38,9,'#5B3FA8',3)+pth('M-25,-50 Q-20,-74 4,-92 Q6,-72 25,-50 Z','#6B4FB8',3)+
-      '<path d="M-25,-50 Q0,-43 25,-50" stroke="#F6C445" stroke-width="4.4" fill="none"/>'+bStar(-2,-68,5.4,'#F6C445');
+    if(!pj) s+=mageHatArt(eq.mhat,false);
   }
+  if(pl) s+='<g transform="'+PLUMEX[kind]+'">'+plumeArt(pl)+'</g>';
+  if(pj) s+=pjCap();
   if(!back){
     s+=faceArt(ex);
     s+='<ellipse cx="-19" cy="-20" rx="5.5" ry="3.5" fill="#FF8FA3" opacity=".7"/><ellipse cx="19" cy="-20" rx="5.5" ry="3.5" fill="#FF8FA3" opacity=".7"/>';
+    if(pj) s+=pjMask();
   }
   if(back) s+='</g>';
   return s+'</g>';
 }
 function compArt(kind,o){
-  var c=CP[kind], lg=o.legs, ar=o.arms, ex=o.expr, s='', i;
-  if(kind==='elf') s+='<g transform="translate(16,-12) rotate(26)">'+compQuiver()+'</g>';
-  if(kind==='mage') s+=pth('M-30,-18 Q-42,18 -34,54 L34,54 Q42,18 30,-18 Q0,-28 -30,-18 Z','#4A2F8F',3);
+  var c=CP[kind], lg=o.legs, ar=o.arms, ex=o.expr, s='', i, eq=o.eq||curEq(), pj=!!eq.pj;
+  var EC=elfCols(eq), MC=mageCols(eq), rb=(kind==='elf')?EC.main:(kind==='mage'?MC.main:null);
+  if(!pj && eq.cape) s+='<g transform="'+CAPEX[kind]+'">'+capeArt(eq.cape)+'</g>';
+  if(kind==='elf' && !pj) s+='<g transform="translate(16,-12) rotate(26)">'+compQuiver(eq.equiver)+'</g>';
+  if(kind==='mage' && !pj) s+=pth('M-30,-18 Q-42,18 -34,54 L34,54 Q42,18 30,-18 Q0,-28 -30,-18 Z',MC.dark,3);
   for(i=0;i<2;i++){
     var hx=(i===0?-10:10);
-    s+=bLimb(hx,20,lg[i][0],lg[i][1],c.legW,c.pants)+bootArt(lg[i][0],lg[i][1],c.boot,false);
+    s+=bLimb(hx,20,lg[i][0],lg[i][1],c.legW,pj?PJ.pants:c.pants)+footArt(lg[i][0],lg[i][1],c.legW,c.boot,eq,pj);
   }
-  if(ROBE[kind]) s+=pth('M-31,-18 Q-35,6 -22,18 L22,18 Q35,6 31,-18 Q0,-29 -31,-18 Z',ROBE[kind],3)+'<path d="M-13,-21 L0,8 L13,-21" stroke="'+(kind==='mage'?'#F6C445':'#F2DC8B')+'" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
-  else s+=mTorso(c.skin,c.skinD);
-  if(kind==='dwarf'){
-    s+=pth('M-22,13 L22,13 L21,31 L0,26 L-21,31 Z','#7A4A26')+'<rect x="-22" y="11" width="44" height="7" rx="3" fill="#4A3322" stroke="'+OL+'" stroke-width="2.5"/>'+circ(0,14.5,4,'#F6C445',2);
-    s+='<path d="M-25,-17 L19,13 M25,-17 L-19,13" stroke="'+OL+'" stroke-width="8" stroke-linecap="round"/><path d="M-25,-17 L19,13 M25,-17 L-19,13" stroke="#8B5A2B" stroke-width="4.6" stroke-linecap="round"/>'+circ(0,-3,4,'#F6C445',2);
-  }else if(kind==='elf'){
-    s+=pth('M-21,13 L21,13 L19,34 L10,26 L0,34 L-10,26 L-19,34 Z','#3E8E5A')+'<rect x="-21" y="11" width="42" height="6" rx="3" fill="#8B5A2B" stroke="'+OL+'" stroke-width="2.5"/>'+circ(0,14,3.4,'#F6C445',1.8);
-    s+='<path d="M-26,-17 L20,13" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/><path d="M-26,-17 L20,13" stroke="#8B5A2B" stroke-width="4" stroke-linecap="round"/>';
-  }else{
-    s+=pth('M-21,13 L21,13 L19,34 L0,28 L-19,34 Z','#5B3FA8')+'<rect x="-21" y="11" width="42" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
-    s+=pth('M-31,-18 Q-38,12 -31,48 L-17,48 L-12,-12 Z','#6B4FB8',3)+pth('M31,-18 Q38,12 31,48 L17,48 L12,-12 Z','#6B4FB8',3)+
-      '<path d="M-12,-12 L-17,48 M12,-12 L17,48" stroke="#F6C445" stroke-width="2.6" fill="none"/>';
+  if(pj) s+=pjTopFront();
+  else{
+    if(rb) s+=pth('M-31,-18 Q-35,6 -22,18 L22,18 Q35,6 31,-18 Q0,-29 -31,-18 Z',rb,3)+'<path d="M-13,-21 L0,8 L13,-21" stroke="'+(kind==='mage'?MC.trim:EC.trim)+'" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+    else s+=mTorso(c.skin,c.skinD);
+    if(kind==='dwarf'){
+      s+=pth('M-22,13 L22,13 L21,31 L0,26 L-21,31 Z','#7A4A26')+'<rect x="-22" y="11" width="44" height="7" rx="3" fill="#4A3322" stroke="'+OL+'" stroke-width="2.5"/>'+circ(0,14.5,4,'#F6C445',2);
+      s+='<path d="M-25,-17 L19,13 M25,-17 L-19,13" stroke="'+OL+'" stroke-width="8" stroke-linecap="round"/><path d="M-25,-17 L19,13 M25,-17 L-19,13" stroke="#8B5A2B" stroke-width="4.6" stroke-linecap="round"/>'+circ(0,-3,4,'#F6C445',2);
+      if(eq.dmail) s+=dmailArt(eq.dmail);
+    }else if(kind==='elf'){
+      s+=pth('M-21,13 L21,13 L19,34 L10,26 L0,34 L-10,26 L-19,34 Z',EC.low)+'<rect x="-21" y="11" width="42" height="6" rx="3" fill="#8B5A2B" stroke="'+OL+'" stroke-width="2.5"/>'+circ(0,14,3.4,'#F6C445',1.8);
+      s+='<path d="M-26,-17 L20,13" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/><path d="M-26,-17 L20,13" stroke="#8B5A2B" stroke-width="4" stroke-linecap="round"/>';
+    }else{
+      s+=pth('M-21,13 L21,13 L19,34 L0,28 L-19,34 Z',MC.low)+'<rect x="-21" y="11" width="42" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
+      s+=pth('M-31,-18 Q-38,12 -31,48 L-17,48 L-12,-12 Z',MC.main,3)+pth('M31,-18 Q38,12 31,48 L17,48 L12,-12 Z',MC.main,3)+
+        '<path d="M-12,-12 L-17,48 M12,-12 L17,48" stroke="'+MC.trim+'" stroke-width="2.6" fill="none"/>';
+    }
   }
+  if(!pj){ if(kind==='elf'&&EC.fx) s+=clothFx(EC.fx,EC.trim,false); if(kind==='mage'&&MC.fx) s+=clothFx(MC.fx,MC.trim,false); }
+  if(!pj && eq.belt) s+=beltItemArt(eq.belt,BELTX[kind]);
+  if(!pj && kind==='mage' && eq.mbook) s+='<g transform="translate(-26,18)">'+mbookArt(eq.mbook)+'</g>';
   for(i=0;i<2;i++){
     var sx=(i===0?-30:30), a=ar[i];
-    s+=mArm(sx,-10,a[0],a[1],a[2],a[3],{w:c.armW,fr:(kind==='dwarf'?10:8.5),f:(ROBE[kind]||c.skin)});
-    if(ROBE[kind]) s+=circ(a[0],a[1],8,c.skin,2.5);
+    s+=mArm(sx,-10,a[0],a[1],a[2],a[3],{w:c.armW,fr:(kind==='dwarf'?10:8.5),f:(pj?PJ.top:(rb||c.skin))});
+    if(pj||rb) s+=circ(a[0],a[1],8,c.skin,2.5);
   }
-  for(i=0;i<2;i++){
+  if(!pj) for(i=0;i<2;i++){
     var px=(i===0?-32:32);
-    s+=circ(px,-15,kind==='dwarf'?10.5:9,c.pad,2.6)+circ(px,-15,2.6,'#F6C445',1.8);
+    s+=circ(px,-15,kind==='dwarf'?10.5:9,(kind==='dwarf'&&eq.dmail)?eq.dmail.fill:c.pad,2.6)+circ(px,-15,2.6,'#F6C445',1.8);
   }
-  if(o.sword) s+=compWeapon(kind,o.sword[0],o.sword[1],o.sword[2],o.flip);
-  s+=compHead(kind,c,ex,false);
+  if(o.sword) s+=compWeapon(kind,o.sword[0],o.sword[1],o.sword[2],o.flip,eq[JOBW[kind]]);
+  s+=compHead(kind,c,ex,false,eq);
   if(o.extra) s+=o.extra;
   return s;
 }
 /* 성벽 위에서 바라보는 뒷모습 */
-function compBack(kind){
-  var c=CP[kind], s='', i;
-  for(i=0;i<2;i++){ var hx=(i===0?-10:10), lx=(i===0?-14:14); s+=bLimb(hx,20,lx,44,c.legW,c.pants)+bootArt(lx,44,c.boot,false); }
-  if(kind==='mage') s+=pth('M-33,-18 Q-44,18 -36,56 L36,56 Q44,18 33,-18 Q0,-28 -33,-18 Z','#6B4FB8',3)+'<path d="M0,-20 V54" stroke="rgba(43,33,56,.3)" stroke-width="2.2"/><path d="M-36,52 H36" stroke="#F6C445" stroke-width="3"/>';
+function compBack(kind,eq){
+  eq=eq||{}; var c=CP[kind], s='', i, pj=!!eq.pj;
+  var EC=elfCols(eq), MC=mageCols(eq), rb=(kind==='elf')?EC.main:(kind==='mage'?MC.main:null);
+  for(i=0;i<2;i++){ var hx=(i===0?-10:10), lx=(i===0?-14:14); s+=bLimb(hx,20,lx,44,c.legW,pj?PJ.pants:c.pants)+footArt(lx,44,c.legW,c.boot,eq,pj); }
+  if(pj) s+=pjBackTorso();
+  else if(kind==='mage') s+=pth('M-33,-18 Q-44,18 -36,56 L36,56 Q44,18 33,-18 Q0,-28 -33,-18 Z',MC.main,3)+'<path d="M0,-20 V54" stroke="rgba(43,33,56,.3)" stroke-width="2.2"/><path d="M-36,52 H36" stroke="'+MC.trim+'" stroke-width="3"/>'+(MC.fx?clothFx(MC.fx,MC.trim,false):'');
   else{
-    s+=pth('M-21,13 L21,13 L19,32 L0,26 L-19,32 Z',kind==='dwarf'?'#7A4A26':'#3E8E5A')+'<rect x="-21" y="11" width="42" height="6" rx="3" fill="'+(kind==='dwarf'?'#4A3322':'#8B5A2B')+'" stroke="'+OL+'" stroke-width="2.5"/>';
-    s+='<g class="an-breathe">'+pth('M-31,-18 Q-35,4 -20,16 L20,16 Q35,4 31,-18 Q0,-29 -31,-18 Z',ROBE[kind]||c.skin)+
+    s+=pth('M-21,13 L21,13 L19,32 L0,26 L-19,32 Z',kind==='dwarf'?'#7A4A26':EC.low)+'<rect x="-21" y="11" width="42" height="6" rx="3" fill="'+(kind==='dwarf'?'#4A3322':'#8B5A2B')+'" stroke="'+OL+'" stroke-width="2.5"/>';
+    s+='<g class="an-breathe">'+pth('M-31,-18 Q-35,4 -20,16 L20,16 Q35,4 31,-18 Q0,-29 -31,-18 Z',rb||c.skin)+
        '<path d="M0,-22 V13 M-13,-12 Q-7,-3 -14,7 M13,-12 Q7,-3 14,7" stroke="'+c.skinD+'" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>';
-    if(kind==='dwarf') s+='<path d="M-25,-17 L19,13 M25,-17 L-19,13" stroke="'+OL+'" stroke-width="8" stroke-linecap="round"/><path d="M-25,-17 L19,13 M25,-17 L-19,13" stroke="#8B5A2B" stroke-width="4.6" stroke-linecap="round"/>';
-    if(kind==='elf') s+='<g transform="translate(10,-14) rotate(22)">'+compQuiver()+'</g><path d="M-26,-17 L20,13" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/><path d="M-26,-17 L20,13" stroke="#8B5A2B" stroke-width="4" stroke-linecap="round"/>';
+    if(kind==='dwarf') s+='<path d="M-25,-17 L19,13 M25,-17 L-19,13" stroke="'+OL+'" stroke-width="8" stroke-linecap="round"/><path d="M-25,-17 L19,13 M25,-17 L-19,13" stroke="#8B5A2B" stroke-width="4.6" stroke-linecap="round"/>'+(eq.dmail?dmailBack(eq.dmail):'');
+    if(kind==='elf') s+='<g transform="translate(10,-14) rotate(22)">'+compQuiver(eq.equiver)+'</g><path d="M-26,-17 L20,13" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/><path d="M-26,-17 L20,13" stroke="#8B5A2B" stroke-width="4" stroke-linecap="round"/>'+(EC.fx?clothFx(EC.fx,EC.trim,false):'');
   }
-  if(kind==='dwarf') s+='<g transform="translate(-4,0) rotate(-34)">'+compWeapon('dwarf',0,0,0)+'</g>';
-  if(kind==='elf') s+='<g transform="translate(-4,-2) rotate(-30)">'+compWeapon('elf',0,0,0)+'</g>';
-  for(i=0;i<2;i++){ var sx=(i===0?-31:31); s+=bLimb(sx,-12,sx*1.12,20,c.armW+2,ROBE[kind]||c.skin)+circ(sx*1.12,24,8.5,c.skin,2.5); }
-  for(i=0;i<2;i++){ var px=(i===0?-33:33); s+=circ(px,-16,kind==='dwarf'?10.5:9,c.pad,2.6)+circ(px,-16,2.6,'#F6C445',1.8); }
-  if(kind==='mage') s+='<g transform="translate(47,10)">'+compWeapon('mage',0,0,0)+'</g>';
-  s+=compHead(kind,c,'cheer',true);
+  if(!pj && eq.belt) s+=beltItemArt(eq.belt,BELTX[kind],true);
+  if(!pj && kind==='mage' && eq.mbook) s+='<g transform="translate(26,22)">'+mbookArt(eq.mbook)+'</g>';
+  if(!pj && eq.cape) s+='<g transform="'+CAPEBX[kind]+'">'+backCapeArt(eq)+'</g>';
+  if(kind==='dwarf') s+='<g transform="translate(-4,0) rotate(-34)">'+compWeapon('dwarf',0,0,0,false,eq.axe)+'</g>';
+  if(kind==='elf') s+='<g transform="translate(-4,-2) rotate(-30)">'+compWeapon('elf',0,0,0,false,eq.bow)+'</g>';
+  for(i=0;i<2;i++){ var sx=(i===0?-31:31); s+=bLimb(sx,-12,sx*1.12,20,c.armW+2,pj?PJ.top:(rb||c.skin))+circ(sx*1.12,24,8.5,c.skin,2.5); }
+  if(!pj) for(i=0;i<2;i++){ var px=(i===0?-33:33); s+=circ(px,-16,kind==='dwarf'?10.5:9,(kind==='dwarf'&&eq.dmail)?eq.dmail.fill:c.pad,2.6)+circ(px,-16,2.6,'#F6C445',1.8); }
+  if(kind==='mage') s+='<g transform="translate(47,10)">'+compWeapon('mage',0,0,0,false,eq.staff)+'</g>';
+  s+=compHead(kind,c,'cheer',true,eq);
   return s;
 }
 /* 자주 쓰는 용사 포즈 */
@@ -2202,7 +2551,7 @@ function resultPopup(d,r){
     var msg=MSG[Math.abs(Math.round(d.getTime()/604800000))%MSG.length];
     var sum=(wd>0||wkm>0)?('이번 주 '+(wd>0?wd+'일 클리어':'')+(wd>0&&wkm>0?', ':'')+(wkm>0?kmFmt(wkm)+'km 달리기':'')+' — 정말 대단해요!'):'이번 주는 조금 쉬어 갔어도 괜찮아요. 돌아온 것만으로 충분해요.';
     var got=itemById(S.restLog&&S.restLog[fmt(d)]);
-    var gb=got?('<div class="lootcard r-n"><div class="lootimg">'+itemIcon(got,true)+'</div><p class="lootn">'+got.name+'</p><p class="lootr">휴식 의상 · 여관에서 입어 보세요</p></div>'):'';
+    var gb=got?('<div class="lootcard r-n"><div class="lootimg">'+itemIcon(got,true)+'</div><p class="lootn">'+got.name+'</p><p class="lootr">특별 장비 · 여관에서 입어 보세요</p></div>'):'';
     return {k:'BLESSING',t:'몸짱신의 가호',b:godScene()+'<p class="bnote">용사는 몸짱신의 가호를 받았습니다</p><p class="comfort">“'+msg+'”</p><p class="bnote">'+sum+'</p>'+gb,mode:'calm'};
   }
   if(r.res==='win'){
@@ -2240,7 +2589,7 @@ function fresh(){return {start:fmt(TODAY),log:{},body:[]};}
 function load(){
   try{
     var raw = localStorage.getItem(KEY);
-    if(raw){var o=JSON.parse(raw); if(o && o.log && o.body && o.start){ if(migrateLog(o.log)) o.dirty=true; return o; }}
+    if(raw){var o=JSON.parse(raw); if(o && o.log && o.body && o.start){ if(migrateLog(o.log)) o.dirty=true; if(migrateRest(o)) o.dirty=true; return o; }}
   }catch(e){}
   return fresh();
 }
@@ -2321,16 +2670,28 @@ function totalXP(){var t=0; Object.keys(S.log).forEach(function(k){t+=dayXP(k);}
 function chestsEarned(){ var n=0; clearedKeys().forEach(function(k){ var d=parse(k); if(DK[d.getDay()]==='sat' && satWin(d)) n++; }); return n; }
 function chestsLeft(){ return Math.max(0,chestsEarned()-(S.chestOpened||0)); }
 function grantRest(k){
+  /* 휴식 의상은 "몸짱 파자마" 1벌로 통합: 첫 일요일 신전 방문(첫 가호) 때 1회만 지급해요 */
   S.restLog=S.restLog||{}; S.inv=S.inv||{};
   if(S.restLog[k]) return;
-  var got=null; ITEMS.forEach(function(it){ if(!got && it.rest && !S.inv[it.id]) got=it; });
-  if(got){ S.inv[got.id]=true; S.restLog[k]=got.id; } else { S.restLog[k]='none'; }
+  if(!S.inv.pajama){ S.inv.pajama=true; S.restLog[k]='pajama'; } else { S.restLog[k]='none'; }
   save();
+}
+/* 예전 휴식 의상 정리: 정산 기록(restLog)은 'none'으로 남겨 가호 인정이 유지되게 하고, 이미 가호를 받은 적이 있으면 파자마를 지급해요 */
+function migrateRest(o){
+  var ch=false, RM=['robe','shoes','mask','pillow'], n=0, k;
+  if(o.inv) RM.forEach(function(id){ if(o.inv[id]){ delete o.inv[id]; ch=true; } });
+  if(o.eq) RM.forEach(function(id){ if(o.eq[id]===id){ delete o.eq[id]; ch=true; } });
+  var rl=o.restLog; if(rl && typeof rl==='object') Object.keys(rl).forEach(function(d){ n++; var v=rl[d]; if(v!=='none' && !itemById(v)){ rl[d]='none'; ch=true; } });
+  if(n>0 && !(o.inv&&o.inv.pajama)){ o.inv=o.inv||{}; o.inv.pajama=true; ch=true; }
+  /* 이미 제작한 투구·갑옷·방패는 재료를 쓴 장비로 기록(검은 예전에 상자에서 나온 것이라 재료를 쓰지 않은 것으로 둬요) */
+  if(o.inv){ o.crafted=o.crafted||{}; ['helm1','helm2','helm3','armor1','armor2','armor3','shield1','shield2','shield3'].forEach(function(id){ if(o.inv[id] && !o.crafted[id]){ o.crafted[id]=true; ch=true; } }); }
+  return ch;
 }
 function openChest(){
   if(chestsLeft()<1) return;
+  var achB=unlocked();
   S.inv=S.inv||{};
-  var pool=ITEMS.filter(function(it){ return !it.rest && !it.craft && !S.inv[it.id]; });
+  var pool=ITEMS.filter(function(it){ return !it.special && !it.craft && !S.inv[it.id]; });
   if(!pool.length){
     S.chestOpened=(S.chestOpened||0)+1; S.bonusXp=(S.bonusXp||0)+100; save(); render();
     showOverlay({k:'LOOT',t:'모든 장비를 모았어요!',b:'<div class="lootbox">'+chestSvg(true)+'</div><p class="bnote">대신 보너스 100 XP를 받았어요.</p>',mode:'win'}); return;
@@ -2342,11 +2703,11 @@ function openChest(){
   ['n','r','l'].forEach(function(r){ if(avail[r] && rar===null){ if(x<w[r]) rar=r; else x-=w[r]; } });
   if(rar===null) rar=Object.keys(avail)[0];
   var cands=pool.filter(function(it){return it.rar===rar;}), it=cands[Math.floor(Math.random()*cands.length)];
-  S.inv[it.id]=true; S.chestOpened=(S.chestOpened||0)+1; save(); render();
+  S.inv[it.id]=true; S.chestOpened=(S.chestOpened||0)+1; save(); render(); achDiffToast(achB);
   lootReveal(it);
 }
 function lootReveal(it){
-  var eq=curEq(); eq[it.slot]=it;
+  var eq=curEq(); if(eq.pj && !isWeaponSlot(it.slot)) eq={}; eq[it.slot]=it;
   var b='<div class="lootbox">'+chestSvg(true)+'</div>'+
     '<div class="lootcard r-'+it.rar+'"><div class="lootimg">'+itemIcon(it,true)+'</div><p class="lootn">'+it.name+'</p><p class="lootr">'+RARN[it.rar]+' · '+SLOTN[it.slot]+'</p></div>'+
     '<div class="lootpv">'+heroPreview(eq,'hero')+'</div>'+
@@ -2379,7 +2740,26 @@ var ACH = [
   {id:'cp_dwarf',n:'드워프 전사 합류',d:'길 위에서 드워프 전사를 만나 동료로 맞이하기',b:'char:dwarf',t:function(c){return c.joined.dwarf;}},
   {id:'cp_elf',n:'엘프 궁수 합류',d:'길 위에서 엘프 궁수를 만나 동료로 맞이하기',b:'char:elf',t:function(c){return c.joined.elf;}},
   {id:'cp_mage',n:'현자 마법사 합류',d:'길 위에서 현자 마법사를 만나 동료로 맞이하기',b:'char:mage',t:function(c){return c.joined.mage;}},
-  {id:'cp_all',n:'전원 집결',d:'드워프 전사, 엘프 궁수, 현자 마법사를 모두 동료로 맞이하기',t:function(c){return c.joined.dwarf&&c.joined.elf&&c.joined.mage;}}
+  {id:'cp_all',n:'전원 집결',d:'드워프 전사, 엘프 궁수, 현자 마법사를 모두 동료로 맞이하기',t:function(c){return c.joined.dwarf&&c.joined.elf&&c.joined.mage;}},
+  {id:'cs_cape',n:'망토 수집가',d:'망토 6종을 모두 모으기',t:function(c){return c.eqs.cs.cape>=6;}},
+  {id:'cs_plume',n:'깃털 수집가',d:'깃털 6종을 모두 모으기',t:function(c){return c.eqs.cs.plume>=6;}},
+  {id:'cs_shoes',n:'신발 수집가',d:'신발 6종을 모두 모으기',t:function(c){return c.eqs.cs.shoes>=6;}},
+  {id:'cs_belt',n:'허리띠 수집가',d:'허리띠 6종을 모두 모으기',t:function(c){return c.eqs.cs.belt>=6;}},
+  {id:'wp_hero',n:'검의 달인',d:'몸짱 용사의 검 6종을 모두 제작하기',b:'char:hero',t:function(c){return c.eqs.wpn.hero>=6;}},
+  {id:'wp_dwarf',n:'도끼의 달인',d:'드워프 전사의 양손 도끼 6종을 모두 제작하기',b:'char:dwarf',t:function(c){return c.eqs.wpn.dwarf>=6;}},
+  {id:'wp_elf',n:'활의 달인',d:'엘프 궁수의 활 6종을 모두 제작하기',b:'char:elf',t:function(c){return c.eqs.wpn.elf>=6;}},
+  {id:'wp_mage',n:'지팡이의 달인',d:'현자 마법사의 지팡이 6종을 모두 제작하기',b:'char:mage',t:function(c){return c.eqs.wpn.mage>=6;}},
+  {id:'jb_hero',n:'몸짱 용사 전용장비 완성',d:'몸짱 용사의 전용장비 24종을 모두 제작하기',b:'char:hero',t:function(c){return c.eqs.job.hero>=24;}},
+  {id:'jb_dwarf',n:'드워프 전사 전용장비 완성',d:'드워프 전사의 전용장비 24종을 모두 제작하기',b:'char:dwarf',t:function(c){return c.eqs.job.dwarf>=24;}},
+  {id:'jb_elf',n:'엘프 궁수 전용장비 완성',d:'엘프 궁수의 전용장비 24종을 모두 제작하기',b:'char:elf',t:function(c){return c.eqs.job.elf>=24;}},
+  {id:'jb_mage',n:'현자 마법사 전용장비 완성',d:'현자 마법사의 전용장비 24종을 모두 제작하기',b:'char:mage',t:function(c){return c.eqs.job.mage>=24;}},
+  {id:'lg_first',n:'첫 전설 장비',d:'전설 등급 전용장비를 처음으로 제작하기',t:function(c){return c.eqs.leg>=1;}},
+  {id:'lg_all',n:'전설 장비 16종 완성',d:'전설 등급 전용장비 16종을 모두 제작하기',t:function(c){return c.eqs.leg>=16;}},
+  {id:'tr_built',n:'몸짱 교역소 개업',d:'몸짱 교역소를 복구하기',t:function(c){return c.tradeBuilt;}},
+  {id:'tr_first',n:'첫 재료 교환',d:'몸짱 교역소에서 재료를 처음으로 교환하기',t:function(c){return c.trade>=1;}},
+  {id:'sp_first',n:'첫 돌발 보급',d:'길 위에서 뜻밖의 보급품을 처음으로 발견하기',t:function(c){return c.supply>=1;}},
+  {id:'sp_12',n:'행운의 러너',d:'길 위에서 돌발 보급을 12번 발견하기',t:function(c){return c.supply>=12;}},
+  {id:'all_gear',n:'모든 장비 수집',d:'공용장비 24종과 전용장비 96종(특별장비 제외)을 모두 모으기',t:function(c){return c.eqs.all>=120;}}
 ];
 /* 단계형 업적: 한 칸에서 다음 목표가 순서대로 나와요 */
 var BSTEPS=[1,5,10,30,50,100];
@@ -2394,7 +2774,9 @@ var CHAINS=[
   bossChain('c_tue','spider','tue','하체짱 왕거미'),
   bossChain('c_wed','golem','wed','코어짱 골렘'),
   bossChain('c_thu','wolf','thu','어깨짱 워울프'),
-  bossChain('c_fri','mino','fri','벅지짱 미노타우르스')
+  bossChain('c_fri','mino','fri','벅지짱 미노타우르스'),
+  {id:'c_common',b:null,steps:[6,12,18,24],unit:'종',count:function(c){return c.eqs.common;},name:function(n){return '공용장비 '+n+'종 수집';}},
+  {id:'c_craft',b:null,steps:[24,48,72,96],unit:'종',count:function(c){return c.eqs.craft;},name:function(n){return '제작 장비 '+n+'종';}}
 ];
 function gstats(){
   var ks=clearedKeys(), sets=0, runs=0, boss=0;
@@ -2413,7 +2795,18 @@ function gstats(){
   Object.keys(bk).forEach(function(k){ if(DK[parse(k).getDay()]!=='sun') return; var rr=dayResult(parse(k)); if(rr && rr.res==='bless') bless++; });
   var killTotal=kills.mon+kills.tue+kills.wed+kills.thu+kills.fri;
   return {joined:{dwarf:jnySeen('dwarf'),elf:jnySeen('elf'),mage:jnySeen('mage')},days:ks.length,best:bestStreak(),sets:sets,runs:runs,boss:boss,kills:kills,killTotal:killTotal,weekAll:weekAll,bless:bless,km:kmSum(),lv:lvInfo(totalXP()).L,
-          weights:S.body.filter(function(b){return b.weight!=null;}).length};
+          weights:S.body.filter(function(b){return b.weight!=null;}).length,
+          eqs:gearStats(), trade:tradeCount(), supply:supSeenCount(), tradeBuilt:(typeof bState==='function'&&bState('trade')==='done')};
+}
+function gearStats(){
+  var o={common:0,cs:{cape:0,plume:0,shoes:0,belt:0},craft:0,leg:0,wpn:{hero:0,dwarf:0,elf:0,mage:0},job:{hero:0,dwarf:0,elf:0,mage:0},all:0}, inv=S.inv||{};
+  ITEMS.forEach(function(it){
+    if(!inv[it.id]||it.special) return;
+    o.all++;
+    if(COMMON_SLOTS.indexOf(it.slot)>=0){ o.common++; o.cs[it.slot]++; }
+    if(it.job){ o.craft++; o.job[it.job]++; if(it.rar==='l') o.leg++; if(isWeaponSlot(it.slot)) o.wpn[it.job]++; }
+  });
+  return o;
 }
 function unlocked(){
   var c=gstats(), o={};
@@ -2445,12 +2838,14 @@ function achReplay(want){
   finally{ S=bak; }
   return res;
 }
+/* 장비 보유·교환·건물처럼 날짜 기록이 없는 업적은 처음 인식된 날을 달성일로 써요(지난 기록을 되짚지 않음) */
+var ACH_NOW=/^(c_common|c_craft|cs_|wp_|jb_|lg_|tr_|sp_|all_gear)/;
 function achStamp(){
   if(!S.achAt||typeof S.achAt!=='object') S.achAt={};
-  var u=unlocked(), want={}, n=0, k;
-  Object.keys(u).forEach(function(key){ if(!S.achAt[key]){ want[key]=1; n++; } });
+  var u=unlocked(), want={}, rp={}, n=0, k;
+  Object.keys(u).forEach(function(key){ if(!S.achAt[key]){ want[key]=1; n++; if(!ACH_NOW.test(key)) rp[key]=1; } });
   if(!n) return;
-  var found=achReplay(want), today=fmt(TODAY);
+  var found=Object.keys(rp).length?achReplay(rp):{}, today=fmt(TODAY);
   Object.keys(want).forEach(function(key){ S.achAt[key]=found[key]||today; });
   save();
 }
@@ -2471,7 +2866,8 @@ var BLD=[
   {id:'wall',n:'성벽',cost:600},
   {id:'train',n:'훈련장',cost:100},
   {id:'forge',n:'대장간',cost:300},
-  {id:'inn',n:'몸짱 여관',cost:0}
+  {id:'inn',n:'몸짱 여관',cost:0},
+  {id:'trade',n:'몸짱 교역소',cost:2000}
 ];
 var BSTN={ruin:'폐허',rest:'복구 중',done:'완성'};
 var kv='map';          /* 왕국 탭 안의 화면: map · inn · train · forge · wall · castle · build:<id> */
@@ -2692,6 +3088,43 @@ function artForge(st,p){
   }
   return s;
 }
+function artTrade(st,p){
+  var s=lmShadow(70), k;
+  s+=ell(0,34,68,14,'#E2C99A',3);
+  function canopy(from,to,top){
+    var o='';
+    for(k=from;k<to;k++){
+      var x0=-60+k*15, x1=x0+15, a=-44+k*11, b=a+11, c=(k%2)?'#F6EBD2':'#E5484D';
+      o+=pth('M'+x0+',-6 L'+a+','+top+' L'+b+','+top+' L'+x1+',-6 Z',c,2.6)+pth('M'+x0+',-6 Q'+((x0+x1)/2)+',3 '+x1+',-6 Z',c,2.4);
+    }
+    return o;
+  }
+  if(st==='ruin'){
+    s+='<g transform="translate(-34,32) rotate(-22)">'+rc(-3,-46,6,46,'#B9783A',1.5)+'</g><g transform="translate(34,32) rotate(28)">'+rc(-3,-38,6,38,'#B9783A',1.5)+'</g>';
+    s+=pth('M-48,38 Q-22,24 6,34 Q30,26 50,38 Q22,46 -8,44 Z','#F2E7CF',2.6)+'<path d="M-34,36 L-26,31 M-12,40 L-2,34 M18,38 L28,33 M36,40 L44,36" stroke="#E5484D" stroke-width="3.2" stroke-linecap="round"/>';
+    s+='<g transform="translate(-4,22)"><circle r="14" fill="none" stroke="'+OL+'" stroke-width="7"/><circle r="14" fill="none" stroke="#B9783A" stroke-width="3.6"/><path d="M-14,0 H14 M0,-14 V14 M-10,-10 L10,10 M10,-10 L-10,10" stroke="#B9783A" stroke-width="2.6" stroke-linecap="round"/><circle r="3" fill="#8B5A2B" stroke="'+OL+'" stroke-width="2"/></g>';
+    s+='<g transform="translate(-56,36) rotate(-12)">'+rc(-9,-16,18,16,'#C8925C',2)+'<path d="M-9,-8 L9,-8" stroke="'+OL+'" stroke-width="1.6"/></g>';
+    s+='<g transform="translate(50,38) rotate(24)">'+rc(-8,-14,16,14,'#B9763A',2)+'</g>'+ell(36,40,6,2.4,'#F6C445',1.8);
+  }else if(st==='rest'){
+    s+=rc(-34,14,68,28,'#C8925C',3)+'<path d="M-34,26 H34 M-34,35 H34" stroke="rgba(43,33,56,.35)" stroke-width="2"/>';
+    s+=rc(-56,-12,6,54,'#B9783A',1.5)+rc(-2,-6,5,48,'#B9783A',1.5)+'<g transform="translate(46,40) rotate(14)">'+rc(-3,-34,6,34,'#B9783A',1.5)+'</g>';
+    s+=canopy(0,4,-34);
+    s+='<path d="M0,-6 L-4,-34 M0,-6 L26,-6 L18,-34" stroke="'+OL+'" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="6 5" fill="none"/>';
+    s+=rc(-66,24,18,18,'#C8925C',2)+rc(38,26,16,16,'#B9763A',2)+kPennant(-53,-12,-34,'#F6C445');
+    s+='<g transform="translate(24,-8)"><g class="an-hammer"><line x1="0" y1="0" x2="13" y2="-13" stroke="#8B5A2B" stroke-width="3.4" stroke-linecap="round"/><rect x="7" y="-22" width="13" height="7" rx="1.8" transform="rotate(45 13.5 -18.5)" fill="#8E97A6" stroke="'+OL+'" stroke-width="2"/></g></g>';
+  }else{
+    s+=rc(-46,10,92,32,'#C8925C',3)+'<path d="M-46,22 H46 M-46,32 H46" stroke="rgba(43,33,56,.35)" stroke-width="2"/>';
+    s+=rc(-52,-12,6,54,'#B9783A',1.5)+rc(46,-12,6,54,'#B9783A',1.5);
+    s+=canopy(0,8,-36);
+    s+=rc(-14,-2,28,14,'#F2E3C4',2)+'<text x="0" y="9" text-anchor="middle" font-size="11" style="font-family:var(--disp)" fill="'+OL+'">교역</text>';
+    s+='<path d="M-30,10 L-30,-2 M-38,-2 H-22" stroke="'+OL+'" stroke-width="2.8" stroke-linecap="round"/>'+ell(-38,2,5.5,2.2,'#F6C445',1.6)+ell(-22,2,5.5,2.2,'#F6C445',1.6);
+    s+=ell(22,8,7,2.6,'#F6C445',1.8)+ell(22,5,7,2.6,'#FFE08A',1.8)+ell(30,8,5,2,'#F6C445',1.6);
+    s+=rc(-68,22,20,20,'#C8925C',2)+rc(-64,6,14,16,'#B9763A',2)+pth('M52,44 Q50,26 61,24 Q72,26 70,44 Z','#E8D9B8',2.4)+'<path d="M56,29 Q61,33 66,29" stroke="'+OL+'" stroke-width="2" fill="none"/>';
+    s+=kPennant(62,-8,-60,'#F6C445')+'<g class="an-twk">'+bStar(62,-65,4.4,'#FFF3B0')+'</g>';
+    s+=circ(70,-52,0,'#fff',0);
+  }
+  return s;
+}
 function artInn(){
   var s=lmShadow(70);
   s+=rc(-46,-6,92,46,'#F2E3C4',2)+pth('M-58,-4 L0,-48 L58,-4 Z','#8B5A2B')+rc(24,-44,13,24,'#B3BAC8',1.5);
@@ -2706,14 +3139,16 @@ function bArt(id,st,p){
   if(id==='wall') return artWall(st,p);
   if(id==='train') return artTrain(st,p);
   if(id==='forge') return artForge(st,p);
+  if(id==='trade') return artTrade(st,p);
   return artInn();
 }
-var BVB={castle:'-80 -122 160 176',wall:'-166 -158 332 322',train:'-84 -54 168 104',forge:'-76 -100 152 150',inn:'-82 -72 164 124'};
+var BVB={castle:'-80 -122 160 176',wall:'-166 -158 332 322',train:'-84 -54 168 104',forge:'-76 -100 152 150',inn:'-82 -72 164 124',trade:'-84 -72 168 122'};
 function bSvg(id){ return '<svg viewBox="'+BVB[id]+'" aria-hidden="true">'+bArt(id,bState(id),bProg(id))+'</svg>'; }
 /* 왕국 전경 */
 var KW=360, KH=500, KCX=180, KCY=240, KRX=160, KRY=150;
-var KPOS={castle:[180,246,.92],train:[90,204,.74],forge:[270,204,.76],inn:[180,336,.58]};
-var KBOX={castle:[148,132,64,168],train:[38,166,104,90],forge:[216,146,108,110],inn:[140,298,80,82],wall:[96,398,168,40]};
+/* 성(가운데)을 중심으로 훈련장·여관·교역소·대장간이 좌우 대칭, 인접 간격 약 78으로 고르게 놓였고 서로 겹치지 않아요(실제 그림 영역으로 계산) */
+var KPOS={castle:[180,246,.92],train:[111,166,.58],forge:[249,166,.61],inn:[102,299,.56],trade:[258,299,.55]};
+var KBOX={castle:[149,134,66,164],train:[68,142,80,56],forge:[216,120,70,76],inn:[66,268,80,58],trade:[218,262,84,66],wall:[96,398,168,40]};
 function kfield(x,y,w,h,c){ var s='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3" fill="'+c+'" stroke="'+OL+'" stroke-width="2"/>', i; for(i=1;i<4;i++) s+='<line x1="'+(x+4)+'" y1="'+(y+i*h/4)+'" x2="'+(x+w-4)+'" y2="'+(y+i*h/4)+'" stroke="rgba(43,33,56,.28)" stroke-width="2" stroke-linecap="round"/>'; return s; }
 function ksw(inner,i){ return '<g class="an-sway" style="animation-duration:'+(2.6+(i%4)*.5).toFixed(1)+'s;animation-delay:-'+((i*.83)%3).toFixed(2)+'s">'+inner+'</g>'; }
 function kfish(x,y,d){
@@ -2734,12 +3169,12 @@ function kingdomSvg(){
   s+=kfish(37,148,-3)+kfish(322,336,-7.5);
   s+='<ellipse cx="'+KCX+'" cy="'+KCY+'" rx="'+KRX+'" ry="'+KRY+'" fill="#C9E5A6"/>';
   s+='<ellipse cx="'+KCX+'" cy="'+(KCY+16)+'" rx="46" ry="30" fill="#BBDC95"/>';
-  [pine(58,262,.5),pine(302,262,.5),mBush(108,308,.6),mBush(254,308,.6)].forEach(function(d,j){ s+=ksw(d,j+10); });
+  [pine(52,236,.5),pine(308,236,.5),mBush(168,350,.7),mBush(196,354,.6),mBush(150,196,.5),mBush(212,196,.5)].forEach(function(d,j){ s+=ksw(d,j+10); });
   s+=wallRing(KCX,KCY,KRX,KRY,st,wp,12);
   if(st==='done'){
     s+='<path d="M158,'+(KCY+KRY+10)+' L158,'+(KCY+KRY+34)+' M202,'+(KCY+KRY+10)+' L202,'+(KCY+KRY+34)+'" stroke="'+OL+'" stroke-width="9" stroke-linecap="round"/><path d="M158,'+(KCY+KRY+10)+' L158,'+(KCY+KRY+34)+' M202,'+(KCY+KRY+10)+' L202,'+(KCY+KRY+34)+'" stroke="#B9783A" stroke-width="4" stroke-linecap="round"/>';
   }
-  ['train','forge','castle','inn'].forEach(function(id){
+  ['train','forge','trade','inn','castle'].forEach(function(id){
     var q=KPOS[id];
     s+='<g transform="translate('+q[0]+','+q[1]+') scale('+q[2]+')">'+bArt(id,bState(id),bProg(id))+'</g>';
   });
@@ -2775,7 +3210,7 @@ function mapTime(){
   var bg=({morning:'rgba(255,236,190,.12)',sunset:'linear-gradient(rgba(255,150,90,.20),rgba(231,124,104,.16))',night:'rgba(10,22,60,.44)'})[per];
   h+='<div class="mapwx" aria-hidden="true"><div style="position:absolute;inset:0;background:'+bg+'"></div>';
   if(per==='night'||per==='sunset'){
-    ['train','forge','castle','inn'].forEach(function(id){
+    ['train','forge','trade','castle','inn'].forEach(function(id){
       var q=KPOS[id], x=(q[0]*100/KW), y=(q[1]*100/KH);
       h+='<div style="position:absolute;left:'+(x-9).toFixed(1)+'%;top:'+(y-9).toFixed(1)+'%;width:18%;height:'+(18*KW/KH).toFixed(1)+'%;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,'+(per==='night'?'.55':'.28')+') 0%,rgba(255,214,120,0) 68%)"></div>';
     });
@@ -2797,7 +3232,7 @@ function mapTimeWeek(){
 }
 function kingdomMapView(){
   var h=matBarHtml()+'<div class="phrow tab" style="margin-top:14px"><h1 class="ph">몸짱 왕국</h1><span class="phsub">모험으로 되살리는 곳</span></div>';
-  var btn=''; ['castle','train','forge','inn','wall'].forEach(function(id){ btn+=kBuildBtn(id); });
+  var btn=''; ['castle','train','forge','inn','trade','wall'].forEach(function(id){ btn+=kBuildBtn(id); });
   h+='<div class="gmap kmap">'+kingdomSvg()+mapTime()+mapWeather()+btn+'</div>';
   h+='<p class="note">건물이나 성벽을 누르면 건물 화면으로 들어가요. 평일 퀘스트와 토벌로 얻은 자재는 모험이 종료된 날부터 쌓여요.</p>';
   return h;
@@ -2858,6 +3293,7 @@ function viewKingdom(){
   if(kv==='inn') return matBarHtml()+backBtn()+viewHome();
   if(kv==='train' && trainBuilt()) return viewTrain();
   if(kv==='forge' && bState('forge')==='done') return viewForge();
+  if(kv==='trade' && bState('trade')==='done') return viewTrade();
   if(kv==='wall' && bState('wall')==='done') return viewWall();
   if(kv==='castle') return castleView();
   if(kv.indexOf('build:')===0){ var bid=kv.slice(6); if(bld(bid) && bld(bid).cost && bState(bid)!=='done') return buildView(bid); }
@@ -2888,7 +3324,7 @@ function sunPopup(){
   if(ks.length===1){ showOverlay(resultPopup(last,{res:'bless'})); return; }
   var items=[]; ks.forEach(function(k){ var it=itemById(S.restLog&&S.restLog[k]); if(it) items.push(it.name); });
   var rp=resultPopup(last,{res:'bless'});
-  showOverlay({k:rp.k,t:rp.t,b:godScene()+'<p class="bnote">스트레칭을 마친 지난 일요일 '+ks.length+'번의 가호가 정산됐어요</p>'+(items.length?'<p class="comfort">받은 휴식 의상 · '+items.join(', ')+'</p>':''),mode:'calm'});
+  showOverlay({k:rp.k,t:rp.t,b:godScene()+'<p class="bnote">스트레칭을 마친 지난 일요일 '+ks.length+'번의 가호가 정산됐어요</p>'+(items.length?'<p class="comfort">받은 특별 장비 · '+items.join(', ')+'</p>':''),mode:'calm'});
 }
 /* ---------- 대장간 · 장비재료 · 제작 장비 (v1.37) ---------- */
 var RECIPE={n:5,r:4,l:3};
@@ -2896,21 +3332,37 @@ var MATN={n:'일반',r:'희귀',l:'전설'};
 function hashStr(str){ var h=2166136261, i; for(i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
 function rngFor(str){ var a=hashStr(str); return function(){ a=(a+0x6D2B79F5)|0; var t=Math.imul(a^(a>>>15),1|a); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296; }; }
 function matRoll(rnd,minRare){ var x=rnd()*100; if(minRare) return x<75?'r':'l'; return x<60?'n':(x<90?'r':'l'); }
-/* 날짜로 결과가 고정되는 재료 드랍: 중간보스 1개, 마왕 3개(마지막 1개는 희귀 이상 확정) */
+/* 날짜로 결과가 고정되는 재료 드랍: (2026-10-04부터) 중간보스 2개, 마왕 6개(마지막 2개는 희귀 이상 확정) · 그 전은 1개 / 3개(마지막 1개 확정) */
+var NEWDROP_FROM='2026-10-04';   /* v1.41.3 배포일: 이 날짜부터 새 드랍량(평일 2개·마왕 6개). 이전 날짜는 예전 규칙 그대로(이미 얻은 재료 보존) */
 function dropsOfDay(k,force){
   var d=parse(k), dk=DK[d.getDay()], o={n:0,r:0,l:0};
   if(dk==='sun') return o;
   var r=dayResult(d); if(!r || r.res!=='win') return o;
   if(!force && !isEnded(k)) return o;
-  var rnd=rngFor('momjjang-forge:'+k), cnt=(dk==='sat')?3:1, i;
-  for(i=0;i<cnt;i++){ o[matRoll(rnd,dk==='sat' && i===cnt-1)]++; }
+  var rnd=rngFor('momjjang-forge:'+k), neu=(k>=NEWDROP_FROM), cnt=(dk==='sat')?(neu?6:3):(neu?2:1), mr=neu?2:1, i;
+  for(i=0;i<cnt;i++){ o[matRoll(rnd,dk==='sat' && i>=cnt-mr)]++; }
+  return o;
+}
+/* 몸짱 교역소 교환 비율: 내림은 후하게, 올림은 박하게(어떤 순서로 바꿔도 이득이 나지 않아요) */
+var XCH=[
+  {id:'a',from:'r',fn:2,to:'n',tn:3,dir:'내림'},
+  {id:'b',from:'l',fn:1,to:'r',tn:2,dir:'내림'},
+  {id:'c',from:'n',fn:5,to:'r',tn:1,dir:'올림'},
+  {id:'d',from:'r',fn:4,to:'l',tn:1,dir:'올림'}
+];
+function tradeCount(){ var t=S.trade||{}, n=0; ['a','b','c','d'].forEach(function(k){ n+=(t[k]>0?t[k]:0); }); return n; }
+function tradeAdj(){
+  var t=S.trade||{}, o={n:0,r:0,l:0};
+  XCH.forEach(function(x){ var c=(t[x.id]>0)?t[x.id]:0; o[x.from]-=x.fn*c; o[x.to]+=x.tn*c; });
   return o;
 }
 function forgeStats(){
   var earned={n:0,r:0,l:0}, spent={n:0,r:0,l:0};
   Object.keys(S.log).forEach(function(k){ var o=dropsOfDay(k,false); earned.n+=o.n; earned.r+=o.r; earned.l+=o.l; });
-  ITEMS.forEach(function(it){ if(it.craft && S.inv && S.inv[it.id]) spent[it.rar]+=RECIPE[it.rar]; });
-  return {earned:earned, spent:spent, bal:{n:Math.max(0,earned.n-spent.n),r:Math.max(0,earned.r-spent.r),l:Math.max(0,earned.l-spent.l)}};
+  ITEMS.forEach(function(it){ if(it.craft && S.inv && S.inv[it.id] && S.crafted && S.crafted[it.id]) spent[it.rar]+=RECIPE[it.rar]; });
+  var sg=supGranted(); earned.n+=sg.n; earned.r+=sg.r; earned.l+=sg.l;
+  var adj=tradeAdj();
+  return {earned:earned, spent:spent, adj:adj, bal:{n:Math.max(0,earned.n+adj.n-spent.n),r:Math.max(0,earned.r+adj.r-spent.r),l:Math.max(0,earned.l+adj.l-spent.l)}};
 }
 function dropText(o){ var t=[]; ['n','r','l'].forEach(function(g){ if(o[g]>0) t.push(MATN[g]+' 재료 +'+o[g]); }); return t.join(' · '); }
 function rewardNote(d,res){
@@ -2927,22 +3379,58 @@ function forgeBar(fs){
   var tot=fs.earned.n+fs.earned.r+fs.earned.l;
   return '<div class="matbar fg" id="fgbar" role="status" aria-label="장비재료 보유량">'+c('n')+c('r')+c('l')+'</div>';
 }
+function viewTrade(){
+  return forgeBar(forgeStats())+backBtn()+'<div class="phrow"><h1 class="ph">몸짱 교역소</h1><span class="phsub">상인 길드가 운영하는, 재료를 맞바꾸는 곳</span></div>'+sceneCard('trade')+'<div id="npcpanel">'+(npcOpen.trade?tradePanel():npcHint('trade'))+'</div>';
+}
+function tradePanel(){
+  var fs=forgeStats(), h='<p class="note" style="margin:0 2px 12px">같은 등급끼리가 아니라 다른 등급의 재료로 바꿔 줘요. 내림은 후하게, 올림은 박하게 쳐 드려요. 교환은 되돌릴 수 없어요.</p>';
+  XCH.forEach(function(x){
+    var have=fs.bal[x.from], ok=have>=x.fn;
+    h+='<div class="xch'+(ok?'':' off')+'"><div class="xt"><b>'+MATN[x.from]+' '+x.fn+'개 → '+MATN[x.to]+' '+x.tn+'개</b><small>'+x.dir+' · '+MATN[x.from]+' 재료 '+have+'개 보유</small></div>'+
+      (ok?'<button type="button" class="primary" data-a="xchg" data-x="'+x.id+'">바꾸기</button>':'<button type="button" class="ghost" disabled>'+MATN[x.from]+' '+(x.fn-have)+'개 더 필요</button>')+'</div>';
+  });
+  return h;
+}
+function doTrade(id){
+  var x=null, i; for(i=0;i<XCH.length;i++) if(XCH[i].id===id) x=XCH[i];
+  if(!x || forgeStats().bal[x.from]<x.fn) return;
+  var before=unlocked();
+  S.trade=S.trade||{}; S.trade[id]=(S.trade[id]>0?S.trade[id]:0)+1; save();
+  kRefresh();
+  toast('교환 완료 · '+MATN[x.from]+' '+x.fn+' → '+MATN[x.to]+' '+x.tn);
+  achDiffToast(before);
+}
+function askTrade(id){
+  var x=null, i; for(i=0;i<XCH.length;i++) if(XCH[i].id===id) x=XCH[i];
+  if(!x || forgeStats().bal[x.from]<x.fn) return;
+  askOpen({title:MATN[x.from]+' 재료 '+x.fn+'개를 바꿀까요?',note:MATN[x.to]+' 재료 '+x.tn+'개를 받아요. 교환은 되돌릴 수 없어요.',yes:'바꾸기',no:'취소',act:function(){ doTrade(id); }});
+}
+/* 업적 해금 알림 (제작·상자·교환 직후) */
+function achDiffToast(before){
+  try{ var a=unlocked(), k, n=[]; for(k in a){ if(!before[k]) n.push(a[k]); } if(n.length) setTimeout(function(){ toast('업적 해금 · '+n[0]+(n.length>1?' 외 '+(n.length-1)+'개':'')); },1800); }catch(e){}
+}
 function viewForge(){
   return forgeBar(forgeStats())+backBtn()+'<div class="phrow"><h1 class="ph">대장간</h1><span class="phsub">장비재료로 장비를 만드는 곳</span></div>'+sceneCard('forge')+'<div id="npcpanel">'+(npcOpen.forge?forgePanel():npcHint('forge'))+'</div>';
 }
+var fgFilter='all';   /* 대장간 목록 직업 필터: all 또는 hero·dwarf·elf·mage */
 function forgePanel(){
   var fs=forgeStats(), h='';
-  h+='<p class="note" style="margin:0 2px 12px">중간보스를 토벌하면 재료 1개, 마왕을 토벌하면 3개(희귀 이상 1개 확정)를 얻어요. 같은 등급의 재료로 같은 등급 장비를 골라서 만들어요. 필요한 재료: 일반 '+RECIPE.n+' · 희귀 '+RECIPE.r+' · 전설 '+RECIPE.l+'개</p>';
-  var list=ITEMS.filter(function(it){return it.craft;}), idx={};
+  h+='<p class="note" style="margin:0 2px 12px">중간보스를 토벌하면 재료 2개, 마왕을 토벌하면 6개(희귀 이상 2개 확정)를 얻어요. 같은 등급의 재료로 같은 등급 장비를 골라서 만들어요. 필요한 재료: 일반 '+RECIPE.n+' · 희귀 '+RECIPE.r+' · 전설 '+RECIPE.l+'개</p>';
+  var seenJobs=CHARIDS.filter(function(id){ return id==='hero' || jnySeen(id); });
+  if(fgFilter!=='all' && seenJobs.indexOf(fgFilter)<0) fgFilter='all';
+  h+='<div class="fgf" role="group" aria-label="직업별로 보기"><button type="button" data-a="fgf" data-j="all" aria-pressed="'+(fgFilter==='all'?'true':'false')+'">전체</button>';
+  seenJobs.forEach(function(id){ h+='<button type="button" data-a="fgf" data-j="'+id+'" aria-pressed="'+(fgFilter===id?'true':'false')+'">'+CHARN[id]+'</button>'; });
+  h+='</div>';
+  var list=ITEMS.filter(function(it){return it.craft && (!it.job || it.job==='hero' || jnySeen(it.job)) && (fgFilter==='all' || it.job===fgFilter);}), idx={};
   list.forEach(function(it,i){ idx[it.id]=i; });
   function rank(it){ return (S.inv&&S.inv[it.id])?2:(fs.bal[it.rar]>=RECIPE[it.rar]?0:1); }
-  list.sort(function(a,b){ return (rank(a)-rank(b))||(idx[a.id]-idx[b.id]); });
+  list.sort(function(a,b){ return (rank(a)-rank(b))||(itemSortKey(a)-itemSortKey(b))||(idx[a.id]-idx[b.id]); });
   list.forEach(function(it){
-    var have=!!(S.inv&&S.inv[it.id]), need=RECIPE[it.rar], bal=fs.bal[it.rar], worn=!!(S.eq&&S.eq[it.slot]===it.id), act;
+    var have=!!(S.inv&&S.inv[it.id]), need=RECIPE[it.rar], bal=fs.bal[it.rar], worn=isWorn(it), act;
     if(have) act='<button type="button" class="ghost" data-a="equip" data-id="'+it.id+'">'+(worn?'벗기':'입기')+'</button>';
     else if(bal>=need) act='<button type="button" class="primary" data-a="craft" data-id="'+it.id+'">만들기</button>';
     else act='<button type="button" class="ghost" disabled>'+MATN[it.rar]+' 재료 '+(need-bal)+'개 더 필요</button>';
-    h+='<div class="fgitem r-'+it.rar+(have?' have':'')+'"><div class="fgi">'+itemIcon(it,true)+'</div><div class="fgt"><b>'+it.name+'</b><small>'+MATN[it.rar]+' · '+SLOTN[it.slot]+'</small><small>'+(have?(worn?'착용 중':'제작 완료'):MATN[it.rar]+' 재료 '+need+'개')+'</small></div><div class="fgact">'+act+'</div></div>';
+    h+='<div class="fgitem r-'+it.rar+(have?' have':'')+'"><div class="fgi">'+itemIcon(it,true)+'</div><div class="fgt"><b>'+it.name+'</b><small>'+(it.job?CHARN[it.job]+' · ':'')+MATN[it.rar]+' · '+SLOTN[it.slot]+'</small><small>'+(have?(worn?'착용 중':'제작 완료'):MATN[it.rar]+' 재료 '+need+'개')+'</small></div><div class="fgact">'+act+'</div></div>';
   });
   return h;
 }
@@ -2952,16 +3440,20 @@ function askCraft(id){
 }
 function doCraft(id){
   var it=itemById(id); if(!it || !it.craft || !craftable(it)) return;
-  S.inv=S.inv||{}; S.inv[id]=true; save(); kRefresh();
-  var eq=curEq(); eq[it.slot]=it;
-  showOverlay({k:it.rar==='l'?'LEGENDARY FORGED':'FORGED',t:'제작 완료!',b:'<div class="lootcard r-'+it.rar+'"><div class="lootimg">'+itemIcon(it,true)+'</div><p class="lootn">'+it.name+'</p><p class="lootr">'+RARN[it.rar]+' · '+SLOTN[it.slot]+'</p></div><div class="lootpv">'+heroPreview(eq)+'</div><button type="button" class="primary" data-a="loot-equip" data-id="'+it.id+'" style="margin-bottom:8px">바로 입기</button>',mode:'win'});
+  var achB=unlocked();
+  S.inv=S.inv||{}; S.inv[id]=true; S.crafted=S.crafted||{}; S.crafted[id]=true; save(); kRefresh();
+  achDiffToast(achB);
+  var eq=curEq(); if(eq.pj && !isWeaponSlot(it.slot)) eq={}; eq[it.slot]=it;
+  showOverlay({k:it.rar==='l'?'LEGENDARY FORGED':'FORGED',t:'제작 완료!',b:'<div class="lootcard r-'+it.rar+'"><div class="lootimg">'+itemIcon(it,true)+'</div><p class="lootn">'+it.name+'</p><p class="lootr">'+RARN[it.rar]+' · '+SLOTN[it.slot]+'</p></div><div class="lootpv">'+heroPreview(eq,it.job)+'</div><button type="button" class="primary" data-a="loot-equip" data-id="'+it.id+'" style="margin-bottom:8px">바로 입기</button>',mode:'win'});
 }
 /* ----- 제작 장비 그림 (머리·가슴·왼손 방패) ----- */
 function helmArt(it){
   var f=it.fill, t=it.trim||'#F6C445', s='';
   if(it.rar==='l') s+=pth('M-26,-54 Q-47,-58 -43,-84 Q-34,-70 -20,-66 Z','#FFF3B0')+pth('M26,-54 Q47,-58 43,-84 Q34,-70 20,-66 Z','#FFF3B0');
   s+=pth('M-30,-38 A30,30 0 0 1 30,-38 Q0,-47 -30,-38 Z',f);
-  if(it.rar==='n'){
+  if(it.rar==='n' && it.metal){
+    s+='<path d="M-29,-41 Q0,-50 29,-41" fill="none" stroke="'+t+'" stroke-width="5" stroke-linecap="round"/><path d="M0,-67 V-48" stroke="'+t+'" stroke-width="4" stroke-linecap="round"/>'+circ(-17,-46,1.8,'#fff',1.2)+circ(17,-46,1.8,'#fff',1.2)+circ(0,-47,2.2,'#fff',1.2);
+  }else if(it.rar==='n'){
     s+='<path d="M-29,-41 Q0,-50 29,-41" fill="none" stroke="#8B5A2B" stroke-width="5" stroke-linecap="round"/><path d="M-23,-54 Q0,-64 23,-54" fill="none" stroke="#8B5A2B" stroke-width="2.2" stroke-dasharray="3 4" stroke-linecap="round"/>'+circ(0,-47,2.6,'#F6C445',1.8);
   }else if(it.rar==='r'){
     s+=pth('M-31,-40 L-35,-22 L-28,-20 L-26,-38 Z','#B8C7DA',2.4)+pth('M31,-40 L35,-22 L28,-20 L26,-38 Z','#B8C7DA',2.4)+
@@ -2974,7 +3466,9 @@ function helmArt(it){
 }
 function armorArt(it){
   var P='M-31,-18 Q-34,0 -22,10 L22,10 Q34,0 31,-18 Q0,-29 -31,-18 Z', t=it.trim||'#F6C445', s=pth(P,it.fill);
-  if(it.rar==='n'){
+  if(it.rar==='n' && it.metal){
+    s+='<path d="M0,-23 V9" stroke="'+t+'" stroke-width="2.6" stroke-linecap="round" fill="none"/>'+(it.fx==='chain'?'<path d="M-24,-12 Q0,-5 24,-12 M-20,-4 Q0,2 20,-4 M-15,4 Q0,8 15,4" fill="none" stroke="'+t+'" stroke-width="2.6" stroke-dasharray="2 2.6" stroke-linecap="round"/>':'<path d="M-23,-10 Q0,-3 23,-10 M-19,1 Q0,7 19,1" fill="none" stroke="'+t+'" stroke-width="2.2" stroke-linecap="round"/>'+circ(-14,-6,1.6,'#fff',1)+circ(14,-6,1.6,'#fff',1)+circ(-10,4,1.6,'#fff',1)+circ(10,4,1.6,'#fff',1));
+  }else if(it.rar==='n'){
     s+='<path d="M0,-23 V9" stroke="#8B5A2B" stroke-width="2.4" stroke-dasharray="3 3.4" stroke-linecap="round" fill="none"/><path d="M-9,-14 L9,-9 M-9,-4 L9,1" stroke="#8B5A2B" stroke-width="2.4" stroke-linecap="round"/>';
   }else if(it.rar==='r'){
     s+='<path d="M-23,-10 Q0,-3 23,-10 M-19,1 Q0,7 19,1" fill="none" stroke="#8FA2BA" stroke-width="2.2" stroke-linecap="round"/>'+pth('M0,-19 L8,-9 L0,2 L-8,-9 Z',t,2.4);
@@ -2987,7 +3481,8 @@ function shieldArt(it,x,y){
   var t=it.trim||'#F6C445', s='<g transform="translate('+(x+4)+','+y+')">';
   if(it.rar==='l') s+='<circle r="20" fill="none" stroke="#F6C445" stroke-width="5" opacity=".45"/>';
   s+=circ(0,0,17,it.fill,3);
-  if(it.rar==='n') s+='<path d="M-6,-15 V15 M6,-15 V15" stroke="#8B5A2B" stroke-width="2.4"/><circle r="13.5" fill="none" stroke="#8E97A6" stroke-width="3"/>'+circ(0,0,4.6,'#B3BAC8',2);
+  if(it.rar==='n' && it.metal) s+='<circle r="13.5" fill="none" stroke="'+t+'" stroke-width="3"/><path d="M0,-12 V12 M-12,0 H12" stroke="'+t+'" stroke-width="2"/>'+circ(0,0,4.6,'#E6EEF8',2)+circ(-9,-9,1.5,'#fff',1)+circ(9,-9,1.5,'#fff',1)+circ(-9,9,1.5,'#fff',1)+circ(9,9,1.5,'#fff',1);
+  else if(it.rar==='n') s+='<path d="M-6,-15 V15 M6,-15 V15" stroke="#8B5A2B" stroke-width="2.4"/><circle r="13.5" fill="none" stroke="#8E97A6" stroke-width="3"/>'+circ(0,0,4.6,'#B3BAC8',2);
   else if(it.rar==='r') s+='<circle r="13.5" fill="none" stroke="'+t+'" stroke-width="3.4"/><path d="M0,-12 V12 M-12,0 H12" stroke="#8FA2BA" stroke-width="2"/>'+circ(0,0,5,t,2);
   else s+='<circle r="13.5" fill="none" stroke="'+t+'" stroke-width="3.4"/>'+bStar(0,0,9.5,'#FFF3B0');
   return s+'</g>';
@@ -3321,6 +3816,59 @@ function scnForge(){
   return s;
 }
 
+/* ===== 길드 상인 (원점: 카운터 위 중앙) ===== */
+function npcMerchant(){
+  var s='', skin='#F1B282';
+  s+=bLimb(-9,-24,-10,-8,14,'#5B3F8F')+bLimb(9,-24,10,-8,14,'#5B3F8F')+sE(-11,-4,12,6.5,'#3B2A1A',2.4)+sE(11,-4,12,6.5,'#3B2A1A',2.4);
+  s+='<g class="an-breathe">'+sP('M-26,-18 Q-32,-58 -17,-66 L17,-66 Q32,-58 26,-18 Z','#4B3A8F',2.6)+sP('M-12,-64 L0,-30 L12,-64 Z','#F2E3C4',2)+sR(-25,-27,50,7,'#3B2A1A',2,2.2)+sR(-5,-28,10,9,'#F6C445',1.5,1.8)+sC(-16,-46,2.6,'#F6C445',1.4)+sC(-16,-38,2.6,'#F6C445',1.4)+sC(16,-46,2.6,'#F6C445',1.4)+sC(16,-38,2.6,'#F6C445',1.4)+'</g>';
+  s+=bLimb(22,-56,34,-40,14,'#4B3A8F')+sC(36,-39,7.5,skin,2.2)+sR(34,-44,22,14,'#B9763A',3,2)+sL(40,-40,52,-40,'#F6C445',2);
+  s+=bLimb(-22,-56,-34,-40,14,'#4B3A8F')+sC(-36,-39,7.5,skin,2.2);
+  s+='<g class="an-sway">'+sC(0,-78,19,skin,2.6)+sC(0,-72,5,'#E8998A',1.8)+
+     sE(0,-90,30,8,'#4B3A8F',2.6)+sP('M-17,-92 Q-14,-112 4,-114 Q18,-112 17,-92 Z','#5B4AA8',2.6)+sL(-16,-95,16,-95,'#F6C445',3.4)+sP('M12,-108 Q26,-124 38,-118 Q30,-108 18,-100 Z','#46E0A5',2.2)+
+     sC(-7,-80,2.8,OL,0)+sC(7,-80,2.8,OL,0)+sC(-7.8,-80.8,1,'#fff',0)+sC(6.2,-80.8,1,'#fff',0)+
+     sP('M-13,-72 Q-6,-77 0,-72 Q6,-77 13,-72 Q8,-67 0,-69 Q-8,-67 -13,-72 Z','#6B4A2B',1.8)+'<path d="M-4,-65 Q0,-62 4,-65" fill="none" stroke="'+OL+'" stroke-width="2" stroke-linecap="round"/></g>';
+  return s;
+}
+/* ===== 교역소 내부 ===== */
+function scnTrade(){
+  var eq=curEq(), s='', i;
+  var G={ idle:{arms:[[-36,20,-34,4],[36,20,34,4]],legs:[[-14,44],[14,44]],sword:null},
+          point:{arms:[[-36,20,-34,4],[40,-52,44,-24]],legs:[[-14,44],[14,44]],sword:null} };
+  s+=scnDefs()+'</defs>';
+  s+='<rect width="340" height="176" fill="#C9A66B"/>';
+  for(i=1;i<16;i++) s+=sL(i*22,0,i*22,176,'rgba(91,58,31,.3)',1.6);
+  s+='<rect y="132" width="340" height="44" fill="#B58E55"/>'+sL(0,132,340,132,'#5B3A1F',2.4);
+  s+='<rect y="176" width="340" height="74" fill="#8B5A2B"/>';
+  for(i=0;i<9;i++) s+=sL(0,184+i*8,340,184+i*8,'rgba(43,33,56,.22)',1.4);
+  s+=sR(-4,-2,348,20,'#4B3A2B',0,2.6)+sR(-4,0,14,176,'#4B3A2B',0,2.6)+sR(330,0,14,176,'#4B3A2B',0,2.6);
+  /* 창문 */
+  s+=sR(26,36,56,62,'#8ED8F6',3,2.6)+sL(54,36,54,98,'#4B3A2B',2.6)+sL(26,67,82,67,'#4B3A2B',2.6)+sR(22,32,64,6,'#4B3A2B',2,2.4);
+  /* 길드 깃발 */
+  s+=sL(118,14,118,22,OL,2.4)+sP('M100,22 L136,22 L136,70 L118,60 L100,70 Z','#4B3A8F',2.8)+sC(118,40,9,'#F6C445',2.2)+sC(118,40,4,'#FFE08A',1.4);
+  /* 재료 선반 (오른쪽): 일반 · 희귀 · 전설 병 */
+  s+=sR(240,40,92,6,'#4B3A2B',1.5,2.2)+sR(240,78,92,6,'#4B3A2B',1.5,2.2)+sR(240,116,92,6,'#4B3A2B',1.5,2.2);
+  [['#B3BAC8',40],['#5CC8FF',78],['#F6C445',116]].forEach(function(r){ for(i=0;i<4;i++) s+=sR(246+i*22,r[1]-22,16,22,r[0],4,2.2)+sR(250+i*22,r[1]-27,8,6,'#8B5A2B',1.5,1.8)+sL(249+i*22,r[1]-14,259+i*22,r[1]-14,'rgba(255,255,255,.55)',2); });
+  /* 자루 · 상자 (왼쪽 바닥) */
+  s+=sR(14,176,34,30,'#C8925C',3,2.4)+sL(14,190,48,190,'rgba(43,33,56,.4)',1.6)+sP('M52,206 Q48,184 62,180 Q76,184 72,206 Z','#E8D9B8',2.4)+sL(58,186,66,186,OL,2);
+  /* 카운터 */
+  s+=sR(150,176,176,56,'#B9763A',4,2.8)+sR(146,170,184,10,'#8B5A2B',3,2.6);
+  for(i=0;i<4;i++) s+=sL(176+i*40,182,176+i*40,230,'rgba(43,33,56,.28)',1.6);
+  /* 큰 저울 */
+  s+=sL(196,170,196,140,OL,4)+sL(196,170,196,142,'#B9763A',2)+sL(172,142,220,142,OL,4)+sL(172,142,220,142,'#F6C445',2)+sC(196,140,4,'#F6C445',1.6);
+  s+=sL(172,142,172,154,OL,1.8)+sL(220,142,220,154,OL,1.8)+sE(172,158,12,3.6,'#F6C445',2)+sE(220,158,12,3.6,'#F6C445',2)+sC(172,152,3,'#5CC8FF',1.4)+sC(214,154,3,'#B3BAC8',1.4)+sC(224,154,3,'#B3BAC8',1.4);
+  /* 장부 · 동전 */
+  s+=sR(262,162,26,8,'#F2E3C4',2,1.8)+sL(262,166,288,166,'#B9763A',1.4)+sE(300,168,8,2.6,'#F6C445',1.6)+sE(300,165,8,2.6,'#FFE08A',1.6);
+  /* 상인 */
+  s+='<g transform="translate(236,172) scale(.6)">'+npcMerchant()+'</g>';
+  /* 용사 */
+  s+='<g transform="translate(86,208) scale(.52)">'+scnPoseFrame('in-g1',G.idle,eq,'cheer')+scnPoseFrame('in-g2',G.point,eq,'cheer')+'</g>';
+  /* 촛불 · 분위기 */
+  s+=sR(318,150,6,20,'#F2E3C4',1.5,1.8)+'<g class="an-fire">'+sP('M321,150 Q317,144 321,138 Q325,144 321,150 Z','#FFB347',1.4)+'</g>';
+  s+='<ellipse class="an-glow" cx="321" cy="146" rx="40" ry="34" fill="url(#scFire)" stroke="none"/>';
+  [[60,110,0],[140,96,-2],[260,128,-3]].forEach(function(m){ s+='<circle class="in-mote" style="animation-delay:'+m[2]+'s" cx="'+m[0]+'" cy="'+m[1]+'" r="1.3" fill="#FFD9A0"/>'; });
+  s+='<rect width="340" height="250" fill="#1B1020" opacity=".08"/><rect width="340" height="250" fill="url(#scVig)"/><rect width="340" height="250" fill="url(#scVigR)"/>';
+  return s;
+}
 /* ===== NPC 대사 · 말 걸기 ===== */
 var NPCS={
   inn:{n:'여관 여주인',nick:'로사',box:[134,82,76,64],
@@ -3357,6 +3905,16 @@ var NPCS={
       '훌륭하다! 허수아비도 놀라서 떨고 있군.'],
     ctxP:{morning:['아침 훈련은 하루를 지배한다!'],day:['한낮의 땀방울이 가장 값지지!'],sunset:['해 지기 전에 한 세트 더!'],night:['밤늦은 훈련은 무리하지 마라. 쉬는 것도 훈련이다.']},
     ctxW:{rain:['비 오는 날엔 실내 훈련이 최고지!'],storm:['번개가 치는 날엔 밖에 나가지 마라. 여기서 단련하면 된다.'],clear:['날씨가 좋군. 달리기도 잊지 말도록!']}},
+  trade:{n:'길드 상인',nick:'마르코',box:[196,82,76,66],
+    greet:['어서 오십시오, 용사님! 남는 재료 있으면 값 좋게 쳐 드리지요.','마침 좋은 물건이 들어왔습니다. 재료 맞바꿔 드릴까요?'],
+    lines:[
+      '희귀 두 개면 일반 세 개로 바꿔 드리지요. 길드 공정 시세입니다!',
+      '높은 등급으로 올리는 건 값이 좀 셉니다. 길드도 먹고살아야지요.',
+      '쌓아 둔 재료는 곰팡이가 슬어요. 필요한 걸로 바꾸세요!',
+      '저울은 거짓말을 안 합니다!',
+      '대장장이 브룬은 일반 재료만 찾더군요. 허허.'],
+    ctxP:{morning:['아침 장사는 길드의 첫 거래가 중요하지요!'],night:['밤에도 저울은 열려 있습니다. 편히 바꿔 가세요.']},
+    ctxW:{rain:['비 오는 날엔 손님이 뜸해서 흥정하기 좋지요.'],snow:['눈 속에서도 길드 마차는 다닙니다!']}},
   forge:{n:'드워프 대장장이',nick:'브룬',box:[232,166,74,70],
     greet:['어서 와라, 용사! 재료는 가져왔나?','허허, 마침 좋은 철이 들어왔다네. 뭘 만들어 줄까?'],
     lines:[
@@ -3407,6 +3965,11 @@ function npcQLines(id){
       else o.push('퀘스트가 '+q.left+'개 남았군. 마저 끝내고 단련하러 오게.');
       o.push(q.wk>=q.goal?'이번 주 목표는 이미 채웠군. 이제부터는 기록만 남지만, 근육은 정직하다!':'마왕성 자격까지 '+(q.goal-q.wk)+' XP 남았다. 지금 채워 두게!');
     }
+  }else if(id==='trade'){
+    var fs=forgeStats(), b=fs.bal;
+    if(b.r>=2||b.l>=1||b.n>=5||b.r>=4) o.push('바꿀 수 있는 재료가 있으시군요! 어떤 걸로 바꿔 드릴까요?');
+    else o.push('아직 바꿀 만큼 모이지 않았군요. 재료가 쌓이면 다시 오십시오!');
+    if(b.r>b.n && b.r>=2) o.push('희귀 재료가 넉넉하네요. 일반 재료로 바꾸면 대장간에서 쓸 곳이 많지요.');
   }else if(id==='forge'){
     var can=ITEMS.some(function(it){ return it.craft && craftable(it); });
     o.push(can?'재료가 충분하군! 만들고 싶은 장비를 골라 보게.':'아직 재료가 모자라네. 보스를 쓰러뜨리면 재료가 나온다네.');
@@ -3439,12 +4002,12 @@ function npcTalk(id){
   if(first){
     npcOpen[id]=true;
     var p=document.getElementById('npcpanel');
-    if(p) p.innerHTML=(id==='train'?trainPanel():forgePanel());
+    if(p) p.innerHTML=(id==='train'?trainPanel():(id==='trade'?tradePanel():forgePanel()));
   }
 }
-var SCNLAB={inn:'여관 내부: 여주인과 용사가 있는 모습',train:'훈련장 내부: 교관 앞에서 용사가 허수아비를 치는 모습',forge:'대장간 내부: 드워프 대장장이가 모루를 두드리는 모습'};
+var SCNLAB={inn:'여관 내부: 여주인과 용사가 있는 모습',train:'훈련장 내부: 교관 앞에서 용사가 허수아비를 치는 모습',forge:'대장간 내부: 드워프 대장장이가 모루를 두드리는 모습',trade:'교역소 내부: 상인이 저울 앞에서 재료를 맞바꿔 주는 모습'};
 function sceneCard(id){
-  var fn={inn:scnInn,train:scnTrain,forge:scnForge}[id], n=NPCS[id], b=n.box;
+  var fn={inn:scnInn,train:scnTrain,forge:scnForge,trade:scnTrade}[id], n=NPCS[id], b=n.box;
   function pc(v,tot){ return (v*100/tot).toFixed(2)+'%'; }
   return '<div class="card scn" data-scn="'+id+'"><svg class="scnsvg live" viewBox="0 0 '+SCN_W+' '+SCN_H+'" role="img" aria-label="'+SCNLAB[id]+'">'+fn()+'</svg>'+
     '<button type="button" class="npcbtn" style="left:'+pc(b[0],SCN_W)+';top:'+pc(b[1],SCN_H)+';width:'+pc(b[2],SCN_W)+';height:'+pc(b[3],SCN_H)+'" data-a="npc" data-n="'+id+'" aria-label="'+n.n+' '+n.nick+'에게 말 걸기"></button>'+
@@ -3452,13 +4015,13 @@ function sceneCard(id){
 }
 function npcHint(id){
   var n=NPCS[id];
-  return '<p class="npchint"><b>'+n.n+' '+n.nick+'</b>에게 말을 걸어 보세요. <span>'+(id==='train'?'훈련 기록은 교관에게 말을 걸면 열려요.':'장비 제작은 대장장이에게 말을 걸면 열려요.')+'</span></p>';
+  return '<p class="npchint"><b>'+n.n+' '+n.nick+'</b>에게 말을 걸어 보세요. <span>'+(id==='train'?'훈련 기록은 교관에게 말을 걸면 열려요.':(id==='trade'?'재료 교환은 상인에게 말을 걸면 열려요.':'장비 제작은 대장장이에게 말을 걸면 열려요.'))+'</span></p>';
 }
 function kRefresh(){
   var p=document.getElementById('npcpanel');
-  if(p && (kv==='train'||kv==='forge') && npcOpen[kv]){
-    p.innerHTML=(kv==='train'?trainPanel():forgePanel());
-    var fb=document.getElementById('fgbar'); if(fb && kv==='forge') fb.outerHTML=forgeBar(forgeStats());
+  if(p && (kv==='train'||kv==='forge'||kv==='trade') && npcOpen[kv]){
+    p.innerHTML=(kv==='train'?trainPanel():(kv==='trade'?tradePanel():forgePanel()));
+    var fb=document.getElementById('fgbar'); if(fb && (kv==='forge'||kv==='trade')) fb.outerHTML=forgeBar(forgeStats());
   }else render();
 }
 
@@ -3466,27 +4029,27 @@ function kRefresh(){
 /* ---------- 성벽 위 풍경 · 마왕성 연출 · 성 자리 (v1.38) ---------- */
 /* 용사 뒷모습 (원점: 몸통 중앙) */
 function heroBackBase(eq){
-  var s='', i, cf=eq.cape?eq.cape.fill:'#F6C445', pat=eq.cape&&eq.cape.pat;
-  for(i=0;i<2;i++){ var hx=(i===0?-10:10), lx=(i===0?-14:14); s+=bLimb(hx,20,lx,44,15,SKIN)+bootArt(lx,44,eq.shoes?eq.shoes.fill:'#24356B',!!eq.shoes); }
-  s+=pth('M-21,13 L21,13 L19,32 L0,26 L-19,32 Z','#3F6FCB')+'<rect x="-21" y="11" width="42" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
-  s+='<g class="an-breathe">'+pth('M-31,-18 Q-35,4 -20,16 L20,16 Q35,4 31,-18 Q0,-29 -31,-18 Z',SKIN)+
-     '<path d="M0,-22 V13 M-13,-12 Q-7,-3 -14,7 M13,-12 Q7,-3 14,7" stroke="'+SKIN_D+'" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>';
-  if(eq.armor) s+=pth('M-31,-18 Q-34,0 -22,10 L22,10 Q34,0 31,-18 Q0,-29 -31,-18 Z',eq.armor.fill)+sL(0,-22,0,9,eq.armor.trim||'#8B5A2B',2.4);
-  if(eq.robe) s+=pth('M-31,-17 Q-35,8 -28,40 L28,40 Q35,8 31,-17 Q0,-28 -31,-17 Z','#FDFDFF',2.8)+'<rect x="-29" y="12" width="58" height="7" rx="3.5" fill="#FF9FB5" stroke="'+OL+'" stroke-width="2.4"/><path d="M0,-18 V40" stroke="#E7E7F2" stroke-width="2"/>';
-  /* 망토 (바람에 펄럭임) */
-  s+='<g class="in-cape">'+pth('M-30,-20 Q-42,12 -35,48 L35,48 Q42,12 30,-20 Q0,-30 -30,-20 Z',cf,3);
-  if(pat==='stars') s+=bStar(-18,2,5,'#FFF3B0')+bStar(14,18,4.4,'#FFF3B0')+bStar(-4,34,4,'#FFFFFF')+bStar(22,-4,3.4,'#FFFFFF');
-  else if(pat==='stripes') s+='<path d="M-24,-6 L-10,14 M-8,-10 L8,14 M8,-10 L24,14 M-26,16 L-12,38 M-8,16 L8,38 M10,16 L26,38" stroke="#E5484D" stroke-width="3.4" stroke-linecap="round" fill="none"/>';
-  else if(pat==='flame') s+='<path d="M-35,48 Q-34,34 -27,28 Q-24,38 -18,36 Q-16,26 -8,22 Q-5,36 2,34 Q6,26 12,24 Q14,36 22,38 Q26,30 30,28 Q36,38 35,48 Z" fill="#FFD95E" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
-  s+='<path d="M-24,-14 Q0,-8 24,-14" fill="none" stroke="rgba(43,33,56,.28)" stroke-width="2.4" stroke-linecap="round"/></g>';
-  /* 등에 멘 검 */
-  s+='<g transform="translate(6,2) rotate(36)">'+swordArt(0,0,0,eq.sword)+'</g>';
-  for(i=0;i<2;i++){ var sx=(i===0?-31:31); s+=bLimb(sx,-12,sx*1.12,20,17,SKIN)+circ(sx*1.12,24,8.5,SKIN,2.5); }
-  for(i=0;i<2;i++){ var px=(i===0?-33:33); s+=circ(px,-16,9,eq.armor?eq.armor.fill:'#8FB3EA',2.6)+circ(px,-16,2.6,eq.armor&&eq.armor.trim?eq.armor.trim:'#F6C445',1.8); }
+  var s='', i, pj=!!eq.pj;
+  for(i=0;i<2;i++){ var hx=(i===0?-10:10), lx=(i===0?-14:14); s+=bLimb(hx,20,lx,44,15,pj?PJ.pants:SKIN)+footArt(lx,44,15,'#24356B',eq,pj); }
+  if(pj){ s+=pjBackTorso()+'<g transform="translate(6,2) rotate(36)">'+swordArt(0,0,0,eq.sword)+'</g>'; }
+  else{
+    s+=pth('M-21,13 L21,13 L19,32 L0,26 L-19,32 Z','#3F6FCB')+'<rect x="-21" y="11" width="42" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
+    s+='<g class="an-breathe">'+pth('M-31,-18 Q-35,4 -20,16 L20,16 Q35,4 31,-18 Q0,-29 -31,-18 Z',SKIN)+
+       '<path d="M0,-22 V13 M-13,-12 Q-7,-3 -14,7 M13,-12 Q7,-3 14,7" stroke="'+SKIN_D+'" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>';
+    if(eq.armor) s+=pth('M-31,-18 Q-34,0 -22,10 L22,10 Q34,0 31,-18 Q0,-29 -31,-18 Z',eq.armor.fill)+sL(0,-22,0,9,eq.armor.trim||'#8B5A2B',2.4);
+    if(eq.belt) s+=beltItemArt(eq.belt,BELTX.hero,true);
+    /* 망토 (바람에 펄럭임) */
+    s+=backCapeArt(eq);
+    /* 등에 멘 검 */
+    s+='<g transform="translate(6,2) rotate(36)">'+swordArt(0,0,0,eq.sword)+'</g>';
+    /* 팔에 든 방패 (뒤에서 보면 팔 옆으로 보여요) */
+    if(eq.shield) s+=shieldArt(eq.shield,-50,16);
+  }
+  for(i=0;i<2;i++){ var sx=(i===0?-31:31); s+=bLimb(sx,-12,sx*1.12,20,17,pj?PJ.top:SKIN)+circ(sx*1.12,24,8.5,SKIN,2.5); }
+  if(!pj) for(i=0;i<2;i++){ var px=(i===0?-33:33); s+=circ(px,-16,9,eq.armor?eq.armor.fill:'#8FB3EA',2.6)+circ(px,-16,2.6,eq.armor&&eq.armor.trim?eq.armor.trim:'#F6C445',1.8); }
   /* 머리 (천천히 좌우를 둘러봄) */
   s+='<g transform="translate(0,-11) scale(.93)"><g class="in-look">'+circ(-26,-36,5.5,FACE,2.4)+circ(26,-36,5.5,FACE,2.4)+circ(0,-38,27,FACE,3)+
-     (eq.helm?helmArt(eq.helm):pth('M-28,-36 A28,28 0 0 1 28,-36 Q26,-24 0,-20 Q-26,-24 -28,-36 Z','#6E9BD8',3)+'<path d="M0,-64 V-22" stroke="rgba(43,33,56,.3)" stroke-width="2.2" fill="none"/>')+plumeArt(eq.plume)+
-     (eq.mask?'<path d="M-28,-34 Q0,-26 28,-34" stroke="'+(eq.mask.fill||'#7A86E8')+'" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M-28,-34 Q0,-26 28,-34" stroke="'+OL+'" stroke-width="1.2" fill="none"/>':'')+'</g></g>';
+     (pj?pjCap():(eq.helm?helmArt(eq.helm):pth('M-28,-36 A28,28 0 0 1 28,-36 Q26,-24 0,-20 Q-26,-24 -28,-36 Z','#6E9BD8',3)+'<path d="M0,-64 V-22" stroke="rgba(43,33,56,.3)" stroke-width="2.2" fill="none"/>')+plumeArt(eq.plume))+'</g></g>';
   return s;
 }
 /* 구름·새·소품 */
@@ -3626,7 +4189,7 @@ function trainAfter(before,adding){
   else if(adding){ toast('기록만 남았어요 · XP는 없어요'); }
 }
 function bldDone(id){
-  var b=bld(id), msg={train:'훈련장이 열렸어요. 이제 평일 XP를 보충하고 자유롭게 운동할 수 있어요.',forge:'대장간이 복구됐어요. 이제 장비재료로 투구·갑옷·방패를 만들 수 있어요.',wall:'성벽이 복구됐어요. 이제 성벽 위에 올라 풍경을 바라볼 수 있어요.'}[id]||'';
+  var b=bld(id), msg={train:'훈련장이 열렸어요. 이제 평일 XP를 보충하고 자유롭게 운동할 수 있어요.',forge:'대장간이 복구됐어요. 이제 장비재료로 전용 무기·방어구·장식을 만들 수 있어요.',trade:'몸짱 교역소가 문을 열었어요. 이제 남는 재료를 부족한 재료로 바꿀 수 있어요.',wall:'성벽이 복구됐어요. 이제 성벽 위에 올라 풍경을 바라볼 수 있어요.'}[id]||'';
   showOverlay({k:'RESTORED',t:b.n+' 복구 완료!',b:'<div class="kdone live">'+bSvg(id)+'</div><p class="bnote">'+msg+'</p>',mode:'win'});
 }
 function dayTick(){
@@ -3658,12 +4221,49 @@ var JNY=[
   {id:'mage',km:300,n:'현자의 탑',x:188,y:100,who:'mage',t:'탑 꼭대기에서 지팡이를 든 노현자가 내려왔어요. 가슴을 활짝 연 로브 아래로 단단한 복근이 보였어요. 지혜와 근육은 함께 자라는 법이라며 동행을 선언했어요.'}
 ];
 var JNYIDS={}; JNY.forEach(function(n){ JNYIDS[n.id]=true; });
-function jnyById(id){ var i; for(i=0;i<JNY.length;i++) if(JNY[i].id===id) return JNY[i]; return null; }
+function isSupId(id){ var m=/^sup(\d{1,4})$/.exec(String(id)); return !!(m && +m[1]>=1); }
+/* ---------- 길 위의 행운: 러닝 돌발 보급 이벤트 (v1.41.6) ---------- */
+/* 적용일(SUP_FROM) 이후 일일 퀘스트 러닝 거리만 세고, 이벤트가 생기는 거리는 40~90km 사이에서 정해진 숨은 값이에요.
+   같은 기록이면 항상 같은 결과이고, 남은 거리·다음 이벤트는 화면 어디에도 보여 주지 않아요. 12회가 한 바퀴(일반 6·희귀 4·전설 2)이고 이후 같은 구성이 반복돼요. */
+var SUP_FROM='2026-10-04';
+var SUP_AMT={n:6,r:3,l:3};
+var SUP_STORY={
+  n:[['버려진 짐수레','길가에 기울어진 짐수레에서 자루 하나가 굴러떨어졌어요.'],['보부상의 덤','지나가던 보부상이 달리는 폼이 좋다며 재료 자루를 얹어 줬어요.'],['나무 밑 상자','큰 나무 밑동에 묻힌 낡은 상자에 발이 걸렸어요.'],['떠돌이 대장장이의 자루','떠돌이 대장장이가 쉬다 두고 간 자루를 주웠어요.'],['개울가의 광석','개울 바닥에서 반짝이는 광석을 발견했어요.'],['쓰러진 마차','길 한편에 쓰러진 빈 마차 짐칸에 재료가 남아 있었어요.']],
+  r:[['길드 순찰병의 선물','길드 순찰병이 인장이 찍힌 상자를 건네고 갔어요.'],['바위 틈의 푸른 결정','바위 틈에서 푸른 결정이 빛나고 있었어요.'],['폐광 입구','버려진 폐광 입구에 쓸 만한 재료가 쌓여 있었어요.'],['빛나는 광맥','이슬 맺힌 동굴 안에서 빛나는 광맥을 찾았어요.']],
+  l:[['선배 용사의 유물 상자','이름 모를 선배 용사가 묻어 둔 유물 상자를 열었어요.'],['떨어진 별 조각','하늘에서 떨어진 별 조각이 길 한가운데 박혀 있었어요.']]
+};
+var supGaps=[0], supKinds={};
+function supKmSince(){ var t=0; Object.keys(S.log).forEach(function(k){ if(k>=SUP_FROM) t+=runKmOn(k); }); return Math.round(t*100)/100; }
+function supThreshold(i){
+  while(supGaps.length<=i){ var j=supGaps.length, g=40+Math.floor(rngFor('momjjang-sup-gap:'+j)()*51); supGaps.push(supGaps[j-1]+g); }
+  return supGaps[i];
+}
+function supCycle(c){
+  if(supKinds[c]) return supKinds[c];
+  var a=['n','n','n','n','n','n','r','r','r','r','l','l'], rnd=rngFor('momjjang-sup-order:'+c), i, j, t;
+  for(i=a.length-1;i>0;i--){ j=Math.floor(rnd()*(i+1)); t=a[i]; a[i]=a[j]; a[j]=t; }
+  return (supKinds[c]=a);
+}
+function supEvent(i){
+  var c=Math.floor((i-1)/12), pos=(i-1)%12, cyc=supCycle(c), kind=cyc[pos], ord=0, q;
+  for(q=0;q<pos;q++) if(cyc[q]===kind) ord++;
+  var st=SUP_STORY[kind][ord], before=runTotal()-supKmSince();
+  return {id:'sup'+i,i:i,sup:1,kind:kind,n:st[0],t:st[1],amt:SUP_AMT[kind],km:before+supThreshold(i)};
+}
+function supGranted(){
+  var o={n:0,r:0,l:0}, seen=(S.jny&&S.jny.seen)||{};
+  Object.keys(seen).forEach(function(id){ if(seen[id] && isSupId(id)){ var e=supEvent(+id.slice(3)); o[e.kind]+=e.amt; } });
+  return o;
+}
+function supSeenCount(){ var n=0, seen=(S.jny&&S.jny.seen)||{}; Object.keys(seen).forEach(function(id){ if(seen[id]&&isSupId(id)) n++; }); return n; }
+function jnyById(id){ var i; if(isSupId(id)) return supEvent(+String(id).slice(3)); for(i=0;i<JNY.length;i++) if(JNY[i].id===id) return JNY[i]; return null; }
 var jnyQ=[];
 function jnyCheck(){
   if(!S.jny||typeof S.jny!=='object') S.jny={seen:{}}; if(!S.jny.seen) S.jny.seen={};
   var t=runTotal();
   JNY.forEach(function(n){ if(n.km<=t && !S.jny.seen[n.id] && jnyQ.indexOf(n.id)<0) jnyQ.push(n.id); });
+  var ks=supKmSince(), si;
+  for(si=1;si<=400 && supThreshold(si)<=ks;si++){ if(!S.jny.seen['sup'+si] && jnyQ.indexOf('sup'+si)<0) jnyQ.push('sup'+si); }
   jnyNext();
 }
 function jnyNext(){
@@ -3671,24 +4271,30 @@ function jnyNext(){
   if(!titleEl.hidden) return;
   if(!ov.hidden){ ovAfter=jnyNext; return; }
   var n=jnyById(jnyQ.shift()); if(!n){ jnyNext(); return; }
+  var achB=unlocked();
   S.jny.seen[n.id]=true; save();
   ovAfter=jnyQ.length?jnyNext:function(){ if(tab==='run'||tab==='home') render(); };
   showOverlay(jnyPopup(n,false));
+  achDiffToast(achB);
 }
 function jnyPopup(n,replay){
   var main=!!n.who;
+  if(n.sup){ var o={n:0,r:0,l:0}; o[n.kind]=n.amt; return {k:'길 위의 행운',t:n.n,mode:(n.kind==='l'&&!replay)?'win':'calm',b:evScene(n)+'<p class="bnote">'+n.t+'</p><p class="comfort">'+dropText(o)+(replay?'':' · 대장간과 교역소에서 쓸 수 있어요')+'</p>'}; }
   return {k:main?'NEW COMPANION':'JOURNEY',t:n.n,mode:(main&&!replay)?'win':'calm',
     b:evScene(n)+'<p class="bnote">'+n.t+'</p>'+(main?'<p class="comfort">'+CHARN[n.who]+'가 합류했어요 · 몸짱 여관에서 캐릭터로 고를 수 있어요</p><p class="note" style="text-align:center">업적 달성 · '+CHARN[n.who]+' 합류</p>':'')};
 }
 function evScene(n){
-  var K=({m25:'sign',dwarf:'village',m75:'river',m100:'pass',m125:'forest',elf:'forest',m175:'lake',m200:'ruin',m225:'stars',m250:'clouds',m275:'lights',mage:'tower'})[n.id]||'sign';
-  var night=(K==='stars'||K==='lake'||K==='lights'||K==='tower'), rm=reduceMotion(), i, s='';
+  var K=n.sup?('sup'+n.kind):({m25:'sign',dwarf:'village',m75:'river',m100:'pass',m125:'forest',elf:'forest',m175:'lake',m200:'ruin',m225:'stars',m250:'clouds',m275:'lights',mage:'tower'})[n.id]||'sign';
+  var night=(K==='stars'||K==='lake'||K==='lights'||K==='tower'||K==='supl'), rm=reduceMotion(), i, s='';
   s+='<svg class="evsc" viewBox="0 0 300 130" aria-hidden="true"><rect width="300" height="130" fill="'+(night?'#2A3A6E':(K==='clouds'?'#BFD9F6':'#BFE3F5'))+'"/>';
   if(night){ for(i=0;i<9;i++) s+=bStar(14+i*33,10+(i*17)%34,2+(i%3)*.7,'#FFF3B0'); s+='<circle cx="268" cy="22" r="9" fill="#FFF3B0"/>'; }
   if(K==='clouds'){ s+=ell(60,26,26,9,'#fff',0)+ell(46,20,12,9,'#fff',0)+ell(220,40,30,10,'#fff',0)+ell(204,32,13,9,'#fff',0); }
   s+='<path d="M0,98 Q70,84 150,96 T300,92 V130 H0 Z" fill="'+(night?'#2F6A55':'#8FCB86')+'"/><path d="M0,113 Q100,104 200,110 T300,108" fill="none" stroke="#B59A73" stroke-width="13" stroke-linecap="round"/><path d="M0,113 Q100,104 200,110 T300,108" fill="none" stroke="#E8D6AE" stroke-width="8" stroke-linecap="round"/>';
   s+='<g transform="translate(236,100)">';
-  if(K==='sign') s+=sR(-2,-36,4,38,'#8B5A2B',1,2)+pth('M-4,-34 L-34,-34 L-40,-28 L-34,-22 L-4,-22 Z','#E8C27A',2)+pth('M4,-20 L34,-20 L40,-14 L34,-8 L4,-8 Z','#E8C27A',2);
+  if(K==='supn') s+='<g transform="translate(0,-4)">'+sR(-34,-6,48,26,'#C8925C',3,2.4)+sL(-34,6,14,6,'rgba(43,33,56,.4)',1.6)+'<g transform="translate(-6,22)"><circle r="10" fill="none" stroke="'+OL+'" stroke-width="5"/><circle r="10" fill="none" stroke="#B9783A" stroke-width="2.6"/><path d="M-10,0 H10 M0,-10 V10" stroke="#B9783A" stroke-width="2" stroke-linecap="round"/></g>'+pth('M18,20 Q14,-2 28,-6 Q42,-2 38,20 Z','#E8D9B8',2.4)+sL(23,0,33,0,OL,2)+ell(46,22,7,2.6,'#F6C445',1.6)+'<g class="an-twk">'+bStar(-30,-16,4,'#FFF3B0')+'</g></g>';
+  else if(K==='supr') s+=pth('M-46,24 L-34,-4 L-20,10 L-6,-18 L10,6 L24,-8 L44,24 Z','#8E97A6',2.6)+pth('M-22,10 L-16,-12 L-10,10 Z','#5CC8FF',2)+pth('M2,6 L9,-20 L16,6 Z','#8ED8F6',2)+pth('M20,12 L25,-6 L31,12 Z','#5CC8FF',2)+'<g class="an-twk">'+bStar(-14,-18,3.6,'#fff')+'</g><g class="an-twk b">'+bStar(22,-14,3,'#CFF3FF')+'</g>';
+  else if(K==='supl') s+='<g class="an-glow"><ellipse cx="0" cy="-8" rx="46" ry="30" fill="#FFE08A" opacity=".32" stroke="none"/></g>'+pth('M-36,22 Q0,-4 36,22 Z','#3B7A60',2.4)+sR(-22,-10,44,26,'#B9763A',3,2.4)+pth('M-24,-8 Q0,-30 24,-8 Z','#CC8A4A',2.4)+sR(-4,-6,8,12,'#F6C445',1,2)+'<g class="an-twk">'+bStar(-30,-28,6,'#FFF3B0')+'</g><g class="an-twk b">'+bStar(30,-22,5,'#FFFFFF')+'</g>'+bStar(0,-38,5.4,'#FFE08A');
+  else if(K==='sign') s+=sR(-2,-36,4,38,'#8B5A2B',1,2)+pth('M-4,-34 L-34,-34 L-40,-28 L-34,-22 L-4,-22 Z','#E8C27A',2)+pth('M4,-20 L34,-20 L40,-14 L34,-8 L4,-8 Z','#E8C27A',2);
   else if(K==='village') s+=pth('M-70,0 L-20,-52 L34,0 Z','#8E9AAE',2.4)+sR(-30,-22,26,22,'#C8925C',2,2.4)+pth('M-34,-22 L-17,-38 L0,-22 Z','#D9564A',2.4)+sR(6,-16,22,16,'#C8925C',2,2.4)+pth('M2,-16 L17,-30 L32,-16 Z','#D9564A',2.4)+sR(-22,-12,8,12,'#6B4423',1,2);
   else if(K==='river') s+=pth('M-24,-6 Q-4,2 -20,14 T-14,30 L34,30 L34,-6 Z','#7FC6F0',2.2)+sR(-34,6,60,6,'#B9763A',2,2.2);
   else if(K==='pass') s+=pth('M-70,0 L-30,-44 L-6,-14 L16,-50 L56,0 Z','#8E9AAE',2.6)+pth('M-34,-38 L-30,-44 L-24,-36 Z M12,-44 L16,-50 L22,-42 Z','#fff',1.6);
@@ -3712,7 +4318,14 @@ function evScene(n){
 var rnOpen={list:false};
 /* 달리는 모습: 옆모습(오른쪽을 보고 달림) 8프레임을 빠르게 번갈아 보여 줘요 */
 function sdBoot(x,y,ps,fill){
-  return '<g transform="translate('+x.toFixed(1)+','+y.toFixed(1)+') rotate('+(ps*35).toFixed(1)+')">'+pth('M-6,-7 L4,-7 L11,1 Q13,7 7,8 L-7,8 Q-10,0 -6,-7 Z',fill,2.6)+'<path d="M-8,5 H10" stroke="rgba(43,33,56,.35)" stroke-width="2" stroke-linecap="round"/></g>';
+  var it=(fill&&typeof fill==='object')?fill:null, f=it?it.fill:fill, ex='';
+  if(it){
+    ex+=pth('M-8,-11 L5,-11 L5,-4 L-9,-4 Z',f,2.4);
+    if(it.pat==='stars') ex+=bStar(-2,-7.5,2.6,'#FFF3B0');
+    else if(it.pat==='stripes') ex+='<path d="M-6,-10 L-4,-5 M0,-10 L2,-5" stroke="#E5484D" stroke-width="2.2" stroke-linecap="round"/>';
+    else if(it.pat==='flame') ex+=pth('M-8,-10 Q-7,-17 -3,-13 Q0,-19 2,-12 Q5,-16 5,-10 Z','#FFD95E',1.8);
+  }
+  return '<g transform="translate('+x.toFixed(1)+','+y.toFixed(1)+') rotate('+(ps*35).toFixed(1)+')">'+pth('M-6,-7 L4,-7 L11,1 Q13,7 7,8 L-7,8 Q-10,0 -6,-7 Z',f,2.6)+ex+'<path d="M-8,5 H10" stroke="rgba(43,33,56,.35)" stroke-width="2" stroke-linecap="round"/></g>';
 }
 function sdLeg(hx,hy,a,w,fill,bootFill,pantsLen){
   var L1=15, L2=14, th=0.8*Math.sin(a), kap=0.2+1.1*Math.max(0,Math.cos(a+0.35)), ps=th-kap;
@@ -3729,62 +4342,89 @@ function sdEye(){
     '<ellipse cx="16" cy="-20" rx="5.5" ry="3.4" fill="#FF8FA3" opacity=".7"/>'+
     '<path d="M8,-14 Q15,-8 22,-15" stroke="'+OL+'" stroke-width="2.6" stroke-linecap="round" fill="none"/><path d="M11,-12 Q15,-9 19,-12 Z" fill="#7A2B3B"/>';
 }
+function sdPjCap(){
+  return pth('M-30,-38 A30,30 0 0 1 28,-44 Q8,-54 -4,-47 Q-18,-40 -30,-38 Z',PJ.cap,3)+
+    pth('M-8,-64 Q-34,-76 -54,-60 Q-42,-55 -28,-62 Z',PJ.cap,3)+circ(-54,-59,6,PJ.pom,2.4)+
+    '<path d="M-29,-38 Q0,-52 27,-46" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>'+bStar(-12,-62,3,'#FFF3B0');
+}
+function sdLeaf(pl,sw,tf){
+  return '<g transform="'+tf+'">'+pth('M-6,-64 Q-24,-74 -38,'+(-62+3*sw).toFixed(1)+' Q-24,-62 -10,-56 Z',(pl&&pl.fill)||'#3DD6A0',2.4)+'</g>';
+}
 function sdHead(kind,p,eq){
+  eq=eq||{}; var pj=!!eq.pj, pl=(!pj&&eq.plume)?eq.plume:null;
   var sw=Math.sin(p), s='<g transform="translate(3,-12) scale(.93)">', fc=({hero:FACE,dwarf:'#F2B88F',elf:'#FFE6CC',mage:FACE})[kind];
   if(kind==='elf') s+=pth('M-22,-56 Q-34,-34 -30,-10 Q-44,-4 -50,-26 Q'+(-48-3*sw)+',-56 -22,-64 Z','#F2DC8B',3);
-  if(kind==='mage') s+=pth('M-6,-58 Q-30,-70 -52,-100 Q-18,-92 14,-60 Z','#6B4FB8',3);
+  if(kind==='mage' && !pj) s+=pth('M-6,-58 Q-30,-70 -52,-100 Q-18,-92 14,-60 Z',(eq.mhat&&eq.mhat.cone)||'#6B4FB8',3);
   s+='<circle cx="0" cy="-38" r="27" fill="'+fc+'" stroke="'+OL+'" stroke-width="3"/>';
   s+=circ(-8,-34,5.5,fc,2.4)+circ(26.5,-26,3.4,fc,2.2);
   if(kind==='dwarf') s+=pth('M10,-22 Q31,-22 27,-2 Q22,17 5,21 Q-5,12 -4,-8 Z','#D9822B',3)+pth('M7,6 Q9,22 3,25 Q-1,16 1,6 Z','#D9822B',2.2)+ell(16,-19,10,4.4,'#D9822B',2.4);
+  if(kind==='dwarf'&&eq.dbeard) s+=dbeardArt(eq.dbeard,true);
   s+=sdEye();
-  if(kind==='dwarf') s+=pth('M-28,-38 A28,28 0 0 1 28,-42 Q10,-50 -4,-46 Q-16,-40 -28,-38 Z','#9AA5B5',3)+'<path d="M-28,-40 Q0,-47 28,-43" stroke="#F6C445" stroke-width="4" fill="none"/>'+pth('M0,-62 Q16,-64 20,-84 Q8,-74 -6,-68 Z','#F3EAD6',2.6)+circ(2,-54,2.6,'#F6C445',1.6);
-  else if(kind==='elf') s+=pth('M-29,-38 A29,29 0 0 1 27,-46 Q12,-54 0,-46 Q-14,-36 -29,-38 Z','#F6E7A0',3)+'<path d="M-27,-47 Q0,-56 26,-48" stroke="#F6C445" stroke-width="4" fill="none"/>'+pth('M-4,-40 L-30,-50 L-8,-26 Z',fc,2.6)+pth('M-8,-62 Q-2,-82 12,-84 Q10,-70 0,-60 Z','#E5484D',2.4);
-  else if(kind==='mage') s+=ell(-2,-52,38,8,'#5B3FA8',3)+pth('M-22,-54 Q-20,-84 -50,-96 Q-6,-100 20,-54 Z','#6B4FB8',3)+'<path d="M-24,-52 Q0,-46 22,-52" stroke="#F6C445" stroke-width="4" fill="none"/>'+bStar(-12,-76,5,'#F6C445')+pth('M14,-20 Q26,-12 12,6 Q-8,22 -36,26 Q-14,8 -6,-8 Q-4,-20 14,-20 Z','#F4F4FA',3);
+  if(pj){
+    if(kind==='mage') s+=pth('M14,-20 Q26,-12 12,6 Q-8,22 -36,26 Q-14,8 -6,-8 Q-4,-20 14,-20 Z','#F4F4FA',3);
+    s+=sdPjCap();
+  }
+  else if(kind==='dwarf') s+=dwarfHelmSide(eq.dhelm);
+  else if(kind==='elf') s+=pth('M-29,-38 A29,29 0 0 1 27,-46 Q12,-54 0,-46 Q-14,-36 -29,-38 Z','#F6E7A0',3)+(eq.ehead?eheadArt(eq.ehead,true):'<path d="M-27,-47 Q0,-56 26,-48" stroke="#F6C445" stroke-width="4" fill="none"/>')+pth('M-4,-40 L-30,-50 L-8,-26 Z',fc,2.6)+(pl?'':pth('M-8,-62 Q-2,-82 12,-84 Q10,-70 0,-60 Z','#E5484D',2.4));
+  else if(kind==='mage') s+=mageHatArt(eq.mhat,true)+pth('M14,-20 Q26,-12 12,6 Q-8,22 -36,26 Q-14,8 -6,-8 Q-4,-20 14,-20 Z','#F4F4FA',3);
   else{
     var hf=(eq.helm&&eq.helm.fill)||'#6E9BD8';
-    s+=pth('M-29,-34 A29,29 0 0 1 28,-42 Q10,-50 -4,-44 Q-18,-38 -29,-34 Z',hf,3)+pth('M-6,-64 Q-24,-74 -38,'+(-62+3*sw).toFixed(1)+' Q-24,-62 -10,-56 Z',(eq.plume&&eq.plume.fill)||'#3DD6A0',2.4);
+    s+=pth('M-29,-34 A29,29 0 0 1 28,-42 Q10,-50 -4,-44 Q-18,-38 -29,-34 Z',hf,3);
   }
+  if(kind==='hero' && !pj) s+=sdLeaf(eq.plume,sw,'translate(0,0)');
+  else if(pl) s+=sdLeaf(pl,sw,SDPLX[kind]);
   return s+'</g>';
 }
 function sdFrame(kind,p,eq){
-  var A=sdLeg(0,20,p,15,(kind==='dwarf'?'#8B5A2B':(kind==='elf'?'#3E8E5A':(kind==='mage'?'#5B3FA8':SKIN))),'#24356B',0),
-      B=sdLeg(0,20,p+Math.PI,15,'#000','#000',0);
-  var C={hero:{sk:SKIN,sd:SKIN_D,pa:'#3F6FCB',bt:(eq.shoes&&eq.shoes.fill)||'#24356B',lg:SKIN,aw:18},
+  eq=eq||{}; var pj=!!eq.pj;
+  var C={hero:{sk:SKIN,sd:SKIN_D,pa:'#3F6FCB',bt:'#24356B',lg:SKIN,aw:18},
          dwarf:{sk:'#E39A6B',sd:'#BF7448',pa:'#7A4A26',bt:'#4A3322',lg:'#6B4423',aw:21},
          elf:{sk:'#F6D2AE',sd:'#DDA87E',pa:'#3E8E5A',bt:'#5A7A3C',lg:'#3E8E5A',aw:15},
          mage:{sk:'#F1B282',sd:'#D08A58',pa:'#5B3FA8',bt:'#8B5A2B',lg:'#5B3FA8',aw:17}}[kind];
   var lw=(kind==='dwarf'?18:(kind==='elf'?13:15));
-  A=sdLeg(0,20,p,lw,C.lg,C.bt); B=sdLeg(1,20,p+Math.PI,lw,C.lg,C.bt);
-  var slv=ROBE[kind]||C.sk, hnd=ROBE[kind]?C.sk:null;
+  var EC=elfCols(eq), MC=mageCols(eq), rb=(kind==='elf')?EC.main:(kind==='mage'?MC.main:null), sdTrim=(kind==='elf')?(eq.etunic?EC.trim:'#F6C445'):MC.trim;
+  var bt=pj?PJ.slip:((eq.shoes)||C.bt);
+  var A=sdLeg(0,20,p,lw,pj?PJ.pants:C.lg,bt), B=sdLeg(1,20,p+Math.PI,lw,pj?PJ.pants:C.lg,bt);
+  var slv=pj?PJ.top:(rb||C.sk), hnd=(pj||rb)?C.sk:null;
   var armN=sdArm(p,C.aw,slv,(kind==='dwarf'?10:8.5),hnd), armF=sdArm(p+Math.PI,C.aw,slv,(kind==='dwarf'?10:8.5),hnd);
-  var dy=44-(20+Math.max(A.fy,B.fy)-20)+0; dy=44-Math.max(A.fy,B.fy);
+  var dy=44-Math.max(A.fy,B.fy);
   var cw=Math.sin(p), s='<g transform="translate(0,'+(dy-1.5*(1-Math.abs(cw))).toFixed(1)+')">';
   /* 뒤로 휘날리는 것들 */
-  if(kind==='hero'){ var cf=(eq.cape&&eq.cape.fill)||'#F6C445'; s+=pth('M-4,-20 Q-26,-18 '+(-40-5*cw).toFixed(1)+','+(2+4*Math.cos(p)).toFixed(1)+' Q-30,14 -6,26 Q-8,4 -4,-20 Z',cf,3); }
-  if(kind==='mage') s+=pth('M-4,-20 Q-30,-14 '+(-44-5*cw).toFixed(1)+','+(14+4*Math.cos(p)).toFixed(1)+' Q-30,34 -4,36 Q-8,8 -4,-20 Z','#4A2F8F',3);
-  if(kind==='elf') s+='<g transform="translate(-12,-14) rotate(-30)">'+compQuiver()+'</g>';
+  var capeIt=eq.cape||(kind==='hero'?{fill:'#F6C445'}:null);
+  if(!pj && capeIt) s+=pth('M-4,-20 Q-26,-18 '+(-40-5*cw).toFixed(1)+','+(2+4*Math.cos(p)).toFixed(1)+' Q-30,14 -6,26 Q-8,4 -4,-20 Z',capeIt.fill,3);
+  if(!pj && kind==='mage') s+=pth('M-4,-20 Q-30,-14 '+(-44-5*cw).toFixed(1)+','+(14+4*Math.cos(p)).toFixed(1)+' Q-30,34 -4,36 Q-8,8 -4,-20 Z',MC.dark,3);
+  if(!pj && kind==='elf') s+='<g transform="translate(-12,-14) rotate(-30)">'+compQuiver(eq.equiver)+'</g>';
   s+=B.svg+armF.svg;
+  if(!pj && kind==='hero' && eq.shield) s+='<g transform="translate(-23,4) scale(.8)">'+shieldArt(eq.shield,-4,0)+'</g>';
   s+='<g transform="rotate(9 0 20)">';
   /* 몸통(옆) */
   var w=(kind==='dwarf'?24:(kind==='elf'?18:21));
-  s+=pth('M'+(-w+1)+',-20 Q'+(-w-6)+',-2 '+(-w+2)+',16 L'+(w-2)+',16 Q'+(w+6)+',0 '+w+',-20 Q0,-30 '+(-w+1)+',-20 Z',ROBE[kind]||C.sk);
-  if(ROBE[kind]) s+='<path d="M'+(w-1)+',-18 Q'+(w+3)+',0 '+(w-2)+',15" stroke="#F6C445" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M-4,-22 Q6,-8 4,10" stroke="rgba(43,33,56,.3)" stroke-width="2.2" fill="none" stroke-linecap="round"/>';
-  else s+='<path d="M3,-13 Q'+(w-4)+',-9 '+(w-1)+',-19" stroke="'+C.sd+'" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M4,0 H'+(w-6)+' M5,7 H'+(w-7)+'" stroke="'+C.sd+'" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
-  if(kind==='dwarf') s+='<path d="M-'+w+',-17 L'+(w-3)+',12" stroke="'+OL+'" stroke-width="8" stroke-linecap="round"/><path d="M-'+w+',-17 L'+(w-3)+',12" stroke="#8B5A2B" stroke-width="4.6" stroke-linecap="round"/>'+circ(2,-3,3.6,'#F6C445',1.8);
-  if(kind==='elf') s+='<path d="M-'+w+',-17 L'+(w-3)+',12" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/><path d="M-'+w+',-17 L'+(w-3)+',12" stroke="#8B5A2B" stroke-width="4" stroke-linecap="round"/>';
-  if(kind==='hero'&&eq.armor) s+=pth('M'+(-w+1)+',-19 Q'+(-w-3)+',-2 '+(-w+3)+',10 L'+(w-3)+',10 Q'+(w+3)+',0 '+w+',-19 Q0,-28 '+(-w+1)+',-19 Z',eq.armor.fill,2.8)+sL(0,-20,0,9,eq.armor.trim||'#8B5A2B',2.4);
-  /* 허리 옷 */
-  if(kind==='mage') s+=pth('M-17,12 L17,12 L18,38 L4,34 L-8,40 Q-26,38 '+(-32-4*cw).toFixed(1)+',32 Q-22,22 -17,12 Z','#5B3FA8',3)+'<path d="M18,38 L4,34 L-8,40" stroke="#F6C445" stroke-width="3" fill="none" stroke-linejoin="round"/><rect x="-18" y="10" width="36" height="7" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
-  else if(kind==='elf') s+=pth('M-16,13 L16,13 L15,32 L7,26 L0,33 L-7,26 L-15,32 Z','#3E8E5A')+'<rect x="-17" y="11" width="34" height="6" rx="3" fill="#8B5A2B" stroke="'+OL+'" stroke-width="2.5"/>';
-  else s+=pth('M-17,13 L17,13 L16,31 L2,26 L-14,31 Z',C.pa)+'<rect x="-18" y="11" width="36" height="7" rx="3" fill="'+(kind==='dwarf'?'#4A3322':'#F6C445')+'" stroke="'+OL+'" stroke-width="2.5"/>';
+  s+=pth('M'+(-w+1)+',-20 Q'+(-w-6)+',-2 '+(-w+2)+',16 L'+(w-2)+',16 Q'+(w+6)+',0 '+w+',-20 Q0,-30 '+(-w+1)+',-20 Z',pj?PJ.top:(rb||C.sk));
+  if(pj) s+=pth('M'+(-w+2)+',10 Q'+(-w)+',24 '+(-w+6)+',32 L'+(w-6)+',32 Q'+w+',22 '+(w-2)+',10 Z',PJ.top,3)+bStar(2,2,3.2,'#FFF3B0')+bStar(w-9,18,2.8,'#FFFFFF')+'<path d="M'+(w-1)+',-18 Q'+(w+3)+',0 '+(w-2)+',16" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+  else{
+    if(rb) s+='<path d="M'+(w-1)+',-18 Q'+(w+3)+',0 '+(w-2)+',15" stroke="'+sdTrim+'" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M-4,-22 Q6,-8 4,10" stroke="rgba(43,33,56,.3)" stroke-width="2.2" fill="none" stroke-linecap="round"/>';
+    else s+='<path d="M3,-13 Q'+(w-4)+',-9 '+(w-1)+',-19" stroke="'+C.sd+'" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M4,0 H'+(w-6)+' M5,7 H'+(w-7)+'" stroke="'+C.sd+'" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+    if(kind==='dwarf') s+='<path d="M-'+w+',-17 L'+(w-3)+',12" stroke="'+OL+'" stroke-width="8" stroke-linecap="round"/><path d="M-'+w+',-17 L'+(w-3)+',12" stroke="#8B5A2B" stroke-width="4.6" stroke-linecap="round"/>'+circ(2,-3,3.6,'#F6C445',1.8);
+    if(kind==='elf') s+='<path d="M-'+w+',-17 L'+(w-3)+',12" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/><path d="M-'+w+',-17 L'+(w-3)+',12" stroke="#8B5A2B" stroke-width="4" stroke-linecap="round"/>';
+    if(kind==='dwarf'&&eq.dmail) s+=pth('M'+(-w+1)+',-19 Q'+(-w-3)+',-2 '+(-w+3)+',11 L'+(w-3)+',11 Q'+(w+3)+',0 '+w+',-19 Q0,-28 '+(-w+1)+',-19 Z',eq.dmail.fill,2.8)+sL(0,-20,0,10,eq.dmail.trim,2.4);
+    if(kind==='hero'&&eq.armor) s+=pth('M'+(-w+1)+',-19 Q'+(-w-3)+',-2 '+(-w+3)+',10 L'+(w-3)+',10 Q'+(w+3)+',0 '+w+',-19 Q0,-28 '+(-w+1)+',-19 Z',eq.armor.fill,2.8)+sL(0,-20,0,9,eq.armor.trim||'#8B5A2B',2.4);
+    /* 허리 옷 */
+    if(kind==='mage') s+=pth('M-17,12 L17,12 L18,38 L4,34 L-8,40 Q-26,38 '+(-32-4*cw).toFixed(1)+',32 Q-22,22 -17,12 Z',MC.low,3)+'<path d="M18,38 L4,34 L-8,40" stroke="'+MC.trim+'" stroke-width="3" fill="none" stroke-linejoin="round"/><rect x="-18" y="10" width="36" height="7" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
+    else if(kind==='elf') s+=pth('M-16,13 L16,13 L15,32 L7,26 L0,33 L-7,26 L-15,32 Z',EC.low)+'<rect x="-17" y="11" width="34" height="6" rx="3" fill="#8B5A2B" stroke="'+OL+'" stroke-width="2.5"/>';
+    else s+=pth('M-17,13 L17,13 L16,31 L2,26 L-14,31 Z',C.pa)+'<rect x="-18" y="11" width="36" height="7" rx="3" fill="'+(kind==='dwarf'?'#4A3322':'#F6C445')+'" stroke="'+OL+'" stroke-width="2.5"/>';
+    if(kind==='elf'&&EC.fx) s+=clothFx(EC.fx,EC.trim,true);
+    if(kind==='mage'&&MC.fx) s+=clothFx(MC.fx,MC.trim,true);
+    if(eq.belt) s+=beltItemArt(eq.belt,{w:40,y:10.5,h:7.5},true);
+    if(kind==='mage'&&eq.mbook) s+='<g transform="translate(-4,22) scale(.8)">'+mbookArt(eq.mbook)+'</g>';
+  }
   s+=sdHead(kind,p,eq);
   /* 어깨 보호대 */
-  s+=circ(1,-15,kind==='dwarf'?10.5:9,(kind==='hero'?((eq.armor&&eq.armor.fill)||'#8FB3EA'):(kind==='dwarf'?'#9AA5B5':(kind==='elf'?'#6FBF73':'#7C5FD0'))),2.6)+circ(1,-15,2.6,'#F6C445',1.8);
+  if(!pj) s+=circ(1,-15,kind==='dwarf'?10.5:9,(kind==='hero'?((eq.armor&&eq.armor.fill)||'#8FB3EA'):(kind==='dwarf'?((eq.dmail&&eq.dmail.fill)||'#9AA5B5'):(kind==='elf'?'#6FBF73':'#7C5FD0'))),2.6)+circ(1,-15,2.6,'#F6C445',1.8);
   s+=armN.svg;
   var wx=armN.hx, wy=armN.hy, wa=({hero:40,dwarf:-52,elf:24,mage:36})[kind]+Math.sin(armN.be)*8;
   if(kind==='hero') s+=swordArt(wx,wy,wa,eq.sword);
-  else if(kind==='elf') s+='<g transform="translate('+wx.toFixed(1)+','+wy.toFixed(1)+') scale(-.82,.82)">'+compWeapon('elf',0,0,-24)+'</g>';
-  else s+=compWeapon(kind,wx,wy,wa);
+  else if(kind==='elf') s+='<g transform="translate('+wx.toFixed(1)+','+wy.toFixed(1)+') scale(-.82,.82)">'+compWeapon('elf',0,0,-24,false,eq.bow)+'</g>';
+  else s+=compWeapon(kind,wx,wy,wa,false,eq[JOBW[kind]]);
   s+='</g>';
   s+=A.svg;
   return s+'</g>';
@@ -3855,10 +4495,12 @@ function viewRun(){
   h+=runStatsHtml();
   /* 길 위에서 만난 일: 겪은 일만 기록하고, 언제·어디서 생길지는 알 수 없어요 */
   var seen=JNY.filter(function(n){return S.jny&&S.jny.seen&&S.jny.seen[n.id];}), on=!!rnOpen.list;
+  Object.keys((S.jny&&S.jny.seen)||{}).forEach(function(id){ if(S.jny.seen[id] && isSupId(id)) seen.push(supEvent(+id.slice(3))); });
+  seen.sort(function(a,b){ return a.km-b.km; });   /* 안에서만 순서를 맞추고 거리는 보여 주지 않아요 */
   var lb='<div style="padding:0 14px 6px">';
   if(seen.length){
     seen.forEach(function(n){
-      lb+='<button type="button" class="jrow" data-a="jny-view" data-id="'+n.id+'"><span class="jn">'+n.n+'</span><small>'+(n.who?CHARN[n.who]+' 합류':'')+'</small></button>';
+      lb+='<button type="button" class="jrow" data-a="jny-view" data-id="'+n.id+'"><span class="jn">'+n.n+'</span><small>'+(n.who?CHARN[n.who]+' 합류':(n.sup?dropText((function(){var o={n:0,r:0,l:0}; o[n.kind]=n.amt; return o;})()):''))+'</small></button>';
     });
   }else lb+='<p class="note" style="margin:6px 2px 10px">아직 길 위에서 만난 일이 없어요. 계속 달리다 보면 무슨 일이 생길지도 몰라요.</p>';
   lb+='</div>';
@@ -4097,11 +4739,13 @@ function bkParse(text){
   ITEMS.forEach(function(it){known[it.id]=it;});
   if(d.inv&&typeof d.inv==='object') Object.keys(d.inv).forEach(function(id){ if(known[id]&&d.inv[id]) inv[id]=true; });
   if(d.eq&&typeof d.eq==='object') Object.keys(d.eq).forEach(function(sl2){ var id=d.eq[sl2]; if(known[id]&&inv[id]&&known[id].slot===sl2) eqm[sl2]=id; });
-  if(d.restLog&&typeof d.restLog==='object') Object.keys(d.restLog).forEach(function(k3){ var v=d.restLog[k3]; if(ok.test(k3)&&(v==='none'||known[v])) rl[k3]=v; });
+  if(d.restLog&&typeof d.restLog==='object') Object.keys(d.restLog).forEach(function(k3){ var v=d.restLog[k3]; if(ok.test(k3)) rl[k3]=(v==='none'||known[v])?v:'none'; });
   var ksp={}, tlog={};
-  ['wall','train','forge'].forEach(function(id){ var v=(d.kingdom&&d.kingdom.spent)?+d.kingdom.spent[id]:0; ksp[id]=(v>0)?Math.min(Math.floor(v),bld(id).cost):0; });
+  ['wall','train','forge','trade'].forEach(function(id){ var v=(d.kingdom&&d.kingdom.spent)?+d.kingdom.spent[id]:0; ksp[id]=(v>0)?Math.min(Math.floor(v),bld(id).cost):0; });
+  var trd2={}; ['a','b','c','d'].forEach(function(k6){ var v=(d.trade&&typeof d.trade==='object')?parseInt(d.trade[k6],10):0; trd2[k6]=(v>0)?Math.min(v,9999):0; });
+  var crf2={}; if(d.crafted&&typeof d.crafted==='object') Object.keys(d.crafted).forEach(function(id){ if(d.crafted[id]&&known[id]&&known[id].craft) crf2[id]=true; });
   var aat={}, akn=achKnown(); if(d.achAt&&typeof d.achAt==='object') Object.keys(d.achAt).forEach(function(k5){ if(akn[k5]&&ok.test(d.achAt[k5])) aat[k5]=d.achAt[k5]; });
-  var jsn2={}; if(d.jny&&d.jny.seen&&typeof d.jny.seen==='object') Object.keys(d.jny.seen).forEach(function(id){ if(d.jny.seen[id]&&JNYIDS[id]) jsn2[id]=true; });
+  var jsn2={}; if(d.jny&&d.jny.seen&&typeof d.jny.seen==='object') Object.keys(d.jny.seen).forEach(function(id){ if(d.jny.seen[id]&&(JNYIDS[id]||isSupId(id))) jsn2[id]=true; });
   if(d.trainLog&&typeof d.trainLog==='object') Object.keys(d.trainLog).forEach(function(k4){
     var e=d.trainLog[k4]; if(!ok.test(k4)||!e||typeof e!=='object') return;
     var o={sets:{},run:Math.max(0,Math.min(parseInt(e.run,10)||0,TR_MAX)),es:0,er:0};
@@ -4110,7 +4754,9 @@ function bkParse(text){
     o.h=[]; if(Array.isArray(e.h)) e.h.slice(-80).forEach(function(x){ var m=/^(\w+):([01])$/.exec(String(x)); if(m && (m[1]==='run' || X[m[1]])) o.h.push(m[1]+':'+m[2]); });
     tlog[k4]=o;
   });
-  return {data:{start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,char:(CHARN[d.char]?d.char:'hero')}};
+  var outd={start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,crafted:crf2,trade:trd2,char:(CHARN[d.char]?d.char:'hero')};
+  migrateRest(outd);
+  return {data:outd};
 }
 function bkCheck(text){
   var r=bkParse((text||'').trim());
@@ -4229,9 +4875,9 @@ function viewAch(){
 }
 var dogOpen={};
 function homeHero(){
-  var li=lvInfo(totalXP()), eq=curEq(), worn=[];
-  Object.keys(eq).forEach(function(k){ if(eq[k]) worn.push(eq[k].name); });
-  return '<section class="stage"><div class="stage-pv">'+heroPreview(eq)+'</div><div class="stage-info"><p class="stage-n">'+CHARN[curChar()]+'</p><p class="stage-t">Lv.'+li.L+' · '+titleOf(li.L)+'</p><p class="stage-w">'+(curChar()!=='hero'?'전용 장비는 준비 중이에요':(worn.length?worn.join(' · '):'아직 아무것도 입지 않았어요'))+'</p></div></section>';
+  var li=lvInfo(totalXP()), eq=curEq(), worn=[], c=curChar(), k;
+  for(k in eq){ if(!eq[k]) continue; if(k==='pj' || COMMON_SLOTS.indexOf(k)>=0 || eq[k].job===c) worn.push(eq[k].name); }
+  return '<section class="stage"><div class="stage-pv">'+heroPreview(eq)+'</div><div class="stage-info"><p class="stage-n">'+CHARN[c]+'</p><p class="stage-t">Lv.'+li.L+' · '+titleOf(li.L)+'</p><p class="stage-w">'+(worn.length?worn.join(' · '):'아직 아무것도 입지 않았어요')+'</p></div></section>';
 }
 function homeParty(){
   var h='<h2>동료 <span class="cnt">'+(1+JNY.filter(function(n){return n.who&&jnySeen(n.who);}).length)+' / 4</span></h2><div class="party">';
@@ -4249,31 +4895,46 @@ function homeChest(){
     '<p class="note" style="margin:0 0 8px">마왕을 토벌하면 상자를 1개 받아요. 지금까지 '+earned+'개를 받았어요.</p>'+
     '<button type="button" class="primary" data-a="chest-open"'+(left?'':' disabled')+'>상자 열기</button></div></div>';
 }
-function homeDogam(){
-  var own=0, secs=[
-    {id:'drop',n:'드랍 장비',slots:LOOT_SLOTS,note:'마왕을 토벌하면 받는 전리품 상자에서 나와요.'},
-    {id:'craft',n:'제작 장비',slots:CRAFT_SLOTS,note:'대장간을 복구한 뒤 장비재료로 직접 골라서 만들어요.'},
-    {id:'rest',n:'휴식 장비',slots:REST_SLOTS,note:'일요일 스트레칭 퀘스트를 모두 마치고 모험이 종료되면 하나씩 받아요.'}
-  ];
-  ITEMS.forEach(function(it){ if(S.inv&&S.inv[it.id]) own++; });
-  var h='<h2>장비 도감 <span class="cnt">'+own+' / '+ITEMS.length+'</span></h2>'+(curChar()!=='hero'?'<p class="note" style="margin:-4px 4px 8px">지금 장비는 몸짱 용사만 입어요 · 동료 전용 장비는 준비 중</p>':'');
-  secs.forEach(function(sc){
-    var list=[], have=0;
-    sc.slots.forEach(function(sl){ ITEMS.forEach(function(it){ if(it.slot===sl) list.push(it); }); });
-    list.forEach(function(it){ if(S.inv&&S.inv[it.id]) have++; });
-    var on=!!dogOpen[sc.id];
-    h+='<div class="dgs'+(on?' open':'')+'"><button type="button" class="dgh" data-a="dogtog" data-g="'+sc.id+'" aria-expanded="'+(on?'true':'false')+'"><span>'+sc.n+'</span><small>'+have+' / '+list.length+' <i aria-hidden="true">'+(on?'▴':'▾')+'</i></small></button>';
-    if(on){
-      h+='<p class="dgn">'+sc.note+' 눌러서 입고 벗어요.</p><div class="items cmp">';
-      list.forEach(function(it){
-        var has=!!(S.inv&&S.inv[it.id]), worn=!!(S.eq&&S.eq[it.slot]===it.id);
-        h+='<button type="button" class="item r-'+it.rar+(has?'':' lock')+(worn?' worn':'')+'" data-a="equip" data-id="'+it.id+'"'+(has?'':' disabled')+'>'+
-           '<span class="ii">'+itemIcon(it,has)+'</span><b>'+(has?it.name:'???')+'</b><small>'+SLOTN[it.slot]+(it.rest?'':' · '+RARN[it.rar])+(worn?' · 착용 중':'')+'</small></button>';
-      });
-      h+='</div>';
-    }
-    h+='</div>';
+function dogCards(list){
+  var h='<div class="items cmp">';
+  list.forEach(function(it){
+    var has=!!(S.inv&&S.inv[it.id]), worn=isWorn(it);
+    h+='<button type="button" class="item r-'+it.rar+(has?'':' lock')+(worn?' worn':'')+'" data-a="equip" data-id="'+it.id+'"'+(has?'':' disabled')+'>'+
+       '<span class="ii">'+itemIcon(it,has)+'</span><b>'+(has?it.name:'???')+'</b><small>'+SLOTN[it.slot]+(it.special?' · 특별':' · '+RARN[it.rar])+(worn?' · 착용 중':'')+'</small></button>';
   });
+  return h+'</div>';
+}
+function dogHave(list){ var n=0; list.forEach(function(it){ if(S.inv&&S.inv[it.id]) n++; }); return n; }
+function dogHead(id,name,have,tot,on,sub){
+  return '<button type="button" class="dgh" data-a="dogtog" data-g="'+id+'" aria-expanded="'+(on?'true':'false')+'"><span>'+name+'</span><small>'+(tot?have+' / '+tot:'준비 중')+' <i aria-hidden="true">'+(on?'▴':'▾')+'</i></small></button>';
+}
+/* 장비 도감: 공용장비 / 전용장비(직업별 하위 토글) / 특별장비 */
+function homeDogam(){
+  var own=dogHave(ITEMS), h='<h2>장비 도감 <span class="cnt">'+own+' / '+ITEMS.length+'</span></h2>';
+  var common=ITEMS.filter(function(it){ return COMMON_SLOTS.indexOf(it.slot)>=0; });
+  var special=ITEMS.filter(function(it){ return it.special; });
+  var priv=ITEMS.filter(function(it){ return it.job; });
+  var on=!!dogOpen.common;
+  h+='<div class="dgs'+(on?' open':'')+'">'+dogHead('common','공용장비',dogHave(common),common.length,on);
+  if(on) h+='<p class="dgn">마왕을 토벌하면 받는 전리품 상자에서 나와요. 어떤 캐릭터든 함께 입어요. 눌러서 입고 벗어요.</p>'+dogCards(common);
+  h+='</div>';
+  on=!!dogOpen.priv;
+  h+='<div class="dgs'+(on?' open':'')+'">'+dogHead('priv','전용장비',dogHave(priv),priv.length,on);
+  if(on){
+    h+='<p class="dgn">직업마다 입을 수 있는 장비가 달라요. 대장간을 복구한 뒤 장비재료로 직접 골라서 만들어요.</p>';
+    CHARIDS.forEach(function(id){
+      var lst=priv.filter(function(it){ return it.job===id; }).sort(function(a,b){ return itemSortKey(a)-itemSortKey(b); }), joined=(id==='hero'||jnySeen(id)), key='p:'+id, o2=!!dogOpen[key];
+      if(!joined){ h+='<div class="dgs sub lock"><button type="button" class="dgh" disabled><span>???</span><small>아직 만나지 못했어요</small></button></div>'; return; }
+      h+='<div class="dgs sub'+(o2?' open':'')+'">'+dogHead(key,CHARN[id],dogHave(lst),lst.length,o2);
+      if(o2) h+=(lst.length?dogCards(lst):'<p class="dgn">전용 장비는 준비 중이에요.</p>');
+      h+='</div>';
+    });
+  }
+  h+='</div>';
+  on=!!dogOpen.special;
+  h+='<div class="dgs'+(on?' open':'')+'">'+dogHead('special','특별장비',dogHave(special),special.length,on);
+  if(on) h+='<p class="dgn">첫 일요일 신전 방문을 마치면 한 번만 받아요. 입으면 무기를 뺀 모든 장비 칸을 대신해요(전용 무기는 파자마를 입어도 함께 입어요). 눌러서 입고 벗어요.</p>'+dogCards(special);
+  h+='</div>';
   return h;
 }
 function viewHome(){
@@ -4635,7 +5296,8 @@ app.addEventListener('click',function(e){
     var dgi=t.getAttribute('data-g'); dogOpen[dgi]=!dogOpen[dgi]; render();
   }else if(a==='equip'){
     var iid=t.getAttribute('data-id'), eit=itemById(iid);
-    if(eit && S.inv && S.inv[iid]){ S.eq=S.eq||{}; if(S.eq[eit.slot]===iid) delete S.eq[eit.slot]; else S.eq[eit.slot]=iid; save(); render(); }
+    if(eit && S.inv && S.inv[iid]){ S.eq=S.eq||{}; var wasOn=isWorn(eit); if(wasOn) delete S.eq[eit.slot]; else{ if(eit.slot!=='pj' && !isWeaponSlot(eit.slot)) delete S.eq.pj; S.eq[eit.slot]=iid; } save(); render();
+      if(!wasOn && eit.job && eit.job!==curChar()) toast(CHARN[eit.job]+' 전용 장비예요 · 캐릭터를 '+CHARN[eit.job]+'로 바꾸면 보여요'); }
   }else if(a==='chest-open'){
     openChest();
   }else if(a==='kb'){
@@ -4656,6 +5318,10 @@ app.addEventListener('click',function(e){
     }
   }else if(a==='npc'){
     npcTalk(t.getAttribute('data-n'));
+  }else if(a==='fgf'){
+    fgFilter=t.getAttribute('data-j')||'all'; render();
+  }else if(a==='xchg'){
+    askTrade(t.getAttribute('data-x'));
   }else if(a==='craft'){
     askCraft(t.getAttribute('data-id'));
   }else if(a==='trset'){
@@ -4766,7 +5432,7 @@ var introSeen=false; try{introSeen=!!localStorage.getItem('home-training-intro')
 var cqEl=document.getElementById('cq'), cqD=document.getElementById('cqd'), cqB=document.getElementById('cqb');
 function withTimeout(p,ms){ return Promise.race([p,new Promise(function(_,rej){setTimeout(function(){rej({code:'timeout'});},ms);})]); }
 function isEmptyData(x){ return !x || (!Object.keys(x.log||{}).length && !(x.body||[]).length); }
-function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{}}; }
+function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{}}; }
 function dayScore(L){ return Object.keys(L.done||{}).length+Object.keys(L.diet||{}).length+(L.km>0?1:0)+(L.out?1:0); }
 function mergeData(a,b){
   var log={}, keys={};
@@ -4787,20 +5453,23 @@ function mergeData(a,b){
   for(k2 in (a.inv||{})) inv[k2]=true; for(k2 in (b.inv||{})) inv[k2]=true;
   for(k2 in (a.restLog||{})) rl[k2]=a.restLog[k2]; for(k2 in (b.restLog||{})) if(!rl[k2]) rl[k2]=b.restLog[k2];
   var eqm=(a.eq&&Object.keys(a.eq).length)?a.eq:(b.eq||{});
-  var ksp={}; ['wall','train','forge'].forEach(function(id){ ksp[id]=Math.max(((a.kingdom||{}).spent||{})[id]||0,((b.kingdom||{}).spent||{})[id]||0); });
+  var ksp={}; ['wall','train','forge','trade'].forEach(function(id){ ksp[id]=Math.max(((a.kingdom||{}).spent||{})[id]||0,((b.kingdom||{}).spent||{})[id]||0); });
   var jsn={}, jk;
   for(jk in ((a.jny||{}).seen||{})) jsn[jk]=true; for(jk in ((b.jny||{}).seen||{})) jsn[jk]=true;
+  var crf={}, ck; for(ck in (a.crafted||{})) crf[ck]=true; for(ck in (b.crafted||{})) crf[ck]=true;
+  var trd={}; ['a','b','c','d'].forEach(function(k5){ trd[k5]=Math.max((a.trade||{})[k5]||0,(b.trade||{})[k5]||0); });
   var aam={}; [a.achAt||{},b.achAt||{}].forEach(function(m){ Object.keys(m).forEach(function(k){ if(!aam[k]||m[k]<aam[k]) aam[k]=m[k]; }); });
   var tlog={}, tks={};
   Object.keys(a.trainLog||{}).forEach(function(k){tks[k]=1;}); Object.keys(b.trainLog||{}).forEach(function(k){tks[k]=1;});
   function trScore(e){ return e?trSetCount(e)+(e.run||0):-1; }
   Object.keys(tks).forEach(function(k){ var x=(a.trainLog||{})[k], y=(b.trainLog||{})[k]; tlog[k]=JSON.parse(JSON.stringify(trScore(x)>=trScore(y)?x:y)); });
-  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
+  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,crafted:crf,trade:trd,char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
 }
 function applyData(x,dirty){
   if(migrateLog(x.log)) dirty=true;
+  if(migrateRest(x)) dirty=true;
   noDirty=true;
-  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
+  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
   save(); noDirty=false;
 }
 function hm(){var d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes());}
@@ -4925,7 +5594,7 @@ if(window.__fb) cloudInit(); else if(window.__fbErr) CL.fail=true;
 document.getElementById('ovb').addEventListener('click',function(e){
   var t=e.target.closest('[data-a="loot-equip"]'); if(!t) return;
   var it=itemById(t.getAttribute('data-id'));
-  if(it){ S.eq=S.eq||{}; S.eq[it.slot]=it.id; save(); closeOv(); render(); toast('입었어요!'); }
+  if(it){ S.eq=S.eq||{}; if(it.slot!=='pj' && !isWeaponSlot(it.slot)) delete S.eq.pj; S.eq[it.slot]=it.id; save(); closeOv(); render(); toast('입었어요!'); }
 });
 
 /* ---------- 효과음 (승리 나팔 · 보스의 웃음소리) ---------- */

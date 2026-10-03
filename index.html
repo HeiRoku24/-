@@ -1171,8 +1171,11 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.38.5', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.38.8', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.38.8','벅지짱 미노타우르스 상체(몸통·팔)를 처음 크기로 되돌림(굵은 다리와 근육 선은 유지)'],
+  ['1.38.7','벅지짱 미노타우르스 다리를 굵게 키우고 허벅지 근육 선 표시(둥글게 부풀린 모양은 되돌림)'],
+  ['1.38.6','벅지짱 미노타우르스 디자인 변경: 허벅지를 크고 단단하게, 상체는 조금 작게'],
   ['1.38.5','대장간·몸짱 여관·성 제목 오른쪽에 설명 추가'],
   ['1.38.4','탭 제목 옆 설명 정리: 훈련장 설명 간소화, 몸짱 왕국 띄어쓰기와 설명을 제목 오른쪽으로 이동, 모험 지도·몸짱 일지·설정에 제목 오른쪽 설명 추가'],
   ['1.38.3','훈련장: 제목 옆 설명 추가, 운동마다 + − 대신 \'훈련\' 버튼 하나(누를 때마다 1세트·XP 반영), 러닝 5km도 훈련 버튼으로 몇 번이고 기록, 시간 재는 운동에 타이머 버튼 추가'],
@@ -1553,11 +1556,20 @@ function mWolf(e){
 }
 /* ===== 금 미노타우르스 (코어 튼튼) ===== */
 function mMino(e){
-  var sk='#B77A44', sd='#8C5A31', s='';
-  s+=bLimb(-11,20,-15,38,15,sk)+bLimb(11,20,15,38,15,sk)+pth('M-25,38 h20 l-3,9 h-15 Z M5,38 h20 l-2,9 h-15 Z','#3B2A1E',2.4);
+  var sk='#B77A44', sd='#8C5A31', sl='#D9A56E', s='';
+  /* 허벅지짱: 둥글게 부풀리지 않고, 다리를 굵게 키우고 허벅지 근육 선만 표시 */
+  [-1,1].forEach(function(g){
+    var hx=16.5*g;
+    s+=bLimb(15.5*g,18,19*g,30,24,sk);
+    s+='<path d="M'+(hx-g*1)+',23 Q'+(hx+g*5)+',30 '+(hx+g*2)+',38" fill="none" stroke="'+sd+'" stroke-width="2.8" stroke-linecap="round"/>';
+    s+='<path d="M'+(hx+g*7)+',22 Q'+(hx+g*9)+',29 '+(hx+g*7)+',36" fill="none" stroke="'+sl+'" stroke-width="3.4" stroke-linecap="round"/>';
+    s+='<path d="M'+(hx-g*6)+',24 Q'+(hx-g*7)+',30 '+(hx-g*5)+',36" fill="none" stroke="'+sd+'" stroke-width="1.8" stroke-linecap="round" opacity=".7"/>';
+    s+='<path d="M'+(hx-g*3)+',38 Q'+(hx+g*2)+',41 '+(hx+g*7)+',38" fill="none" stroke="'+sd+'" stroke-width="2" stroke-linecap="round" opacity=".8"/>';
+    s+=pth('M'+(g*5)+',42 h'+(g*22)+' l'+(-g*2)+',5 h'+(-g*18)+' Z','#3B2A1E',2.4);
+  });
   var A=e==='dead'?[[-58,-38,-54,-14],[58,-32,54,-10]]:(e==='smug'?[[-56,-44,-54,-16],[58,-52,56,-24]]:[[-40,20,-36,4],[40,20,36,4]]);
   s+=mTorso(sk,sd);
-  s+=pth('M-22,13 L22,13 L20,34 L0,27 L-20,34 Z','#D9483B')+'<rect x="-22" y="11" width="44" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
+  s+=pth('M-24,12 L24,12 L22,29 L0,23 L-22,29 Z','#D9483B')+'<rect x="-24" y="10" width="48" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
   s+=mArm(-27,-9,A[0][0],A[0][1],A[0][2],A[0][3],{f:sk,w:16,fr:9})+mArm(27,-9,A[1][0],A[1][1],A[1][2],A[1][3],{f:sk,w:16,fr:9});
   if(e==='smug'){ s+='<g transform="translate(58,-30) rotate(8)"><rect x="-3" y="-8" width="6" height="64" rx="2" fill="#8B5A2B" stroke="'+OL+'" stroke-width="2.5"/>'+pth('M0,-6 Q22,-22 24,2 Q22,22 0,10 Z M0,-6 Q-22,-22 -24,2 Q-22,22 0,10 Z','#D5DEE9',2.6)+'</g>'; }
   s+=pth('M-20,-52 Q-48,-52 -46,-80 Q-32,-64 -14,-58 Z','#FFE9B8',3)+pth('M20,-52 Q48,-52 46,-80 Q32,-64 14,-58 Z','#FFE9B8',3);

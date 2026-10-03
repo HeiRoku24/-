@@ -820,6 +820,49 @@ svg.chart{width:100%; height:auto; display:block;}
   .live .in-patrol,.live .in-hint,.live .in-swing,.live .in-wipe,.live .in-point,.live .in-smith,.live .an-spark2,.live .in-bellow,.live .in-wheel,.live .an-ember,.live .in-mote,.live .an-zz,.live .in-wcloud,.live .in-rain,.live .in-snow,.live .in-f1,.live .in-f2,.live .in-f3,.live .in-g1,.live .in-g2,.live .in-dummy,.live .in-burst,.live .in-dust{animation:none;}
   .live .in-f1,.live .in-g1{visibility:visible;}
 }
+
+/* ---------- 성벽 풍경 · 마왕전 성벽 · 성 자리 (v1.38) ---------- */
+.in-bird,.in-bfly,.in-rays,.in-mill,.in-wcl,.in-fogd,.in-shoot,.in-rain2,.in-snow2{transform-box:view-box;}
+.in-flap,.in-cape,.in-look,.in-fly{transform-box:fill-box;}
+.in-fly,.in-shoot{opacity:0;}
+.live .in-bird{animation:inBird 26s linear infinite;}
+@keyframes inBird{from{transform:translateX(0);}to{transform:translateX(440px);}}
+.live .in-flap{transform-origin:50% 100%; animation:inFlap .5s ease-in-out infinite alternate;}
+@keyframes inFlap{from{transform:scaleY(1);}to{transform:scaleY(.35);}}
+.live .in-bfly{animation:inBfly 9s ease-in-out infinite;}
+.live .in-bfly.b{animation-duration:11s; animation-delay:-4s;}
+@keyframes inBfly{0%,100%{transform:translate(0,0);}25%{transform:translate(24px,-14px);}50%{transform:translate(50px,6px);}75%{transform:translate(22px,-10px);}}
+.live .in-fly{animation:inFly 6s ease-in-out infinite;}
+@keyframes inFly{0%{opacity:0; transform:translate(0,0);}20%{opacity:1;}50%{opacity:.4; transform:translate(10px,-12px);}80%{opacity:1; transform:translate(-6px,-20px);}100%{opacity:0; transform:translate(0,-28px);}}
+.live .in-rays{transform-origin:0 0; animation:inWheel 90s linear infinite;}
+.live .in-mill{transform-origin:0 0; animation:inWheel 10s linear infinite;}
+.live .in-wcl{animation:inWcl 70s linear infinite;}
+@keyframes inWcl{from{transform:translateX(0);}to{transform:translateX(480px);}}
+.live .in-fogd{animation:inFogd 16s ease-in-out infinite alternate;}
+.live .in-fogd.b{animation-direction:alternate-reverse; animation-duration:21s;}
+@keyframes inFogd{from{transform:translateX(-24px);}to{transform:translateX(24px);}}
+.live .in-shoot{animation:inShoot 9s linear infinite;}
+@keyframes inShoot{0%,88%{opacity:0; transform:translate(210px,20px);}90%{opacity:1;}100%{opacity:0; transform:translate(110px,64px);}}
+.live .in-cape{transform-origin:50% 0; animation:inCape 2.6s ease-in-out infinite alternate;}
+@keyframes inCape{from{transform:skewX(-3deg) scaleX(1);}to{transform:skewX(4deg) scaleX(.96);}}
+.live .in-look{transform-origin:50% 100%; animation:inLook 11s ease-in-out infinite;}
+@keyframes inLook{0%,28%{transform:rotate(0);}38%,54%{transform:rotate(-6deg);}64%,82%{transform:rotate(5deg);}100%{transform:rotate(0);}}
+.live .in-rain2{animation:inRain2 .55s linear infinite;}
+@keyframes inRain2{to{transform:translate(0,28px);}}
+.live .in-snow2{animation:inSnow2 6s linear infinite;}
+@keyframes inSnow2{to{transform:translate(0,84px);}}
+.wallcap{margin:8px 2px 2px; font-family:var(--disp); font-size:16px; color:var(--link);}
+@media (prefers-reduced-motion: reduce){
+  .live .in-bird,.live .in-flap,.live .in-bfly,.live .in-fly,.live .in-rays,.live .in-mill,.live .in-wcl,.live .in-fogd,.live .in-shoot,.live .in-cape,.live .in-look,.live .in-rain2,.live .in-snow2{animation:none;}
+}
+/* ---------- 훈련장 훈련 버튼 · 제목 설명 (v1.38.3) ---------- */
+.phrow{display:flex; align-items:baseline; flex-wrap:wrap; gap:2px 10px; margin-top:8px;}
+.phrow h1.ph{margin:0;}
+.phrow.tab{margin:22px 2px 6px;}
+.phsub{font-size:12.5px; color:var(--muted); line-height:1.4;}
+.trgo{flex:none; min-width:78px; min-height:46px; padding:0 16px; border-radius:14px; border:2px solid var(--gold); background:var(--gold); color:var(--gold-ink); font-family:var(--disp); font-size:18px; box-shadow:0 3px 0 var(--edge);}
+.trgo:active{transform:translateY(2px); box-shadow:0 1px 0 var(--edge);}
+.swbtn.sm{display:inline-block; min-height:36px; margin-top:6px; padding:0 12px; font-size:14px; box-shadow:0 2px 0 var(--edge);}
 </style>
 </head>
 <body>
@@ -1128,8 +1171,14 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.37.5', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.38.5', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.38.5','대장간·몸짱 여관·성 제목 오른쪽에 설명 추가'],
+  ['1.38.4','탭 제목 옆 설명 정리: 훈련장 설명 간소화, 몸짱 왕국 띄어쓰기와 설명을 제목 오른쪽으로 이동, 모험 지도·몸짱 일지·설정에 제목 오른쪽 설명 추가'],
+  ['1.38.3','훈련장: 제목 옆 설명 추가, 운동마다 + − 대신 \'훈련\' 버튼 하나(누를 때마다 1세트·XP 반영), 러닝 5km도 훈련 버튼으로 몇 번이고 기록, 시간 재는 운동에 타이머 버튼 추가'],
+  ['1.38.2','성벽 복구 단계에 따른 마왕성 보스전 연출 변화를 삭제하고 예전 연출로 되돌림'],
+  ['1.38.1','건물 내부 장면에서 NPC 머리 위에 떠 있던 말풍선(...) 삭제'],
+  ['1.38','성벽 완성 시 성벽 위 풍경 씬 추가(용사 뒷모습, 시간·날씨 연동, 구름·새·풍차·강·반딧불 등 움직임), 토요일 마왕성 보스전 배경에 성벽 복구 단계 반영(폐허·복구 중·완성, 결과 문구 포함), 성 자리를 안개 낀 알 수 없는 폐허 장면으로 마무리'],
   ['1.37.5','완성된 건물(여관·훈련장·대장간) 화면에 내부 장면 추가: 용사와 NPC(여관 여주인·기사단 교관·드워프 대장장이)가 살아 움직이는 인테리어, NPC에게 말을 걸어 훈련·제작 기능 이용, 여주인 일상 대사(시간·날씨 연동)'],
   ['1.37.4','훈련장·대장간에 움직임 추가(복구 중·완성 단계만, 폐허는 정지): 훈련장 허수아비 흔들림·먼지·깃발·검 반짝임, 대장간 불꽃·아궁이 빛·모루 불똥·깃발·망치질'],
   ['1.37.3','왕국 전경에 움직임 추가(성 깃발, 굴뚝 연기, 대장간 불꽃, 해자 물 흐름과 물고기, 흔들리는 나무·수풀, 떠다니는 구름), 전경 네 귀퉁이 밭 네모 삭제, 성벽 이름표를 위쪽 성벽 안쪽 아래로 이동'],
@@ -2133,7 +2182,7 @@ var BLD=[
 var BSTN={ruin:'폐허',rest:'복구 중',done:'완성'};
 var kv='map';          /* 왕국 탭 안의 화면: map · inn · train · forge · wall · castle · build:<id> */
 var trOpen={};         /* 훈련장 토글 */
-var TR_MAX=12;
+var TR_MAX=99;
 var pendSun=[];
 function bld(id){ var i; for(i=0;i<BLD.length;i++){ if(BLD[i].id===id) return BLD[i]; } return null; }
 function kdSpent(id){ var k=S.kingdom; return (k && k.spent && k.spent[id]>0)?Math.floor(k.spent[id]):0; }
@@ -2224,7 +2273,8 @@ function trRun(){
   var k=fmt(TODAY);
   if(!S.trainLog) S.trainLog={};
   var e=S.trainLog[k]; if(!e) e=S.trainLog[k]={sets:{},run:0,es:0,er:0};
-  if(e.run){ e.run=0; e.er=0; } else { e.run=1; e.er=trainEarnNow()?1:0; }
+  if(e.run>=TR_MAX) return false;
+  e.run=(e.run||0)+1; if(trainEarnNow()) e.er=(e.er||0)+1;
   save(); return true;
 }
 function trainWeekInfo(){
@@ -2407,7 +2457,7 @@ function matBarHtml(){
 }
 function backBtn(){ return '<button type="button" class="kback" data-a="kback">‹ 왕국 전경으로</button>'; }
 function kingdomMapView(){
-  var h=matBarHtml()+'<p class="eyebrow">모험으로 되살리는 곳</p><h1 class="ph" style="margin-top:6px">몸짱왕국</h1>';
+  var h=matBarHtml()+'<div class="phrow tab" style="margin-top:14px"><h1 class="ph">몸짱 왕국</h1><span class="phsub">모험으로 되살리는 곳</span></div>';
   var btn=''; ['castle','train','forge','inn','wall'].forEach(function(id){ btn+=kBuildBtn(id); });
   h+='<div class="gmap kmap">'+kingdomSvg()+btn+'</div>';
   h+='<p class="note">건물이나 성벽을 누르면 건물 화면으로 들어가요. 평일 퀘스트와 토벌로 얻은 자재는 모험이 종료된 날부터 쌓여요.</p>';
@@ -2432,10 +2482,10 @@ function placeholderView(id){
   return matBarHtml()+backBtn()+'<h1 class="ph" style="margin-top:8px">'+b.n+'</h1><div class="card kbuild"><div class="kbart live">'+bSvg(id)+'</div><p class="kbst">완성</p><p class="note" style="margin:6px 0 12px">'+txt+'</p></div>';
 }
 function castleView(){
-  return matBarHtml()+backBtn()+'<h1 class="ph" style="margin-top:8px">성</h1><div class="card kbuild"><div class="kbart live">'+bSvg('castle')+'</div><p class="kbst">알 수 없는 폐허</p><p class="note" style="margin:6px 0 12px">오래된 폐허예요. 아직 아무것도 알 수 없어요.</p></div>';
+  return matBarHtml()+backBtn()+'<div class="phrow"><h1 class="ph">성</h1><span class="phsub">알 수 없는 폐허</span></div><div class="card scn"><svg class="scnsvg live" viewBox="0 0 340 250" role="img" aria-label="안개 낀 밤, 알 수 없는 폐허가 된 성의 탑">'+scnCastle()+'</svg></div>';
 }
 function viewTrain(){
-  return backBtn()+'<h1 class="ph" style="margin-top:8px">훈련장</h1>'+sceneCard('train')+'<div id="npcpanel">'+(npcOpen.train?trainPanel():npcHint('train'))+'</div>';
+  return backBtn()+'<div class="phrow"><h1 class="ph">훈련장</h1><span class="phsub">마왕성 도전을 위한 추가 훈련</span></div>'+sceneCard('train')+'<div id="npcpanel">'+(npcOpen.train?trainPanel():npcHint('train'))+'</div>';
 }
 function trainPanel(){
   var st=stageIdx(), wi=trainWeekInfo(), te=trDay(fmt(TODAY)), open=trainDayOpen(), earn=trainEarnNow(), h='';
@@ -2445,16 +2495,17 @@ function trainPanel(){
      '<p class="wq-sub">'+(wi.raw>wi.g?'합계가 '+SAT_GOAL+'을 넘은 '+(wi.raw-wi.g)+' XP는 기록만 남았어요. ':'')+
      (!open?'일요일은 회복의 신전에서 쉬는 날이에요. 훈련장은 월~토에 열려요.':(earn?'오늘 한 훈련은 XP로 인정돼요 (세트 '+XP_SET+', 러닝 '+XP_RUN+').':'마왕성 판정이 끝나서 오늘 훈련은 기록만 남아요.'))+'</p></section>';
   if(!open) return h;
-  h+='<div class="q"><div class="trrow"><div class="trn"><b>러닝 5km</b><small>'+(te.run?'오늘 기록했어요':'오늘 달렸다면 체크')+'</small></div><button type="button" class="set wide" aria-pressed="'+(te.run?'true':'false')+'" data-a="trrun">'+(te.run?'완료':'했어요')+'</button></div></div>';
+  h+='<div class="q"><div class="trrow"><div class="trn"><b>러닝 5km</b><small>'+(te.run?'오늘 '+te.run+'회 · ':'')+'한 번 뛸 때마다 눌러요'+(earn?' (회당 '+XP_RUN+' XP)':'')+'</small></div><button type="button" class="trgo" data-a="trrun" aria-label="러닝 5km 훈련 기록">훈련</button></div></div>';
   TGR.forEach(function(g,gi){
     var on=!!trOpen[gi], cnt=0;
     g.ids.forEach(function(id){ cnt+=(te.sets[id]||0); });
     h+='<div class="q trg"><button type="button" class="trhead" data-a="trtog" data-g="'+gi+'" aria-expanded="'+(on?'true':'false')+'"><span>'+g.n+'</span><small>'+(cnt?cnt+'세트 · ':'')+g.ids.length+'종목 '+(on?'▴':'▾')+'</small></button>';
     if(on){
       g.ids.forEach(function(id){
-        var e=X[id], n=te.sets[id]||0, dose=e.r[st];
-        h+='<div class="trrow"><div class="trn"><b>'+e.n+'</b><small>'+dose+(e.one?'':' · 세트당')+'</small></div>'+
-           '<div class="trctl"><button type="button" class="trb" data-a="trset" data-id="'+id+'" data-dl="-1" aria-label="'+e.n+' 한 세트 취소"'+(n?'':' disabled')+'>−</button><span class="trc" aria-live="polite">'+n+'</span><button type="button" class="trb on" data-a="trset" data-id="'+id+'" data-dl="1" aria-label="'+e.n+' 한 세트 추가"'+(n>=TR_MAX?' disabled':'')+'>+</button></div></div>';
+        var e=X[id], n=te.sets[id]||0, dose=e.r[st], swb='', sm;
+        if(e.t){ sm=String(dose).match(/(\d+)\s*초/); if(sm){ var side=String(dose).indexOf('한쪽')>=0; swb='<button type="button" class="swbtn sm" data-a="sw" data-sec="'+sm[1]+'" data-name="'+e.n+'">▶ '+(side?'한쪽 ':'')+sm[1]+'초 타이머</button>'; } }
+        h+='<div class="trrow"><div class="trn"><b>'+e.n+'</b><small>'+dose+(e.one?'':' · 세트당')+(n?' · 오늘 '+n+'세트':'')+'</small>'+swb+'</div>'+
+           '<button type="button" class="trgo" data-a="trset" data-id="'+id+'" aria-label="'+e.n+' 한 세트 훈련 기록">훈련</button></div>';
       });
     }
     h+='</div>';
@@ -2466,7 +2517,7 @@ function viewKingdom(){
   if(kv==='inn') return matBarHtml()+backBtn()+viewHome();
   if(kv==='train' && trainBuilt()) return viewTrain();
   if(kv==='forge' && bState('forge')==='done') return viewForge();
-  if(kv==='wall' && bState('wall')==='done') return placeholderView('wall');
+  if(kv==='wall' && bState('wall')==='done') return viewWall();
   if(kv==='castle') return castleView();
   if(kv.indexOf('build:')===0){ var bid=kv.slice(6); if(bld(bid) && bld(bid).cost && bState(bid)!=='done') return buildView(bid); }
   kv='map';
@@ -2536,7 +2587,7 @@ function forgeBar(fs){
   return '<div class="matbar fg" id="fgbar" role="status" aria-label="장비재료 보유량">'+c('n')+c('r')+c('l')+'</div>';
 }
 function viewForge(){
-  return forgeBar(forgeStats())+backBtn()+'<h1 class="ph" style="margin-top:8px">대장간</h1>'+sceneCard('forge')+'<div id="npcpanel">'+(npcOpen.forge?forgePanel():npcHint('forge'))+'</div>';
+  return forgeBar(forgeStats())+backBtn()+'<div class="phrow"><h1 class="ph">대장간</h1><span class="phsub">장비재료로 장비를 만드는 곳</span></div>'+sceneCard('forge')+'<div id="npcpanel">'+(npcOpen.forge?forgePanel():npcHint('forge'))+'</div>';
 }
 function forgePanel(){
   var fs=forgeStats(), h='';
@@ -2609,9 +2660,6 @@ function sL(x1,y1,x2,y2,c,w){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" 
 function sP(d,f,sw){ return pth(d,f,sw==null?2:sw); }
 function sE(cx,cy,rx,ry,f,sw){ return ell(cx,cy,rx,ry,f,sw==null?2:sw); }
 function sC(cx,cy,r,f,sw){ return circ(cx,cy,r,f,sw==null?2:sw); }
-function scnHint(x,y){
-  return '<g transform="translate('+x+','+y+')"><g class="in-hint"><path d="M-13,-9 h26 a6,6 0 0 1 6,6 v6 a6,6 0 0 1 -6,6 h-8 l-4,6 l-2,-6 h-12 a6,6 0 0 1 -6,-6 v-6 a6,6 0 0 1 6,-6 z" fill="#fff" stroke="'+OL+'" stroke-width="2"/><circle cx="-7" cy="0" r="1.9" fill="'+OL+'"/><circle cx="0" cy="0" r="1.9" fill="'+OL+'"/><circle cx="7" cy="0" r="1.9" fill="'+OL+'"/></g></g>';
-}
 /* 걷는 용사(8프레임) · 천천히 걷도록 프레임 길이를 따로 받아요 */
 function scnWalkFrame(i,n,eq,dur){
   var p=i/n*2*Math.PI, sn=Math.sin(p), lL=Math.max(0,sn)*10, rL=Math.max(0,-sn)*10, bob=-2.6*Math.abs(sn);
@@ -2752,7 +2800,6 @@ function scnInn(){
      '<g class="an-fire b">'+sP('M50,174 Q48,162 54,154 Q56,162 60,160 Q62,154 66,150 Q70,162 66,174 Z','#FFD95E',0)+'</g>';
   s+='<g transform="translate(17.5,52)"><g class="an-fire">'+sP('M0,0 Q-3,-5 0,-9 Q3,-5 0,0 Z','#FFB347',1.4)+'</g></g>';
   [[266,128,0],[283,110,-2],[300,134,-4],[250,96,-1],[310,98,-3]].forEach(function(m){ s+='<circle class="in-mote" style="animation-delay:'+m[2]+'s" cx="'+m[0]+'" cy="'+m[1]+'" r="1.3" fill="#FFF6D0"/>'; });
-  s+=scnHint(214,100);
   s+='<rect width="340" height="250" fill="url(#scVig)"/><rect width="340" height="250" fill="url(#scVigR)"/>';
   return s;
 }
@@ -2853,7 +2900,7 @@ function scnTrain(){
   /* 불빛 · 분위기 */
   [[24,50],[316,46]].forEach(function(t){ s+='<circle class="an-glow" cx="'+t[0]+'" cy="'+t[1]+'" r="34" fill="url(#scFire)" stroke="none"/><g transform="translate('+t[0]+','+(t[1]-3)+')"><g class="an-fire">'+sP('M0,0 Q-6,-8 0,-17 Q6,-8 0,0 Z','#FF8A3D',1.8)+'</g><g class="an-fire b">'+sP('M0,-1 Q-3,-6 0,-11 Q3,-6 0,-1 Z','#FFD95E',0)+'</g></g>'; });
   [[150,120,0],[200,100,-2],[120,150,-4],[270,130,-1],[60,150,-3]].forEach(function(m){ s+='<circle class="in-mote" style="animation-delay:'+m[2]+'s" cx="'+m[0]+'" cy="'+m[1]+'" r="1.3" fill="#FFF6D0"/>'; });
-  s+=scnHint(92,64)+'<rect width="340" height="250" fill="url(#scVig)"/><rect width="340" height="250" fill="url(#scVigR)"/>';
+  s+='<rect width="340" height="250" fill="url(#scVig)"/><rect width="340" height="250" fill="url(#scVigR)"/>';
   return s;
 }
 
@@ -2912,7 +2959,7 @@ function scnForge(){
   s+='<circle class="an-puff" cx="318" cy="192" r="4.4" fill="#fff" stroke="rgba(43,33,56,.22)" stroke-width="1.2"/><circle class="an-puff b" cx="320" cy="192" r="4.4" fill="#fff" stroke="rgba(43,33,56,.22)" stroke-width="1.2"/>';
   s+='<circle class="an-glow" cx="216" cy="190" r="26" fill="url(#scFire)" stroke="none"/>';
   [[240,108,0],[180,130,-2],[120,100,-4],[290,130,-1]].forEach(function(m){ s+='<circle class="in-mote" style="animation-delay:'+m[2]+'s" cx="'+m[0]+'" cy="'+m[1]+'" r="1.3" fill="#FFD9A0"/>'; });
-  s+=scnHint(270,150)+'<rect width="340" height="250" fill="#1B1020" opacity=".12"/><rect width="340" height="250" fill="url(#scVig)"/><rect width="340" height="250" fill="url(#scVigR)"/>';
+  s+='<rect width="340" height="250" fill="#1B1020" opacity=".12"/><rect width="340" height="250" fill="url(#scVig)"/><rect width="340" height="250" fill="url(#scVigR)"/>';
   return s;
 }
 
@@ -3016,6 +3063,158 @@ function kRefresh(){
 }
 
 
+/* ---------- 성벽 위 풍경 · 마왕성 연출 · 성 자리 (v1.38) ---------- */
+/* 용사 뒷모습 (원점: 몸통 중앙) */
+function heroBack(eq){
+  var s='', i, cf=eq.cape?eq.cape.fill:'#F6C445', pat=eq.cape&&eq.cape.pat;
+  for(i=0;i<2;i++){ var hx=(i===0?-10:10), lx=(i===0?-14:14); s+=bLimb(hx,20,lx,44,15,SKIN)+bootArt(lx,44,eq.shoes?eq.shoes.fill:'#24356B',!!eq.shoes); }
+  s+=pth('M-21,13 L21,13 L19,32 L0,26 L-19,32 Z','#3F6FCB')+'<rect x="-21" y="11" width="42" height="6" rx="3" fill="#F6C445" stroke="'+OL+'" stroke-width="2.5"/>';
+  s+='<g class="an-breathe">'+pth('M-31,-18 Q-35,4 -20,16 L20,16 Q35,4 31,-18 Q0,-29 -31,-18 Z',SKIN)+
+     '<path d="M0,-22 V13 M-13,-12 Q-7,-3 -14,7 M13,-12 Q7,-3 14,7" stroke="'+SKIN_D+'" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>';
+  if(eq.armor) s+=pth('M-31,-18 Q-34,0 -22,10 L22,10 Q34,0 31,-18 Q0,-29 -31,-18 Z',eq.armor.fill)+sL(0,-22,0,9,eq.armor.trim||'#8B5A2B',2.4);
+  if(eq.robe) s+=pth('M-31,-17 Q-35,8 -28,40 L28,40 Q35,8 31,-17 Q0,-28 -31,-17 Z','#FDFDFF',2.8)+'<rect x="-29" y="12" width="58" height="7" rx="3.5" fill="#FF9FB5" stroke="'+OL+'" stroke-width="2.4"/><path d="M0,-18 V40" stroke="#E7E7F2" stroke-width="2"/>';
+  /* 망토 (바람에 펄럭임) */
+  s+='<g class="in-cape">'+pth('M-30,-20 Q-42,12 -35,48 L35,48 Q42,12 30,-20 Q0,-30 -30,-20 Z',cf,3);
+  if(pat==='stars') s+=bStar(-18,2,5,'#FFF3B0')+bStar(14,18,4.4,'#FFF3B0')+bStar(-4,34,4,'#FFFFFF')+bStar(22,-4,3.4,'#FFFFFF');
+  else if(pat==='stripes') s+='<path d="M-24,-6 L-10,14 M-8,-10 L8,14 M8,-10 L24,14 M-26,16 L-12,38 M-8,16 L8,38 M10,16 L26,38" stroke="#E5484D" stroke-width="3.4" stroke-linecap="round" fill="none"/>';
+  else if(pat==='flame') s+='<path d="M-35,48 Q-34,34 -27,28 Q-24,38 -18,36 Q-16,26 -8,22 Q-5,36 2,34 Q6,26 12,24 Q14,36 22,38 Q26,30 30,28 Q36,38 35,48 Z" fill="#FFD95E" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
+  s+='<path d="M-24,-14 Q0,-8 24,-14" fill="none" stroke="rgba(43,33,56,.28)" stroke-width="2.4" stroke-linecap="round"/></g>';
+  /* 등에 멘 검 */
+  s+='<g transform="translate(6,2) rotate(36)">'+swordArt(0,0,0,eq.sword)+'</g>';
+  for(i=0;i<2;i++){ var sx=(i===0?-31:31); s+=bLimb(sx,-12,sx*1.12,20,17,SKIN)+circ(sx*1.12,24,8.5,SKIN,2.5); }
+  for(i=0;i<2;i++){ var px=(i===0?-33:33); s+=circ(px,-16,9,eq.armor?eq.armor.fill:'#8FB3EA',2.6)+circ(px,-16,2.6,eq.armor&&eq.armor.trim?eq.armor.trim:'#F6C445',1.8); }
+  /* 머리 (천천히 좌우를 둘러봄) */
+  s+='<g transform="translate(0,-11) scale(.93)"><g class="in-look">'+circ(-26,-36,5.5,FACE,2.4)+circ(26,-36,5.5,FACE,2.4)+circ(0,-38,27,FACE,3)+
+     (eq.helm?helmArt(eq.helm):pth('M-28,-36 A28,28 0 0 1 28,-36 Q26,-24 0,-20 Q-26,-24 -28,-36 Z','#6E9BD8',3)+'<path d="M0,-64 V-22" stroke="rgba(43,33,56,.3)" stroke-width="2.2" fill="none"/>')+plumeArt(eq.plume)+
+     (eq.mask?'<path d="M-28,-34 Q0,-26 28,-34" stroke="'+(eq.mask.fill||'#7A86E8')+'" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M-28,-34 Q0,-26 28,-34" stroke="'+OL+'" stroke-width="1.2" fill="none"/>':'')+'</g></g>';
+  return s;
+}
+/* 구름·새·소품 */
+function wlCloud(x,y,k,f){ return '<g transform="translate('+x+','+y+') scale('+k+')" fill="'+f+'" opacity=".92"><ellipse cx="0" cy="0" rx="26" ry="9"/><ellipse cx="-10" cy="-8" rx="12" ry="9"/><ellipse cx="8" cy="-10" rx="14" ry="11"/></g>'; }
+function wlBird(x,y,d,dur){ return '<g class="in-bird" style="animation-duration:'+dur+'s;animation-delay:'+d+'s"><g transform="translate('+x+','+y+')"><g class="in-flap"><path d="M0,0 q4,-5 8,0 q4,-5 8,0" fill="none" stroke="'+OL+'" stroke-width="2" stroke-linecap="round"/></g></g></g>'; }
+function wlGrass(x,y,k){ return '<g transform="translate('+x+','+y+') scale('+k+')"><g class="an-sway'+(Math.round(x)%2?' b':'')+'" style="animation-delay:-'+((x%7)*.4).toFixed(1)+'s"><path d="M-5,0 Q-9,-10 -7,-16 Q-4,-8 -2,0 Z M-1,0 Q-2,-14 1,-22 Q4,-12 2,0 Z M3,0 Q8,-8 10,-13 Q8,-4 6,0 Z" fill="#6FBF73" stroke="'+OL+'" stroke-width="1.6" stroke-linejoin="round"/></g></g>'; }
+function wlFlower(x,y,c){ return '<g transform="translate('+x+','+y+')"><line x1="0" y1="0" x2="0" y2="-9" stroke="'+OL+'" stroke-width="1.6"/>'+sC(0,-11,3,c,1.4)+sC(0,-11,1,'#FFF3B0',0)+'</g>'; }
+function wlFarCastle(x,y,k,col){
+  return '<g transform="translate('+x+','+y+') scale('+k+')"><ellipse class="an-glow" cx="0" cy="-30" rx="46" ry="40" fill="#B04AD0" opacity=".28" stroke="none"/>'+
+    '<g fill="'+col+'" stroke="none"><rect x="-8" y="-52" width="16" height="52"/><path d="M-12,-52 L0,-86 L12,-52 Z"/><rect x="-30" y="-30" width="14" height="30"/><path d="M-33,-30 L-23,-52 L-13,-30 Z"/><rect x="16" y="-24" width="14" height="24"/><path d="M13,-24 L23,-44 L33,-24 Z"/><rect x="-36" y="-10" width="72" height="10"/></g>'+
+    '<g fill="#FF6A5B"><rect x="-3" y="-40" width="3" height="5"/><rect x="2" y="-28" width="3" height="5"/><rect x="-25" y="-18" width="3" height="4"/><rect x="20" y="-12" width="3" height="4"/></g></g>';
+}
+
+/* ===== 성벽 위에서 바라본 풍경 (힐링 씬) ===== */
+var WL_W=340, WL_H=300;
+function wlPal(per){
+  return ({
+    morning:{m1:'#B9CBE8',m2:'#9FB8DC',h1:'#9AD28F',h2:'#86C97E',h3:'#6FBF73',cl:'#FFFFFF',cs:'#FFD9B8',castle:'#6B5C8A',roof:'#D9564A'},
+    day:{m1:'#A9C2E2',m2:'#8FB0D4',h1:'#8FCB86',h2:'#7ACB84',h3:'#66B873',cl:'#FFFFFF',cs:'#FFFFFF',castle:'#5B4B7A',roof:'#D9564A'},
+    sunset:{m1:'#9A7FB0',m2:'#7C63A0',h1:'#86905F',h2:'#6E8450',h3:'#58703F',cl:'#FFC9A8',cs:'#FF9E82',castle:'#3E2F5C',roof:'#B8483E'},
+    night:{m1:'#2A3A6E',m2:'#1F2D5C',h1:'#1E4A3A',h2:'#1A4034',h3:'#143329',cl:'#3B4A7A',cs:'#2B3866',castle:'#241C40',roof:'#6B2E3A'}})[per];
+}
+function scnWall(){
+  var per=tsPeriod(), wk=wxKind(), P=TSP[per], K=wlPal(per), eq=curEq(), s='', i;
+  var wet=(wk==='rain'||wk==='storm'), night=(per==='night'), hide=(wet||wk==='fog'||wk==='snow'||(wk==='cloudy'&&!night)), HZ=176;
+  var ccol=wk==='storm'?'#5B6678':(wk==='rain'?'#8D9AAE':(wk==='cloudy'?(night?'#2B3866':'#B8C4D4'):(wk==='snow'?'#D6DEE9':K.cl)));
+  s+='<defs><linearGradient id="wlSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+P.sk1+'"/>'+(P.sk3?'<stop offset=".55" stop-color="'+P.sk3+'"/>':'')+'<stop offset="1" stop-color="'+P.sk2+'"/></linearGradient>'+
+     '<radialGradient id="wlGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="'+(night?'#DCE6FF':(per==='sunset'?'#FFB27A':'#FFF1B8'))+'" stop-opacity=".75"/><stop offset="1" stop-color="'+(night?'#DCE6FF':'#FFF1B8')+'" stop-opacity="0"/></radialGradient>'+
+     '<radialGradient id="scFire" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFB347" stop-opacity=".6"/><stop offset="1" stop-color="#FFB347" stop-opacity="0"/></radialGradient>'+
+     '<linearGradient id="wlFog" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'+
+     '<radialGradient id="wlVig" cx=".5" cy=".5" r=".75"><stop offset=".62" stop-color="#1B1020" stop-opacity="0"/><stop offset="1" stop-color="#1B1020" stop-opacity=".32"/></radialGradient></defs>';
+  s+='<rect width="340" height="'+(HZ+30)+'" fill="url(#wlSky)"/>';
+  /* 해·달·별 */
+  if(night){
+    [[30,26],[62,58],[96,22],[128,70],[170,34],[206,16],[236,50],[300,28],[318,70],[22,96],[150,100],[280,92],[190,84],[110,46]].forEach(function(p,k){ s+='<g class="an-twk'+(k%2?' b':'')+'" style="animation-delay:-'+(k*.37).toFixed(2)+'s">'+bStar(p[0],p[1],2.6+(k%3)*.5,'#FFF6D0')+'</g>'; });
+    if(!hide) s+='<g transform="translate(262,58)"><circle r="40" fill="url(#wlGlow)"/>'+sC(0,0,15,'#FFF6D0',1.8)+'<circle cx="-5" cy="-3" r="3" fill="#EADFB0"/><circle cx="5" cy="6" r="2.2" fill="#EADFB0"/></g>'+
+       '<g class="in-shoot"><line x1="0" y1="0" x2="-22" y2="-9" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>';
+  }else if(!hide){
+    if(per==='morning') s+='<g transform="translate(190,136)"><circle r="74" fill="url(#wlGlow)"/><g class="in-rays">'+(function(){var r='';for(var k=0;k<12;k++) r+='<path d="M-5,-30 L0,-120 L5,-30 Z" fill="#FFF3B0" opacity=".26" transform="rotate('+(k*30)+')"/>'; return r;})()+'</g>'+sC(0,0,22,'#FFF1B8',2)+'</g>';
+    else if(per==='sunset') s+='<g transform="translate(172,128)"><circle r="96" fill="url(#wlGlow)"/>'+sC(0,0,28,'#FF9A5C',2)+'</g>'+'<rect x="0" y="118" width="340" height="5" fill="#FFB6A0" opacity=".5"/><rect x="40" y="132" width="260" height="4" fill="#FF9E82" opacity=".45"/>';
+    else s+='<g transform="translate(252,56)"><circle r="56" fill="url(#wlGlow)"/><g class="in-rays">'+(function(){var r='';for(var k=0;k<10;k++) r+='<path d="M-3,-22 L0,-40 L3,-22 Z" fill="#FFE08A" transform="rotate('+(k*36)+')"/>'; return r;})()+'</g>'+sC(0,0,16,'#FFE08A',1.8)+'</g>';
+  }
+  /* 구름 */
+  var nc=(wk==='cloudy'||wet||wk==='snow')?5:(wk==='fog'?2:3);
+  for(i=0;i<nc;i++) s+='<g class="in-wcl" style="animation-duration:'+(60+i*17)+'s;animation-delay:-'+(i*23)+'s">'+wlCloud(-60,24+i*17+(i%2)*10,1.2+i*.12,ccol)+'</g>';
+  if(!hide && !night) s+=wlBird(-30,70,0,26)+wlBird(-60,86,-4,26)+wlBird(-20,60,-12,34);
+  /* 먼 산 · 마왕성 실루엣 */
+  s+=sP('M0,'+HZ+' L0,118 L40,96 L72,122 L120,84 L170,128 L214,100 L262,132 L300,108 L340,126 L340,'+HZ+' Z',K.m1,0);
+  if(!night) s+='<path d="M114,90 L120,84 L128,93 L123,96 L119,91 Z M208,106 L214,100 L221,108 L216,110 L213,106 Z" fill="#fff" opacity=".85"/>';
+  s+=wlFarCastle(52,128,.5,K.castle);
+  s+=sP('M0,'+HZ+' L0,140 Q50,124 100,142 T200,136 T300,140 T340,134 L340,'+HZ+' Z',K.m2,0);
+  /* 언덕 · 마을 · 강 · 풍차 · 숲 */
+  s+=sP('M0,'+(HZ+30)+' L0,160 Q60,148 130,162 T250,158 T340,164 L340,'+(HZ+30)+' Z',K.h1,0);
+  s+=sP('M0,'+(HZ+40)+' L0,176 Q70,166 140,178 T260,172 T340,180 L340,'+(HZ+40)+' Z',K.h2,0);
+  s+='<g class="an-flow" style="stroke-dasharray:10 38">'+'</g>';
+  s+='<path d="M340,176 Q290,184 250,192 T170,206 T60,214 L-10,222" fill="none" stroke="'+(night?'#1B3A6E':'#6FC3E8')+'" stroke-width="10" stroke-linecap="round"/><path class="an-flow" d="M340,176 Q290,184 250,192 T170,206 T60,214 L-10,222" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-dasharray="10 38" opacity=".8"/>';
+  s+=sP('M0,'+(HZ+60)+' L0,198 Q80,190 160,202 T340,196 L340,'+(HZ+60)+' Z',K.h3,0);
+  [[16,196,150],[88,200,230]].forEach(function(f){ s+='<g opacity=".55">'+sP('M'+f[0]+',204 L'+(f[0]+60)+',198 L'+(f[0]+80)+',212 L'+(f[0]+14)+',220 Z',night?'#2C5A3A':'#E6CE87',0)+sL(f[0]+6,208,f[0]+70,204,'rgba(43,33,56,.3)',1.4)+sL(f[0]+10,214,f[0]+76,210,'rgba(43,33,56,.3)',1.4)+'</g>'; });
+  [[226,190],[248,186],[270,192],[290,188]].forEach(function(h,k){ s+=sR(h[0],h[1],14,10,night?'#3A3A56':'#F2E3C4',1,1.6)+sP('M'+(h[0]-2)+','+h[1]+' L'+(h[0]+7)+','+(h[1]-8)+' L'+(h[0]+16)+','+h[1]+' Z',K.roof,1.6)+(night||per==='sunset'?sR(h[0]+4,h[1]+3,5,4,'#FFE08A',0,0):'')+(k%2===0?'<circle class="an-puff" cx="'+(h[0]+11)+'" cy="'+(h[1]-8)+'" r="2.6" fill="#fff" opacity=".8"/>':''); });
+  s+='<g transform="translate(316,170)"><path d="M-6,22 L-3,-6 L3,-6 L6,22 Z" fill="'+(night?'#4A3A5E':'#F2E3C4')+'" stroke="'+OL+'" stroke-width="1.8"/>'+sP('M-5,-6 L0,-14 L5,-6 Z','#B9783A',1.6)+'<g transform="translate(0,-4)"><g class="in-mill">'+sL(0,0,0,-20,OL,3.4)+sL(0,0,0,20,OL,3.4)+sL(0,0,20,0,OL,3.4)+sL(0,0,-20,0,OL,3.4)+sR(-3,-20,6,12,'#FFF6E0',0,1.4)+sR(-3,8,6,12,'#FFF6E0',0,1.4)+sR(8,-3,12,6,'#FFF6E0',0,1.4)+sR(-20,-3,12,6,'#FFF6E0',0,1.4)+'</g></g></g>';
+  [[30,184,.5],[52,190,.42],[120,192,.5],[300,200,.5],[40,208,.55]].forEach(function(p,k){ s+=ksw(pine(p[0],p[1],p[2]),k); });
+  /* 안개 · 밤 어둠 */
+  if(wk==='fog') s+='<g class="in-fogd"><rect x="-60" y="130" width="460" height="46" fill="url(#wlFog)"/><rect x="-60" y="168" width="460" height="40" fill="url(#wlFog)" opacity=".8"/></g>';
+  if(night) s+='<rect width="340" height="'+(HZ+60)+'" y="0" fill="#0A1633" opacity=".18"/>';
+  else if(per==='sunset') s+='<rect width="340" height="'+(HZ+60)+'" fill="#FF8A3D" opacity=".1"/>';
+  /* 성벽 : 성가퀴 · 흉벽 · 바닥 */
+  var st='#9AA2B6';
+  s+='<rect y="232" width="340" height="38" fill="#8E97AC"/>';
+  for(i=0;i<5;i++){ s+=sL(0,244+i*0,340,244,'rgba(43,33,56,.3)',1.6); }
+  for(i=0;i<9;i++){ s+=sL(i*42+(i%2?10:0),232,i*42+(i%2?10:0),244,'rgba(43,33,56,.28)',1.5)+sL(i*42+(i%2?30:20),244,i*42+(i%2?30:20),258,'rgba(43,33,56,.26)',1.5); }
+  s+=sL(0,258,340,258,'rgba(43,33,56,.3)',1.6);
+  [0,76,152,228,304].forEach(function(x){ s+=sR(x,200,40,34,'#A9B1C3',2,2.4)+sL(x+4,212,x+36,212,'rgba(43,33,56,.28)',1.4)+sL(x+4,224,x+36,224,'rgba(43,33,56,.28)',1.4)+sR(x-2,196,44,8,'#C3CAD6',2,2.2); });
+  s+=sR(-4,230,348,9,'#C3CAD6',0,2.4);
+  s+='<rect y="268" width="340" height="32" fill="#7E869B"/>'+sL(0,268,340,268,OL,2.4);
+  [[0,0],[1,1],[2,0],[3,1],[4,0],[5,1],[6,0],[7,1]].forEach(function(p){ s+=sL(p[0]*48+(p[1]?24:0),268,p[0]*48+(p[1]?24:0)-6,300,'rgba(43,33,56,.3)',1.5); });
+  s+=sL(0,284,340,284,'rgba(43,33,56,.3)',1.5);
+  /* 깃발 장대 · 풀 · 꽃 */
+  s+=sL(322,110,322,232,OL,5)+sL(322,110,322,232,'#8B5A2B',2.8)+'<g transform="translate(322,114)"><g class="an-flag">'+sP('M0,0 L-34,6 L0,16 Z','#E5484D',2.2)+bStar(-12,8,4,'#F6C445')+'</g></g>';
+  [[20,238,1.2],[58,238,1],[98,238,1.1],[196,238,1],[246,238,1.2],[286,238,1],[34,266,1.3],[210,264,1.2]].forEach(function(g){ s+=wlGrass(g[0],g[1],g[2]); });
+  if(!hide && !night){ [[44,238,'#FFFFFF'],[104,238,'#FFD95E'],[200,238,'#FF8FA3'],[262,238,'#FFFFFF']].forEach(function(f){ s+=wlFlower(f[0],f[1],f[2]); });
+    s+='<g class="in-bfly"><g transform="translate(60,206)"><g class="in-flap">'+sP('M0,0 Q-8,-8 -9,-2 Q-8,4 0,2 Z M0,0 Q8,-8 9,-2 Q8,4 0,2 Z','#FF8FA3',1.4)+'</g></g></g>'+
+       '<g class="in-bfly b"><g transform="translate(250,210)"><g class="in-flap">'+sP('M0,0 Q-7,-7 -8,-2 Q-7,3 0,2 Z M0,0 Q7,-7 8,-2 Q7,3 0,2 Z','#8ED8F6',1.4)+'</g></g></g>'; }
+  if(night){ [[40,214,0],[118,222,-2],[210,216,-4],[270,226,-1],[160,208,-3]].forEach(function(f){ s+='<circle class="in-fly" style="animation-delay:'+f[2]+'s" cx="'+f[0]+'" cy="'+f[1]+'" r="1.9" fill="#E8FF8A"/>'; }); }
+  /* 용사 (뒷모습) */
+  s+='<g transform="translate(150,229) scale(.74)"><g class="an-sway" style="animation-duration:5s">'+heroBack(eq)+'</g></g>';
+  /* 날씨 · 조명 */
+  if(wk==='rain'||wk==='storm'){
+    s+='<rect width="340" height="300" fill="'+(wk==='storm'?'#1B2438':'#4B5A6E')+'" opacity="'+(wk==='storm'?.32:.2)+'"/>';
+    s+='<g class="in-rain2" stroke="#E4F0FF" stroke-width="1.4" stroke-linecap="round" opacity=".7">'; var r,c; for(r=-1;r<12;r++) for(c=0;c<12;c++) s+='<line x1="'+(c*30+(r%2)*14)+'" y1="'+(r*28)+'" x2="'+(c*30+(r%2)*14-5)+'" y2="'+(r*28+13)+'"/>'; s+='</g>';
+    [[70,280],[170,290],[260,282]].forEach(function(p,k){ s+='<ellipse class="an-ring'+(k%2?' b':'')+'" cx="'+p[0]+'" cy="'+p[1]+'" rx="14" ry="3.4" fill="none" stroke="#E4F0FF" stroke-width="1.6"/>'; });
+    if(wk==='storm') s+='<rect class="an-flash" width="340" height="300" fill="#fff"/><g class="an-bolt"><polyline points="210,30 196,80 214,80 198,130" fill="none" stroke="#FFF3B0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>';
+  }
+  if(wk==='snow'){ s+='<g class="in-snow2" fill="#fff">'; var r3,c3; for(r3=-1;r3<8;r3++) for(c3=0;c3<10;c3++) s+='<circle cx="'+(c3*36+(r3%2)*18)+'" cy="'+(r3*42+(c3%3)*12)+'" r="'+(1.6+(c3%3)*.5)+'"/>'; s+='</g>'; }
+  if(per==='sunset') s+='<rect width="340" height="300" fill="#FF8A3D" opacity=".08"/>';
+  if(night) s+='<rect width="340" height="300" fill="#0A1633" opacity=".16"/><g transform="translate(322,128)"><g class="in-swing">'+sL(0,0,0,10,OL,2)+sR(-6,10,12,15,'#3B2A1A',2,2)+sR(-4,12,8,11,'#FFE08A',1,0)+'</g></g><circle class="an-glow" cx="322" cy="144" r="28" fill="url(#scFire)" stroke="none"/>';
+  s+='<rect width="340" height="300" fill="url(#wlVig)"/>';
+  return s;
+}
+function wlCaption(){
+  var PN={morning:'아침',day:'낮',sunset:'노을 지는 저녁',night:'별이 뜬 밤'}, wk=wxKind();
+  return '성벽 위에서 바라본 풍경 · '+PN[tsPeriod()]+(wk?' · '+WXN[wk]:'');
+}
+function viewWall(){
+  return backBtn()+'<h1 class="ph" style="margin-top:8px">성벽</h1>'+
+    '<div class="card scn wallscn"><svg class="scnsvg live" viewBox="0 0 '+WL_W+' '+WL_H+'" role="img" aria-label="성벽 위에서 풍경을 바라보는 몸짱용사의 뒷모습">'+scnWall()+'</svg></div>'+
+    '<p class="wallcap">'+wlCaption()+'</p><p class="note" style="margin:2px 2px 0">기능은 없고, 잠시 쉬어 가는 곳이에요. 시간과 날씨에 따라 풍경이 달라져요.</p>';
+}
+
+/* ===== 성 자리: 알 수 없는 폐허 ===== */
+function scnCastle(){
+  var s='', i;
+  s+='<defs><linearGradient id="cmSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B2552"/><stop offset=".7" stop-color="#6B4F8E"/><stop offset="1" stop-color="#C98FB0"/></linearGradient><radialGradient id="cmGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E6B8FF" stop-opacity=".7"/><stop offset="1" stop-color="#E6B8FF" stop-opacity="0"/></radialGradient></defs>';
+  s+='<rect width="340" height="250" fill="url(#cmSky)"/>';
+  [[30,30],[70,60],[120,24],[180,50],[240,28],[300,56],[320,20],[52,100],[270,96],[210,86]].forEach(function(p,k){ s+='<g class="an-twk'+(k%2?' b':'')+'" style="animation-delay:-'+(k*.4).toFixed(1)+'s">'+bStar(p[0],p[1],2.6,'#FFF6D0')+'</g>'; });
+  s+=sC(274,48,13,'#FFF6D0',1.6)+'<circle cx="279" cy="45" r="11" fill="#3A2F68"/>';
+  s+=sP('M0,190 L0,150 L40,130 L80,156 L130,120 L190,160 L250,128 L300,154 L340,134 L340,190 Z','#3B2F66',0)+sP('M0,200 L0,176 Q80,160 170,180 T340,170 L340,200 Z','#2A2350',0);
+  s+='<rect y="190" width="340" height="60" fill="#241E48"/>';
+  s+='<ellipse cx="170" cy="130" rx="90" ry="86" fill="url(#cmGlow)" class="an-glow"/>';
+  s+='<g transform="translate(170,206) scale(1.5)">'+artCastle()+'</g>';
+  s+='<g transform="translate(170,98)"><g class="in-hint">'+'<text text-anchor="middle" y="0" font-size="30" fill="#F3D9FF" stroke="'+OL+'" stroke-width="1.6" style="font-family:var(--disp)">?</text></g></g>';
+  [[24,214,.9],[316,218,1],[84,228,.7],[262,230,.8]].forEach(function(b,k){ s+=ksw(mBush(b[0],b[1],b[2]),k); });
+  for(i=0;i<9;i++) s+='<circle class="in-fly" style="animation-delay:-'+(i*.9).toFixed(1)+'s" cx="'+(40+i*32)+'" cy="'+(196+(i%3)*12)+'" r="1.8" fill="#E8FF8A"/>';
+  s+='<g class="in-fogd"><rect x="-60" y="176" width="460" height="46" fill="#C9B8E8" opacity=".28"/></g><g class="in-fogd b"><rect x="-80" y="206" width="460" height="40" fill="#D8C8F0" opacity=".22"/></g>';
+  s+='<rect width="340" height="250" fill="#120A2A" opacity=".1"/>';
+  return s;
+}
+
+
 function trainAfter(before,adding){
   var a=snap(), gain=a.xp-before.xp;
   var newAch=Object.keys(a.ach).filter(function(id){ return !before.ach[id]; });
@@ -3027,7 +3226,7 @@ function trainAfter(before,adding){
   else if(adding){ toast('기록만 남았어요 · XP는 없어요'); }
 }
 function bldDone(id){
-  var b=bld(id), msg={train:'훈련장이 열렸어요. 이제 평일 XP를 보충하고 자유롭게 운동할 수 있어요.',forge:'대장간이 복구됐어요. 이제 장비재료로 투구·갑옷·방패를 만들 수 있어요.',wall:'성벽이 복구됐어요. 성벽 위 풍경 씬은 v1.38에서 열려요.'}[id]||'';
+  var b=bld(id), msg={train:'훈련장이 열렸어요. 이제 평일 XP를 보충하고 자유롭게 운동할 수 있어요.',forge:'대장간이 복구됐어요. 이제 장비재료로 투구·갑옷·방패를 만들 수 있어요.',wall:'성벽이 복구됐어요. 이제 성벽 위에 올라 풍경을 바라볼 수 있어요.'}[id]||'';
   showOverlay({k:'RESTORED',t:b.n+' 복구 완료!',b:'<div class="kdone live">'+bSvg(id)+'</div><p class="bnote">'+msg+'</p>',mode:'win'});
 }
 function dayTick(){
@@ -3196,7 +3395,7 @@ function mapWeather(){
 function viewWeek(){
   var ws=weekStart(), h='', doneDays=0, wxp=0, i, d, st=[], dead=[], live=[], btn='', t=(TODAY.getDay()+6)%7;
   for(i=0;i<7;i++){ d=addDays(ws,i); if(isDone(d)) doneDays++; wxp+=dayXP(fmt(d)); }
-  h+='<p class="eyebrow">이번 주</p>'+hud()+'<h1 class="ph">모험 지도</h1>';
+  h+='<p class="eyebrow">이번 주</p>'+hud()+'<div class="phrow tab"><h1 class="ph">모험 지도</h1><span class="phsub">이번 주 모험지와 마왕성으로 가는 길</span></div>';
   h+='<div class="stats"><div class="stat"><b>'+doneDays+' / 7</b><span>클리어한 스테이지</span></div>'+
      '<div class="stat"><b>'+wxp+'</b><span>이번 주 획득 XP</span></div></div>';
   for(i=0;i<7;i++){
@@ -3270,9 +3469,9 @@ function bkParse(text){
   ['wall','train','forge'].forEach(function(id){ var v=(d.kingdom&&d.kingdom.spent)?+d.kingdom.spent[id]:0; ksp[id]=(v>0)?Math.min(Math.floor(v),bld(id).cost):0; });
   if(d.trainLog&&typeof d.trainLog==='object') Object.keys(d.trainLog).forEach(function(k4){
     var e=d.trainLog[k4]; if(!ok.test(k4)||!e||typeof e!=='object') return;
-    var o={sets:{},run:e.run?1:0,es:0,er:0};
+    var o={sets:{},run:Math.max(0,Math.min(parseInt(e.run,10)||0,TR_MAX)),es:0,er:0};
     if(e.sets&&typeof e.sets==='object') Object.keys(e.sets).forEach(function(id){ var n=parseInt(e.sets[id],10); if(X[id]&&n>0) o.sets[id]=Math.min(n,TR_MAX); });
-    o.es=Math.max(0,Math.min(parseInt(e.es,10)||0,trSetCount(o))); o.er=o.run?(e.er?1:0):0;
+    o.es=Math.max(0,Math.min(parseInt(e.es,10)||0,trSetCount(o))); o.er=Math.max(0,Math.min(parseInt(e.er,10)||0,o.run));
     tlog[k4]=o;
   });
   return {data:{start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog}};
@@ -3371,7 +3570,7 @@ function achPopup(x){
   return {k:'ACHIEVEMENT',t:ch.name(x.all?ch.steps[ch.steps.length-1]:x.next),b:'<div class="achp">'+body+'</div>',mode:'info'};
 }
 function viewAch(){
-  var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<h1 class="ph">몸짱 일지</h1>';
+  var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<div class="phrow tab"><h1 class="ph">몸짱 일지</h1><span class="phsub">업적과 달리기·체중 기록</span></div>';
   var stt=achState(gstats()), doneN=0, totalN=0;
   stt.forEach(function(x){ if(x.kind==='one'){ totalN++; if(x.on) doneN++; } else { totalN+=x.total; doneN+=x.done; } });
   h+='<h2>업적 <span class="cnt">'+doneN+' / '+totalN+'</span></h2><div class="achg">';
@@ -3459,7 +3658,7 @@ function homeDogam(){
   return h;
 }
 function viewHome(){
-  var h='<p class="eyebrow">모험을 마치고 돌아온 곳</p>'+hud()+'<h1 class="ph">몸짱 여관</h1>'+sceneCard('inn')+homeHero()+homeChest()+homeDogam();
+  var h='<p class="eyebrow">모험을 마치고 돌아온 곳</p>'+hud()+'<div class="phrow tab"><h1 class="ph">몸짱 여관</h1><span class="phsub">전리품 상자와 장비 도감</span></div>'+sceneCard('inn')+homeHero()+homeChest()+homeDogam();
   return h;
 }
 
@@ -3483,7 +3682,7 @@ function soundCardHtml(){
     '<p class="note" style="margin:0 2px">아이폰은 무음 스위치가 켜져 있으면 소리가 나지 않아요.</p></div>';
 }
 function viewSettings(){
-  var h='<p class="eyebrow">모험을 준비하는 곳</p>'+hud()+'<h1 class="ph">설정</h1>';
+  var h='<p class="eyebrow">모험을 준비하는 곳</p>'+hud()+'<div class="phrow tab"><h1 class="ph">설정</h1><span class="phsub">소리·날씨·백업 등 앱 관리</span></div>';
   h+='<h2>기본 설정</h2><div class="card" style="padding:10px 16px 16px">'+
     '<div class="field"><label>루틴 시작일 (주차 계산 기준)<input type="date" id="startd" value="'+S.start+'"></label></div>'+
     '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="title-show">시작화면 보기</button></div>'+
@@ -3774,11 +3973,11 @@ app.addEventListener('click',function(e){
   }else if(a==='craft'){
     askCraft(t.getAttribute('data-id'));
   }else if(a==='trset'){
-    var tb1=snap(), dl=parseInt(t.getAttribute('data-dl'),10);
-    if(trAdd(t.getAttribute('data-id'),dl)){ kRefresh(); trainAfter(tb1,dl>0); }
+    var tb1=snap(), tid=t.getAttribute('data-id');
+    if(trAdd(tid,1)){ kRefresh(); pop('.trgo[data-id="'+tid+'"]'); try{ if(navigator.vibrate) navigator.vibrate(18); }catch(e){} trainAfter(tb1,true); }
   }else if(a==='trrun'){
-    var tb2=snap(), wasRun=!!trDay(fmt(TODAY)).run;
-    if(trRun()){ kRefresh(); trainAfter(tb2,!wasRun); }
+    var tb2=snap();
+    if(trRun()){ kRefresh(); pop('.trgo[data-a="trrun"]'); try{ if(navigator.vibrate) navigator.vibrate(18); }catch(e){} trainAfter(tb2,true); }
   }else if(a==='trtog'){
     var tgi=t.getAttribute('data-g'); trOpen[tgi]=!trOpen[tgi]; kRefresh();
   }else if(a==='tip'){
@@ -3897,7 +4096,7 @@ function mergeData(a,b){
   var ksp={}; ['wall','train','forge'].forEach(function(id){ ksp[id]=Math.max(((a.kingdom||{}).spent||{})[id]||0,((b.kingdom||{}).spent||{})[id]||0); });
   var tlog={}, tks={};
   Object.keys(a.trainLog||{}).forEach(function(k){tks[k]=1;}); Object.keys(b.trainLog||{}).forEach(function(k){tks[k]=1;});
-  function trScore(e){ return e?trSetCount(e)+(e.run?1:0):-1; }
+  function trScore(e){ return e?trSetCount(e)+(e.run||0):-1; }
   Object.keys(tks).forEach(function(k){ var x=(a.trainLog||{})[k], y=(b.trainLog||{})[k]; tlog[k]=JSON.parse(JSON.stringify(trScore(x)>=trScore(y)?x:y)); });
   return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog};
 }

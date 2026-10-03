@@ -1232,8 +1232,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.5', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.6', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.6','시작화면을 세로 방향으로 변경: 캐릭터가 앞모습으로 아래에서 위로 걷고, 길이 언덕 능선 너머로 이어지며, 능선 위 높은 언덕에 오늘의 모험지가 보임. 양옆의 나무·건물·성벽(재건 상태 그대로)이 아래로 다가오며 지나감'],
   ['1.39.5','일지 업적에 동료 수집 업적 추가(드워프 전사 합류·엘프 궁수 합류·현자 마법사 합류·전원 집결), 동료 그림이 업적 아이콘으로 표시'],
   ['1.39.4','엘프 궁수에게 초록 튜닉과 소매 추가(맨살 가슴 제거) / 보스전과 안내 그림의 공격 모습을 엘프는 활 쏘기(날아가는 화살), 현자 마법사는 마법 쏘기(날아가는 마법 구체)로 변경'],
   ['1.39.3','현자 마법사에게 보라색 로브와 소매 추가(웃통 맨살 제거, 정면·옆모습·성벽 뒷모습 공통) / 훈련장에서 엘프 궁수는 허수아비에게 화살을 쏘고 현자 마법사는 마법을 쏘도록 변경'],
@@ -5578,6 +5579,135 @@ function titleBuild(again){
   h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
   titleEl.innerHTML=h;
 }
+/* ===== 세로 방향 시작화면 (v1.39.6): 캐릭터가 앞모습으로 아래에서 위로 걷고, 길은 언덕 능선 너머로 이어지며, 목적지는 능선 위 높은 언덕에 보여요. 양옆 배경은 재건 상태 그대로 아래로 다가와요. ===== */
+var titleBuildH=null;
+(function(){
+  var _tb=titleBuild;
+  var YH=40, YB=96, Z0=9, Z1=0.7, NK=18, T=12;   /* 길의 소실점 40vh(능선보다 위 = 오르막), 가까운 기준선 96vh, 한 바퀴 12초 */
+  var CR=43.6;   /* 능선 꼭대기 높이(vh) */
+  function uri(vb,inner){ return "url('data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+vb+'">'+inner+'</svg>').replace(/'/g,'%27')+"')"; }
+  function kf(name,L,sy){
+    var s='@keyframes '+name+'{', k, z, t;
+    for(k=0;k<=NK;k++){
+      t=k/NK; z=Z0+(Z1-Z0)*t;
+      s+=(t*100).toFixed(2)+'%{opacity:'+(k===0?0:1)+';z-index:'+Math.max(1,Math.round(100/z))+';transform:translate('+(50+L/z).toFixed(2)+'vw,'+(YH+(YB-YH)/z).toFixed(2)+'vh) scale('+(1/z).toFixed(3)+','+(sy?(1/Math.pow(z,1.7)).toFixed(3):(1/z).toFixed(3))+') translate(-50%,-100%);}';
+    }
+    return s+'}';
+  }
+  var css='';
+  css+=kf('tvA',-64)+kf('tvB',64)+kf('tvC',-90)+kf('tvD',90)+kf('tvS',0,true);
+  css+='.tv .tv-s,.tv .tv-st{position:absolute;left:0;top:0;transform-origin:0 0;opacity:0;pointer-events:none;will-change:transform;background-size:100% 100%;background-repeat:no-repeat;animation-duration:'+T+'s;animation-timing-function:linear;animation-iteration-count:infinite;}'+
+    '.tv .tv-st{width:80vw;height:6.5vh;}'+
+    '.tv-world{position:absolute;inset:0;filter:var(--tsf,none);overflow:hidden;}'+
+    '.tv-hill{position:absolute;inset:0;width:100%;height:100%;}'+
+    '.tv-mt{position:absolute;left:0;right:0;bottom:53vh;height:17vh;background-repeat:repeat-x;background-size:auto 100%;background-position:50% 100%;}'+
+    '.tv-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.34),rgba(255,255,255,0));pointer-events:none;}'+
+    '.tv-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);width:132px;margin-left:-66px;text-align:center;}'+
+    '.tv-dest svg{display:block;width:100%;height:auto;}'+
+    '@media (max-height:700px){.tv-dest{width:104px;margin-left:-52px;} .tv .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .tv .ts-logo svg{width:min(62%,250px);} .tv .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
+    '.tv .ts-cl{bottom:auto;top:15vh;}'+
+    '.tv .ts-cl2{bottom:auto;top:8vh;}'+
+    '.tv .ts-logo{top:calc(5vh + env(safe-area-inset-top,0px));}'+
+    '.tv-hero{position:absolute;left:50%;bottom:calc(84px + 3vh);width:140px;margin-left:-70px;z-index:500;}'+
+    '.tv-hero svg{display:block;width:100%;height:auto;overflow:visible;}'+
+    '.tv-dust{animation:tvDust .72s linear infinite;opacity:0;}'+
+    '@keyframes tvDust{0%{transform:translate(0,0) scale(.5);opacity:.6;}100%{transform:translate(0,16px) scale(1.5);opacity:0;}}'+
+    '#title.go .tv-s,#title.go .tv-st,#title.go .tv-dust{animation-play-state:paused;}'+
+    '.tv .ts-stars{inset:0 0 auto 0;height:'+YH+'vh;}'+
+    '@media (prefers-reduced-motion: reduce){.tv .tv-s,.tv .tv-st{animation:none;opacity:1;}}';
+  var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+
+  /* 스프라이트: [viewBox, 안쪽 그림, 가로 px(z=1일 때)] — 아래쪽 가운데가 땅에 닿는 점 */
+  function spr(kind){
+    var d;
+    if(kind==='pine') d=['-26 -36 52 62',pine(0,0,1),3.4];
+    else if(kind==='pine2') d=['-26 -36 52 62',pine(0,0,1),4.4];
+    else if(kind==='bush') d=['-20 -20 40 36',mBush(0,6,1),2.8];
+    else if(kind==='rock') d=['-14 -10 28 18','<ellipse cx="0" cy="0" rx="10" ry="6" fill="#B6BED0" stroke="'+OL+'" stroke-width="2.5"/><ellipse cx="-4" cy="-2" rx="3.4" ry="1.8" fill="#D6DCE8"/>',2.6];
+    else if(kind==='flower') d=['-18 -14 36 22','<g stroke="'+OL+'" stroke-width="2"><line x1="-8" y1="2" x2="-8" y2="-6"/><line x1="2" y1="3" x2="2" y2="-9"/><line x1="10" y1="2" x2="10" y2="-5"/></g><circle cx="-8" cy="-8" r="3.6" fill="#FF8FA3" stroke="'+OL+'" stroke-width="1.6"/><circle cx="2" cy="-11" r="4" fill="#FFE08A" stroke="'+OL+'" stroke-width="1.6"/><circle cx="10" cy="-7" r="3.4" fill="#fff" stroke="'+OL+'" stroke-width="1.6"/>',2.8];
+    else if(kind==='wall') d=['-10 -64 192 78','<g transform="translate(0,0)">'+tsWallSeg(170,0,34)+'</g>',1.5];
+    else if(kind==='castle') d=['-42 -126 84 180',bArt('castle',bState('castle'),bProg('castle')),1.7];
+    else{ /* train · forge · inn */
+      var vb=({train:'-76 -64 152 118',forge:'-72 -74 144 128',inn:'-74 -60 160 112'})[kind];
+      d=[vb,bArt(kind,bState(kind),bProg(kind)),1.6];
+    }
+    var p=d[0].split(' ').map(Number), px=Math.round(p[2]*d[2]), py=Math.round(p[3]*d[2]);
+    return {bg:uri(d[0],d[1]),w:px,h:py};
+  }
+  function put(kind,lane,ph){
+    var sp=spr(kind);
+    return '<div class="tv-s" style="width:'+sp.w+'px;height:'+sp.h+'px;background-image:'+sp.bg+';animation-name:tv'+lane+';animation-delay:-'+(ph*T).toFixed(2)+'s"></div>';
+  }
+  function seq(list,lane,off){ var h=''; list.forEach(function(k,i){ h+=put(k,lane,(off+i/list.length)%1); }); return h; }
+
+  function tvSky(per){
+    var s='', k;
+    if(per==='night'){
+      s+='<svg class="ts-stars" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">';
+      [[8,10],[18,26],[27,6],[36,18],[47,9],[58,28],[66,12],[74,22],[86,7],[93,30],[12,40],[40,36],[80,42],[52,46],[22,52]].forEach(function(p,i){ s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r=".45" fill="#FFF8D6"'+(i%3===0?' class="a-twk" style="animation-delay:-'+(i*.3)+'s"':'')+'/>'; });
+      s+='</svg><div class="ts-orb" style="right:12%;top:16vh;width:48px;height:48px;background:#FFF3C4;box-shadow:0 0 0 9px rgba(255,243,196,.12),0 0 34px rgba(255,243,196,.5);"><span style="position:absolute;right:-7px;top:-5px;width:42px;height:42px;border-radius:50%;background:#0F1C45;"></span></div>';
+    }else if(per==='sunset') s+='<div class="ts-orb" style="left:14%;top:30vh;width:88px;height:88px;background:#FF8A4C;box-shadow:0 0 60px rgba(255,150,80,.75);"></div>';
+    else if(per==='morning') s+='<div class="ts-orb" style="left:10%;top:19vh;width:54px;height:54px;background:#FFD86B;border:3px solid '+OL+';box-shadow:0 0 42px rgba(255,220,120,.8);"></div>';
+    else s+='<div class="ts-orb" style="right:10%;top:18vh;width:58px;height:58px;background:#F6C445;border:3px solid '+OL+';box-shadow:0 0 0 11px rgba(246,196,69,.18),0 0 46px rgba(255,230,140,.7);"></div>';
+    return s;
+  }
+  function tvHero(eq,um){
+    var n=8, i, s='<svg viewBox="-80 -170 170 226" aria-hidden="true">';
+    s+='<ellipse cx="0" cy="49" rx="40" ry="6.5" fill="#000" opacity=".22"/>';
+    s+='<g fill="#F5E6C8" stroke="'+OL+'" stroke-width="1.6"><circle class="tv-dust" cx="-13" cy="46" r="5"/><circle class="tv-dust" cx="13" cy="46" r="5" style="animation-delay:-.36s"/></g>';
+    s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq,um); s+='</g>';
+    s+='<g class="ts-cheer">'+heroArt({expr:'cheer',arms:HP.cheer.arms,legs:HP.cheer.legs,sword:HP.cheer.sword,eq:eq})+
+      '<g class="ts-burst">'+bStar(60,-96,9,'#FFF3B0')+bStar(-46,-82,7,'#F6C445')+bStar(70,-50,6,'#FFFFFF')+bStar(-62,-40,6,'#FFF3B0')+'</g></g>';
+    return s+'</svg>';
+  }
+  function tvBuild(again){
+    var per=tsPeriod(), P=TSP[per], eq=curEq(), dk=DK[TODAY.getDay()], w=wxKind(), wet=(w==='rain'||w==='storm'), sn=(w==='snow'), um=wet, i;
+    titleEl.className='tv p-'+per+(w?' w-'+w:'')+(again?' no-drop':'');
+    titleEl.style.setProperty('--sk1',P.sk1); titleEl.style.setProperty('--sk2',P.sk2); if(P.sk3) titleEl.style.setProperty('--sk3',P.sk3);
+    titleEl.style.setProperty('--tsf',P.f);
+    var h=tvSky(per)+tsWeather(w,per);
+    h+='<div class="ts-l ts-cl" style="background-image:'+tsUri(560,150,tsClouds())+(per==='night'&&(!w||w==='clear')?';opacity:.25':'')+'"></div>';
+    h+='<div class="tv-world">';
+    h+='<div class="tv-mt" style="background-image:'+tsUri(640,210,tsMountains())+'"></div>';
+    /* 목적지가 서 있는 높은 언덕(능선 너머) */
+    var g1=sn?'#F2F6FC':'#8FD18A', g2=sn?'#DDE6F2':'#6FBF73', gm=sn?'#EAF0F8':'#9CDB97', rc=(wet?'#D3AE78':'#E7C38A'), a=.5, rw=(100-YH)*0.7143;
+    var ridge='M0,51 C18,49 34,44.2 50,'+CR+' C66,44.2 82,49 100,51', mound='M-3,53 C16,45.5 35,38.6 50,38.6 C65,38.6 84,45.5 103,53';
+    h+='<svg class="tv-hill" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+
+      '<path d="'+mound+' L103,70 L-3,70 Z" fill="'+gm+'"/><path d="'+mound+'" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/>'+
+      '</svg>';
+    h+='<div class="tv-dest">'+tsDest(dk)+'</div>';
+    /* 앞쪽 언덕(땅) + 길: 길은 능선에서 잘려 언덕 너머로 이어져요 */
+    h+='<svg class="tv-hill" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs>'+
+      '<linearGradient id="tvg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+g1+'"/><stop offset="1" stop-color="'+g2+'"/></linearGradient>'+
+      '<clipPath id="tvc"><path d="'+ridge+' L100,100 L0,100 Z"/></clipPath></defs>'+
+      '<path d="'+ridge+' L100,100 L0,100 Z" fill="url(#tvg)"/>'+
+      '<g clip-path="url(#tvc)"><polygon points="'+(50-a)+','+YH+' '+(50+a)+','+YH+' '+(50+rw)+',100 '+(50-rw)+',100" fill="'+rc+'"/>'+
+      '<polyline points="'+(50-a)+','+YH+' '+(50-rw)+',100" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/>'+
+      '<polyline points="'+(50+a)+','+YH+' '+(50+rw)+',100" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/></g>'+
+      '<path d="'+ridge+'" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/></svg>';
+    h+='<div class="tv-haze"></div>';
+    /* 길 위 가로 띠 · 가운데 점선 (걷는 속도에 맞춰 아래로 흘러요) */
+    for(i=0;i<9;i++) h+='<div class="tv-st" style="background:'+(wet?'rgba(168,128,80,.5)':'rgba(214,172,110,.62)')+';animation-name:tvS;animation-delay:-'+((i/9)*T).toFixed(2)+'s"></div>';
+    for(i=0;i<9;i++) h+='<div class="tv-st" style="width:2.4vw;height:7vh;background:'+(sn?'#fff':'#FFF3C4')+';border-radius:3px;animation-name:tvS;animation-delay:-'+(((i+.5)/9)*T).toFixed(2)+'s"></div>';
+    /* 양옆 배경 */
+    h+=seq(['pine','bush','pine','flower','bush','pine','rock','bush','pine','bush'],'A',0.03);
+    h+=seq(['bush','pine','rock','pine','bush','flower','pine','bush','pine','flower'],'B',0.08);
+    h+=seq(['train','pine2','inn','pine2','wall'],'C',0.0);
+    h+=seq(['forge','pine2','castle','pine2','wall'],'D',0.11);
+    h+='</div>';
+    h+='<div class="tv-hero" style="filter:'+P.hf+'">'+tvHero(eq,um)+'</div>';
+    h+=tsWeatherFront(w);
+    h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
+    if(w) h+='<span class="ts-wx">'+WXN[w]+'</span>';
+    h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">세로 테스트 · v'+APP_VER+'</span>';
+    h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
+    titleEl.innerHTML=h;
+  }
+  titleBuild=function(again){ tvBuild(again); };
+  titleBuildH=_tb;   /* 이전 가로 시작화면은 남겨 둠 */
+
+})();
+
 function wxAfter(changed){ if(changed && tab==='week' && titleEl.hidden) render(); }
 function tsTapUpdate(){
   var tp=titleEl.querySelector('.ts-tap'); if(!tp||titleEl.hidden) return;

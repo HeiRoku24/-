@@ -1243,8 +1243,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.14', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.15', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.15','시작화면 캐릭터가 깜빡이던 문제 수정(배경 소품 움직임에서 겹침 순서 애니메이션을 빼고 걷기 프레임 전환 방식을 가볍게 변경) / 왼쪽 위 표시를 \'모험 N일째 · 요일 · 목적지\' 한 줄로 변경'],
   ['1.39.14','시작화면은 요일별 풍경으로 확정: 설정의 시작화면 배경 선택 버튼과 재건 마을 시작화면 삭제'],
   ['1.39.13','시작화면 왼쪽 위에 \'무슨 요일 · 목적지 이름\' 줄 추가, 캐릭터와 \'화면을 눌러 모험 시작\' 문구를 조금 위로 이동'],
   ['1.39.13','시작화면을 넘어가면 처음 나오는 탭을 퀘스트에서 지도로 변경'],
@@ -5624,7 +5625,7 @@ var titleBuildD=null;
     var s='@keyframes '+name+'{', k, z, t;
     for(k=0;k<=NK;k++){
       t=k/NK; z=Z0+(Z1-Z0)*t;
-      s+=(t*100).toFixed(2)+'%{opacity:'+(k===0?0:1)+';z-index:'+Math.max(1,Math.round(100/z))+';transform:translate('+(50+L/z).toFixed(2)+'vw,'+(YH+(YB-YH)/z).toFixed(2)+'vh) scale('+(1/z).toFixed(3)+','+(sy?(1/Math.pow(z,1.7)).toFixed(3):(1/z).toFixed(3))+') translate(-50%,-100%);}';
+      s+=(t*100).toFixed(2)+'%{opacity:'+(k===0?0:1)+';transform:translate('+(50+L/z).toFixed(2)+'vw,'+(YH+(YB-YH)/z).toFixed(2)+'vh) scale('+(1/z).toFixed(3)+','+(sy?(1/Math.pow(z,1.7)).toFixed(3):(1/z).toFixed(3))+') translate(-50%,-100%);}';
     }
     return s+'}';
   }
@@ -5634,12 +5635,11 @@ var titleBuildD=null;
     '.td-world{position:absolute;inset:0;overflow:hidden;}'+
     '.td-hill{position:absolute;inset:0;width:100%;height:100%;}'+
     '.td-mt{position:absolute;left:0;right:0;top:30vh;height:26vh;background-repeat:repeat-x,no-repeat;background-size:auto 17vh,100% 10vh;background-position:50% 0,0 16vh;}'+
-    '.td .ts-day{top:calc(40px + env(safe-area-inset-top,0px));} .td .ts-wx{top:calc(68px + env(safe-area-inset-top,0px));}'+
     '.td .ts-tap{bottom:calc(16px + var(--lift) * .55 + 4vh + env(safe-area-inset-bottom,0px));}'+
     '.td-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;pointer-events:none;}'+
     '.td-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}'+
     '.td-dest svg{display:block;width:100px;height:auto;margin-top:2px;}'+
-    '@media (max-height:700px){.td-dest svg{width:80px;} .td .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .td .ts-logo svg{width:min(54%,220px);} .td .ts-dst,.td .ts-day,.td .ts-wx{font-size:11px;padding:1px 8px;} .td .ts-day{top:calc(36px + env(safe-area-inset-top,0px));} .td .ts-wx{top:calc(60px + env(safe-area-inset-top,0px));} .td .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
+    '@media (max-height:700px){.td-dest svg{width:80px;} .td .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .td .ts-logo svg{width:min(54%,220px);} .td .ts-day,.td .ts-wx{font-size:11px;padding:1px 8px;} .td .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
     '.td .ts-cl{bottom:auto;top:15vh;}'+
     '.td .ts-logo{top:calc(5vh + env(safe-area-inset-top,0px));}'+
     '.td .ts-stars{inset:0 0 auto 0;height:'+YH+'vh;}'+
@@ -5648,8 +5648,10 @@ var titleBuildD=null;
     '.td.p-sunset .td-tint{background:linear-gradient(rgba(231,124,104,.10),rgba(255,160,90,.22));}'+
     '.td.p-morning .td-tint{background:rgba(255,236,200,.06);}'+
     '.td.w-fog .td-tint{background:rgba(228,232,238,.22);}'+
-    '.td-hero{position:absolute;left:50%;bottom:calc(76px + 6vh);width:clamp(150px,22vh,196px);transform:translateX(-50%);z-index:500;}'+
+    '.td-hero{position:absolute;left:50%;bottom:calc(76px + 6vh);width:clamp(150px,22vh,196px);transform:translateX(-50%);z-index:500;will-change:transform;}'+
     '.td-hero svg{display:block;width:100%;height:auto;overflow:visible;}'+
+    '.tdwf{opacity:0;animation:tdwf .72s steps(1,end) infinite both;}'+
+    '@keyframes tdwf{0%{opacity:1;}12.5%{opacity:0;}100%{opacity:0;}}'+
     '.td-dust{animation:tdDust .72s linear infinite;opacity:0;}'+
     '@keyframes tdDust{0%{transform:translate(0,0) scale(.5);opacity:.6;}100%{transform:translate(0,16px) scale(1.5);opacity:0;}}'+
     '#title.go .td-s,#title.go .td-st,#title.go .td-dust,#title.go .td-fx i{animation-play-state:paused;}'+
@@ -5660,7 +5662,7 @@ var titleBuildD=null;
     '@keyframes tdFall{0%{opacity:0;transform:translate(0,-16px) rotate(0);}10%{opacity:.9;}100%{opacity:0;transform:translate(var(--dx,40px),240px) rotate(320deg);}}'+
     '@keyframes tdBlink{0%,100%{opacity:0;transform:translate(0,0);}50%{opacity:.95;transform:translate(var(--dx,10px),-14px);}}'+
     '@keyframes tdDrift{0%{opacity:0;transform:translate(-30px,0);}20%{opacity:.7;}100%{opacity:0;transform:translate(260px,var(--dy,20px));}}'+
-    '@media (prefers-reduced-motion: reduce){.td .td-s,.td .td-st{animation:none;opacity:0;}.td-fx{display:none;}}';
+    '@media (prefers-reduced-motion: reduce){.td .td-s,.td .td-st{animation:none;opacity:0;}.td-fx{display:none;} .tdwf{animation:none;} .tdwf.f0{opacity:1;}}';
   var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
 
   /* ---------- 소품 그림 (아래 가운데가 땅에 닿는 점) ---------- */
@@ -5721,7 +5723,7 @@ var titleBuildD=null;
     var sp=sprite(kind);
     return '<div class="td-s" style="width:'+sp.w+'px;height:'+sp.h+'px;background-image:'+sp.bg+';animation-name:td'+lane+';animation-delay:-'+(ph*T).toFixed(2)+'s"></div>';
   }
-  function seq(list,lane,off){ var h=''; list.forEach(function(k,i){ h+=put(k,lane,(off+i/list.length)%1); }); return h; }
+  function seq(list,lane,off){ var a=[],h=''; list.forEach(function(k,i){ a.push({k:k,p:(off+i/list.length)%1}); }); a.sort(function(x,y){ return x.p-y.p; }); a.forEach(function(o){ h+=put(o.k,lane,o.p); }); return h; }
 
   /* ---------- 먼 풍경 (산·절벽 등) ---------- */
   function back(kind,c1,c2){
@@ -5811,7 +5813,7 @@ var titleBuildD=null;
     var n=8, i, s='<svg viewBox="-80 -170 170 226" aria-hidden="true">';
     s+='<ellipse cx="0" cy="49" rx="40" ry="6.5" fill="#000" opacity=".22"/>';
     s+='<g fill="#F5E6C8" stroke="'+OL+'" stroke-width="1.6"><circle class="td-dust" cx="-13" cy="46" r="5"/><circle class="td-dust" cx="13" cy="46" r="5" style="animation-delay:-.36s"/></g>';
-    s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq,um); s+='</g>';
+    s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq,um).replace('class="wf ','class="tdwf '); s+='</g>';
     s+='<g class="ts-cheer">'+heroArt({expr:'cheer',arms:HP.cheer.arms,legs:HP.cheer.legs,sword:HP.cheer.sword,eq:eq})+
       '<g class="ts-burst">'+bStar(60,-96,9,'#FFF3B0')+bStar(-46,-82,7,'#F6C445')+bStar(70,-50,6,'#FFFFFF')+bStar(-62,-40,6,'#FFF3B0')+'</g></g>';
     return s+'</svg>';
@@ -5841,14 +5843,14 @@ var titleBuildD=null;
       '<path d="'+ridge+'" fill="none" stroke="'+OL+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round"/></svg>';
     h+='<div class="td-haze" style="background:linear-gradient(rgba(255,255,255,0),'+th.haze+',rgba(255,255,255,0))"></div>';
     for(i=0;i<9;i++) h+='<div class="td-st" style="background:'+th.stripe+';animation-name:tdS;animation-delay:-'+((i/9)*T).toFixed(2)+'s"></div>';
-    h+=seq(th.A,'A',0.03)+seq(th.B,'B',0.08)+seq(th.C,'C',0.0)+seq(th.D,'D',0.11);
+    h+=seq(th.C,'C',0.0)+seq(th.D,'D',0.11)+seq(th.A,'A',0.03)+seq(th.B,'B',0.08);
     h+='<div class="td-tint"></div></div>';
     h+=fx(th.fx);
     h+='<div class="td-hero" style="filter:'+P.hf+'">'+tdHero(eq,um)+'</div>';
     h+=tsWeatherFront(w);
     h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
     if(w) h+='<span class="ts-wx">'+WXN[w]+'</span>';
-    h+='<span class="ts-info ts-dst">'+({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[dk]+'요일 · '+QN[dk]+'</span><span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
+    h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째 · '+({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[dk]+'요일 · '+QN[dk]+'</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
     h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
     titleEl.innerHTML=h;
   }

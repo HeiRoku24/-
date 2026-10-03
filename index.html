@@ -306,6 +306,7 @@ svg.chart{width:100%; height:auto; display:block;}
 .bk-btns{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;}
 .bk-btns .ghost{flex:1; min-width:104px;}
 .bk-btns .primary{flex:1;}
+.bk-btns .ghost.nw{min-width:0; padding:0 6px; white-space:nowrap; font-size:clamp(12.5px,3.7vw,15px);}
 .bk-ta{width:100%; min-height:96px; margin-top:10px; border-radius:12px; border:2px solid var(--line); background:var(--soft); color:var(--ink); font:12px/1.4 ui-monospace,Menlo,monospace; padding:8px; resize:vertical;}
 .bk-file{display:block; width:100%; margin-top:8px; font-size:14px; color:var(--muted);}
 .bk-sum{margin-top:12px; padding:12px 14px; border-radius:14px; background:var(--soft); border:2px solid var(--gold);}
@@ -902,22 +903,13 @@ svg.chart{width:100%; height:auto; display:block;}
 .rn-sc .ts-wdim{z-index:1;}
 .rn-sc .ts-fall,.rn-sc .ts-sway,.rn-sc .ts-bolt{z-index:3;}
 .rn-sc.p-night .ts-haze{background:linear-gradient(to top,rgba(150,160,185,0),rgba(150,160,185,.45) 40%,rgba(150,160,185,0));}
-.rn-n{margin:0 0 8px; display:flex; justify-content:space-between; align-items:baseline; font-size:14px;}
-.rn-n b{font-family:var(--disp); font-weight:400; font-size:22px; color:var(--link);}
-.rnstat{padding:14px 16px 16px;}
 .rn-l{margin:0; font-size:13px; color:var(--muted);}
 .rn-v{margin:2px 0 8px; font-family:var(--disp); font-size:20px;}
 .rn-v b{font-size:42px; color:var(--link); font-weight:400;}
-.rn-n{margin:0 0 8px; font-size:14px;}
-.rn-bar{height:12px; border-radius:7px; background:var(--soft); border:2px solid var(--line); overflow:hidden;}
-.rn-bar i{display:block; height:100%; background:var(--gold);}
-.jmap{display:block; width:100%; height:auto; border-radius:12px;}
 .jrow{display:flex; align-items:center; gap:10px; width:100%; min-height:46px; padding:6px 0; background:none; border:0; text-align:left; color:var(--ink); font-size:15px;}
 .jrow + .jrow{border-top:1px solid var(--line);}
-.jrow .jk{width:66px; font-family:var(--disp); font-size:17px;}
 .jrow .jn{flex:1;}
 .jrow small{color:var(--muted); font-size:12px;}
-.jrow.lock{color:var(--muted);}
 .evsc{display:block; width:100%; height:auto; border-radius:14px; margin:0 0 10px; border:3px solid var(--ink);}
 .party{display:grid; grid-template-columns:repeat(2,1fr); gap:8px;}
 .pcard{display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 4px 10px; border-radius:16px; border:2px solid var(--line); background:var(--card,#fff); color:var(--ink); box-shadow:0 2px 0 var(--edge);}
@@ -1243,8 +1235,11 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.17', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.20', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.20','일지의 업적을 달성한 것만 달성한 날짜와 함께 달성 순서대로 쌓이도록 변경(달성 날짜는 지난 기록을 되짚어 채움). 누적 거리·총 달린 거리를 일일 퀘스트 러닝으로 입력한 거리만으로 통일(일요일 걷기 제외)'],
+  ['1.39.19','러닝 콘텐츠를 길 위에서 우연히 생기는 이벤트 느낌으로 정리: 러닝 탭의 원정 지도와 다음 지점·남은 거리 표시를 삭제하고, 지나온 여정은 만난 이벤트만 거리 없이 기록. 일지의 달린 거리 섹션을 러닝 탭으로 이동. 지도 탭에 시간대(아침·노을·밤) 반영. 설정의 시작 안내 다시 보기 버튼이 한 줄로 보이도록 정리'],
+  ['1.39.18','시작화면 배경이 끊겨 보이던 문제 수정: v1.39.16에서 바뀐 화면 분리 설정을 되돌리고 캐릭터를 독립된 층으로 다시 분리'],
   ['1.39.17','시작화면 캐릭터 깜빡임 대응 2: 걷는 그림 8장을 미리 한 장의 비트맵으로 만들어 위치만 바꿔 보여주도록 변경, 캐릭터 발밑의 계속 움직이던 먼지 효과 삭제'],
   ['1.39.16','시작화면 캐릭터 깜빡임 대응: 걷는 그림을 CSS 애니메이션 대신 한 장씩 직접 바꿔 보여주고(겹침·빈 순간 없음), 캐릭터 위치 방식과 불씨 효과의 번짐을 줄이고 배경 영역을 분리'],
   ['1.39.15','시작화면 캐릭터가 깜빡이던 문제 수정(배경 소품 움직임에서 겹침 순서 애니메이션을 빼고 걷기 프레임 전환 방식을 가볍게 변경) / 왼쪽 위 표시를 \'모험 N일째 · 요일 · 목적지\' 한 줄로 변경'],
@@ -2369,14 +2364,14 @@ var ACH = [
   {id:'kill30',n:'토벌 30회',d:'중간보스를 누적 30회 토벌',t:function(c){return c.killTotal>=30;}},
   {id:'bless',n:'몸짱신의 가호',d:'일요일 스트레칭을 모두 마치고 가호를 받기',b:'god',t:function(c){return c.bless>=1;}},
   {id:'run',n:'러너의 발걸음',d:'러닝 퀘스트 10회 완료',t:function(c){return c.runs>=10;}},
-  {id:'km50',n:'50km 돌파',d:'달리기·걷기 누적 50km',t:function(c){return c.km>=50;}},
+  {id:'km50',n:'50km 돌파',d:'일일 퀘스트 러닝으로 누적 50km',t:function(c){return c.km>=50;}},
   {id:'sets',n:'세트 100개',d:'세트를 누적 100개 완료',t:function(c){return c.sets>=100;}},
   {id:'lv5',n:'홈트 전사',d:'레벨 5 달성',t:function(c){return c.lv>=5;}},
   {id:'d14',n:'14일 클리어',d:'퀘스트를 14일 클리어',t:function(c){return c.days>=14;}},
   {id:'w3',n:'몸 기록 3회',d:'체중을 3번 기록',t:function(c){return c.weights>=3;}},
-  {id:'cp_dwarf',n:'드워프 전사 합류',d:'러닝 누적 50km, 드워프의 마을에 도달해 드워프 전사를 동료로 맞이하기',b:'char:dwarf',t:function(c){return c.joined.dwarf;}},
-  {id:'cp_elf',n:'엘프 궁수 합류',d:'러닝 누적 150km, 엘프의 숲에 도달해 엘프 궁수를 동료로 맞이하기',b:'char:elf',t:function(c){return c.joined.elf;}},
-  {id:'cp_mage',n:'현자 마법사 합류',d:'러닝 누적 300km, 현자의 탑에 도달해 현자 마법사를 동료로 맞이하기',b:'char:mage',t:function(c){return c.joined.mage;}},
+  {id:'cp_dwarf',n:'드워프 전사 합류',d:'길 위에서 드워프 전사를 만나 동료로 맞이하기',b:'char:dwarf',t:function(c){return c.joined.dwarf;}},
+  {id:'cp_elf',n:'엘프 궁수 합류',d:'길 위에서 엘프 궁수를 만나 동료로 맞이하기',b:'char:elf',t:function(c){return c.joined.elf;}},
+  {id:'cp_mage',n:'현자 마법사 합류',d:'길 위에서 현자 마법사를 만나 동료로 맞이하기',b:'char:mage',t:function(c){return c.joined.mage;}},
   {id:'cp_all',n:'전원 집결',d:'드워프 전사, 엘프 궁수, 현자 마법사를 모두 동료로 맞이하기',t:function(c){return c.joined.dwarf&&c.joined.elf&&c.joined.mage;}}
 ];
 /* 단계형 업적: 한 칸에서 다음 목표가 순서대로 나와요 */
@@ -2394,17 +2389,6 @@ var CHAINS=[
   bossChain('c_thu','wolf','thu','어깨짱 워울프'),
   bossChain('c_fri','mino','fri','벅지짱 미노타우르스')
 ];
-function achState(c){
-  var out=[];
-  CHAINS.forEach(function(ch){
-    var cur=ch.count(c), done=0;
-    ch.steps.forEach(function(st){ if(cur>=st) done++; });
-    var all=(done===ch.steps.length);
-    out.push({kind:'chain',ch:ch,cur:cur,done:done,all:all,next:all?ch.steps[ch.steps.length-1]:ch.steps[done],total:ch.steps.length});
-  });
-  ACH.forEach(function(a){ out.push({kind:'one',a:a,on:!!a.t(c)}); });
-  return out;
-}
 function gstats(){
   var ks=clearedKeys(), sets=0, runs=0, boss=0;
   Object.keys(S.log).forEach(function(k){
@@ -2430,6 +2414,48 @@ function unlocked(){
   CHAINS.forEach(function(ch){ var cur=ch.count(c); ch.steps.forEach(function(st){ if(cur>=st) o[ch.id+':'+st]=ch.name(st); }); });
   return o;
 }
+/* 달성한 업적 목록: 달성한 날짜가 빠른 순서(같은 날은 정의 순서)로 쌓여요 */
+function achKnown(){ var o={}; ACH.forEach(function(a){ o[a.id]=1; }); CHAINS.forEach(function(ch){ ch.steps.forEach(function(st){ o[ch.id+':'+st]=1; }); }); return o; }
+function achReplay(want){
+  /* 아직 날짜가 없는 업적이 처음 달성된 날을, 지난 기록을 날짜순으로 되짚어 찾아요 */
+  var res={}, bak=S, ds={}, left=Object.keys(want).length, i;
+  [S.log,S.restLog,S.trainLog].forEach(function(m){ Object.keys(m||{}).forEach(function(k){ ds[k]=1; }); });
+  (S.body||[]).forEach(function(b){ if(b&&b.date) ds[b.date]=1; });
+  var dates=Object.keys(ds).sort(), seen0=(S.jny&&S.jny.seen)||{};
+  function cut(m,D){ var o={}; Object.keys(m||{}).forEach(function(k){ if(k<=D) o[k]=m[k]; }); return o; }
+  try{
+    for(i=0;i<dates.length&&left>0;i++){
+      var D=dates[i], T={}, kk;
+      for(kk in bak) T[kk]=bak[kk];
+      T.log=cut(bak.log,D); T.restLog=cut(bak.restLog,D); T.trainLog=cut(bak.trainLog,D);
+      T.body=(bak.body||[]).filter(function(b){ return b&&b.date<=D; });
+      S=T;
+      var sn={}, rt=runTotal(); JNY.forEach(function(n){ if(seen0[n.id] && n.km<=rt) sn[n.id]=true; }); S.jny={seen:sn};
+      var u=unlocked();
+      Object.keys(want).forEach(function(key){ if(!res[key] && u[key]){ res[key]=D; left--; } });
+    }
+  }catch(e){}
+  finally{ S=bak; }
+  return res;
+}
+function achStamp(){
+  if(!S.achAt||typeof S.achAt!=='object') S.achAt={};
+  var u=unlocked(), want={}, n=0, k;
+  Object.keys(u).forEach(function(key){ if(!S.achAt[key]){ want[key]=1; n++; } });
+  if(!n) return;
+  var found=achReplay(want), today=fmt(TODAY);
+  Object.keys(want).forEach(function(key){ S.achAt[key]=found[key]||today; });
+  save();
+}
+function achList(){
+  var c=gstats(), items=[], ord=0, at=S.achAt||{}, today=fmt(TODAY);
+  CHAINS.forEach(function(ch){ var cur=ch.count(c); ch.steps.forEach(function(st){ if(cur>=st){ items.push({key:ch.id+':'+st,name:ch.name(st),b:ch.b,desc:(ch.name(st)),ord:ord++}); } }); });
+  ACH.forEach(function(a){ if(a.t(c)){ items.push({key:a.id,name:a.n,b:a.b,desc:a.d,ord:ord++}); } });
+  items.forEach(function(x){ x.at=at[x.key]||today; });
+  items.sort(function(p,q){ return p.at<q.at?-1:(p.at>q.at?1:p.ord-q.ord); });
+  return items;
+}
+function achDate(ymd){ return ymd.slice(0,4)+'.'+ymd.slice(5,7)+'.'+ymd.slice(8,10); }
 function snap(){var xp=totalXP(); return {xp:xp, lv:lvInfo(xp).L, ach:unlocked(), done:isDone(sel)};}
 
 /* ---------- 몸짱왕국 (v1.36): 건축 자재 · 건물 복구 · 훈련장 ---------- */
@@ -2745,6 +2771,19 @@ function mapTime(){
     ['train','forge','castle','inn'].forEach(function(id){
       var q=KPOS[id], x=(q[0]*100/KW), y=(q[1]*100/KH);
       h+='<div style="position:absolute;left:'+(x-9).toFixed(1)+'%;top:'+(y-9).toFixed(1)+'%;width:18%;height:'+(18*KW/KH).toFixed(1)+'%;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,'+(per==='night'?'.55':'.28')+') 0%,rgba(255,214,120,0) 68%)"></div>';
+    });
+  }
+  return h+'</div>';
+}
+function mapTimeWeek(){
+  var per=tsPeriod(), h='';
+  if(per==='day') return '';
+  var bg=({morning:'rgba(255,236,190,.12)',sunset:'linear-gradient(rgba(255,150,90,.20),rgba(231,124,104,.16))',night:'rgba(10,22,60,.44)'})[per];
+  h+='<div class="mapwx" aria-hidden="true"><div style="position:absolute;inset:0;background:'+bg+'"></div>';
+  if(per==='night'||per==='sunset'){
+    MPOS.forEach(function(q,i){
+      var D=(i===5?170:120), x=q[0]*100/MW, y=(q[1]-(i===5?40:10))*100/MH;
+      h+='<div style="position:absolute;left:'+(x-D*50/MW).toFixed(1)+'%;top:'+(y-D*50/MH).toFixed(1)+'%;width:'+(D*100/MW).toFixed(1)+'%;height:'+(D*100/MH).toFixed(1)+'%;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,'+(per==='night'?'.5':'.26')+') 0%,rgba(255,214,120,0) 68%)"></div>';
     });
   }
   return h+'</div>';
@@ -3601,7 +3640,7 @@ var JNY=[
   {id:'m25',km:25,n:'첫 갈림길',x:150,y:566,t:'낡은 이정표 앞에서 세 갈래 길이 갈라져요. 용사는 가장 먼지가 쌓인 길을 고르고 씩 웃었어요.'},
   {id:'dwarf',km:50,n:'드워프의 마을',x:250,y:534,who:'dwarf',t:'산자락 마을에서 쇠 두드리는 소리가 울려요. 양손 도끼를 멘 드워프 전사가 용사의 팔뚝을 보더니 팔씨름을 청했어요. 결과는 무승부, 둘은 껄껄 웃으며 함께 걷기로 했어요.'},
   {id:'m75',km:75,n:'녹는 개울',x:300,y:484,t:'얼어 있던 개울이 녹아 졸졸 흘러요. 일행은 물가에서 나란히 스트레칭을 했어요.'},
-  {id:'m100',km:100,n:'백 리 고개',x:220,y:446,t:'고갯마루에 서니 지나온 길이 한눈에 보여요. 100km를 달린 기념으로 둘이 하늘에 대고 크게 외쳤어요.'},
+  {id:'m100',km:100,n:'백 리 고개',x:220,y:446,t:'고갯마루에 서니 지나온 길이 한눈에 보여요. 먼 길을 달려온 기념으로 둘이 하늘에 대고 크게 외쳤어요.'},
   {id:'m125',km:125,n:'숲의 어귀',x:110,y:420,t:'이슬 맺힌 나뭇잎이 반짝여요. 어디선가 화살 한 대가 발끝 앞에 꽂혔어요. 숲이 가까워졌다는 신호예요.'},
   {id:'elf',km:150,n:'엘프의 숲',x:66,y:368,who:'elf',t:'숲 입구에서 화살이 나무 사이를 가르며 날아왔어요. 나무 위에서 내려온 엘프 궁수가 말했어요. 달리는 모습이 숲바람 같아서 따라가고 싶다고요.'},
   {id:'m175',km:175,n:'달빛 호수',x:120,y:318,t:'호수 위에 별이 가득 비쳐요. 일행은 말없이 물결 위의 별을 한참 바라봤어요.'},
@@ -3631,8 +3670,8 @@ function jnyNext(){
 }
 function jnyPopup(n,replay){
   var main=!!n.who;
-  return {k:main?'NEW COMPANION':'JOURNEY',t:n.n+' 도달',mode:(main&&!replay)?'win':'calm',
-    b:evScene(n)+'<p class="bnote">'+n.t+'</p>'+(main?'<p class="comfort">'+CHARN[n.who]+'가 합류했어요 · 몸짱 여관에서 캐릭터로 고를 수 있어요</p><p class="note" style="text-align:center">업적 달성 · '+CHARN[n.who]+' 합류</p>':'')+'<p class="note" style="text-align:center">누적 '+n.km+'km</p>'};
+  return {k:main?'NEW COMPANION':'JOURNEY',t:n.n,mode:(main&&!replay)?'win':'calm',
+    b:evScene(n)+'<p class="bnote">'+n.t+'</p>'+(main?'<p class="comfort">'+CHARN[n.who]+'가 합류했어요 · 몸짱 여관에서 캐릭터로 고를 수 있어요</p><p class="note" style="text-align:center">업적 달성 · '+CHARN[n.who]+' 합류</p>':'')};
 }
 function evScene(n){
   var K=({m25:'sign',dwarf:'village',m75:'river',m100:'pass',m125:'forest',elf:'forest',m175:'lake',m200:'ruin',m225:'stars',m250:'clouds',m275:'lights',mage:'tower'})[n.id]||'sign';
@@ -3663,36 +3702,7 @@ function evScene(n){
   }
   return s+'</svg>';
 }
-function jnyPt(km){
-  var P=[{km:0,x:60,y:588}].concat(JNY), i, a, b, f;
-  if(km>=300) return {x:P[P.length-1].x,y:P[P.length-1].y};
-  for(i=0;i<P.length-1;i++){ if(km<=P[i+1].km){ a=P[i]; b=P[i+1]; f=(km-a.km)/(b.km-a.km); return {x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f}; } }
-  return {x:60,y:588};
-}
-function jnyMapSvg(t){
-  var P=[{km:0,x:60,y:588}].concat(JNY), d='M'+P.map(function(p){return p.x+','+p.y;}).join(' L'), i, s='', hp=jnyPt(Math.min(t,300)), rd='M60,588';
-  for(i=1;i<P.length;i++){ if(P[i].km<=t) rd+=' L'+P[i].x+','+P[i].y; }
-  rd+=' L'+hp.x+','+hp.y;
-  s+='<svg class="jmap" viewBox="0 0 360 620" role="img" aria-label="원정 여정 지도"><rect width="360" height="620" fill="#CFEFD0"/>'+
-    '<path d="M0,0 H360 V120 Q250,90 180,130 Q90,160 0,110 Z" fill="#C9D6F0"/>'+ell(60,520,70,30,'#BFE6BE',0)+ell(300,380,64,34,'#BFE6BE',0)+ell(180,230,90,26,'#BFE6BE',0)+
-    '<path d="M300,330 Q330,300 360,320 V420 Q320,440 300,420 Z" fill="#9CD3F2"/>';
-  [[30,470,1],[320,560,.9],[30,250,1],[330,120,.8],[250,310,.8],[60,150,.9]].forEach(function(q){ s+=pine(q[0],q[1],q[2]); });
-  s+='<path d="'+d+'" fill="none" stroke="#B59A73" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="'+d+'" fill="none" stroke="#E8D6AE" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>'+
-    '<path d="'+rd+'" fill="none" stroke="#F6C445" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>';
-  s+='<g transform="translate(60,588)"><line x1="0" y1="0" x2="0" y2="-26" stroke="'+OL+'" stroke-width="3"/><path d="M0,-26 L16,-21 L0,-15 Z" fill="#E5484D" stroke="'+OL+'" stroke-width="2"/></g>';
-  /* 지점 풍경: 마을 · 숲 · 탑 */
-  s+='<g transform="translate(276,520)">'+sR(-16,-18,22,18,'#C8925C',2,2.4)+pth('M-20,-18 L-5,-32 L10,-18 Z','#D9564A',2.4)+sR(14,-12,18,12,'#C8925C',2,2.4)+pth('M10,-12 L23,-24 L36,-12 Z','#D9564A',2.4)+'</g>';
-  s+=pine(20,350,1.1)+pine(24,384,.9)+pine(18,416,1);
-  s+='<g transform="translate(214,112)">'+sR(-10,-60,20,60,'#7C6FA8',2,2.6)+pth('M-15,-60 L0,-88 L15,-60 Z','#5B3FA8',2.6)+sR(-3,-44,6,9,'#FFE08A',1,0)+bStar(0,-84,3.4,'#F6C445')+'</g>';
-  JNY.forEach(function(n){
-    var on=n.km<=t, m=!!n.who;
-    s+=circ(n.x,n.y,m?11:7.5,on?(m?'#F6C445':'#FFF3B0'):'#E3DDD0',2.4)+'<text x="'+n.x+'" y="'+(n.y+4)+'" text-anchor="middle" font-size="'+(m?10:8)+'" font-weight="700" fill="'+OL+'">'+(m?(n.who==='dwarf'?'50':n.who==='elf'?'150':'300'):n.km)+'</text>';
-    if(m) s+='<text x="'+n.x+'" y="'+(n.y+26)+'" text-anchor="middle" font-size="11" font-weight="700" fill="'+OL+'">'+n.n+'</text>';
-  });
-  s+='<g transform="translate('+hp.x+','+(hp.y-9)+')"><g class="a-bob"><g transform="translate(0,-20) scale(.24)">'+heroPose('stand')+'</g></g></g>';
-  return s+'</svg>';
-}
-var rnOpen={map:true,list:false};
+var rnOpen={list:false};
 /* 달리는 모습: 옆모습(오른쪽을 보고 달림) 8프레임을 빠르게 번갈아 보여 줘요 */
 function sdBoot(x,y,ps,fill){
   return '<g transform="translate('+x.toFixed(1)+','+y.toFixed(1)+') rotate('+(ps*35).toFixed(1)+')">'+pth('M-6,-7 L4,-7 L11,1 Q13,7 7,8 L-7,8 Q-10,0 -6,-7 Z',fill,2.6)+'<path d="M-8,5 H10" stroke="rgba(43,33,56,.35)" stroke-width="2" stroke-linecap="round"/></g>';
@@ -3795,7 +3805,7 @@ function rnSky(per){
   else s+='<div class="ts-orb" style="right:12%; top:20px; width:42px; height:42px; background:#F6C445; border:3px solid '+OL+'; box-shadow:0 0 0 8px rgba(246,196,69,.18),0 0 34px rgba(255,230,140,.7);"></div>';
   return s;
 }
-function rnScene(t,nx){
+function rnScene(t){
   var per=tsPeriod(), P=TSP[per], eq=curEq(), w=wxKind();
   var h='<section class="rn-sc p-'+per+(w?' w-'+w:'')+'" style="--sk1:'+P.sk1+';--sk2:'+P.sk2+(P.sk3?';--sk3:'+P.sk3:'')+';--tsf:'+P.f+'" aria-label="달리는 '+CHARN[curChar()]+'">';
   h+=rnSky(per)+tsWeather(w,per);
@@ -3806,32 +3816,46 @@ function rnScene(t,nx){
   h+='<div class="ts-l ts-rd" style="background-image:'+tsUri(300,120,tsRoad(w))+'"></div>';
   h+='<div class="ts-hero" style="filter:'+P.hf+'">'+runHero(eq)+'</div>'+tsWeatherFront(w);
   h+='<div class="ts-plate rn-ov rn-l1"><small>총 달린 거리</small><b>'+kmFmt(t)+' km</b></div>';
-  h+='<div class="ts-plate rn-ov rn-r1"><small>'+(nx?'다음 지점':'원정')+'</small><b>'+(nx?(nx.who?nx.n:'새로운 길'):'모든 지점 도착')+'</b></div>';
   return h+'</section>';
 }
-function viewRun(){
-  var t=runTotal(), nx=JNY.filter(function(n){return n.km>t;})[0], pk=0;
-  JNY.forEach(function(n){ if(n.km<=t) pk=n.km; });
-  var h='<p class="eyebrow">모험을 이어가는 길</p>'+hud()+'<div class="phrow tab"><h1 class="ph">러닝</h1><span class="phsub">누적 거리와 원정 여정</span></div>';
-  h+=rnScene(t,nx);
-  h+='<section class="card rnstat">';
-  if(nx){
-    var pct=Math.max(0,Math.min(100,Math.round((t-pk)*100/(nx.km-pk))));
-    h+='<p class="rn-n"><span>다음 지점까지</span><b>'+kmFmt(nx.km-t)+' km</b></p><div class="rn-bar"><i style="width:'+pct+'%"></i></div>';
-  }else h+='<p class="rn-n"><span>모든 지점에 도착했어요</span><b>다음 여정 준비 중</b></p>';
-  h+='<p class="note" style="margin:8px 0 0">일일 러닝에 입력한 거리만 쌓여요</p></section>';
-  function tog(id,name,sub,body){
-    var on=!!rnOpen[id];
-    return '<div class="dgs'+(on?' open':'')+'"><button type="button" class="dgh" data-a="rntog" data-g="'+id+'" aria-expanded="'+(on?'true':'false')+'"><span>'+name+'</span><small>'+sub+' <i aria-hidden="true">'+(on?'▴':'▾')+'</i></small></button>'+(on?body:'')+'</div>';
+/* 달린 거리 요약: 일지에 있던 것을 러닝 탭으로 옮겼어요 */
+function runStatsHtml(){
+  var ke=kmEntries(), tot=kmSum(), ws0=weekStart(), wk=kmSum(fmt(ws0),fmt(addDays(ws0,6))), ym=fmt(TODAY).slice(0,7);
+  var mo=0, best=0; ke.forEach(function(e){ if(e.k.slice(0,7)===ym) mo+=e.v; if(e.v>best) best=e.v; });
+  var recent=ke.slice(-14), kpts=recent.map(function(e){return {v:e.v};}), h='';
+  h+='<h2>달린 거리</h2><div class="stats"><div class="stat"><b>'+kmFmt(tot)+'<em>km</em></b><span>누적 거리</span></div>'+
+     '<div class="stat"><b>'+kmFmt(wk)+'<em>km</em></b><span>이번 주</span></div></div>'+
+     '<div class="stats" style="margin-top:0"><div class="stat"><b>'+kmFmt(mo)+'<em>km</em></b><span>이번 달</span></div>'+
+     '<div class="stat"><b>'+(ke.length?kmFmt(best):'-')+'<em>km</em></b><span>하루 최고</span></div></div>';
+  if(ke.length){
+    h+='<div class="card" style="margin-top:10px"><div class="chart-title"><b>최근 기록</b><span>'+kmFmt(ke[ke.length-1].v)+'km</span></div>'+chart(kpts,'거리','km')+'</div>';
+    h+='<div class="card" style="margin-top:10px">';
+    ke.slice(-5).reverse().forEach(function(e){
+      var dd=parse(e.k);
+      h+='<div class="hist"><span>'+(dd.getMonth()+1)+'/'+dd.getDate()+' ('+DAYS[dd.getDay()]+')</span><b class="kmv">'+kmFmt(e.v)+'km</b></div>';
+    });
+    h+='</div>';
+  }else{
+    h+='<p class="note" style="margin-top:10px">퀘스트 화면의 러닝 카드에서 오늘 달린 거리를 적으면 여기에 쌓여요.</p>';
   }
-  var seenN=JNY.filter(function(n){return S.jny&&S.jny.seen&&S.jny.seen[n.id];}).length;
-  h+=tog('map','원정 지도',kmFmt(t)+' km','<div style="padding:0 8px 10px">'+jnyMapSvg(t)+'</div>');
+  h+='<p class="note" style="margin-top:10px">일일 퀘스트 러닝으로 입력한 거리만 쌓여요. 일요일 걷기와 훈련장 자유 러닝은 포함되지 않아요.</p>';
+  return h;
+}
+function viewRun(){
+  var t=runTotal();
+  var h='<p class="eyebrow">모험을 이어가는 길</p>'+hud()+'<div class="phrow tab"><h1 class="ph">러닝</h1><span class="phsub">달린 거리와 길 위에서 만난 일</span></div>';
+  h+=rnScene(t);
+  h+=runStatsHtml();
+  /* 길 위에서 만난 일: 겪은 일만 기록하고, 언제·어디서 생길지는 알 수 없어요 */
+  var seen=JNY.filter(function(n){return S.jny&&S.jny.seen&&S.jny.seen[n.id];}), on=!!rnOpen.list;
   var lb='<div style="padding:0 14px 6px">';
-  JNY.forEach(function(n){
-    var seen=!!(S.jny&&S.jny.seen&&S.jny.seen[n.id]);
-    lb+='<button type="button" class="jrow'+(seen?'':' lock')+'" data-a="jny-view" data-id="'+n.id+'"'+(seen?'':' disabled')+'><span class="jk">'+n.km+'km</span><span class="jn">'+((seen||n.who)?n.n:'???')+'</span><small>'+(seen?(n.who?CHARN[n.who]+' 합류':'도착'):'')+'</small></button>';
-  });
-  h+=tog('list','지나온 여정',seenN+' / '+JNY.length,lb+'</div>');
+  if(seen.length){
+    seen.forEach(function(n){
+      lb+='<button type="button" class="jrow" data-a="jny-view" data-id="'+n.id+'"><span class="jn">'+n.n+'</span><small>'+(n.who?CHARN[n.who]+' 합류':'')+'</small></button>';
+    });
+  }else lb+='<p class="note" style="margin:6px 2px 10px">아직 길 위에서 만난 일이 없어요. 계속 달리다 보면 무슨 일이 생길지도 몰라요.</p>';
+  lb+='</div>';
+  h+='<div class="dgs'+(on?' open':'')+'" style="margin-top:14px"><button type="button" class="dgh" data-a="rntog" data-g="list" aria-expanded="'+(on?'true':'false')+'"><span>지나온 여정</span><small>'+(seen.length?seen.length+'개 ':'')+'<i aria-hidden="true">'+(on?'▴':'▾')+'</i></small></button>'+(on?lb:'')+'</div>';
   return h;
 }
 
@@ -3849,7 +3873,8 @@ function check(on,label,sub,act,extra,dis,rew){
     '<span class="rt">'+label+(sub?'<span class="rs">'+sub+'</span>':'')+'</span>'+(rew!=null?rewChip(rew,on):'')+'</button>';
 }
 function kmEntries(){
-  return Object.keys(S.log).filter(function(k){return S.log[k].km>0;}).sort().map(function(k){return {k:k,v:S.log[k].km};});
+  /* 일일 퀘스트 러닝으로 입력한 거리만 (일요일 걷기·훈련장 자유 러닝 제외) */
+  return Object.keys(S.log).filter(function(k){return S.log[k].km>0 && parse(k).getDay()!==0;}).sort().map(function(k){return {k:k,v:S.log[k].km};});
 }
 function kmSum(a,b){
   var t=0; kmEntries().forEach(function(e){ if((!a||e.k>=a)&&(!b||e.k<=b)) t+=e.v; }); return t;
@@ -4012,7 +4037,7 @@ function viewWeek(){
       'aria-label="'+QN[dk]+', '+p.k+'요일 '+(d.getMonth()+1)+'/'+d.getDate()+', '+stat+(isT?', 오늘':'')+'">'+
       '<span class="plate"><b>'+QN[dk]+'</b><small>'+p.k+' '+(d.getMonth()+1)+'/'+d.getDate()+' · '+stat+(isT?' · 오늘':'')+'</small></span></button>';
   }
-  h+='<div class="gmap">'+mapSvg(st,t,dead,live)+mapWeather()+btn+'</div><p class="note">스테이지를 누르면 그날의 퀘스트가 열려요.</p>';
+  h+='<div class="gmap">'+mapSvg(st,t,dead,live)+mapTimeWeek()+mapWeather()+btn+'</div><p class="note">스테이지를 누르면 그날의 퀘스트가 열려요.</p>';
   return h;
 }
 
@@ -4068,6 +4093,7 @@ function bkParse(text){
   if(d.restLog&&typeof d.restLog==='object') Object.keys(d.restLog).forEach(function(k3){ var v=d.restLog[k3]; if(ok.test(k3)&&(v==='none'||known[v])) rl[k3]=v; });
   var ksp={}, tlog={};
   ['wall','train','forge'].forEach(function(id){ var v=(d.kingdom&&d.kingdom.spent)?+d.kingdom.spent[id]:0; ksp[id]=(v>0)?Math.min(Math.floor(v),bld(id).cost):0; });
+  var aat={}, akn=achKnown(); if(d.achAt&&typeof d.achAt==='object') Object.keys(d.achAt).forEach(function(k5){ if(akn[k5]&&ok.test(d.achAt[k5])) aat[k5]=d.achAt[k5]; });
   var jsn2={}; if(d.jny&&d.jny.seen&&typeof d.jny.seen==='object') Object.keys(d.jny.seen).forEach(function(id){ if(d.jny.seen[id]&&JNYIDS[id]) jsn2[id]=true; });
   if(d.trainLog&&typeof d.trainLog==='object') Object.keys(d.trainLog).forEach(function(k4){
     var e=d.trainLog[k4]; if(!ok.test(k4)||!e||typeof e!=='object') return;
@@ -4077,7 +4103,7 @@ function bkParse(text){
     o.h=[]; if(Array.isArray(e.h)) e.h.slice(-80).forEach(function(x){ var m=/^(\w+):([01])$/.exec(String(x)); if(m && (m[1]==='run' || X[m[1]])) o.h.push(m[1]+':'+m[2]); });
     tlog[k4]=o;
   });
-  return {data:{start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},char:(CHARN[d.char]?d.char:'hero')}};
+  return {data:{start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,char:(CHARN[d.char]?d.char:'hero')}};
 }
 function bkCheck(text){
   var r=bkParse((text||'').trim());
@@ -4162,53 +4188,22 @@ function achIcon(key,on){
   return '<svg viewBox="-92 -90 184 144" class="'+(on?'':'sil')+'" aria-hidden="true">'+bossArtBy(key,'idle')+'</svg>';
 }
 function achPopup(x){
-  var one=(x.kind==='one'), on=one?x.on:x.done>0, key=one?x.a.b:x.ch.b, body='', i;
-  var ic='<span class="ai big'+(key?' bimg':'')+'" aria-hidden="true">'+(key?achIcon(key,on):(on?'★':'?'))+'</span>';
-  if(one){
-    body=ic+'<p class="achd">'+x.a.d+'</p><p class="achs2'+(x.on?' ok':'')+'">'+(x.on?'달성한 업적이에요!':'아직 잠겨 있어요')+'</p>';
-    return {k:x.on?'ACHIEVED':'LOCKED',t:x.a.n,b:'<div class="achp">'+body+'</div>',mode:'info'};
-  }
-  var ch=x.ch, pc=x.all?100:Math.min(100,Math.round(x.cur*100/x.next));
-  body=ic+'<p class="achd">'+(x.all?'모든 단계를 달성했어요!':'다음 목표 · '+ch.name(x.next))+'</p>'+
-    '<p class="achs2'+(x.all?' ok':'')+'">현재 '+x.cur+ch.unit+(x.all?'':' / '+x.next+ch.unit)+'</p>'+
-    '<span class="pbar" aria-hidden="true"><i style="width:'+pc+'%"></i></span><ul class="achl2">';
-  for(i=0;i<ch.steps.length;i++){ var st=ch.steps[i]; body+='<li class="'+(x.cur>=st?'on':'')+'"><span aria-hidden="true">'+(x.cur>=st?'✓':'○')+'</span> '+ch.name(st)+'</li>'; }
-  body+='</ul>';
-  return {k:'ACHIEVEMENT',t:ch.name(x.all?ch.steps[ch.steps.length-1]:x.next),b:'<div class="achp">'+body+'</div>',mode:'info'};
+  var ic='<span class="ai big'+(x.b?' bimg':'')+'" aria-hidden="true">'+(x.b?achIcon(x.b,true):'★')+'</span>';
+  var body=ic+'<p class="achd">'+x.desc+'</p><p class="achs2 ok">'+achDate(x.at)+' 달성</p>';
+  return {k:'ACHIEVED',t:x.name,b:'<div class="achp">'+body+'</div>',mode:'info'};
 }
 function viewAch(){
-  var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<div class="phrow tab"><h1 class="ph">몸짱 일지</h1><span class="phsub">업적과 달리기·체중 기록</span></div>';
-  var stt=achState(gstats()), doneN=0, totalN=0;
-  stt.forEach(function(x){ if(x.kind==='one'){ totalN++; if(x.on) doneN++; } else { totalN+=x.total; doneN+=x.done; } });
-  h+='<h2>업적 <span class="cnt">'+doneN+' / '+totalN+'</span></h2><div class="achg">';
-  stt.forEach(function(x,xi){
-    var one=(x.kind==='one'), on=one?x.on:x.done>0, key=one?x.a.b:x.ch.b, nm=one?x.a.n:x.ch.name(x.next), sm;
-    if(one) sm=x.on?'달성':'잠김';
-    else sm=x.all?'모든 단계 달성':(x.cur+' / '+x.next+x.ch.unit);
-    h+='<button type="button" class="achm'+(on?'':' lock')+((!one&&x.all)?' max':'')+'" data-a="achinfo" data-i="'+xi+'"><span class="ai'+(key?' bimg':'')+'" aria-hidden="true">'+(key?achIcon(key,on):(on?'★':'?'))+'</span><span class="amt"><b>'+nm+'</b><small>'+sm+'</small></span></button>';
-  });
-  h+='</div>';
-  h+='<div class="divider"></div>';
-  var ke=kmEntries(), tot=kmSum(), ws0=weekStart(), wk=kmSum(fmt(ws0),fmt(addDays(ws0,6))), ym=fmt(TODAY).slice(0,7);
-  var mo=0, best=0; ke.forEach(function(e){ if(e.k.slice(0,7)===ym) mo+=e.v; if(e.v>best) best=e.v; });
-  var nextM=Math.floor(tot/50)*50+50, recent=ke.slice(-14), kpts=recent.map(function(e){return {v:e.v};});
-  h+='<h2>달린 거리</h2><div class="stats"><div class="stat"><b>'+kmFmt(tot)+'<em>km</em></b><span>누적 거리</span></div>'+
-     '<div class="stat"><b>'+kmFmt(wk)+'<em>km</em></b><span>이번 주</span></div></div>'+
-     '<div class="stats" style="margin-top:0"><div class="stat"><b>'+kmFmt(mo)+'<em>km</em></b><span>이번 달</span></div>'+
-     '<div class="stat"><b>'+(ke.length?kmFmt(best):'-')+'<em>km</em></b><span>하루 최고</span></div></div>';
-  h+='<div class="card" style="padding:12px 16px 14px;margin-top:10px"><div class="chart-title" style="padding-top:0"><b>다음 '+nextM+'km까지</b><span>'+kmFmt(nextM-tot)+'km</span></div>'+
-     '<div class="xpbar big" aria-hidden="true"><i style="width:'+Math.round((tot-(nextM-50))*100/50)+'%"></i></div></div>';
-  if(ke.length){
-    h+='<div class="card" style="margin-top:10px"><div class="chart-title"><b>최근 기록</b><span>'+kmFmt(ke[ke.length-1].v)+'km</span></div>'+chart(kpts,'거리','km')+'</div>';
-    h+='<div class="card" style="margin-top:10px">';
-    ke.slice(-5).reverse().forEach(function(e){
-      var dd=parse(e.k);
-      h+='<div class="hist"><span>'+(dd.getMonth()+1)+'/'+dd.getDate()+' ('+DAYS[dd.getDay()]+')</span><b class="kmv">'+kmFmt(e.v)+'km</b></div>';
+  var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<div class="phrow tab"><h1 class="ph">몸짱 일지</h1><span class="phsub">업적과 체중 기록</span></div>';
+  var list=achList();
+  h+='<h2>업적 <span class="cnt">'+list.length+'개</span></h2>';
+  if(list.length){
+    h+='<div class="achg">';
+    list.forEach(function(x,xi){
+      h+='<button type="button" class="achm" data-a="achinfo" data-i="'+xi+'"><span class="ai'+(x.b?' bimg':'')+'" aria-hidden="true">'+(x.b?achIcon(x.b,true):'★')+'</span><span class="amt"><b>'+x.name+'</b><small>'+achDate(x.at)+' 달성</small></span></button>';
     });
     h+='</div>';
-  }else{
-    h+='<p class="note" style="margin-top:10px">퀘스트 화면의 러닝 카드에서 오늘 달린 거리를 적으면 여기에 쌓여요.</p>';
-  }
+  }else h+='<p class="note">아직 달성한 업적이 없어요. 모험을 이어가면 이곳에 하나씩 쌓여요.</p>';
+  h+='<div class="divider"></div>';
   var body=S.body.slice().sort(function(a,b){return a.date<b.date?-1:1;}).filter(function(b){return b.weight!=null;});
   var wpts=body.map(function(b){return {v:b.weight};});
   h+='<h2>체중 기록하기</h2><div class="card" style="padding:10px 16px 16px">'+
@@ -4234,10 +4229,10 @@ function homeHero(){
 function homeParty(){
   var h='<h2>동료 <span class="cnt">'+(1+JNY.filter(function(n){return n.who&&jnySeen(n.who);}).length)+' / 4</span></h2><div class="party">';
   CHARIDS.forEach(function(id){
-    var on=(id==='hero')||jnySeen(id), cs=(curChar()===id), nd=JNY.filter(function(n){return n.who===id;})[0];
+    var on=(id==='hero')||jnySeen(id), cs=(curChar()===id);
     h+='<button type="button" class="pcard'+(cs?' sel':'')+(on?'':' lock')+'" data-a="pickchar" data-id="'+id+'"'+(on?'':' disabled')+'>'+
       '<span class="pimg"><svg viewBox="-60 -96 120 148" aria-hidden="true"><g class="a-bob">'+heroArt({who:id,expr:'cheer',arms:HP.swordpose.arms,legs:HP.swordpose.legs,sword:HP.swordpose.sword,eq:(id==='hero'?curEq():{})})+'</g></svg></span>'+
-      '<b>'+(on?CHARN[id]:'???')+'</b><small>'+(cs?'선택 중':(on?'눌러서 선택':nd.n+' 도달 시 합류'))+'</small></button>';
+      '<b>'+(on?CHARN[id]:'???')+'</b><small>'+(cs?'선택 중':(on?'눌러서 선택':'아직 만나지 못했어요'))+'</small></button>';
   });
   return h+'</div>';
 }
@@ -4302,12 +4297,12 @@ function viewSettings(){
   var h='<p class="eyebrow">모험을 준비하는 곳</p>'+hud()+'<div class="phrow tab"><h1 class="ph">설정</h1><span class="phsub">소리·날씨·백업 등 앱 관리</span></div>';
   h+='<h2>기본 설정</h2><div class="card" style="padding:10px 16px 16px">'+
     '<div class="field"><label>루틴 시작일 (주차 계산 기준)<input type="date" id="startd" value="'+S.start+'"></label></div>'+
-    '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="title-show">시작화면 보기</button></div>'+
+    '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost nw" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost nw" data-a="title-show">시작화면 보기</button></div>'+
     
-    '<div class="bk-btns" style="margin:0 0 6px"><button type="button" class="ghost" data-a="wx-toggle" aria-pressed="'+(wxOn()?'true':'false')+'">날씨 반영 '+(wxOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost" data-a="wx-check"'+(wxOn()?'':' disabled')+'>지금 날씨 확인</button></div>'+
+    '<div class="bk-btns" style="margin:0 0 6px"><button type="button" class="ghost nw" data-a="wx-toggle" aria-pressed="'+(wxOn()?'true':'false')+'">날씨 반영 '+(wxOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost nw" data-a="wx-check"'+(wxOn()?'':' disabled')+'>지금 날씨 확인</button></div>'+
     '<p class="note" id="wxstat" style="margin:0 2px 12px">'+wxStatus()+'</p>'+
-    '<div class="bk-btns" style="margin:0"><button type="button" class="ghost" data-a="intro">시작 안내 다시 보기</button>'+
-    '<button type="button" class="ghost danger" data-a="reset">모든 기록 초기화</button></div></div>';
+    '<div class="bk-btns" style="margin:0"><button type="button" class="ghost nw" data-a="intro">시작 안내 다시 보기</button>'+
+    '<button type="button" class="ghost danger nw" data-a="reset">모든 기록 초기화</button></div></div>';
   h+=soundCardHtml();
   h+=cloudHtml();
   h+=bkHtml();
@@ -4319,6 +4314,7 @@ function viewSettings(){
 
 
 function render(){
+  try{ achStamp(); }catch(e){}
   var v=tab==='today'?viewToday():(tab==='run'?viewRun():tab==='week'?viewWeek():(tab==='ach'?viewAch():(tab==='set'?viewSettings():viewKingdom())));
   app.innerHTML=v;
   var bs=document.querySelectorAll('#nav button');
@@ -4623,7 +4619,7 @@ app.addEventListener('click',function(e){
   }else if(a==='chg'){
     showChg=!showChg; render();
   }else if(a==='achinfo'){
-    var axs=achState(gstats())[parseInt(t.getAttribute('data-i'),10)]; if(axs) showOverlay(achPopup(axs));
+    var axs=achList()[parseInt(t.getAttribute('data-i'),10)]; if(axs) showOverlay(achPopup(axs));
   }else if(a==='dogtog'){
     var dgi=t.getAttribute('data-g'); dogOpen[dgi]=!dogOpen[dgi]; render();
   }else if(a==='equip'){
@@ -4755,7 +4751,7 @@ var introSeen=false; try{introSeen=!!localStorage.getItem('home-training-intro')
 var cqEl=document.getElementById('cq'), cqD=document.getElementById('cqd'), cqB=document.getElementById('cqb');
 function withTimeout(p,ms){ return Promise.race([p,new Promise(function(_,rej){setTimeout(function(){rej({code:'timeout'});},ms);})]); }
 function isEmptyData(x){ return !x || (!Object.keys(x.log||{}).length && !(x.body||[]).length); }
-function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero'}; }
+function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{}}; }
 function dayScore(L){ return Object.keys(L.done||{}).length+Object.keys(L.diet||{}).length+(L.km>0?1:0)+(L.out?1:0); }
 function mergeData(a,b){
   var log={}, keys={};
@@ -4779,16 +4775,17 @@ function mergeData(a,b){
   var ksp={}; ['wall','train','forge'].forEach(function(id){ ksp[id]=Math.max(((a.kingdom||{}).spent||{})[id]||0,((b.kingdom||{}).spent||{})[id]||0); });
   var jsn={}, jk;
   for(jk in ((a.jny||{}).seen||{})) jsn[jk]=true; for(jk in ((b.jny||{}).seen||{})) jsn[jk]=true;
+  var aam={}; [a.achAt||{},b.achAt||{}].forEach(function(m){ Object.keys(m).forEach(function(k){ if(!aam[k]||m[k]<aam[k]) aam[k]=m[k]; }); });
   var tlog={}, tks={};
   Object.keys(a.trainLog||{}).forEach(function(k){tks[k]=1;}); Object.keys(b.trainLog||{}).forEach(function(k){tks[k]=1;});
   function trScore(e){ return e?trSetCount(e)+(e.run||0):-1; }
   Object.keys(tks).forEach(function(k){ var x=(a.trainLog||{})[k], y=(b.trainLog||{})[k]; tlog[k]=JSON.parse(JSON.stringify(trScore(x)>=trScore(y)?x:y)); });
-  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
+  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
 }
 function applyData(x,dirty){
   if(migrateLog(x.log)) dirty=true;
   noDirty=true;
-  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
+  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
   save(); noDirty=false;
 }
 function hm(){var d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes());}
@@ -5634,7 +5631,7 @@ var titleBuildD=null;
   var css=kf('tdA',-64)+kf('tdB',64)+kf('tdC',-90)+kf('tdD',90)+kf('tdS',0,true);
   css+='.td .td-s,.td .td-st{position:absolute;left:0;top:0;transform-origin:0 0;opacity:0;pointer-events:none;background-size:100% 100%;background-repeat:no-repeat;animation-duration:'+T+'s;animation-timing-function:linear;animation-iteration-count:infinite;}'+
     '.td .td-st{width:80vw;height:6.5vh;}'+
-    '.td-world{position:absolute;inset:0;overflow:hidden;contain:layout paint style;}'+
+    '.td-world{position:absolute;inset:0;overflow:hidden;}'+
     '.td-hill{position:absolute;inset:0;width:100%;height:100%;}'+
     '.td-mt{position:absolute;left:0;right:0;top:30vh;height:26vh;background-repeat:repeat-x,no-repeat;background-size:auto 17vh,100% 10vh;background-position:50% 0,0 16vh;}'+
     '.td .ts-tap{bottom:calc(16px + var(--lift) * .55 + 4vh + env(safe-area-inset-bottom,0px));}'+
@@ -5650,7 +5647,7 @@ var titleBuildD=null;
     '.td.p-sunset .td-tint{background:linear-gradient(rgba(231,124,104,.10),rgba(255,160,90,.22));}'+
     '.td.p-morning .td-tint{background:rgba(255,236,200,.06);}'+
     '.td.w-fog .td-tint{background:rgba(228,232,238,.22);}'+
-    '.td-hero{position:absolute;left:0;right:0;margin:0 auto;bottom:calc(76px + 6vh);width:clamp(150px,22vh,196px);z-index:500;}'+
+    '.td-hero{position:absolute;left:0;right:0;margin:0 auto;bottom:calc(76px + 6vh);width:clamp(150px,22vh,196px);z-index:500;will-change:transform;}'+
     '.td-hero svg{display:block;width:100%;height:auto;overflow:visible;}'+
     '.tdspr{position:absolute;left:0;top:0;width:100%;aspect-ratio:170 / 226;background-repeat:no-repeat;background-size:800% 100%;background-position:0% 0;pointer-events:none;display:none;}'+
     '.td-hero.spr-on .tdspr{display:block;} .td-hero.spr-on .ts-walk{display:none;}'+

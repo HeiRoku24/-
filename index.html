@@ -1243,8 +1243,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.39.15', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.39.16', APP_DATE='2026-10-03', showChg=false;
 var CHANGES=[
+  ['1.39.16','시작화면 캐릭터 깜빡임 대응: 걷는 그림을 CSS 애니메이션 대신 한 장씩 직접 바꿔 보여주고(겹침·빈 순간 없음), 캐릭터 위치 방식과 불씨 효과의 번짐을 줄이고 배경 영역을 분리'],
   ['1.39.15','시작화면 캐릭터가 깜빡이던 문제 수정(배경 소품 움직임에서 겹침 순서 애니메이션을 빼고 걷기 프레임 전환 방식을 가볍게 변경) / 왼쪽 위 표시를 \'모험 N일째 · 요일 · 목적지\' 한 줄로 변경'],
   ['1.39.14','시작화면은 요일별 풍경으로 확정: 설정의 시작화면 배경 선택 버튼과 재건 마을 시작화면 삭제'],
   ['1.39.13','시작화면 왼쪽 위에 \'무슨 요일 · 목적지 이름\' 줄 추가, 캐릭터와 \'화면을 눌러 모험 시작\' 문구를 조금 위로 이동'],
@@ -5632,7 +5633,7 @@ var titleBuildD=null;
   var css=kf('tdA',-64)+kf('tdB',64)+kf('tdC',-90)+kf('tdD',90)+kf('tdS',0,true);
   css+='.td .td-s,.td .td-st{position:absolute;left:0;top:0;transform-origin:0 0;opacity:0;pointer-events:none;background-size:100% 100%;background-repeat:no-repeat;animation-duration:'+T+'s;animation-timing-function:linear;animation-iteration-count:infinite;}'+
     '.td .td-st{width:80vw;height:6.5vh;}'+
-    '.td-world{position:absolute;inset:0;overflow:hidden;}'+
+    '.td-world{position:absolute;inset:0;overflow:hidden;contain:layout paint style;}'+
     '.td-hill{position:absolute;inset:0;width:100%;height:100%;}'+
     '.td-mt{position:absolute;left:0;right:0;top:30vh;height:26vh;background-repeat:repeat-x,no-repeat;background-size:auto 17vh,100% 10vh;background-position:50% 0,0 16vh;}'+
     '.td .ts-tap{bottom:calc(16px + var(--lift) * .55 + 4vh + env(safe-area-inset-bottom,0px));}'+
@@ -5648,21 +5649,19 @@ var titleBuildD=null;
     '.td.p-sunset .td-tint{background:linear-gradient(rgba(231,124,104,.10),rgba(255,160,90,.22));}'+
     '.td.p-morning .td-tint{background:rgba(255,236,200,.06);}'+
     '.td.w-fog .td-tint{background:rgba(228,232,238,.22);}'+
-    '.td-hero{position:absolute;left:50%;bottom:calc(76px + 6vh);width:clamp(150px,22vh,196px);transform:translateX(-50%);z-index:500;will-change:transform;}'+
+    '.td-hero{position:absolute;left:0;right:0;margin:0 auto;bottom:calc(76px + 6vh);width:clamp(150px,22vh,196px);z-index:500;}'+
     '.td-hero svg{display:block;width:100%;height:auto;overflow:visible;}'+
-    '.tdwf{opacity:0;animation:tdwf .72s steps(1,end) infinite both;}'+
-    '@keyframes tdwf{0%{opacity:1;}12.5%{opacity:0;}100%{opacity:0;}}'+
     '.td-dust{animation:tdDust .72s linear infinite;opacity:0;}'+
     '@keyframes tdDust{0%{transform:translate(0,0) scale(.5);opacity:.6;}100%{transform:translate(0,16px) scale(1.5);opacity:0;}}'+
     '#title.go .td-s,#title.go .td-st,#title.go .td-dust,#title.go .td-fx i{animation-play-state:paused;}'+
     '.td-fx{position:absolute;inset:0;pointer-events:none;z-index:450;overflow:hidden;}'+
-    '.td-fx i{position:absolute;left:var(--x);top:var(--y);width:var(--s,4px);height:var(--s,4px);border-radius:50%;background:var(--c,#fff);opacity:0;box-shadow:0 0 6px var(--c,#fff);animation-duration:var(--d,6s);animation-delay:var(--dl,0s);animation-iteration-count:infinite;animation-timing-function:linear;}'+
+    '.td-fx i{position:absolute;left:var(--x);top:var(--y);width:var(--s,4px);height:var(--s,4px);border-radius:50%;background:var(--c,#fff);opacity:0;animation-duration:var(--d,6s);animation-delay:var(--dl,0s);animation-iteration-count:infinite;animation-timing-function:linear;}'+
     '.td-fx.up i{animation-name:tdUp;} .td-fx.fall i{animation-name:tdFall;border-radius:60% 0 60% 0;box-shadow:none;} .td-fx.blink i{animation-name:tdBlink;animation-timing-function:ease-in-out;} .td-fx.drift i{animation-name:tdDrift;border-radius:40%;box-shadow:none;}'+
     '@keyframes tdUp{0%{opacity:0;transform:translate(0,0);}15%{opacity:.95;}100%{opacity:0;transform:translate(var(--dx,14px),-140px);}}'+
     '@keyframes tdFall{0%{opacity:0;transform:translate(0,-16px) rotate(0);}10%{opacity:.9;}100%{opacity:0;transform:translate(var(--dx,40px),240px) rotate(320deg);}}'+
     '@keyframes tdBlink{0%,100%{opacity:0;transform:translate(0,0);}50%{opacity:.95;transform:translate(var(--dx,10px),-14px);}}'+
     '@keyframes tdDrift{0%{opacity:0;transform:translate(-30px,0);}20%{opacity:.7;}100%{opacity:0;transform:translate(260px,var(--dy,20px));}}'+
-    '@media (prefers-reduced-motion: reduce){.td .td-s,.td .td-st{animation:none;opacity:0;}.td-fx{display:none;} .tdwf{animation:none;} .tdwf.f0{opacity:1;}}';
+    '@media (prefers-reduced-motion: reduce){.td .td-s,.td .td-st{animation:none;opacity:0;}.td-fx{display:none;}}';
   var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
 
   /* ---------- 소품 그림 (아래 가운데가 땅에 닿는 점) ---------- */
@@ -5813,10 +5812,22 @@ var titleBuildD=null;
     var n=8, i, s='<svg viewBox="-80 -170 170 226" aria-hidden="true">';
     s+='<ellipse cx="0" cy="49" rx="40" ry="6.5" fill="#000" opacity=".22"/>';
     s+='<g fill="#F5E6C8" stroke="'+OL+'" stroke-width="1.6"><circle class="td-dust" cx="-13" cy="46" r="5"/><circle class="td-dust" cx="13" cy="46" r="5" style="animation-delay:-.36s"/></g>';
-    s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq,um).replace('class="wf ','class="tdwf '); s+='</g>';
+    s+='<g class="ts-walk">'; for(i=0;i<n;i++) s+=tsWalkFrame(i,n,eq,um).replace('class="wf ','class="tdwf ').replace(/style="animation-delay:[^"]*"/,'style="display:none"'); s+='</g>';
     s+='<g class="ts-cheer">'+heroArt({expr:'cheer',arms:HP.cheer.arms,legs:HP.cheer.legs,sword:HP.cheer.sword,eq:eq})+
       '<g class="ts-burst">'+bStar(60,-96,9,'#FFF3B0')+bStar(-46,-82,7,'#F6C445')+bStar(70,-50,6,'#FFFFFF')+bStar(-62,-40,6,'#FFF3B0')+'</g></g>';
     return s+'</svg>';
+  }
+  var walkT=null;
+  function walkStart(){
+    if(walkT){ clearInterval(walkT); walkT=null; }
+    var fr=[].slice.call(titleEl.querySelectorAll('.tdwf')), k=0; if(!fr.length) return;
+    fr.forEach(function(f,i){ f.style.display=(i===0?'':'none'); });
+    if(reduceMotion()) return;
+    walkT=setInterval(function(){
+      if(titleEl.hidden){ clearInterval(walkT); walkT=null; return; }
+      if(document.hidden) return;
+      fr[k].style.display='none'; k=(k+1)%fr.length; fr[k].style.display='';
+    },90);
   }
   function tdBuild(again){
     var dk=dayKey(), th=TH[dk], per=tsPeriod(), P=TSP[per], eq=curEq(), w=wxKind(), wet=(w==='rain'||w==='storm'), sn=(w==='snow'), um=wet, i;
@@ -5853,6 +5864,7 @@ var titleBuildD=null;
     h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째 · '+({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[dk]+'요일 · '+QN[dk]+'</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
     h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
     titleEl.innerHTML=h;
+    walkStart();
   }
   titleBuildD=tdBuild;
 })();

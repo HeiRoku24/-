@@ -1251,8 +1251,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.41.9', APP_DATE='2026-10-03', showChg=false;
+var APP_VER='1.41.11', APP_DATE='2026-10-05', showChg=false;
 var CHANGES=[
+  ['1.41.11','시작화면 "몸짱소울" 타이틀을 아래로 내려 목적지 그림과의 빈 공간을 줄이고, 해·달 위치를 타이틀에 덜 가리는 곳으로 옮김'],
+  ['1.41.10','러닝 거리 오입력 방지: 하루 입력은 최대 15km까지, 10km 이상이면 "맞아요" 확인창을 거쳐요. 거리에 비해 일찍 열린 이벤트·동료 기록을 한 번 정리'],
   ['1.41.9','왕국 건물 이름을 "여관"·"훈련장"·"대장간"·"교역소"로 통일(앞의 "몸짱"을 뺌). 화면 제목, 건물 목록, 업적 문구, 안내 문구, 여관 배경음악 이름에 모두 반영'],
   ['1.41.8','일요일 퀘스트의 "가볍게 걷기 30분"에서 걸은 거리를 적는 칸을 없애고 체크만 하도록 변경(이미 적어 둔 일요일 거리 기록은 그대로 보존)'],
   ['1.41.7','교역소의 "바꾸기" 버튼이 활성화되면 교환 줄이 세로로 길게 늘어나던 문제 수정(버튼 폭이 줄 전체로 늘어나 글자 칸을 밀어내던 것). 설정 톱니바퀴를 조금 위로 올려 아래 카드와 닿지 않게 조정'],
@@ -4261,6 +4263,22 @@ function supGranted(){
 }
 function supSeenCount(){ var n=0, seen=(S.jny&&S.jny.seen)||{}; Object.keys(seen).forEach(function(id){ if(seen[id]&&isSupId(id)) n++; }); return n; }
 function jnyById(id){ var i; if(isSupId(id)) return supEvent(+String(id).slice(3)); for(i=0;i<JNY.length;i++) if(JNY[i].id===id) return JNY[i]; return null; }
+/* v1.41.10 일회성 기록 정리: 거리에 비해 너무 일찍 열린 이벤트·동료·보급과 그 업적 달성일을 한 번만 정리해요(오입력 사고 복구용, 이 폰에서 1회).
+   정리 뒤에는 실제로 달린 거리만큼 이벤트가 정상적으로 다시 열려요. 사용자가 누르는 되돌리기 버튼은 없어요. */
+var FIXKM_KEY='home-training-fix-km1';
+function fixKmOnce(){
+  try{ if(localStorage.getItem(FIXKM_KEY)) return; }catch(e){ return; }
+  var ch=false, seen, tot, ks, at, sc, jn;
+  if(!S.jny||typeof S.jny!=='object') S.jny={seen:{}}; if(!S.jny.seen) S.jny.seen={};
+  seen=S.jny.seen; tot=runTotal(); ks=supKmSince();
+  JNY.forEach(function(n){ if(seen[n.id] && n.km>tot){ delete seen[n.id]; ch=true; } });
+  Object.keys(seen).forEach(function(id){ if(isSupId(id) && supThreshold(+id.slice(3))>ks){ delete seen[id]; ch=true; } });
+  if(S.char && S.char!=='hero' && !seen[S.char]){ S.char='hero'; ch=true; }
+  at=S.achAt||{}; sc=supSeenCount(); jn={dwarf:!!seen.dwarf,elf:!!seen.elf,mage:!!seen.mage};
+  [['cp_dwarf',jn.dwarf],['cp_elf',jn.elf],['cp_mage',jn.mage],['cp_all',jn.dwarf&&jn.elf&&jn.mage],['sp_first',sc>=1],['sp_12',sc>=12],['km50',kmSum()>=50]].forEach(function(p){ if(!p[1] && at[p[0]]){ delete at[p[0]]; ch=true; } });
+  try{ localStorage.setItem(FIXKM_KEY,'1'); }catch(e){}
+  if(ch) save();
+}
 var jnyQ=[];
 function jnyCheck(){
   if(!S.jny||typeof S.jny!=='object') S.jny={seen:{}}; if(!S.jny.seen) S.jny.seen={};
@@ -4539,7 +4557,7 @@ function runRow(on,label,sub,rew){
 function kmRow(L,rest,lock){
   if(rest) return ''; /* 일요일 걷기는 거리 입력 없이 체크만 */
   return '<div class="kmrow"><label for="kmin">'+(rest?'오늘 걸은 거리':'실제로 뛴 거리')+'</label>'+
-    '<input id="kmin" type="number" inputmode="decimal" step="0.01" min="0" max="200" placeholder="5.00" value="'+(L.km>0?L.km:'')+'"'+(lock?' disabled':'')+'><span>km</span></div>'+((!rest&&L.km>0&&L.km<RUN_MIN&&!L.done.run)?'<p class="note" style="margin:-6px 4px 10px">'+RUN_MIN+'km 이상 입력해야 러닝이 완료돼요</p>':'');
+    '<input id="kmin" type="number" inputmode="decimal" step="0.01" min="0" max="15" placeholder="5.00" value="'+(L.km>0?L.km:'')+'"'+(lock?' disabled':'')+'><span>km</span></div>'+((!rest&&L.km>0&&L.km<RUN_MIN&&!L.done.run)?'<p class="note" style="margin:-6px 4px 10px">'+RUN_MIN+'km 이상 입력해야 러닝이 완료돼요</p>':'');
 }
 function dayNav(d){
   var pv=addDays(d,-1), nx=addDays(d,1), isT=(fmt(d)===fmt(TODAY));
@@ -5359,21 +5377,36 @@ app.addEventListener('click',function(e){
     askOpen({title:'정말로 초기화 하시겠습니까?',note:'운동 기록, 체중 기록, 레벨, 장비가 모두 지워지고 되돌릴 수 없어요. 클라우드에 로그인한 상태라면 클라우드에 저장된 기록도 함께 비워져요. 필요하면 먼저 "백업 만들기"로 저장해 두세요.',yes:'초기화',no:'취소',danger:true,act:doReset});
   }
 });
+var KM_MAX=15, KM_ASK=10;
+function commitKm(kk,dsel,v){
+  var bf=snap(), Lk=wr(kk), restDay=(DK[dsel.getDay()]==='sun'), hp0=bossHp(dsel), was=!!Lk.done.run;
+  if(isNaN(v)||v<=0){ delete Lk.km; }
+  else{ Lk.km=Math.round(Math.min(KM_MAX,v)*100)/100; }
+  if(!restDay){ if(Lk.km>=RUN_MIN) Lk.done.run=true; else delete Lk.done.run; }
+  var now=!!Lk.done.run;
+  save(); render();
+  if(!restDay && now!==was) btDelay=battleHit(dsel,hp0,bossHp(dsel),XP_RUN);
+  if(now&&!was) toast('러닝 완료 · '+kmFmt(Lk.km)+'km');
+  else if(Lk.km>0) toast('거리 기록 · '+kmFmt(Lk.km)+'km');
+  afterAction(bf,kk);
+  jnyCheck();
+}
 app.addEventListener('change',function(e){
   if(e.target && e.target.id==='bkfile'){ bkFile(e.target.files&&e.target.files[0]); return; }
   if(e.target && e.target.id==='kmin'){
     if(isEnded(fmt(sel))){ render(); return; }
-    var kk=fmt(sel), bf=snap(), v=parseFloat(e.target.value), Lk=wr(kk), restDay=(DK[sel.getDay()]==='sun'), hp0=bossHp(sel), was=!!Lk.done.run;
-    if(isNaN(v)||v<=0){ delete Lk.km; }
-    else{ Lk.km=Math.min(200,Math.round(v*100)/100); }
-    if(!restDay){ if(Lk.km>=RUN_MIN) Lk.done.run=true; else delete Lk.done.run; }
-    var now=!!Lk.done.run;
-    save(); render();
-    if(!restDay && now!==was) btDelay=battleHit(sel,hp0,bossHp(sel),XP_RUN);
-    if(now&&!was) toast('러닝 완료 · '+kmFmt(Lk.km)+'km');
-    else if(Lk.km>0) toast('거리 기록 · '+kmFmt(Lk.km)+'km');
-    afterAction(bf,kk);
-    jnyCheck();
+    var kkv=parseFloat(e.target.value), kkd=sel, kkk=fmt(sel);
+    /* v1.41.10 오입력 방지: 하루 최대 KM_MAX, KM_ASK 이상은 한 번 더 확인 */
+    if(!isNaN(kkv) && kkv>KM_MAX){
+      render();
+      askOpen({title:'하루에 입력할 수 있는 거리는 최대 '+KM_MAX+'km예요',note:'소수점 위치를 확인해 주세요. 예) 5.03km는 "5.03"이라고 입력해요.',yes:'확인',no:'닫기',act:function(){}});
+      return;
+    }
+    if(!isNaN(kkv) && kkv>=KM_ASK){
+      askOpen({title:kmFmt(kkv)+'km로 기록할까요?',note:'소수점 위치가 맞는지 한 번 더 확인해 주세요. 예) 5.03km는 "5.03"이라고 입력해요.',yes:'맞아요, 기록',no:'다시 입력',act:function(){ commitKm(kkk,kkd,kkv); },cancel:function(){ render(); }});
+      return;
+    }
+    commitKm(kkk,kkd,kkv);
     return;
   }
   if(e.target && e.target.id==='startd' && e.target.value){
@@ -5384,14 +5417,14 @@ app.addEventListener('change',function(e){
 
 /* ---------- 모험 종료 확인 · 시작 안내 ---------- */
 var askEl=document.getElementById('ask'), askYes=document.getElementById('askyes'), askNo=document.getElementById('askno'),
-    askT=document.getElementById('askt'), askNote=document.querySelector('#ask .bnote'), askBox=document.querySelector('#ask .ovc'), askAct=null;
+    askT=document.getElementById('askt'), askNote=document.querySelector('#ask .bnote'), askBox=document.querySelector('#ask .ovc'), askAct=null, askCancel=null;
 function askOpen(o){
-  askT.textContent=o.title; askNote.textContent=o.note; askYes.textContent=o.yes; askNo.textContent=o.no; askAct=o.act;
+  askT.textContent=o.title; askNote.textContent=o.note; askYes.textContent=o.yes; askNo.textContent=o.no; askAct=o.act; askCancel=o.cancel||null;
   askYes.classList.toggle('danger',!!o.danger); askBox.classList.toggle('danger',!!o.danger);
   askEl.hidden=false; (o.danger?askNo:askYes).focus();
 }
-function askClose(){ askEl.hidden=true; askAct=null; }
-askYes.addEventListener('click',function(){ var f=askAct; askEl.hidden=true; askAct=null; if(f) f(); });
+function askClose(){ var c=askCancel; askEl.hidden=true; askAct=null; askCancel=null; if(c) c(); }
+askYes.addEventListener('click',function(){ var f=askAct; askEl.hidden=true; askAct=null; askCancel=null; if(f) f(); });
 askNo.addEventListener('click',askClose);
 document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !askEl.hidden) askClose(); });
 function doReset(){
@@ -6329,7 +6362,7 @@ var titleBuildD=null;
     '.td-dest svg{display:block;width:100px;height:auto;margin-top:2px;}'+
     '@media (max-height:700px){.td-dest svg{width:80px;} .td .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .td .ts-logo svg{width:min(54%,220px);} .td .ts-day,.td .ts-wx{font-size:11px;padding:1px 8px;} .td .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
     '.td .ts-cl{bottom:auto;top:15vh;}'+
-    '.td .ts-logo{top:calc(5vh + env(safe-area-inset-top,0px));}'+
+    '.td .ts-logo{top:calc(11vh + env(safe-area-inset-top,0px));}'+
     '.td .ts-stars{inset:0 0 auto 0;height:'+YH+'vh;}'+
     '.td-tint{position:absolute;inset:0;pointer-events:none;z-index:400;}'+
     '.td.p-night .td-tint{background:rgba(8,16,48,.46);}'+
@@ -6481,14 +6514,14 @@ var titleBuildD=null;
     if(per==='night'){
       s+='<svg class="ts-stars" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">';
       [[8,10],[18,26],[27,6],[36,18],[47,9],[58,28],[66,12],[74,22],[86,7],[93,30],[12,40],[40,36],[80,42],[52,46],[22,52]].forEach(function(p,i){ s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r=".45" fill="#FFF8D6"'+(i%3===0?' class="a-twk" style="animation-delay:-'+(i*.3)+'s"':'')+'/>'; });
-      s+='</svg><div class="ts-orb" style="right:12%;top:16vh;width:48px;height:48px;background:#FFF3C4;box-shadow:0 0 0 9px rgba(255,243,196,.12),0 0 34px rgba(255,243,196,.5);"><span style="position:absolute;right:-7px;top:-5px;width:42px;height:42px;border-radius:50%;background:#0F1C45;"></span></div>';
+      s+='</svg><div class="ts-orb" style="right:12%;top:23vh;width:48px;height:48px;background:#FFF3C4;box-shadow:0 0 0 9px rgba(255,243,196,.12),0 0 34px rgba(255,243,196,.5);"><span style="position:absolute;right:-7px;top:-5px;width:42px;height:42px;border-radius:50%;background:#0F1C45;"></span></div>';
     }else if(th.orb==='none'){
       s+='';
     }else if(th.noSun){
-      s+='<div class="ts-orb" style="left:50%;margin-left:-40px;top:23vh;width:80px;height:80px;background:radial-gradient(circle,#FF6A5B 0%,#C0305A 62%,rgba(160,40,100,0) 72%);box-shadow:0 0 60px rgba(230,70,90,.6);opacity:.75"></div>';
+      s+='<div class="ts-orb" style="left:50%;margin-left:-40px;top:29vh;width:80px;height:80px;background:radial-gradient(circle,#FF6A5B 0%,#C0305A 62%,rgba(160,40,100,0) 72%);box-shadow:0 0 60px rgba(230,70,90,.6);opacity:.75"></div>';
     }else if(per==='sunset') s+='<div class="ts-orb" style="left:14%;top:30vh;width:88px;height:88px;background:#FF8A4C;box-shadow:0 0 60px rgba(255,150,80,.75);"></div>';
-    else if(per==='morning') s+='<div class="ts-orb" style="left:10%;top:19vh;width:54px;height:54px;background:#FFD86B;border:3px solid '+OL+';box-shadow:0 0 42px rgba(255,220,120,.8);"></div>';
-    else s+='<div class="ts-orb" style="right:10%;top:18vh;width:58px;height:58px;background:#F6C445;border:3px solid '+OL+';box-shadow:0 0 0 11px rgba(246,196,69,.18),0 0 46px rgba(255,230,140,.7);"></div>';
+    else if(per==='morning') s+='<div class="ts-orb" style="left:10%;top:23vh;width:54px;height:54px;background:#FFD86B;border:3px solid '+OL+';box-shadow:0 0 42px rgba(255,220,120,.8);"></div>';
+    else s+='<div class="ts-orb" style="right:10%;top:23vh;width:58px;height:58px;background:#F6C445;border:3px solid '+OL+';box-shadow:0 0 0 11px rgba(246,196,69,.18),0 0 46px rgba(255,230,140,.7);"></div>';
     return s;
   }
   /* 목적지: 보스 실루엣 없이 풍경만, 정가운데에 크게 */
@@ -6643,6 +6676,7 @@ function titleGo(){
 titleEl.addEventListener('click',titleGo);
 titleEl.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); titleGo(); } });
 
+fixKmOnce();
 sunSettle();
 render();
 bgmReady=true;

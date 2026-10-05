@@ -1330,8 +1330,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.42.3', APP_DATE='2026-10-05', showChg=false;
+var APP_VER='1.42.5', APP_DATE='2026-10-05', showChg=false;
 var CHANGES=[
+  ['1.42.5','새로 시작할 때 순서를 바꿈: 규칙 설명창이 먼저 나오고, 닫으면 반디가 인사하며 난이도를 추천해 줘요'],
+  ['1.42.4','반디 안내 추가(새로 시작한 사용자만): 첫 퀘스트 화면, 첫 마왕전 전날(금요일), 러닝 탭·왕국 탭·대장간에 처음 들어갔을 때 반디가 짧게 알려 줘요(각 한 번). 운동 중에는 나오지 않아요. 반디 도움말에 달리기·걷기 거리, 왕국, 대장간 설명도 추가. 기존 기록이 있으면 자동 안내는 나오지 않아요'],
   ['1.42.3','안내 캐릭터 반디(임시)를 요정 모습으로 바꿈: 날개·뾰족한 귀·민트색 머리·별 지팡이'],
   ['1.42.2','안내 캐릭터 "반디"(임시) 추가: 처음 시작하면 반디가 인사하고 질문 세 개로 난이도(새싹·모험·몸짱의 길)를 추천해 줘요(직접 고르기도 가능). 화면 오른쪽 위 반디 버튼으로 언제든 도움말(하루 할 일·마왕전·비 오는 날), 난이도 다시 고르기, 게임 규칙 다시 보기를 열 수 있어요. 설정 > 난이도에도 "반디에게 추천받기" 추가. 기존 기록이 있으면 첫 안내는 나오지 않아요'],
   ['1.42.1','실내 유산소 대체: 비·눈이 아닌 날에는 폭염·한파·미세먼지·빙판길·그 밖의 날씨 중 이유를 골라 주 3회까지(사유 없이는 주 1회) 대체 가능. 대체 동작 4개에도 "영상으로 보기" 링크 추가'],
@@ -4937,6 +4939,7 @@ function bkParse(text){
   var trd2={}; ['a','b','c','d'].forEach(function(k6){ var v=(d.trade&&typeof d.trade==='object')?parseInt(d.trade[k6],10):0; trd2[k6]=(v>0)?Math.min(v,9999):0; });
   var crf2={}; if(d.crafted&&typeof d.crafted==='object') Object.keys(d.crafted).forEach(function(id){ if(d.crafted[id]&&known[id]&&known[id].craft) crf2[id]=true; });
   var dl2={}; if(d.dl&&typeof d.dl==='object') Object.keys(d.dl).forEach(function(k7){ if(ok.test(k7)&&DIFF[d.dl[k7]]) dl2[k7]=d.dl[k7]; });
+  var bds2=null; if(d.bdSeen&&typeof d.bdSeen==='object'){ bds2={}; Object.keys(d.bdSeen).forEach(function(k8){ if(({today:1,boss:1,run:1,kingdom:1,forge:1})[k8]&&d.bdSeen[k8]) bds2[k8]=(typeof d.bdSeen[k8]==='string'&&ok.test(d.bdSeen[k8]))?d.bdSeen[k8]:'2000-01-01'; }); }
   var aat={}, akn=achKnown(); if(d.achAt&&typeof d.achAt==='object') Object.keys(d.achAt).forEach(function(k5){ if(akn[k5]&&ok.test(d.achAt[k5])) aat[k5]=d.achAt[k5]; });
   var jsn2={}; if(d.jny&&d.jny.seen&&typeof d.jny.seen==='object') Object.keys(d.jny.seen).forEach(function(id){ if(d.jny.seen[id]&&(JNYIDS[id]||isSupId(id))) jsn2[id]=true; });
   if(d.trainLog&&typeof d.trainLog==='object') Object.keys(d.trainLog).forEach(function(k4){
@@ -4947,7 +4950,7 @@ function bkParse(text){
     o.h=[]; if(Array.isArray(e.h)) e.h.slice(-80).forEach(function(x){ var m=/^(\w+):([01])$/.exec(String(x)); if(m && (m[1]==='run' || X[m[1]])) o.h.push(m[1]+':'+m[2]); });
     tlog[k4]=o;
   });
-  var outd={start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,crafted:crf2,trade:trd2,dl:dl2,char:(CHARN[d.char]?d.char:'hero')};
+  var outd={start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,crafted:crf2,trade:trd2,dl:dl2,bdSeen:bds2,char:(CHARN[d.char]?d.char:'hero')};
   migrateRest(outd);
   return {data:outd};
 }
@@ -5208,6 +5211,7 @@ function render(){
     else bs[i].removeAttribute('aria-current');
   }
   bgmSync();
+  bdTipSoon();
 }
 
 /* ---------- 효과: 소리·진동·토스트·오버레이 ---------- */
@@ -5311,7 +5315,7 @@ function confetti(){
   })(t0);
 }
 var ovAfter=null;
-function closeOv(){ov.hidden=true; stopConfetti(); var f=ovAfter; ovAfter=null; if(f) setTimeout(f,300);}
+function closeOv(){ov.hidden=true; stopConfetti(); var f=ovAfter; ovAfter=null; if(f) setTimeout(f,300); bdTipSoon();}
 ovx.addEventListener('click',closeOv);
 document.addEventListener('keydown',function(e){if(e.key==='Escape' && !ov.hidden) closeOv();});
 function showOverlay(o){
@@ -5712,6 +5716,19 @@ var BANDI={
     health:'통증이 있거나 건강이 걱정되면 무리하지 말고 전문가와 상의하세요.',
     helpHead:'무엇이 궁금해요, 용사님?'
   },
+  /* 상황별 첫 안내(v1.42.4): 새 사용자에게만, 각 한 번. h=제목, x=본문(문자열 또는 함수). 문구 교체는 여기만 */
+  tips:{
+    today:{h:'오늘 할 일은 여기 있어요!',x:'운동 동작은 세트마다 체크하고, 식단 세 가지도 체크해요. 달리기·걷기는 하는 날에만 있어요. 다 못 해도 괜찮아요. 내일 다시 시작하면 돼요.'},
+    boss:{h:function(w){ return w==='sat'?'오늘은 마왕전이에요!':'내일은 마왕전이에요!'; },
+      x:function(w){
+        var d=(w==='sat')?TODAY:addDays(TODAY,1);
+        return (w==='sat'?'평일 퀘스트로 모은 XP가 ':'이번 주 평일 퀘스트로 모은 XP가 ')+SAT_GOAL+' 이상이면 마왕성에 도전할 수 있어요. '+
+          (firstWeekFree(d)?'처음 한 번은 XP가 모자라도 연습전이라 패배로 기록되지 않아요. 편하게 도전해 봐요!':'못 미치면 마왕의 저주로 패배로 기록되지만, 괜찮아요. 다음 주에 다시 도전하면 돼요.');
+      }},
+    run:{h:'달린 거리는 여기에 쌓여요',x:function(){ return '거리는 퀘스트 탭에서 적어요. 걷기도 똑같이 인정돼요. 달리기·걷기가 있는 날엔 '+runMinOn(fmt(TODAY))+'km 이상 적으면 그날 퀘스트가 완료돼요. 비·눈 오는 날엔 퀘스트 탭에서 집 안 유산소로 바꿀 수도 있어요.'; }},
+    kingdom:{h:'여기가 몸짱왕국이에요',x:'퀘스트와 토벌로 건축 자재가 쌓이면 무너진 건물을 하나씩 되살릴 수 있어요. 마왕과 중간보스를 이기면 장비를 만들 재료도 얻어요. 건물을 눌러 들어가 보세요!'},
+    forge:{h:'대장간이에요!',x:'보스에게서 얻은 재료로 전용 장비를 만들어요. 같은 등급의 재료로 같은 등급 장비를 만들 수 있어요. 재료가 모자라면 교역소가 열린 뒤 바꿀 수도 있어요.'}
+  },
   /* 난이도 추천 질문 (확정 문구) — 가장 낮은 점수 기준: 0~1점 새싹, 2점 모험, 3점 몸짱 */
   qs:[
     {q:'용사님, 푸시업은 얼마나 할 수 있어요?',o:['한 번도 못 해 봤어요','무릎 대고 10개가 힘들어요','무릎 대고 10개는 해요','바닥에서 10개 이상 해요']},
@@ -5722,22 +5739,63 @@ var BANDI={
   help:[
     ['오늘은 뭘 하면 돼요?','퀘스트 탭에 오늘 할 일이 모두 나와요. 운동 동작을 세트마다 체크하고, 달리기·걷기는 거리를 적고(하는 날만 있어요), 식단 세 가지를 체크해요. 다 마치면 \'오늘의 모험 종료\'를 눌러 마무리하면 돼요. 못 마친 날이 있어도 괜찮아요. 다음 날 다시 시작하면 돼요.'],
     ['마왕전이 뭐예요?','토요일엔 마왕과 싸워요. 월~금 퀘스트로 1000XP 이상 모으면 도전할 수 있고, 마왕성 퀘스트를 모두 하면 마왕을 토벌해요. 1000XP에 못 미치면 \'마왕의 저주\'로 패배해요. 단, 시작하고 7일 안의 마왕전은 XP가 모자라도 연습전이라 패배로 기록되지 않아요.'],
-    ['비 오는 날엔 어떡해요?','비·눈이 오는 날엔 달리기·걷기를 집 안 유산소로 바꿀 수 있어요(층간소음이 적은 동작만이에요). XP와 클리어는 똑같이 인정되지만, 달린 거리(km)는 올라가지 않아요. 폭염·한파·미세먼지·빙판길 같은 날엔 이유를 골라 주 3회까지 바꿀 수 있어요.']
+    ['비 오는 날엔 어떡해요?','비·눈이 오는 날엔 달리기·걷기를 집 안 유산소로 바꿀 수 있어요(층간소음이 적은 동작만이에요). XP와 클리어는 똑같이 인정되지만, 달린 거리(km)는 올라가지 않아요. 폭염·한파·미세먼지·빙판길 같은 날엔 이유를 골라 주 3회까지 바꿀 수 있어요.'],
+    ['달리기·걷기 거리는 어디에 적어요?',function(){ return BANDI.tips.run.x(); }],
+    ['왕국에서는 뭘 해요?',function(){ return BANDI.tips.kingdom.x; }],
+    ['대장간은 뭘 하는 곳이에요?',function(){ return BANDI.tips.forge.x; }]
   ]
 };
 var bdEl=document.getElementById('bandi'), bdC=document.getElementById('bdc');
 var bd={mode:'help',step:'help',ans:[null,null,null],pick:null,topic:null};
+/* 상황별 첫 안내 띄우기: 새 사용자(S.bdSeen이 있는 사용자)만, 다른 창이 없고 운동 중이 아닐 때 */
+var bdTipT=null;
+function bdBusy(){
+  var ovs=document.querySelectorAll('.ov'), i, tm=document.getElementById('timer');
+  for(i=0;i<ovs.length;i++){ if(!ovs[i].hidden) return true; }
+  if(titleEl && !titleEl.hidden) return true;
+  if(btEl && !btEl.hidden) return true;
+  if(tm && !tm.hidden) return true;
+  return false;
+}
+function bdTipId(){
+  var sn=S.bdSeen, t=fmt(TODAY), dk;
+  if(!sn || typeof sn!=='object') return null;
+  if(tab==='today'){
+    if(!sn.today) return {id:'today'};
+    dk=DK[TODAY.getDay()];
+    if(!sn.boss && sn.today!==t && (dk==='fri' || dk==='sat')) return {id:'boss',when:dk};
+  }else if(tab==='run'){
+    if(!sn.run) return {id:'run'};
+  }else if(tab==='home'){
+    if(kv==='map' && !sn.kingdom) return {id:'kingdom'};
+    if(kv==='forge' && bState('forge')==='done' && !sn.forge) return {id:'forge'};
+  }
+  return null;
+}
+function bdTipCheck(){
+  var r; if(bdBusy()) return;
+  try{ r=bdTipId(); }catch(e){ r=null; }
+  if(r) bandiOpen('tip',r.id,r.when);
+}
+function bdTipSoon(){ clearTimeout(bdTipT); bdTipT=setTimeout(bdTipCheck,450); }
 function needBandi(){ return isEmptyData(S) && !(S.dl && Object.keys(S.dl).length); }
-function firstRun(){ if(needBandi()) bandiOpen('first'); else if(!introSeen) introOpen(); }
+var introThenBandi=false;   /* 새 사용자: 규칙 설명창을 먼저 보여 주고, 닫으면 반디 인사로 이어가요 */
+function firstRun(){
+  if(needBandi()){ if(!introSeen){ introThenBandi=true; introOpen(); } else bandiOpen('first'); }
+  else if(!introSeen) introOpen();
+}
 function bdRec(){
   var m=3, i; for(i=0;i<3;i++){ if(bd.ans[i]==null) return null; if(bd.ans[i]<m) m=bd.ans[i]; }
   return m<=1?'sprout':(m===2?'adv':'body');
 }
-function bandiOpen(mode){
-  bd={mode:mode,step:(mode==='first'?'hello':(mode==='ask'?0:'help')),ans:[null,null,null],pick:null,topic:null};
+function bandiOpen(mode,tip,when){
+  bd={mode:mode,step:(mode==='first'?'hello':(mode==='ask'?0:(mode==='tip'?'tip':'help'))),ans:[null,null,null],pick:null,topic:null,tip:tip||null,when:when||null};
   bdRender(); bdEl.hidden=false;
 }
-function bandiClose(){ bdEl.hidden=true; bdC.innerHTML=''; }
+function bandiClose(){
+  if(bd.mode==='tip' && bd.tip && S.bdSeen && typeof S.bdSeen==='object'){ S.bdSeen[bd.tip]=fmt(TODAY); bd.tip=null; save(); }  /* 본 안내는 다시 안 나와요 */
+  bdEl.hidden=true; bdC.innerHTML='';
+}
 function bdDots(n,on){ var d='',i; for(i=0;i<n;i++) d+='<i'+(i===on?' class="on"':'')+'></i>'; return '<div class="dots">'+d+'</div>'; }
 function bdDcard(id,rec){
   var on=(bd.pick===id);
@@ -5770,8 +5828,13 @@ function bdRender(){
     for(i=0;i<BANDI.help.length;i++) h+='<button type="button" class="dcard" data-b="topic" data-i="'+i+'"><b>'+BANDI.help[i][0]+'</b></button>';
     h+='<button type="button" class="dcard go" data-b="redo"><b>난이도를 다시 골라 보고 싶어요</b></button><button type="button" class="dcard go" data-b="rules"><b>게임 규칙을 다시 보고 싶어요</b></button></div>'+
       '<p class="bdsm">'+BANDI.say.health+'</p><button type="button" class="skip" data-b="close">닫기</button>';
+  }else if(st==='tip'){
+    var tp=BANDI.tips[bd.tip]||BANDI.tips.today, tw=bd.when;
+    h=BANDI.scene('안내하는 반디의 그림')+'<p class="bdq">'+(typeof tp.h==='function'?tp.h(tw):tp.h)+'</p><p class="bdans">'+(typeof tp.x==='function'?tp.x(tw):tp.x)+'</p>'+
+      '<div class="bdrow col"><button type="button" class="primary" data-b="close">알겠어요</button></div>'+
+      (bd.tip==='today'?'<p class="bdsm">궁금한 게 생기면 오른쪽 위 반디를 눌러요. 도움말을 다시 볼 수 있어요.</p>':'');
   }else if(st==='ans'){
-    h=BANDI.scene('설명하는 반디의 그림')+'<p class="bdq">'+BANDI.help[bd.topic][0]+'</p><p class="bdans">'+BANDI.help[bd.topic][1]+'</p>'+
+    h=BANDI.scene('설명하는 반디의 그림')+'<p class="bdq">'+BANDI.help[bd.topic][0]+'</p><p class="bdans">'+(typeof BANDI.help[bd.topic][1]==='function'?BANDI.help[bd.topic][1]():BANDI.help[bd.topic][1])+'</p>'+
       '<div class="bdrow"><button type="button" class="ghost" data-b="helpback">다른 질문</button><button type="button" class="primary" data-b="close">알았어요</button></div>';
   }
   bdC.innerHTML=h;
@@ -5781,7 +5844,7 @@ function bdConfirm(){
   var id=bd.pick, mode=bd.mode;
   if(!DIFF[id]) return;
   bandiClose();
-  if(mode==='first'){ setDiff(id); render(); toast(DIFF[id].n+'로 시작해요'); if(!introSeen) introOpen(); }
+  if(mode==='first'){ setDiff(id); if(!S.bdSeen){ S.bdSeen={}; save(); } render(); toast(DIFF[id].n+'로 시작해요'); }
   else pickDiff(id,true);
 }
 bdEl.addEventListener('click',function(e){
@@ -5829,7 +5892,11 @@ function introRender(){
   introNext.textContent=(iN===INTRO_TXT.length-1)?'모험 시작!':'다음';
 }
 function introOpen(){ iN=0; introRender(); introEl.hidden=false; introNext.focus(); }
-function introClose(){ introEl.hidden=true; try{localStorage.setItem('home-training-intro','1');}catch(e){} }
+function introClose(){
+  introEl.hidden=true; try{localStorage.setItem('home-training-intro','1');}catch(e){} introSeen=true;
+  if(introThenBandi){ introThenBandi=false; if(needBandi()){ bandiOpen('first'); return; } }
+  bdTipSoon();
+}
 introNext.addEventListener('click',function(){ if(iN>=INTRO_TXT.length-1){introClose();} else{iN++; introRender();} });
 introPrev.addEventListener('click',function(){ if(iN>0){iN--; introRender();} });
 document.getElementById('introskip').addEventListener('click',introClose);
@@ -5849,7 +5916,7 @@ var introSeen=false; try{introSeen=!!localStorage.getItem('home-training-intro')
 var cqEl=document.getElementById('cq'), cqD=document.getElementById('cqd'), cqB=document.getElementById('cqb');
 function withTimeout(p,ms){ return Promise.race([p,new Promise(function(_,rej){setTimeout(function(){rej({code:'timeout'});},ms);})]); }
 function isEmptyData(x){ return !x || (!Object.keys(x.log||{}).length && !(x.body||[]).length); }
-function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{}}; }
+function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null}; }
 function dayScore(L){ return Object.keys(L.done||{}).length+Object.keys(L.diet||{}).length+(L.km>0?1:0)+(L.out?1:0); }
 function mergeData(a,b){
   var log={}, keys={};
@@ -5876,18 +5943,19 @@ function mergeData(a,b){
   var crf={}, ck; for(ck in (a.crafted||{})) crf[ck]=true; for(ck in (b.crafted||{})) crf[ck]=true;
   var trd={}; ['a','b','c','d'].forEach(function(k5){ trd[k5]=Math.max((a.trade||{})[k5]||0,(b.trade||{})[k5]||0); });
   var dlm={}, dk6; for(dk6 in (b.dl||{})) dlm[dk6]=b.dl[dk6]; for(dk6 in (a.dl||{})) dlm[dk6]=a.dl[dk6];
+  var bds=null; if((a.bdSeen&&typeof a.bdSeen==='object')||(b.bdSeen&&typeof b.bdSeen==='object')){ bds={}; [a.bdSeen||{},b.bdSeen||{}].forEach(function(m){ Object.keys(m).forEach(function(k){ if(!bds[k]||String(m[k])<String(bds[k])) bds[k]=m[k]; }); }); }
   var aam={}; [a.achAt||{},b.achAt||{}].forEach(function(m){ Object.keys(m).forEach(function(k){ if(!aam[k]||m[k]<aam[k]) aam[k]=m[k]; }); });
   var tlog={}, tks={};
   Object.keys(a.trainLog||{}).forEach(function(k){tks[k]=1;}); Object.keys(b.trainLog||{}).forEach(function(k){tks[k]=1;});
   function trScore(e){ return e?trSetCount(e)+(e.run||0):-1; }
   Object.keys(tks).forEach(function(k){ var x=(a.trainLog||{})[k], y=(b.trainLog||{})[k]; tlog[k]=JSON.parse(JSON.stringify(trScore(x)>=trScore(y)?x:y)); });
-  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,crafted:crf,trade:trd,dl:dlm,char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
+  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,crafted:crf,trade:trd,dl:dlm,bdSeen:bds,char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
 }
 function applyData(x,dirty){
   if(migrateLog(x.log)) dirty=true;
   if(migrateRest(x)) dirty=true;
   noDirty=true;
-  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
+  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
   save(); noDirty=false;
 }
 function hm(){var d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes());}

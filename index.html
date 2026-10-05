@@ -277,6 +277,21 @@ svg.chart{width:100%; height:auto; display:block;}
 .dcard{display:block; width:100%; text-align:left; background:var(--surface); border:2px solid var(--line); border-radius:14px; padding:10px 12px; margin:0 0 8px; color:var(--ink);}
 .dcard b{display:block; font-size:16px;} .dcard span{display:block; font-size:13px; margin-top:2px;} .dcard small{display:block; font-size:12px; color:var(--muted); margin-top:3px;}
 .dcard.on{border-color:var(--gold); box-shadow:0 0 0 2px rgba(246,196,69,.35);}
+.bdbtn{position:absolute; top:5px; right:64px; z-index:5; width:40px; height:40px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid var(--line); background:var(--surface); box-shadow:0 2px 0 var(--edge);}
+.bdbtn svg{width:36px; height:30px; display:block;}
+.bdbtn:active{background:var(--soft);}
+.bdq{font-size:17px; line-height:1.6; margin:8px 2px 12px; text-align:center; word-break:keep-all; font-weight:600;}
+.bdsm{font-size:13px; line-height:1.55; color:var(--muted); margin:8px 2px 0; text-align:center; word-break:keep-all;}
+.bdans{font-size:15px; line-height:1.7; margin:4px 2px 10px; text-align:left; word-break:keep-all;}
+.bdopts{margin:2px 0 4px;}
+.bdopts .dcard{padding:12px 14px;}
+.bdopts .dcard b{font-size:15px; font-weight:600;}
+.bdopts .dcard.go{background:var(--soft);}
+.bdrow{display:flex; gap:10px; margin-top:10px;}
+.bdrow>button{flex:1; margin-top:0;}
+.bdrow .primary{width:auto;}
+.bdrow.col{flex-direction:column;}
+.bdrow.col>button{width:100%;}
 .altbox{margin:6px 0 4px; padding:10px 12px; border:2px dashed var(--line); border-radius:14px; background:var(--surface);}
 .altbox p{margin:4px 0; font-size:13px;} .altbox ol{margin:6px 0 8px 18px; padding:0; font-size:13px; line-height:1.5;}
 .altwhy{display:flex; flex-wrap:wrap; gap:6px; margin:4px 0 8px;}
@@ -1002,6 +1017,9 @@ svg.chart{width:100%; height:auto; display:block;}
     <button type="button" class="skip" id="introskip">건너뛰기</button>
   </div>
 </div>
+<div class="ov" id="bandi" hidden role="dialog" aria-modal="true" aria-label="반디 안내">
+  <div class="ovc" id="bdc"></div>
+</div>
 <div class="ov" id="cq" hidden role="alertdialog" aria-modal="true" aria-labelledby="cqt">
   <div class="ovc" data-mode="lose">
     <h2 class="ovh" id="cqt">다른 계정의 기록이 있어요</h2>
@@ -1312,8 +1330,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.42.1', APP_DATE='2026-10-05', showChg=false;
+var APP_VER='1.42.3', APP_DATE='2026-10-05', showChg=false;
 var CHANGES=[
+  ['1.42.3','안내 캐릭터 반디(임시)를 요정 모습으로 바꿈: 날개·뾰족한 귀·민트색 머리·별 지팡이'],
+  ['1.42.2','안내 캐릭터 "반디"(임시) 추가: 처음 시작하면 반디가 인사하고 질문 세 개로 난이도(새싹·모험·몸짱의 길)를 추천해 줘요(직접 고르기도 가능). 화면 오른쪽 위 반디 버튼으로 언제든 도움말(하루 할 일·마왕전·비 오는 날), 난이도 다시 고르기, 게임 규칙 다시 보기를 열 수 있어요. 설정 > 난이도에도 "반디에게 추천받기" 추가. 기존 기록이 있으면 첫 안내는 나오지 않아요'],
   ['1.42.1','실내 유산소 대체: 비·눈이 아닌 날에는 폭염·한파·미세먼지·빙판길·그 밖의 날씨 중 이유를 골라 주 3회까지(사유 없이는 주 1회) 대체 가능. 대체 동작 4개에도 "영상으로 보기" 링크 추가'],
   ['1.42.0','난이도 3단계(새싹의 길·모험의 길·몸짱의 길): 설정에서 고르면 내일부터 적용되고, 지난 기록과 XP는 그날 난이도 그대로 유지. 일일 러닝은 "러닝 또는 걷기"로(새싹 2km·모험 3km·몸짱 3km). 비·눈 오는 날과 주 1회는 실내 유산소로 대체 가능. 시작하고 첫 7일 안의 마왕전은 마왕의 저주 면제(연습전)'],
   ['1.41.11','시작화면 "몸짱소울" 타이틀을 아래로 내려 목적지 그림과의 빈 공간을 줄이고, 해·달 위치를 타이틀에 덜 가리는 곳으로 옮김'],
@@ -5134,6 +5154,13 @@ function soundCardHtml(){
     '<p class="note" id="bgmnow" style="margin:0 2px 6px">'+bgmNowText()+'</p>'+
     '<p class="note" style="margin:0 2px">아이폰은 무음 스위치가 켜져 있으면 소리가 나지 않아요.</p></div>';
 }
+function pickDiff(did,fromBandi){
+  var dcur=diffOn(fmt(TODAY)), dpd=diffPending();
+  if(!DIFF[did]) return;
+  if(did===dcur && !dpd){ if(fromBandi) toast('지금도 '+DIFF[did].n+'이에요'); return; }
+  if(isEmptyData(S)){ setDiff(did); render(); toast(DIFF[did].n+'로 시작해요'); return; }
+  askOpen({title:'내일부터 '+DIFF[did].n+'로 바꿀까요?',note:'지금까지의 기록과 XP는 그대로 유지돼요. 오늘은 지금 난이도로 마치고, 내일부터 새 난이도가 적용돼요. 언제든 다시 바꿀 수 있어요.',yes:'바꾸기',no:'취소',act:function(){ setDiff(did); render(); toast(did===dcur?'난이도 변경을 취소했어요':'내일부터 '+DIFF[did].n+'이에요'); }});
+}
 function diffCardHtml(){
   var cur=diffOn(fmt(TODAY)), pd=diffPending(), h='<h2>난이도</h2><div class="card" style="padding:12px 16px 14px">';
   h+='<p class="note" style="margin:0 2px 10px">지금은 <b>'+DIFF[cur].n+'</b>이에요.'+(pd?' 내일부터 <b>'+DIFF[pd.id].n+'</b>로 바뀌어요.':'')+' 바꿔도 지금까지의 기록과 XP는 그대로이고, 내일부터 적용돼요.</p>';
@@ -5141,6 +5168,7 @@ function diffCardHtml(){
     var on=(pd?pd.id===id:cur===id);
     h+='<button type="button" class="dcard'+(on?' on':'')+'" data-a="diffpick" data-id="'+id+'" aria-pressed="'+(on?'true':'false')+'"><b>'+DIFF[id].n+(cur===id?' · 지금':'')+'</b><span>'+DIFF[id].who+'</span><small>'+DIFF[id].sum+'</small></button>';
   });
+  h+='<div class="bk-btns" style="margin:4px 0 8px"><button type="button" class="ghost nw" data-a="bandi-ask">반디에게 추천받기</button></div>';
   h+='<p class="note" style="margin:8px 2px 0">통증이 있거나 건강이 걱정되면 무리하지 말고 전문가와 상의하세요.</p></div>';
   return h;
 }
@@ -5172,6 +5200,7 @@ function render(){
   if(tab!=='set'){
     if(!app.firstElementChild||!app.firstElementChild.classList.contains('eyebrow')) app.insertAdjacentHTML('afterbegin','<p class="eyebrow" aria-hidden="true"></p>');
     app.insertAdjacentHTML('afterbegin','<button type="button" class="gearbtn" data-a="gear" aria-label="설정"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>');
+    app.insertAdjacentHTML('afterbegin','<button type="button" class="bdbtn" data-a="bandi" aria-label="반디에게 물어보기">'+BANDI.face()+'</button>');
   }
   var bs=document.querySelectorAll('#nav button');
   for(var i=0;i<bs.length;i++){
@@ -5450,10 +5479,7 @@ app.addEventListener('click',function(e){
     }
     save(); render(); pop('[data-a="alt"]'); btDelay=battleHit(sel,hpa,bossHp(sel),runXpOn(k)); afterAction(before,k);
   }else if(a==='diffpick'){
-    var did=t.getAttribute('data-id'), dcur=diffOn(fmt(TODAY)), dpd=diffPending();
-    if(!DIFF[did] || (did===dcur && !dpd)) return;
-    if(isEmptyData(S)){ setDiff(did); render(); toast(DIFF[did].n+'로 시작해요'); return; }
-    askOpen({title:'내일부터 '+DIFF[did].n+'로 바꿀까요?',note:'지금까지의 기록과 XP는 그대로 유지돼요. 오늘은 지금 난이도로 마치고, 내일부터 새 난이도가 적용돼요. 언제든 다시 바꿀 수 있어요.',yes:'바꾸기',no:'취소',act:function(){ setDiff(did); render(); toast(did===dcur?'난이도 변경을 취소했어요':'내일부터 '+DIFF[did].n+'이에요'); }});
+    pickDiff(t.getAttribute('data-id'),false);
   }else if(a==='run'){
     if(DK[sel.getDay()]!=='sun') return;
     before=snap(); L=wr(k); var hpr=bossHp(sel); L.done.run=!L.done.run; save(); render(); pop('[data-a="run"]'); btDelay=battleHit(sel,hpr,bossHp(sel),XP_RUN); afterAction(before,k);
@@ -5486,6 +5512,10 @@ app.addEventListener('click',function(e){
     titleOpen(false);
   }else if(a==='intro'){
     introOpen();
+  }else if(a==='bandi'){
+    bandiOpen('help');
+  }else if(a==='bandi-ask'){
+    bandiOpen('ask');
   }else if(a==='prev'||a==='next'){
     sel=addDays(sel,a==='prev'?-1:1); stopTimer(); render(); window.scrollTo(0,0);
   }else if(a==='today'){
@@ -5615,6 +5645,170 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !askEl.h
 function doReset(){
   var ck=S.cloudTs, cu=S.uid; S=fresh(); S.cloudTs=ck; S.uid=cu; save(); armed=false; sel=TODAY; render(); toast('모든 기록을 초기화했어요');
 }
+/* ---------- 가이드 캐릭터 "반디" (임시) · v1.42.2 ----------
+   그림·이름·대사를 모두 이 블록 한곳에 모아 둬요. 나중에 디자인이 바뀌면 BANDI만 고치면 돼요.
+   대사에는 날개·비행처럼 종족을 못박는 표현을 쓰지 않아요. 말투는 ~요, 사용자는 "용사님", 놓친 날에도 혼내지 않아요. */
+var BANDI={
+  name:'반디',
+  /* 그림: 작은 요정 안내자 (임시). 날개·뾰족한 귀·민트색 머리·별 지팡이 (viewBox 0 0 120 120) */
+  vb:'6 4 108 84',
+  art:function(){
+    var W='#CDEBFF', W2='#FFD0EC', M='#7ADCB4', D='#FF9FC4';
+    function sp(x,y,r,c){ return '<path d="M'+x+','+(y-r)+' L'+(x+r*.3)+','+(y-r*.3)+' L'+(x+r)+','+y+' L'+(x+r*.3)+','+(y+r*.3)+' L'+x+','+(y+r)+' L'+(x-r*.3)+','+(y+r*.3)+' L'+(x-r)+','+y+' L'+(x-r*.3)+','+(y-r*.3)+' Z" fill="'+c+'"/>'; }
+    var s='';
+    /* 날개 (뒤쪽 아랫날개 → 윗날개) */
+    s+='<g stroke="'+OL+'" stroke-width="2.5" stroke-linejoin="round">'+
+       '<ellipse cx="33" cy="79" rx="17" ry="8.5" transform="rotate(30 33 79)" fill="'+W2+'"/><ellipse cx="87" cy="79" rx="17" ry="8.5" transform="rotate(-30 87 79)" fill="'+W2+'"/>'+
+       '<ellipse cx="25" cy="47" rx="25" ry="13" transform="rotate(-42 25 47)" fill="'+W+'"/><ellipse cx="95" cy="47" rx="25" ry="13" transform="rotate(42 95 47)" fill="'+W+'"/></g>'+
+       '<g fill="none" stroke="#9CCBEA" stroke-width="1.4" stroke-linecap="round"><path d="M14,58 Q22,46 32,36 M20,60 Q28,52 38,46 M106,58 Q98,46 88,36 M100,60 Q92,52 82,46"/></g>';
+    /* 은은한 빛 */
+    s+='<ellipse cx="60" cy="86" rx="24" ry="26" fill="#FFF3B0" opacity=".45"/>';
+    /* 머리(뒤) + 올림머리 + 별 핀 */
+    s+='<ellipse cx="60" cy="47" rx="27" ry="26" fill="'+M+'" stroke="'+OL+'" stroke-width="3"/>'+
+       '<circle cx="60" cy="19" r="8" fill="'+M+'" stroke="'+OL+'" stroke-width="3"/>'+bStar(60,19,5.5,'#FFD95E');
+    /* 드레스(꽃잎 치마) · 허리 리본 */
+    s+='<path d="M50,72 Q60,68 70,72 L80,98 Q60,108 40,98 Z" fill="'+D+'" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round"/>'+
+       '<path d="M44,95 Q60,103 76,95" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".7"/>'+
+       '<rect x="51" y="75" width="18" height="5" rx="2.5" fill="#FFD95E" stroke="'+OL+'" stroke-width="2"/>';
+    /* 다리 · 신발 */
+    s+=bLimb(54,101,53,111,5,FACE)+bLimb(66,101,67,111,5,FACE)+ell(51,113,5.5,3.2,'#FFD95E',2.2)+ell(69,113,5.5,3.2,'#FFD95E',2.2);
+    /* 팔 · 별 지팡이 */
+    s+=bLimb(51,78,38,88,5,FACE);
+    s+='<line x1="86" y1="64" x2="98" y2="42" stroke="'+OL+'" stroke-width="5" stroke-linecap="round"/><line x1="86" y1="64" x2="98" y2="42" stroke="#FFE9A8" stroke-width="2.4" stroke-linecap="round"/>'+
+       bLimb(69,78,86,66,5,FACE)+bStar(99,38,9,'#FFD95E');
+    /* 뾰족한 귀 */
+    s+='<path d="M35,49 L23,42 L36,60 Z" fill="'+FACE+'" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round"/><path d="M85,49 L97,42 L84,60 Z" fill="'+FACE+'" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round"/>';
+    /* 얼굴 */
+    s+='<circle cx="60" cy="51" r="21" fill="'+FACE+'" stroke="'+OL+'" stroke-width="3"/>';
+    /* 앞머리 */
+    s+='<path d="M38,48 Q40,28 60,28 Q80,28 82,48 Q73,40 67,42 Q61,35 55,42 Q47,40 38,48 Z" fill="'+M+'" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round"/>';
+    /* 눈 · 볼터치 · 입 */
+    s+='<ellipse cx="51" cy="54" rx="3.8" ry="5" fill="'+OL+'"/><ellipse cx="69" cy="54" rx="3.8" ry="5" fill="'+OL+'"/>'+
+       '<circle cx="52.3" cy="52" r="1.5" fill="#fff"/><circle cx="70.3" cy="52" r="1.5" fill="#fff"/><circle cx="50.4" cy="56" r=".8" fill="#fff"/><circle cx="68.4" cy="56" r=".8" fill="#fff"/>'+
+       '<ellipse cx="44" cy="61" rx="4.6" ry="2.7" fill="#FF8FA8" opacity=".75"/><ellipse cx="76" cy="61" rx="4.6" ry="2.7" fill="#FF8FA8" opacity=".75"/>'+
+       '<path d="M54.5,62 Q60,68 65.5,62 Q60,64.5 54.5,62 Z" fill="#FF7A93" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    /* 반짝이 */
+    s+='<g class="a-twk">'+sp(14,96,6,'#FFE27A')+sp(108,96,5,'#FFFFFF')+sp(14,22,4,'#FFFFFF')+sp(112,66,3.5,'#FFE27A')+'</g>';
+    return s;
+  },
+  /* 큰 그림(안내창 위): sceneFrame 한 컷 */
+  scene:function(label){
+    var s='<g fill="#fff" opacity=".85"><ellipse cx="62" cy="40" rx="26" ry="9"/><ellipse cx="254" cy="52" rx="30" ry="10"/></g>';
+    s+='<g class="a-twk">'+bStar(60,110,7,'#F6C445')+bStar(262,100,6,'#46E0A5')+bStar(232,34,5,'#F6C445')+'</g>';
+    s+='<ellipse cx="160" cy="178" rx="30" ry="5" fill="#000" opacity=".12"/>';
+    s+='<g transform="translate(97,24) scale(1.2)"><g class="a-bob">'+BANDI.art()+'</g></g>';
+    return sceneFrame('#E8F7FF','#CFE9B8',s,label||'안내자 반디의 그림');
+  },
+  /* 작은 얼굴(톱니바퀴 옆 버튼) */
+  face:function(){
+    return '<svg viewBox="'+BANDI.vb+'" aria-hidden="true">'+BANDI.art()+'</svg>';
+  },
+  say:{
+    hello:['용사님, 어서 와요! 저는 길 안내를 맡은 반디예요.','먼저 용사님에게 맞는 모험의 길을 같이 골라 봐요. 질문은 딱 세 개예요.'],
+    resHead:'용사님에게는 이 길을 추천해요.',
+    resNote:'가장 낮게 고른 답에 맞춰, 무리하지 않게 골랐어요. 마음에 안 들면 다른 길로 바꿔도 돼요.',
+    pickHead:'어느 길로 갈까요?',
+    pickNote:'지금 고른 길은 언제든 설정에서 올리거나 내릴 수 있어요. 지금까지의 기록은 그대로예요.',
+    health:'통증이 있거나 건강이 걱정되면 무리하지 말고 전문가와 상의하세요.',
+    helpHead:'무엇이 궁금해요, 용사님?'
+  },
+  /* 난이도 추천 질문 (확정 문구) — 가장 낮은 점수 기준: 0~1점 새싹, 2점 모험, 3점 몸짱 */
+  qs:[
+    {q:'용사님, 푸시업은 얼마나 할 수 있어요?',o:['한 번도 못 해 봤어요','무릎 대고 10개가 힘들어요','무릎 대고 10개는 해요','바닥에서 10개 이상 해요']},
+    {q:'쉬지 않고 얼마나 갈 수 있어요?',o:['10분이 힘들어요','걷기 30분은 괜찮아요','가볍게 뛰면 20분쯤 가요','3km를 쉬지 않고 달려요']},
+    {q:'요즘 운동은 어때요?',o:['거의 안 해요','가끔(주 1번 이하)','주 2~3번','주 3번 이상 꾸준히']}
+  ],
+  /* 언제든 부르는 도움말: [제목, 답] */
+  help:[
+    ['오늘은 뭘 하면 돼요?','퀘스트 탭에 오늘 할 일이 모두 나와요. 운동 동작을 세트마다 체크하고, 달리기·걷기는 거리를 적고(하는 날만 있어요), 식단 세 가지를 체크해요. 다 마치면 \'오늘의 모험 종료\'를 눌러 마무리하면 돼요. 못 마친 날이 있어도 괜찮아요. 다음 날 다시 시작하면 돼요.'],
+    ['마왕전이 뭐예요?','토요일엔 마왕과 싸워요. 월~금 퀘스트로 1000XP 이상 모으면 도전할 수 있고, 마왕성 퀘스트를 모두 하면 마왕을 토벌해요. 1000XP에 못 미치면 \'마왕의 저주\'로 패배해요. 단, 시작하고 7일 안의 마왕전은 XP가 모자라도 연습전이라 패배로 기록되지 않아요.'],
+    ['비 오는 날엔 어떡해요?','비·눈이 오는 날엔 달리기·걷기를 집 안 유산소로 바꿀 수 있어요(층간소음이 적은 동작만이에요). XP와 클리어는 똑같이 인정되지만, 달린 거리(km)는 올라가지 않아요. 폭염·한파·미세먼지·빙판길 같은 날엔 이유를 골라 주 3회까지 바꿀 수 있어요.']
+  ]
+};
+var bdEl=document.getElementById('bandi'), bdC=document.getElementById('bdc');
+var bd={mode:'help',step:'help',ans:[null,null,null],pick:null,topic:null};
+function needBandi(){ return isEmptyData(S) && !(S.dl && Object.keys(S.dl).length); }
+function firstRun(){ if(needBandi()) bandiOpen('first'); else if(!introSeen) introOpen(); }
+function bdRec(){
+  var m=3, i; for(i=0;i<3;i++){ if(bd.ans[i]==null) return null; if(bd.ans[i]<m) m=bd.ans[i]; }
+  return m<=1?'sprout':(m===2?'adv':'body');
+}
+function bandiOpen(mode){
+  bd={mode:mode,step:(mode==='first'?'hello':(mode==='ask'?0:'help')),ans:[null,null,null],pick:null,topic:null};
+  bdRender(); bdEl.hidden=false;
+}
+function bandiClose(){ bdEl.hidden=true; bdC.innerHTML=''; }
+function bdDots(n,on){ var d='',i; for(i=0;i<n;i++) d+='<i'+(i===on?' class="on"':'')+'></i>'; return '<div class="dots">'+d+'</div>'; }
+function bdDcard(id,rec){
+  var on=(bd.pick===id);
+  return '<button type="button" class="dcard'+(on?' on':'')+'" data-b="pick" data-id="'+id+'" aria-pressed="'+(on?'true':'false')+'"><b>'+DIFF[id].n+(rec?' · 추천':'')+'</b><span>'+DIFF[id].who+'</span><small>'+DIFF[id].sum+'</small></button>';
+}
+function bdRender(){
+  var st=bd.step, h='', i, q, rec;
+  if(st==='hello'){
+    h=BANDI.scene('안내자 반디가 인사하는 그림')+'<p class="bdq">'+BANDI.say.hello[0]+'</p><p class="bdq" style="font-weight:400;margin-top:0">'+BANDI.say.hello[1]+'</p>'+
+      '<div class="bdrow"><button type="button" class="ghost big" data-b="skipq">직접 고를래요</button><button type="button" class="primary" data-b="start">좋아요</button></div>';
+  }else if(typeof st==='number'){
+    q=BANDI.qs[st];
+    h=BANDI.scene('질문하는 반디의 그림')+'<p class="bdq">'+q.q+'</p><div class="bdopts">';
+    for(i=0;i<q.o.length;i++) h+='<button type="button" class="dcard'+(bd.ans[st]===i?' on':'')+'" data-b="opt" data-i="'+i+'"><b>'+q.o[i]+'</b></button>';
+    h+='</div>'+bdDots(3,st)+'<div class="bdrow"><button type="button" class="ghost" data-b="'+(st===0?(bd.mode==='first'?'tohello':'close'):'back')+'">'+(st===0&&bd.mode!=='first'?'닫기':'이전')+'</button></div>';
+    if(bd.mode==='first' && st===0) h+='<button type="button" class="skip" data-b="skipq">건너뛰고 직접 고를래요</button>';
+  }else if(st==='res'){
+    rec=bdRec();
+    h=BANDI.scene('추천을 알려 주는 반디의 그림')+'<p class="bdq">'+BANDI.say.resHead+'</p><div class="bdopts">'+bdDcard(rec,true).replace('data-b="pick"','data-b="recpick"')+'</div><p class="bdsm">'+BANDI.say.resNote+'</p>'+
+      '<div class="bdrow col"><button type="button" class="primary" data-b="confirm">'+(bd.mode==='first'?'이 길로 시작해요':'이 길로 갈래요')+'</button><button type="button" class="ghost" data-b="topick">다른 길 고르기</button></div>'+
+      '<p class="bdsm">'+BANDI.say.health+'</p>';
+  }else if(st==='pick'){
+    rec=bdRec();
+    h='<div style="text-align:center;margin:-4px 0 2px"><svg viewBox="'+BANDI.vb+'" width="78" height="66" role="img" aria-label="길을 안내하는 반디의 그림">'+BANDI.art()+'</svg></div><p class="bdq">'+BANDI.say.pickHead+'</p><div class="bdopts">';
+    DIFFS.forEach(function(id){ h+=bdDcard(id,id===rec); });
+    h+='</div><p class="bdsm">'+BANDI.say.pickNote+'</p><div class="bdrow col"><button type="button" class="primary" data-b="confirm"'+(bd.pick?'':' disabled')+'>'+(bd.mode==='first'?'이 길로 시작해요':'이 길로 갈래요')+'</button><button type="button" class="ghost" data-b="pickback">이전</button></div>'+
+      '<p class="bdsm">'+BANDI.say.health+'</p>';
+  }else if(st==='help'){
+    h=BANDI.scene('도와주는 반디의 그림')+'<p class="bdq">'+BANDI.say.helpHead+'</p><div class="bdopts">';
+    for(i=0;i<BANDI.help.length;i++) h+='<button type="button" class="dcard" data-b="topic" data-i="'+i+'"><b>'+BANDI.help[i][0]+'</b></button>';
+    h+='<button type="button" class="dcard go" data-b="redo"><b>난이도를 다시 골라 보고 싶어요</b></button><button type="button" class="dcard go" data-b="rules"><b>게임 규칙을 다시 보고 싶어요</b></button></div>'+
+      '<p class="bdsm">'+BANDI.say.health+'</p><button type="button" class="skip" data-b="close">닫기</button>';
+  }else if(st==='ans'){
+    h=BANDI.scene('설명하는 반디의 그림')+'<p class="bdq">'+BANDI.help[bd.topic][0]+'</p><p class="bdans">'+BANDI.help[bd.topic][1]+'</p>'+
+      '<div class="bdrow"><button type="button" class="ghost" data-b="helpback">다른 질문</button><button type="button" class="primary" data-b="close">알았어요</button></div>';
+  }
+  bdC.innerHTML=h;
+  try{ bdC.scrollTop=0; }catch(e){}
+}
+function bdConfirm(){
+  var id=bd.pick, mode=bd.mode;
+  if(!DIFF[id]) return;
+  bandiClose();
+  if(mode==='first'){ setDiff(id); render(); toast(DIFF[id].n+'로 시작해요'); if(!introSeen) introOpen(); }
+  else pickDiff(id,true);
+}
+bdEl.addEventListener('click',function(e){
+  var t=e.target, b, i;
+  while(t && t!==bdEl && !(t.getAttribute && t.getAttribute('data-b'))) t=t.parentNode;
+  if(!t || t===bdEl || !t.getAttribute) return;
+  b=t.getAttribute('data-b'); i=parseInt(t.getAttribute('data-i'),10);
+  if(b==='start'){ bd.step=0; bdRender(); }
+  else if(b==='skipq'){ bd.step='pick'; bdRender(); }
+  else if(b==='tohello'){ bd.step='hello'; bdRender(); }
+  else if(b==='opt'){ bd.ans[bd.step]=i; if(bd.step<2){ bd.step++; } else { bd.step='res'; bd.pick=bdRec(); } bdRender(); }
+  else if(b==='back'){ if(typeof bd.step==='number' && bd.step>0){ bd.step--; bdRender(); } }
+  else if(b==='topick'){ bd.step='pick'; bd.pick=null; bdRender(); }
+  else if(b==='pickback'){ bd.step=(bdRec()?'res':(bd.mode==='first'?'hello':0)); if(bdRec()) bd.pick=bdRec(); bdRender(); }
+  else if(b==='recpick'){ /* 추천 카드는 보기만 해요 */ }
+  else if(b==='pick'){ bd.pick=t.getAttribute('data-id'); bdRender(); }
+  else if(b==='confirm'){ bdConfirm(); }
+  else if(b==='topic'){ bd.topic=i; bd.step='ans'; bdRender(); }
+  else if(b==='helpback'){ bd.step='help'; bdRender(); }
+  else if(b==='redo'){ bd.mode='ask'; bd.step=0; bd.ans=[null,null,null]; bd.pick=null; bdRender(); }
+  else if(b==='rules'){ bandiClose(); introOpen(); }
+  else if(b==='close'){ bandiClose(); }
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape' && !bdEl.hidden && bd.mode!=='first') bandiClose();
+});
+
 var INTRO_TXT=[
   "당신은 몸짱용사입니다. 각 모험지의 적들을 물리치며 '전신짱 마왕'을 토벌할 힘을 기르십시오.",
   "매일 모험지를 돌며 퀘스트를 수행하고 중간보스를 토벌하십시오. 퀘스트 완료시 상응하는 경험치를 획득할 수 있습니다.",
@@ -6834,7 +7028,7 @@ function titleFinish(){
   titleEl.hidden=true; titleEl.innerHTML=''; titleEl.className='';
   document.body.classList.remove('title-up');
   bgmSync();
-  if(tsFirst && !introSeen) introOpen();
+  if(tsFirst) firstRun();
   render(); if(!tsFirst) window.scrollTo(0,tsScrollY); sunPopup(); jnyCheck();
 }
 function titleGo(){
@@ -6866,7 +7060,7 @@ fixKmOnce();
 sunSettle();
 render();
 bgmReady=true;
-if(titleOn()) titleOpen(true); else { bgmSync(); wxRefresh(false,wxAfter); if(!introSeen) introOpen(); sunPopup(); jnyCheck(); }
+if(titleOn()) titleOpen(true); else { bgmSync(); wxRefresh(false,wxAfter); firstRun(); sunPopup(); jnyCheck(); }
 document.addEventListener('visibilitychange',function(){ if(!document.hidden){ wxRefresh(false,wxAfter); dayTick(); } });
 setInterval(dayTick,30000);
 })();

@@ -64,8 +64,10 @@ h3{margin:0;}
 .lv{flex:none; width:64px; height:70px; background:var(--gold); color:var(--gold-ink); display:grid; place-content:center; text-align:center;
   clip-path:polygon(50% 0,100% 22%,100% 78%,50% 100%,0 78%,0 22%); font-family:var(--disp); line-height:1;}
 .lv span{font-size:12px;} .lv b{font-size:30px; font-weight:400;}
-.rkb{flex:none; width:68px; padding:0; border:0; background:none; display:block; line-height:0; border-radius:12px;}
-.rkb svg{width:68px; height:auto; display:block;}
+.hud{gap:6px; padding:6px 14px 6px 8px;}
+.hud .xpt{flex-wrap:wrap; column-gap:8px;}
+.rkb{flex:none; width:124px; padding:0; border:0; background:none; display:block; line-height:0; border-radius:12px;}
+.rkb svg{width:124px; height:auto; display:block;}
 .rk-hero{text-align:center; padding:14px 16px 16px;}
 .rk-big{max-width:220px; margin:0 auto;}
 .rk-big svg{max-width:220px !important;}
@@ -1350,8 +1352,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.44.0', APP_DATE='2026-10-06', showChg=false;
+var APP_VER='1.44.2', APP_DATE='2026-10-06', showChg=false;
 var CHANGES=[
+  ['1.44.2','랭크 배지의 육각형을 정육각형으로 바로잡고(예전엔 옆으로 퍼져 찌그러져 보였어요), LV 숫자를 배지 정중앙에 오도록 글자 높이에 맞춰 정렬했어요'],
+  ['1.44.1','퀘스트 화면 위의 랭크 배지를 날개·후광·왕관까지 모두 보이는 큰 모양으로 바꿨어요(위쪽 칸이 조금 높아졌어요)'],
   ['1.44.0','랭크 추가(길드·랭크 1단계): 퀘스트 화면 위의 육각형이 랭크 배지로 바뀌었어요(언랭크·카퍼·아이언·브론즈·실버·골드·플래티넘·미스릴·오리하르콘·아다만타이트 10종, 금속마다 질감과 모양이 달라요). 배지를 누르면 현재 랭크, 다음 승급 조건, 누적 마왕 토벌 승리 수, 랭크 목록을 볼 수 있어요. 랭크는 승급 시험으로 오르고, 승급 시험은 다음 업데이트에서 열려요(그때까지는 모두 언랭크예요). 기존 기록·XP·레벨에는 영향이 없어요'],
   ['1.43.0','보스를 쓰러뜨리면 그로기 팝업이 뜨고, [예]를 누르면 직업마다 다른 처형 컷씬이 나와요(몸짱 용사 일도양단·드워프 대지 분쇄·엘프 별빛 관통·현자 마법사 유성 대폭발). 팝업에서 [건너뛰기]로 넘기거나, [아니요]로 마지막 체크를 취소하고 보스 체력을 되돌릴 수 있고, 설정 > 처형 컷씬을 끄면 컷씬 없이 토벌 완료 창이 뜨고, 거기서 [확인]을 누르면 확정, [해치웠나?]를 누르면 마지막 체크가 취소돼요. 확정하기 전에 앱을 닫으면 취소로 처리돼요. 보스를 쓰러뜨리면 그날의 메인 퀘스트·러닝 기록은 잠기고, 식단(사이드 퀘스트)은 오늘의 모험을 종료하기 전까지 계속 체크할 수 있어요. 이미 클리어한 지난 날짜는 그대로예요'],
   ['1.42.5','새로 시작할 때 순서를 바꿈: 규칙 설명창이 먼저 나오고, 닫으면 반디가 인사하며 난이도를 추천해 줘요'],
@@ -4760,8 +4764,28 @@ var RKP=[
 {n:'오리하르콘',w:'31승',t:'용암 균열 · 불꽃',rim:'#7E160A',face:'#EC4F27',hi:'#FFC45E',ac:'#F7C948',tx:'#3E0A04'},
 {n:'아다만타이트',w:'40승',t:'수정 기둥 · 결정 면',rim:'#F2BE3C',face:'#111A3D',hi:'#2C42A0',ac:'#F6C445',tx:'#F6C445'}];
 var RKUID=0;
-function rkV(cx,cy,w,h){var t=cy-h/2;return [[cx,t],[cx+w/2,t+h*.22],[cx+w/2,t+h*.78],[cx,cy+h/2],[cx-w/2,t+h*.78],[cx-w/2,t+h*.22]];}
+function rkV(cx,cy,w,h){var t=cy-h/2,hw=h*0.8660254/2;return [[cx,t],[cx+hw,t+h*.25],[cx+hw,t+h*.75],[cx,cy+h/2],[cx-hw,t+h*.75],[cx-hw,t+h*.25]];}
 function rkHx(cx,cy,w,h){return rkV(cx,cy,w,h).map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ');}
+var RKFM={};
+function rkInk(px,txt){
+  var key=px+'|'+txt; if(RKFM[key]) return RKFM[key];
+  var r={a:px*.72,d:0};
+  try{
+    if(!rkInk.cx){ rkInk.cx=document.createElement('canvas').getContext('2d'); }
+    rkInk.cx.font="400 "+px+"px 'Do Hyeon','Noto Sans KR',sans-serif";
+    var m=rkInk.cx.measureText(txt);
+    if(m.actualBoundingBoxAscent>0) r={a:m.actualBoundingBoxAscent,d:Math.max(0,m.actualBoundingBoxDescent)};
+  }catch(e){}
+  RKFM[key]=r; return r;
+}
+function rkRefit(){
+  RKFM={};
+  try{
+    var hb=document.querySelector('.rkb'); if(hb) hb.innerHTML=rkBadge(rkCur(),lvInfo(totalXP()).L,2);
+    if(tab==='rank') render();
+  }catch(e){}
+}
+try{ if(document.fonts){ if(document.fonts.addEventListener) document.fonts.addEventListener('loadingdone',rkRefit); if(document.fonts.ready) document.fonts.ready.then(rkRefit); } }catch(e){}
 function rkStar(x,y,r,f){return '<path d="M'+x+','+(y-r)+' Q'+x+','+y+' '+(x+r)+','+y+' Q'+x+','+y+' '+x+','+(y+r)+' Q'+x+','+y+' '+(x-r)+','+y+' Q'+x+','+y+' '+x+','+(y-r)+'Z" fill="'+f+'"/>';}
 function rkGem(x,y,r,c){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c.ac+'" stroke="'+c.rim+'" stroke-width="1.2"/><circle cx="'+(x-r*.3)+'" cy="'+(y-r*.3)+'" r="'+(r*.3)+'" fill="#fff" opacity=".85"/>';}
 function rkDia(x,y,r,f,sk){return '<path d="M'+x+','+(y-r)+' L'+(x+r*.8)+','+y+' L'+x+','+(y+r)+' L'+(x-r*.8)+','+y+'Z" fill="'+f+'" stroke="'+sk+'" stroke-width="1" stroke-linejoin="round"/><path d="M'+x+','+(y-r)+' L'+x+','+(y+r)+' M'+(x-r*.8)+','+y+' L'+(x+r*.8)+','+y+'" stroke="#fff" stroke-width=".7" opacity=".8"/>';}
@@ -4804,7 +4828,7 @@ else if(i===7){g='<path d="M'+(cx-19)+',33 Q'+cx+',20 '+(cx+19)+',33" fill="none
 else if(i===8){[[-16,16],[-8,10],[0,4],[8,10],[16,16]].forEach(function(p){var x=cx+p[0];g+='<path d="M'+(x-5.5)+',33 Q'+(x-6)+','+(p[1]+14)+' '+x+','+p[1]+' Q'+(x+6)+','+(p[1]+14)+' '+(x+5.5)+',33Z" fill="'+c.ac+'" stroke="'+c.rim+'" stroke-width="1.2" stroke-linejoin="round"/><path d="M'+(x-2.6)+',33 Q'+(x-3)+','+(p[1]+18)+' '+x+','+(p[1]+8)+' Q'+(x+3)+','+(p[1]+18)+' '+(x+2.6)+',33Z" fill="#E5382A"/>';});}
 else if(i===9){g='<path d="M'+(cx-22)+',33 L'+(cx-20)+',14 L'+(cx-11)+',23 L'+(cx-6)+',8 L'+cx+',22 L'+(cx+6)+',8 L'+(cx+11)+',23 L'+(cx+20)+',14 L'+(cx+22)+',33Z" fill="#F6C445" stroke="#8C5F00" stroke-width="1.4" stroke-linejoin="round"/><path d="M'+(cx-6)+',10 L'+(cx-9)+',22 M'+(cx+6)+',10 L'+(cx+9)+',22" stroke="#FFF3B0" stroke-width="1" fill="none"/><g stroke="#8C5F00" stroke-width=".9"><circle cx="'+(cx-20)+'" cy="16" r="2.6" fill="#7C8BFF"/><circle cx="'+(cx-6)+'" cy="10" r="2.8" fill="#BFD0FF"/><circle cx="'+(cx+6)+'" cy="10" r="2.8" fill="#BFD0FF"/><circle cx="'+(cx+20)+'" cy="16" r="2.6" fill="#7C8BFF"/><circle cx="'+cx+'" cy="25" r="3.4" fill="#7C8BFF"/></g>';}
 return g;}
-function rkBadge(i,lv,sm){
+function rkBadge(i,lv,sm){var hd=(sm===2); if(hd) sm=false;
 var c=RKP[i],cx=75,cy=64,s='',k,id='rkc'+(RKUID++),V=rkV(cx,cy,64,70),wt=RKWT[i+1]||'',wf=(i===9)?c.hi:c.ac,x,y;
 s+='<defs><clipPath id="'+id+'"><polygon points="'+rkHx(cx,cy,56,62)+'"/></clipPath></defs>';
 if(!sm&&i>=2){s+='<polygon points="'+rkHx(cx,cy,84,92)+'" fill="'+c.ac+'" opacity=".16"/>';}
@@ -4817,8 +4841,8 @@ if(!sm&&i===6){s+=rkRays(cx,cy,12,54,2.6,'#fff',c.ac,.7);}
 if(!sm&&i===8){s+=rkRays(cx,cy,16,58,4.4,c.ac,'#E5382A',.45);}
 if(!sm&&i===7){[150,180,-150,105,-105].forEach(function(d){s+=rkSpike(cx,cy,d,30,56,6);});}
 if(!sm&&i===9){[-128,128,-158,158,180].forEach(function(d){s+=rkPrism(cx,cy,d,31,22,5);});}
-if(!sm&&i>=2){var sc=.5+(i-2)*.05;s+=rkWing(wt,cx+32,1,sc,c,wf)+rkWing(wt,cx-32,-1,sc,c,wf);}
-else if(!sm&&i===1){s+=rkWing('leaf',cx+32,1,.5,c,c.ac)+rkWing('leaf',cx-32,-1,.5,c,c.ac);}
+if(!sm&&i>=2){var sc=.5+(i-2)*.05;s+=rkWing(wt,cx+30,1,sc,c,wf)+rkWing(wt,cx-30,-1,sc,c,wf);}
+else if(!sm&&i===1){s+=rkWing('leaf',cx+30,1,.5,c,c.ac)+rkWing('leaf',cx-30,-1,.5,c,c.ac);}
 if(!sm&&i===3){[[-38,34,58],[-33,42,50],[-26,48,35],[-18,52,20],[-9,54,8]].forEach(function(p){s+='<ellipse cx="'+(cx+p[0])+'" cy="'+(cy+p[1])+'" rx="6.4" ry="3" fill="#7C9A5A" stroke="'+c.rim+'" stroke-width=".8" transform="rotate('+p[2]+' '+(cx+p[0])+' '+(cy+p[1])+')"/><ellipse cx="'+(cx-p[0])+'" cy="'+(cy+p[1])+'" rx="6.4" ry="3" fill="#7C9A5A" stroke="'+c.rim+'" stroke-width=".8" transform="rotate('+(-p[2])+' '+(cx-p[0])+' '+(cy+p[1])+')"/>';});}
 s+=rkCrown(i,c,cx);
 s+='<polygon points="'+rkHx(cx,cy,64,70)+'" fill="'+c.rim+'" stroke="'+c.rim+'" stroke-width="2" stroke-linejoin="round"/>';
@@ -4836,9 +4860,10 @@ if(i===7){V.forEach(function(p,j){if(j>0)s+=rkDia(p[0],p[1],5,'#BFEFFF',c.rim);}
 if(i===9){V.forEach(function(p,j){if(j>0)s+=rkGem(p[0],p[1],3.2,c);});}
 var sp=[[-56,-38,6],[56,-44,5],[-62,10,4],[62,14,6],[-52,48,5],[54,52,4],[-36,-58,4],[38,-60,5],[-64,-14,4]];
 for(k=0;!sm&&k<Math.min(sp.length,i+1);k++){if(i>=4&&(k===6||k===7))continue;s+=rkStar(cx+sp[k][0],cy+sp[k][1],sp[k][2],i===9?'#F6C445':(i===1||i===2||i===3)?c.hi:c.ac);}
-var T1='<text x="'+cx+'" y="'+(sm?cy-8:cy-6)+'" text-anchor="middle" font-size="'+(sm?13:11)+'" font-weight="500" style="font-family:var(--disp),sans-serif"',T2='<text x="'+cx+'" y="'+(sm?cy+22:cy+20)+'" text-anchor="middle" font-size="'+(sm?30:26)+'" font-weight="500" style="font-family:var(--disp),sans-serif"';
+var fl=((sm||hd)?13:11), fn=((sm||hd)?30:26), gp=((sm||hd)?4:3), iL=rkInk(fl,'LV'), iN=rkInk(fn,String(lv)), tot=iL.a+gp+iN.a+iN.d, yL=cy-tot/2+iL.a, yN=yL+gp+iN.a;
+var T1='<text x="'+cx+'" y="'+yL.toFixed(1)+'" text-anchor="middle" font-size="'+fl+'" font-weight="500" style="font-family:var(--disp),sans-serif"',T2='<text x="'+cx+'" y="'+yN.toFixed(1)+'" text-anchor="middle" font-size="'+fn+'" font-weight="500" style="font-family:var(--disp),sans-serif"';
 s+=T1+' fill="'+c.face+'" stroke="'+c.face+'" stroke-width="3" stroke-linejoin="round">LV</text>'+T1+' fill="'+c.tx+'">LV</text>'+T2+' fill="'+c.face+'" stroke="'+c.face+'" stroke-width="4" stroke-linejoin="round">'+lv+'</text>'+T2+' fill="'+c.tx+'">'+lv+'</text>';
-return '<svg viewBox="'+(sm?'37 4 76 94':'0 0 150 124')+'" width="100%" style="max-width:'+(sm?'none':'150px')+';display:block;margin:0 auto" role="img" aria-label="'+c.n+' 배지">'+s+'</svg>';}
+return '<svg viewBox="'+(sm?'37 4 76 94':'0 0 150 124')+'" width="100%" style="max-width:'+((sm||hd)?'none':'150px')+';display:block;margin:0 auto" role="img" aria-label="'+c.n+' 배지">'+s+'</svg>';}
 
 
 /* ---------- v1.44.0 랭크 (길드·랭크 1단계: 랭크 계산·저장, 배지, 랭크 화면) ----------
@@ -4878,7 +4903,7 @@ function viewRank(){
 
 function hud(){
   var li=lvInfo(totalXP()), p=Math.round(li.cur*100/li.need);
-  return '<section class="hud" aria-label="내 레벨"><button type="button" class="rkb" data-a="rank" aria-label="'+RANKS[rkCur()].n+' 랭크 · 레벨 '+li.L+' · 눌러서 랭크 보기">'+rkBadge(rkCur(),li.L,true)+'</button>'+
+  return '<section class="hud" aria-label="내 레벨"><button type="button" class="rkb" data-a="rank" aria-label="'+RANKS[rkCur()].n+' 랭크 · 레벨 '+li.L+' · 눌러서 랭크 보기">'+rkBadge(rkCur(),li.L,2)+'</button>'+
     '<div class="hud-main"><div class="hud-top"><span class="ttl">'+titleOf(li.L)+'</span><span class="stk">연속 <b>'+streak()+'</b>일</span></div>'+
     '<div class="xpbar" role="progressbar" aria-label="경험치" aria-valuemin="0" aria-valuemax="'+li.need+'" aria-valuenow="'+li.cur+'"><i style="width:'+p+'%"></i></div>'+
     '<div class="xpt"><span>'+li.cur+' / '+li.need+' XP</span><span>다음 레벨까지 '+(li.need-li.cur)+'</span></div></div></section>';

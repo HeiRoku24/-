@@ -1367,8 +1367,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.45.6', APP_DATE='2026-10-06', showChg=false;
+var APP_VER='1.46.0', APP_DATE='2026-10-06', showChg=false;
 var CHANGES=[
+  ['1.46.0','테스트 기간에는 앱을 연 날짜가 기록돼요. 로그인하면 개발자가 볼 수 있어요. 처형 기술 이름 몸짱일도양단은 일도양단으로 바꿨어요'],
+  ['1.45.7','몸짱파자마, 몸짱일지도 붙여 쓰도록 통일했어요'],
   ['1.45.6','몸짱소울, 몸짱용사, 몸짱왕국은 모두 붙여 쓰도록 통일했어요. 시작화면 로고도 몸짱소울로 되돌렸어요'],
   ['1.45.5','문구를 다듬었어요. 확인창과 팝업의 말투를 ~요체로 맞추고, 사라진 휴식 의상 문구와 어색한 대사 한 줄을 고쳤어요. 말줄임표와 종료됐어요 표기도 통일했어요'],
   ['1.45.4','한글 줄바꿈을 다듬었어요(단어 중간에서 끊지 않고, 토벌 완료 창처럼 "+20 XP"만 둘째 줄에 덩그러니 남지 않게). 아니오를 아니요로, 띄어쓰기 몇 곳을 바로잡았어요'],
@@ -1403,7 +1405,7 @@ var CHANGES=[
   ['1.41.3','전용무기 18종 추가(드워프 도끼 6·엘프 활 6·마법사 지팡이 6, 용사 검 6종과 합쳐 전용무기 24종 완성): 대장간에서 제작하고 입은 무기가 정면·옆·뒷모습에 반영, 파자마를 입어도 함께 입음. 제작 재료 드랍량 상향(평일 중간보스 1→2개, 마왕 3→6개·희귀 이상 확정 1→2개)은 2026-10-04부터 적용되고 이전에 얻은 재료는 그대로. 대장간에는 만난 직업의 장비만 보임'],
   ['1.41.2','공용장비에 신발 6종·허리띠 6종 추가(공용 드랍 장비 24종 완성: 망토·깃털·신발·허리띠). 네 직업 모두 정면·옆·뒷모습에 반영, 신발은 일반 3·희귀 2·전설 1(별빛·줄무늬·불꽃 무늬), 허리띠는 주머니 허리띠 포함. 전리품 상자에서 나오고 파자마를 입으면 가려져요'],
   ['1.41.1','파자마를 입어도 전용 \'무기\'는 함께 입고 보이도록 수정(용사의 검은 정면·옆·뒷모습 모두 반영, 무기를 입어도 파자마가 벗겨지지 않음). 동료의 뒷모습 무기도 파자마 차림에서 보임'],
-  ['1.41.0','장비 체계 개편 1단계: 일요일 휴식 의상(가운·슬리퍼·안대·베개)을 모두 없애고 특별장비 "몸짱 파자마" 1벌로 통합(첫 일요일 신전 방문 시 1회 지급, 입으면 모든 장비 칸을 대신하며 4직업 모두 착용 가능). 공용장비(망토·깃털)를 드워프 전사·엘프 궁수·현자 마법사도 입을 수 있게 하고 정면·옆·뒷모습에 반영. 용사 러닝 옆모습과 성벽 뒷모습에 방패 표시. 용사 검 6종은 상자에서 대장간 제작으로 이동(이미 가진 검은 그대로 인정, 재료 사용 안 함). 여관 장비 도감을 공용장비 / 전용장비(직업별 하위 토글) / 특별장비로 재구성'],
+  ['1.41.0','장비 체계 개편 1단계: 일요일 휴식 의상(가운·슬리퍼·안대·베개)을 모두 없애고 특별장비 "몸짱파자마" 1벌로 통합(첫 일요일 신전 방문 시 1회 지급, 입으면 모든 장비 칸을 대신하며 4직업 모두 착용 가능). 공용장비(망토·깃털)를 드워프 전사·엘프 궁수·현자 마법사도 입을 수 있게 하고 정면·옆·뒷모습에 반영. 용사 러닝 옆모습과 성벽 뒷모습에 방패 표시. 용사 검 6종은 상자에서 대장간 제작으로 이동(이미 가진 검은 그대로 인정, 재료 사용 안 함). 여관 장비 도감을 공용장비 / 전용장비(직업별 하위 토글) / 특별장비로 재구성'],
   ['1.40.1','시작화면이 떠 있는 동안 뒤에 있는 앱 화면을 멈춰 두어 시작화면 움직임의 프레임 드랍을 줄이도록 수정(시작화면을 닫으면 원래 화면과 스크롤 위치로 복귀)'],
   ['1.40.0','탭 개편: 하단 메뉴를 지도·퀘스트·러닝·왕국·일지 5개로 줄이고 설정은 화면 오른쪽 위 톱니바퀴로 이동(설정 화면의 ‹ 돌아가기로 원래 탭 복귀). 앱을 열면 처음 화면이 퀘스트로 바뀜'],
   ['1.39.20','일지의 업적을 달성한 것만 달성한 날짜와 함께 달성 순서대로 쌓이도록 변경(달성 날짜는 지난 기록을 되짚어 채움). 누적 거리·총 달린 거리를 일일 퀘스트 러닝으로 입력한 거리만으로 통일(일요일 걷기 제외)'],
@@ -1441,7 +1443,7 @@ var CHANGES=[
   ['1.38.7','벅지짱 미노타우르스 다리를 굵게 키우고 허벅지 근육 선 표시(둥글게 부풀린 모양은 되돌림)'],
   ['1.38.6','벅지짱 미노타우르스 디자인 변경: 허벅지를 크고 단단하게, 상체는 조금 작게'],
   ['1.38.5','대장간·여관·성 제목 오른쪽에 설명 추가'],
-  ['1.38.4','탭 제목 옆 설명 정리: 훈련장 설명 간소화, 몸짱왕국 띄어쓰기와 설명을 제목 오른쪽으로 이동, 모험 지도·몸짱 일지·설정에 제목 오른쪽 설명 추가'],
+  ['1.38.4','탭 제목 옆 설명 정리: 훈련장 설명 간소화, 몸짱왕국 띄어쓰기와 설명을 제목 오른쪽으로 이동, 모험 지도·몸짱일지·설정에 제목 오른쪽 설명 추가'],
   ['1.38.3','훈련장: 제목 옆 설명 추가, 운동마다 + − 대신 \'훈련\' 버튼 하나(누를 때마다 1세트·XP 반영), 러닝 5km도 훈련 버튼으로 몇 번이고 기록, 시간 재는 운동에 타이머 버튼 추가'],
   ['1.38.2','성벽 복구 단계에 따른 마왕성 보스전 연출 변화를 삭제하고 예전 연출로 되돌림'],
   ['1.38.1','건물 내부 장면에서 NPC 머리 위에 떠 있던 말풍선(...) 삭제'],
@@ -1449,7 +1451,7 @@ var CHANGES=[
   ['1.37.5','완성된 건물(여관·훈련장·대장간) 화면에 내부 장면 추가: 용사와 NPC(여관 여주인·기사단 교관·드워프 대장장이)가 살아 움직이는 인테리어, NPC에게 말을 걸어 훈련·제작 기능 이용, 여주인 일상 대사(시간·날씨 연동)'],
   ['1.37.4','훈련장·대장간에 움직임 추가(복구 중·완성 단계만, 폐허는 정지): 훈련장 허수아비 흔들림·먼지·깃발·검 반짝임, 대장간 불꽃·아궁이 빛·모루 불똥·깃발·망치질'],
   ['1.37.3','왕국 전경에 움직임 추가(성 깃발, 굴뚝 연기, 대장간 불꽃, 해자 물 흐름과 물고기, 흔들리는 나무·수풀, 떠다니는 구름), 전경 네 귀퉁이 밭 네모 삭제, 성벽 이름표를 위쪽 성벽 안쪽 아래로 이동'],
-  ['1.37.2','여관 장비 도감을 드랍·제작·휴식 장비 토글로 정리, 몸짱 일지 업적을 얇은 박스로 줄이고 누르면 팝업으로 그림·세부 내용 표시'],
+  ['1.37.2','여관 장비 도감을 드랍·제작·휴식 장비 토글로 정리, 몸짱일지 업적을 얇은 박스로 줄이고 누르면 팝업으로 그림·세부 내용 표시'],
   ['1.37.1','왕국 조감도 다듬기: 성을 가늘고 뾰족한 탑 하나로 변경, 건물을 성 둘레에 골고루 배치, 도로·자재 말풍선·큰 이름표를 없애고 건물 아래에 이름만 작게 표시'],
   ['1.37','장비재료 드랍 추가(중간보스 1개, 마왕 3개·희귀 이상 1개 확정, 날짜별 고정·지난 승리 기록에 소급), 대장간 완성(재료로 원하는 장비 제작), 제작 장비 9종(투구·갑옷·방패 × 일반·희귀·전설)과 용사 새 부위 레이어, 승리 화면에 이번 보상 표시, 설정의 자동 종료 소급 적용 표 삭제, 왕국 화면 터치 위치 어긋남 수정'],
   ['1.36.1','왕국 전경을 조감도로 변경: 성이 가운데, 훈련장·대장간·여관이 주변, 원형 성벽이 바깥을 둘러싸는 구도(성벽 복구가 진행될수록 원이 이어져요)'],
@@ -1476,7 +1478,7 @@ var CHANGES=[
   ['1.16','시작화면 배치 조정(제목 아래로, 용사와 배경 위로), 앱 정보에서 업데이트 내역 버튼 제거'],
   ['1.15','새 버전을 올리면 앱을 다시 열 때 바로 반영되도록 개선'],
   ['1.14','시작화면 추가: 걸어가는 몸짱용사(입은 장비 그대로), 시간대별 하늘, 오늘의 목적지 예고, 터치 연출, 설정에서 켜고 끄기'],
-  ['1.13','업적 페이지를 "몸짱 일지"로 바꾸고 달린 거리·체중 기록을 옮김'],
+  ['1.13','업적 페이지를 "몸짱일지"로 바꾸고 달린 거리·체중 기록을 옮김'],
   ['1.12','바뀐 운동의 예전 기록(수건 로우·점프 스쿼트·버피)을 새 운동 기록으로 이어받기'],
   ['1.11','앱 버전 표시와 업데이트 내역 추가'],
   ['1.10','여관(옷 입히기), 전리품 상자, 일요일 위로 한마디·휴식 의상, 업적 탭 분리'],
@@ -1544,7 +1546,7 @@ var ITEMS=[
  {id:'shield1',slot:'shield',job:'hero',rar:'n',name:'나무 방패',craft:1,fill:'#B9783A'},
  {id:'shield2',slot:'shield',job:'hero',rar:'r',name:'청강 방패',craft:1,fill:'#C9D4E3',trim:'#5CC8FF'},
  {id:'shield3',slot:'shield',job:'hero',rar:'l',name:'황금 방패',craft:1,fill:'#F6C445',trim:'#E5484D'},
- {id:'pajama',slot:'pj',rar:'n',name:'몸짱 파자마',special:1}
+ {id:'pajama',slot:'pj',rar:'n',name:'몸짱파자마',special:1}
 ];
 var SLOTN={cape:'망토',plume:'깃털',shoes:'신발',belt:'허리띠',sword:'검',axe:'양손 도끼',bow:'활',staff:'지팡이',dhelm:'뿔 투구',dmail:'판금 갑옷',dbeard:'수염 장식',ehead:'머리띠',etunic:'튜닉',equiver:'화살통',mhat:'뾰족 모자',mrobe:'로브',mbook:'마법책·구슬',helm:'투구',armor:'갑옷',shield:'방패',pj:'파자마'};
 var WEAPON_SLOTS=['sword','axe','bow','staff'];                                  /* 전용 '무기' 칸: 파자마를 입어도 함께 입어요 (동료 무기가 생기면 칸 이름을 여기에 더해요) */
@@ -1803,7 +1805,7 @@ function beltItemArt(it,B,noPouch){
   if(it.pouch && !noPouch) s+='<rect x="'+(w/2-16)+'" y="'+(y+h-1)+'" width="12" height="11" rx="3.4" fill="#C8925C" stroke="'+OL+'" stroke-width="2.2"/><path d="M'+(w/2-16)+','+(y+h+3)+' H'+(w/2-4)+'" stroke="'+OL+'" stroke-width="1.6"/>'+circ(w/2-10,y+h+3,1.4,'#F6C445',0);
   return s;
 }
-/* ===== 몸짱 파자마 (특별장비): 수면 모자 · 수면 안대 · 수면 신발 · 파자마. 네 캐릭터 모두 같은 부품을 써요 ===== */
+/* ===== 몸짱파자마 (특별장비): 수면 모자 · 수면 안대 · 수면 신발 · 파자마. 네 캐릭터 모두 같은 부품을 써요 ===== */
 var PJ={top:'#8FA0F0',topD:'#6E80DA',pants:'#7F90E8',cap:'#7A86E8',pom:'#FFF3B0',slip:'#FFB3C7',mask:'#A9B5FF'};
 function pjTopFront(){
   return pth('M-31,-18 Q-36,10 -25,33 L25,33 Q36,10 31,-18 Q0,-29 -31,-18 Z',PJ.top,3)+
@@ -2864,7 +2866,7 @@ function totalXP(){var t=0; Object.keys(S.log).forEach(function(k){t+=dayXP(k);}
 function chestsEarned(){ var n=0; clearedKeys().forEach(function(k){ var d=parse(k); if(DK[d.getDay()]==='sat' && satWin(d)) n++; }); return n; }
 function chestsLeft(){ return Math.max(0,chestsEarned()-(S.chestOpened||0)); }
 function grantRest(k){
-  /* 휴식 의상은 "몸짱 파자마" 1벌로 통합: 첫 일요일 신전 방문(첫 가호) 때 1회만 지급해요 */
+  /* 휴식 의상은 "몸짱파자마" 1벌로 통합: 첫 일요일 신전 방문(첫 가호) 때 1회만 지급해요 */
   S.restLog=S.restLog||{}; S.inv=S.inv||{};
   if(S.restLog[k]) return;
   if(!S.inv.pajama){ S.inv.pajama=true; S.restLog[k]='pajama'; } else { S.restLog[k]='none'; }
@@ -4504,6 +4506,7 @@ function dayTick(){
   if(fmt(t)===fmt(TODAY)) return;
   var follow=(fmt(sel)===fmt(TODAY));
   NOW=n; TODAY=t; if(follow) sel=TODAY;
+  visitMark();
   stopTimer(); sunSettle();
   if(titleEl.hidden){ render(); sunPopup(); jnyCheck(); }
 }
@@ -5570,7 +5573,7 @@ function bkParse(text){
     o.h=[]; if(Array.isArray(e.h)) e.h.slice(-80).forEach(function(x){ var m=/^(\w+):([01])$/.exec(String(x)); if(m && (m[1]==='run' || X[m[1]])) o.h.push(m[1]+':'+m[2]); });
     tlog[k4]=o;
   });
-  var outd={start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,crafted:crf2,trade:trd2,dl:dl2,bdSeen:bds2,rk:rk2,ex:ex2,char:(CHARN[d.char]?d.char:'hero')};
+  var outd={start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,crafted:crf2,trade:trd2,dl:dl2,bdSeen:bds2,rk:rk2,ex:ex2,vis:visClean(d.vis),char:(CHARN[d.char]?d.char:'hero')};
   migrateRest(outd);
   return {data:outd};
 }
@@ -5662,7 +5665,7 @@ function achPopup(x){
   return {k:'ACHIEVED',t:x.name,b:'<div class="achp">'+body+'</div>',mode:'info'};
 }
 function viewAch(){
-  var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<div class="phrow tab"><h1 class="ph">몸짱 일지</h1><span class="phsub">업적과 체중 기록</span></div>';
+  var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<div class="phrow tab"><h1 class="ph">몸짱일지</h1><span class="phsub">업적과 체중 기록</span></div>';
   var list=achList();
   h+='<h2>업적 <span class="cnt">'+list.length+'개</span></h2>';
   if(list.length){
@@ -6387,7 +6390,7 @@ var BANDI={
     train:{h:'훈련장이에요!',x:'마왕전을 앞두고 XP가 모자랄 때 추가로 훈련할 수 있어요. 교관 가론에게 말을 걸면 훈련 기록이 열려요. 훈련 XP는 월~금 누적에 더해지지만 1000을 넘는 부분은 기록만 남아요.'},
     trade:{h:'교역소예요!',x:'남는 재료를 다른 등급의 재료로 바꿔 줘요. 내림은 후하게, 올림은 박하게 쳐 줘요. 상인 마르코에게 말을 걸면 교환이 열리고, 교환은 되돌릴 수 없어요.'},
     map:{h:'여기는 모험 지도예요!',x:'이번 주 월요일부터 일요일까지의 스테이지가 길로 이어져 있어요. 스테이지를 누르면 그날의 퀘스트가 열리고, 마친 날에는 표시가 남아요. 길 끝에는 토요일의 마왕성이 기다려요.'},
-    diary:{h:'여기는 몸짱 일지예요!',x:'모험을 하며 달성한 업적이 하나씩 쌓여요. 업적을 누르면 자세한 내용을 볼 수 있어요. 체중을 기록하면 변화를 그래프로 볼 수 있지만, 하고 싶을 때만 해도 괜찮아요.'},
+    diary:{h:'여기는 몸짱일지예요!',x:'모험을 하며 달성한 업적이 하나씩 쌓여요. 업적을 누르면 자세한 내용을 볼 수 있어요. 체중을 기록하면 변화를 그래프로 볼 수 있지만, 하고 싶을 때만 해도 괜찮아요.'},
     guild:{h:'길드예요!',x:'마왕을 쓰러뜨려 승리를 쌓으면 랭크를 올리는 승급 시험을 볼 수 있어요. 접수원 세라에게 말을 걸어 보세요. 시험은 몸 상태가 좋은 날에, 무리하지 말고 봐요.'},
     forge:{h:'대장간이에요!',x:'보스에게서 얻은 재료로 전용 장비를 만들어요. 같은 등급의 재료로 같은 등급 장비를 만들 수 있어요. 재료가 모자라면 교역소가 열린 뒤 바꿀 수도 있어요.'}
   },
@@ -6669,7 +6672,32 @@ var introSeen=false; try{introSeen=!!localStorage.getItem('home-training-intro')
 var cqEl=document.getElementById('cq'), cqD=document.getElementById('cqd'), cqB=document.getElementById('cqb');
 function withTimeout(p,ms){ return Promise.race([p,new Promise(function(_,rej){setTimeout(function(){rej({code:'timeout'});},ms);})]); }
 function isEmptyData(x){ return !x || (!Object.keys(x.log||{}).length && !(x.body||[]).length); }
-function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{}}; }
+/* ===== v1.46.0 접속 날짜 기록 (테스트 기간용): S.vis={first:처음 연 날짜, days:{날짜:1}} 날짜만, 시간은 기록하지 않아요 ===== */
+var VIS_OK=/^\d{4}-\d{2}-\d{2}$/;
+function visClean(v){
+  var o={}, days={}, f=null;
+  if(v && typeof v==='object'){
+    if(typeof v.first==='string' && VIS_OK.test(v.first)) f=v.first;
+    if(v.days && typeof v.days==='object') Object.keys(v.days).forEach(function(k){ if(VIS_OK.test(k) && v.days[k]){ days[k]=1; if(!f||k<f) f=k; } });
+  }
+  if(f){ o.first=f; o.days=days; }
+  return o;
+}
+function visUnion(a,b){
+  var x=visClean(a), y=visClean(b), o={}, days={}, k;
+  if(!x.first && !y.first) return {};
+  for(k in (x.days||{})) days[k]=1; for(k in (y.days||{})) days[k]=1;
+  o.first=(x.first&&y.first)?(x.first<y.first?x.first:y.first):(x.first||y.first);
+  o.days=days; return o;
+}
+function visitMark(){
+  var t=fmt(TODAY), v=visClean(S.vis);
+  if(v.days && v.days[t]) return;
+  if(!v.first){ v={first:t,days:{}}; }
+  v.days[t]=1; if(t<v.first) v.first=t;
+  S.vis=v; save();
+}
+function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{},vis:x.vis||{}}; }
 function dayScore(L){ return Object.keys(L.done||{}).length+Object.keys(L.diet||{}).length+(L.km>0?1:0)+(L.out?1:0); }
 function mergeData(a,b){
   var log={}, keys={};
@@ -6704,13 +6732,13 @@ function mergeData(a,b){
   Object.keys(a.trainLog||{}).forEach(function(k){tks[k]=1;}); Object.keys(b.trainLog||{}).forEach(function(k){tks[k]=1;});
   function trScore(e){ return e?trSetCount(e)+(e.run||0):-1; }
   Object.keys(tks).forEach(function(k){ var x=(a.trainLog||{})[k], y=(b.trainLog||{})[k]; tlog[k]=JSON.parse(JSON.stringify(trScore(x)>=trScore(y)?x:y)); });
-  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,crafted:crf,trade:trd,dl:dlm,bdSeen:bds,rk:rkm,ex:exm,char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
+  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,crafted:crf,trade:trd,dl:dlm,bdSeen:bds,rk:rkm,ex:exm,vis:visUnion(a.vis,b.vis),char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
 }
 function applyData(x,dirty){
   if(migrateLog(x.log)) dirty=true;
   if(migrateRest(x)) dirty=true;
   noDirty=true;
-  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{},lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
+  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{},vis:visUnion(S.vis,x.vis),lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
   save(); noDirty=false;
 }
 function hm(){var d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes());}
@@ -6807,9 +6835,11 @@ function cloudHtml(){
   if(CL.user){
     return h+'<p class="cluser">로그인됨 · <b>'+String(CL.user.email||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</b></p>'+
       '<p class="clnote" id="clstat">'+(CL.stat||'')+'</p>'+
+      '<p class="clnote" style="text-wrap:balance">테스트 기간에는 앱을 연 날짜가 기록돼서 개발자가 볼 수 있어요.</p>'+
       '<div class="bkrow"><button type="button" class="primary" data-a="cl-sync">지금 동기화</button><button type="button" class="ghost big" data-a="cl-out">로그아웃</button></div></div>';
   }
   return h+'<p class="clnote">로그인하면 기록이 구글 서버에 저장돼서, 폰을 바꿔도 다른 기기에서도 볼 수 있어요.</p>'+
+    '<p class="clnote" style="text-wrap:balance">테스트 기간에는 앱을 연 날짜가 기록돼요. 로그인하면 개발자가 볼 수 있어요.</p>'+
     '<div class="field"><label>이메일<input id="cle" type="email" inputmode="email" autocomplete="email" autocapitalize="off"></label></div>'+
     '<div class="field"><label>비밀번호 (6자 이상)<input id="clp" type="password" autocomplete="current-password"></label></div>'+
     '<div class="bkrow"><button type="button" class="primary" data-a="cl-in">로그인</button><button type="button" class="ghost big" data-a="cl-up">회원가입</button></div>'+
@@ -7880,6 +7910,7 @@ titleEl.addEventListener('click',titleGo);
 titleEl.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); titleGo(); } });
 
 fixKmOnce();
+visitMark();
 sunSettle();
 render();
 bgmReady=true;
@@ -7934,7 +7965,7 @@ var EXEC={};
      이 블록은 자기 함수 안에 있어서 앱의 다른 이름과 겹치지 않아요. 밖에서는 EXEC.flow(직업,보스키,끝난뒤할일)로만 불러요. */
   var OVL='', G=452, FEET=50, HS=1.25, anims=[], timers=[], Q=[], uid=0, csOpt={c:'hero',k:'demon'}, csDone=false, csCont=null, csUndo=null, csCommit=null;
   var THEME={hero:['#160F2E','#6A2C70','#F08A5D','#3B2A4F'],dwarf:['#150C0C','#5A2A1E','#E0883A','#3A2418'],elf:['#041219','#0F4540','#6FD0A0','#1F3B2B'],mage:['#0A0A2C','#3B2A8C','#B58CFF','#2A2160']};
-  var SKILL={hero:'몸짱 일도양단!',dwarf:'대지 분쇄!',elf:'별빛 관통!',mage:'유성 대폭발!'};
+  var SKILL={hero:'일도양단!',dwarf:'대지 분쇄!',elf:'별빛 관통!',mage:'유성 대폭발!'};
   var csCss='#excut{position:fixed;left:0;top:0;right:0;bottom:0;z-index:950;background:#120a20;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none;touch-action:manipulation;font-family:inherit}'+
     '#excut[hidden]{display:none}'+
     '#excut svg.cs{width:min(100vw,calc(100vh*9/16));height:min(100vh,calc(100vw*16/9));display:block;overflow:hidden}'+

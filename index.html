@@ -85,6 +85,10 @@ h3{margin:0;}
 .rk-info b{font-family:var(--disp); font-weight:400; font-size:18px;}
 .rk-info span{font-size:13px; color:var(--muted);}
 .rk-tag{font-size:12px; font-weight:700; color:var(--link); white-space:nowrap;}
+.ex-line{display:flex; gap:10px; margin:10px 0 4px;}
+.ex-f{flex:1; min-width:0; display:flex; flex-direction:column; gap:4px; font-size:13px; color:var(--muted);}
+.ex-f input{width:100%; height:52px; border-radius:12px; border:2px solid var(--line); background:var(--soft); color:var(--ink); font-family:var(--disp); font-size:24px; text-align:center; padding:0 8px; box-sizing:border-box;}
+.ex-err:empty{display:none;}
 .hud-main{flex:1; min-width:0;}
 .hud-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px;}
 .ttl{font-family:var(--disp); font-size:19px;}
@@ -1352,8 +1356,12 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.44.2', APP_DATE='2026-10-06', showChg=false;
+var APP_VER='1.44.6', APP_DATE='2026-10-06', showChg=false;
 var CHANGES=[
+  ['1.44.6','랭크업 연출에서 이전 배지가 빛나며 떨릴 때의 소리를 더 "올라간다"는 느낌이 나게 바꿨어요(점점 올라가는 음계, 빨라지는 떨림 소리, 번쩍이기 직전 치솟는 소리)'],
+  ['1.44.5','랭크업 연출에 효과음이 생겼어요(기를 모을 때 올라가는 소리, 번쩍일 때 쿵 하는 울림, 새 배지가 만들어질 때 쇠 울림과 화음, 랭크 이름이 나올 때 종소리와 반짝임). 랭크 화면의 "다음 승급"에 [길드로 승급시험 보러가기] 버튼이 생겼어요(승급 시험 자격을 채우면 눌러서 길드로 갈 수 있어요)'],
+  ['1.44.4','왕국에 새 건물 "길드"가 생겼어요(처음부터 열려 있어요). 승급 시험은 이제 길드에서 접수원 세라에게 말을 걸어 볼 수 있고, 랭크 화면에서는 다음 승급까지 남은 조건을 보고, 조건을 채우면 [길드로 승급시험 보러가기] 버튼으로 길드로 갈 수 있어요. 반디가 왕국의 건물(여관·훈련장·대장간·교역소·길드)에 처음 들어갈 때마다 한 번씩 안내해요(성벽과 성은 없어요). 기존 기록·XP·레벨에는 영향이 없어요'],
+  ['1.44.3','승급 시험 추가(길드·랭크 2단계): 마왕 토벌 승리 수가 응시 조건을 채우면 랭크 화면에서 "승급 시험 보기"를 눌러 볼 수 있어요. 운동 3종목과 러닝 1종목을 같은 날 한 번에 보고(1분 타이머·스톱워치 제공), 4개 모두 합격선 이상이면 합격이에요. 시험은 하루 한 번이고 떨어지면 내일부터 다시 볼 수 있어요. 월~토에 응시하면 4개 항목이 모두 합격선의 절반 이상일 때 합격·불합격과 관계없이 그날의 메인 퀘스트와 러닝이 완료로 인정돼요(러닝 거리는 누적에 올라가지 않아요). 합격하면 배지가 다음 랭크 배지로 변하는 승급 연출이 나와요. 기존 기록·XP·레벨에는 영향이 없어요'],
   ['1.44.2','랭크 배지의 육각형을 정육각형으로 바로잡고(예전엔 옆으로 퍼져 찌그러져 보였어요), LV 숫자를 배지 정중앙에 오도록 글자 높이에 맞춰 정렬했어요'],
   ['1.44.1','퀘스트 화면 위의 랭크 배지를 날개·후광·왕관까지 모두 보이는 큰 모양으로 바꿨어요(위쪽 칸이 조금 높아졌어요)'],
   ['1.44.0','랭크 추가(길드·랭크 1단계): 퀘스트 화면 위의 육각형이 랭크 배지로 바뀌었어요(언랭크·카퍼·아이언·브론즈·실버·골드·플래티넘·미스릴·오리하르콘·아다만타이트 10종, 금속마다 질감과 모양이 달라요). 배지를 누르면 현재 랭크, 다음 승급 조건, 누적 마왕 토벌 승리 수, 랭크 목록을 볼 수 있어요. 랭크는 승급 시험으로 오르고, 승급 시험은 다음 업데이트에서 열려요(그때까지는 모두 언랭크예요). 기존 기록·XP·레벨에는 영향이 없어요'],
@@ -3032,17 +3040,18 @@ var BLD=[
   {id:'train',n:'훈련장',cost:100},
   {id:'forge',n:'대장간',cost:300},
   {id:'inn',n:'여관',cost:0},
+  {id:'guild',n:'길드',cost:0},
   {id:'trade',n:'교역소',cost:2000}
 ];
 var BSTN={ruin:'폐허',rest:'복구 중',done:'완성'};
-var kv='map';          /* 왕국 탭 안의 화면: map · inn · train · forge · wall · castle · build:<id> */
+var kv='map';          /* 왕국 탭 안의 화면: map · inn · guild · train · forge · wall · castle · build:<id> */
 var trOpen={};         /* 훈련장 토글 */
 var TR_MAX=99;
 var pendSun=[];
 function bld(id){ var i; for(i=0;i<BLD.length;i++){ if(BLD[i].id===id) return BLD[i]; } return null; }
 function kdSpent(id){ var k=S.kingdom; return (k && k.spent && k.spent[id]>0)?Math.floor(k.spent[id]):0; }
-function bProg(id){ var b=bld(id); if(id==='inn') return 1; if(!b||!b.cost) return 0; return Math.min(1,kdSpent(id)/b.cost); }
-function bState(id){ if(id==='inn') return 'done'; if(id==='castle') return 'ruin'; var p=bProg(id); return p>=1?'done':(p>=0.5?'rest':'ruin'); }
+function bProg(id){ var b=bld(id); if(id==='inn'||id==='guild') return 1; if(!b||!b.cost) return 0; return Math.min(1,kdSpent(id)/b.cost); }
+function bState(id){ if(id==='inn'||id==='guild') return 'done'; if(id==='castle') return 'ruin'; var p=bProg(id); return p>=1?'done':(p>=0.5?'rest':'ruin'); }
 /* 건축 자재: 종료된 날 기준으로 기록에서 계산하고, 쓴 양만 저장해요 */
 function matOfDay(k){
   var d=parse(k), dk=DK[d.getDay()], r;
@@ -3299,21 +3308,32 @@ function artInn(){
   s+='<circle class="an-puff" cx="30.5" cy="-48" r="4.6" fill="#fff" stroke="rgba(43,33,56,.22)" stroke-width="1.4"/><circle class="an-puff b" cx="30.5" cy="-48" r="4.6" fill="#fff" stroke="rgba(43,33,56,.22)" stroke-width="1.4"/><circle class="an-puff c" cx="30.5" cy="-48" r="4.6" fill="#fff" stroke="rgba(43,33,56,.22)" stroke-width="1.4"/>';
   return s;
 }
+function artGuild(){
+  var s=lmShadow(56);
+  s+=rc(-44,-8,88,48,'#B9C0CC',2)+pth('M-54,-8 L0,-52 L54,-8 Z','#3B4F9A')+rc(-44,-8,88,6,'#2E3F86',1);
+  s+=kPennant(0,-52,-74,'#F6C445');
+  s+=pth('M-11,40 L-11,16 Q0,6 11,16 L11,40 Z','#8B5A2B')+rc(-37,6,17,15,'#FFE08A',1.5)+rc(20,6,17,15,'#FFE08A',1.5);
+  s+=pth('M-9,-24 L9,-24 L9,-12 Q0,-3 -9,-12 Z','#F6C445',2.4)+pth('M-5,-21 L5,-21 L5,-13 Q0,-8 -5,-13 Z','#2E3F86',1.6);
+  s+='<g stroke="'+OL+'" stroke-width="2.6" stroke-linecap="round"><line x1="-20" y1="-26" x2="-12" y2="-14"/><line x1="20" y1="-26" x2="12" y2="-14"/></g><g stroke="#EAF1F9" stroke-width="1.4" stroke-linecap="round"><line x1="-20" y1="-26" x2="-12" y2="-14"/><line x1="20" y1="-26" x2="12" y2="-14"/></g>';
+  s+='<g class="an-twk">'+bStar(-30,-40,4,'#FFF3B0')+'</g>';
+  return s;
+}
 function bArt(id,st,p){
   if(id==='castle') return artCastle();
   if(id==='wall') return artWall(st,p);
   if(id==='train') return artTrain(st,p);
   if(id==='forge') return artForge(st,p);
   if(id==='trade') return artTrade(st,p);
+  if(id==='guild') return artGuild();
   return artInn();
 }
-var BVB={castle:'-80 -122 160 176',wall:'-166 -158 332 322',train:'-84 -54 168 104',forge:'-76 -100 152 150',inn:'-82 -72 164 124',trade:'-84 -72 168 122'};
+var BVB={castle:'-80 -122 160 176',wall:'-166 -158 332 322',train:'-84 -54 168 104',forge:'-76 -100 152 150',inn:'-82 -72 164 124',trade:'-84 -72 168 122',guild:'-60 -80 120 130'};
 function bSvg(id){ return '<svg viewBox="'+BVB[id]+'" aria-hidden="true">'+bArt(id,bState(id),bProg(id))+'</svg>'; }
 /* 왕국 전경 */
 var KW=360, KH=500, KCX=180, KCY=240, KRX=160, KRY=150;
 /* 성(가운데)을 중심으로 훈련장·여관·교역소·대장간이 좌우 대칭, 인접 간격 약 78으로 고르게 놓였고 서로 겹치지 않아요(실제 그림 영역으로 계산) */
-var KPOS={castle:[180,246,.92],train:[111,166,.58],forge:[249,166,.61],inn:[102,299,.56],trade:[258,299,.55]};
-var KBOX={castle:[149,134,66,164],train:[68,142,80,56],forge:[216,120,70,76],inn:[66,268,80,58],trade:[218,262,84,66],wall:[96,398,168,40]};
+var KPOS={castle:[180,246,.92],train:[111,166,.58],forge:[249,166,.61],inn:[102,299,.56],trade:[258,299,.55],guild:[182,344,.5]};
+var KBOX={castle:[149,134,66,164],train:[68,142,80,56],forge:[216,120,70,76],inn:[66,268,80,58],trade:[218,262,84,66],guild:[154,306,56,64],wall:[96,398,168,40]};
 function kfield(x,y,w,h,c){ var s='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3" fill="'+c+'" stroke="'+OL+'" stroke-width="2"/>', i; for(i=1;i<4;i++) s+='<line x1="'+(x+4)+'" y1="'+(y+i*h/4)+'" x2="'+(x+w-4)+'" y2="'+(y+i*h/4)+'" stroke="rgba(43,33,56,.28)" stroke-width="2" stroke-linecap="round"/>'; return s; }
 function ksw(inner,i){ return '<g class="an-sway" style="animation-duration:'+(2.6+(i%4)*.5).toFixed(1)+'s;animation-delay:-'+((i*.83)%3).toFixed(2)+'s">'+inner+'</g>'; }
 function kfish(x,y,d){
@@ -3334,12 +3354,12 @@ function kingdomSvg(){
   s+=kfish(37,148,-3)+kfish(322,336,-7.5);
   s+='<ellipse cx="'+KCX+'" cy="'+KCY+'" rx="'+KRX+'" ry="'+KRY+'" fill="#C9E5A6"/>';
   s+='<ellipse cx="'+KCX+'" cy="'+(KCY+16)+'" rx="46" ry="30" fill="#BBDC95"/>';
-  [pine(52,236,.5),pine(308,236,.5),mBush(168,350,.7),mBush(196,354,.6),mBush(150,196,.5),mBush(212,196,.5)].forEach(function(d,j){ s+=ksw(d,j+10); });
+  [pine(52,236,.5),pine(308,236,.5),mBush(128,352,.7),mBush(236,354,.6),mBush(150,196,.5),mBush(212,196,.5)].forEach(function(d,j){ s+=ksw(d,j+10); });
   s+=wallRing(KCX,KCY,KRX,KRY,st,wp,12);
   if(st==='done'){
     s+='<path d="M158,'+(KCY+KRY+10)+' L158,'+(KCY+KRY+34)+' M202,'+(KCY+KRY+10)+' L202,'+(KCY+KRY+34)+'" stroke="'+OL+'" stroke-width="9" stroke-linecap="round"/><path d="M158,'+(KCY+KRY+10)+' L158,'+(KCY+KRY+34)+' M202,'+(KCY+KRY+10)+' L202,'+(KCY+KRY+34)+'" stroke="#B9783A" stroke-width="4" stroke-linecap="round"/>';
   }
-  ['train','forge','trade','inn','castle'].forEach(function(id){
+  ['train','forge','trade','inn','guild','castle'].forEach(function(id){
     var q=KPOS[id];
     s+='<g transform="translate('+q[0]+','+q[1]+') scale('+q[2]+')">'+bArt(id,bState(id),bProg(id))+'</g>';
   });
@@ -3375,7 +3395,7 @@ function mapTime(){
   var bg=({morning:'rgba(255,236,190,.12)',sunset:'linear-gradient(rgba(255,150,90,.20),rgba(231,124,104,.16))',night:'rgba(10,22,60,.44)'})[per];
   h+='<div class="mapwx" aria-hidden="true"><div style="position:absolute;inset:0;background:'+bg+'"></div>';
   if(per==='night'||per==='sunset'){
-    ['train','forge','trade','castle','inn'].forEach(function(id){
+    ['train','forge','trade','castle','inn','guild'].forEach(function(id){
       var q=KPOS[id], x=(q[0]*100/KW), y=(q[1]*100/KH);
       h+='<div style="position:absolute;left:'+(x-9).toFixed(1)+'%;top:'+(y-9).toFixed(1)+'%;width:18%;height:'+(18*KW/KH).toFixed(1)+'%;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,'+(per==='night'?'.55':'.28')+') 0%,rgba(255,214,120,0) 68%)"></div>';
     });
@@ -3397,7 +3417,7 @@ function mapTimeWeek(){
 }
 function kingdomMapView(){
   var h=matBarHtml()+'<div class="phrow tab" style="margin-top:14px"><h1 class="ph">몸짱 왕국</h1><span class="phsub">모험으로 되살리는 곳</span></div>';
-  var btn=''; ['castle','train','forge','inn','trade','wall'].forEach(function(id){ btn+=kBuildBtn(id); });
+  var btn=''; ['castle','train','forge','inn','guild','trade','wall'].forEach(function(id){ btn+=kBuildBtn(id); });
   h+='<div class="gmap kmap">'+kingdomSvg()+mapTime()+mapWeather()+btn+'</div>';
   h+='<p class="note">건물이나 성벽을 누르면 건물 화면으로 들어가요. 평일 퀘스트와 토벌로 얻은 자재는 모험이 종료된 날부터 쌓여요.</p>';
   return h;
@@ -3456,6 +3476,7 @@ function trainPanel(){
 }
 function viewKingdom(){
   if(kv==='inn') return matBarHtml()+backBtn()+viewHome();
+  if(kv==='guild') return viewGuild();
   if(kv==='train' && trainBuilt()) return viewTrain();
   if(kv==='forge' && bState('forge')==='done') return viewForge();
   if(kv==='trade' && bState('trade')==='done') return viewTrade();
@@ -3468,6 +3489,7 @@ function viewKingdom(){
 function kbOpen(id){
   npcOpen={};
   if(id==='inn') kv='inn';
+  else if(id==='guild') kv='guild';
   else if(id==='castle') kv='castle';
   else if(bState(id)==='done') kv=id;
   else kv='build:'+id;
@@ -4034,8 +4056,103 @@ function scnTrade(){
   s+='<rect width="340" height="250" fill="#1B1020" opacity=".08"/><rect width="340" height="250" fill="url(#scVig)"/><rect width="340" height="250" fill="url(#scVigR)"/>';
   return s;
 }
+/* ===== 길드 (v1.44.4) · 접수원 세라 ===== 
+   그림·이름·대사는 이 블록(GUILD·npcReceptionist·scnGuild)과 NPCS.guild에 모여 있어요. 임시 이름·그림이라 나중에 바꾸기 쉬워요. 말투는 ~요, 사용자는 "용사님", 혼내지 않아요. */
+var GUILD={
+  name:'길드 접수원', nick:'세라',
+  say:{
+    short:function(g){ return '어서 오세요, 용사님! 길드 접수원 세라예요. 다음은 '+g.nx.n+' 승급인데, 마왕 토벌 승리가 '+g.left+'승 더 필요해요. 조건이 차면 그때 시험을 안내해 드릴게요!'; },
+    ready:function(g){ return '승급 시험 조건을 모두 채우셨네요, 축하해요! '+g.nx.n+' 시험을 보시겠어요? 오늘 몸 상태는 어떠세요? 통증이 있으면 무리하지 말고 쉬어 가세요.'; },
+    resume:function(){ return '아까 적던 시험 기록이 남아 있어요. 이어서 하시겠어요?'; },
+    pass:function(){ return '합격 축하드려요, 용사님! 다음 승급 시험은 내일부터 볼 수 있어요.'; },
+    fail:function(){ return '이번에는 합격선에 아쉽게 닿지 못했어요. 괜찮아요, 다음 응시는 내일부터예요. 내일 다시 오세요!'; },
+    ended:function(){ return '오늘은 접수가 끝났어요. 모험을 마친 날에는 시험을 볼 수 없거든요. 내일 오세요!'; },
+    max:function(){ return '아다만타이트라니… 길드 최고 등급이에요! 이 자리를 지키는 건 꾸준한 용사님만의 특권이에요.'; }
+  }
+};
+function guildState(){
+  var ri=rkCur(), nx=RANKS[ri+1], wins=rkWins(), k=fmt(TODAY), rec=exRec(k), sv;
+  if(rec) return {s:'done',pass:!!rec.p};
+  if(!nx) return {s:'max'};
+  if(wins<nx.w) return {s:'short',nx:nx,left:nx.w-wins};
+  if(isEnded(k)) return {s:'ended'};
+  sv=exSaved(ri+1);
+  return {s:(sv&&sv.go)?'resume':'ready',nx:nx};
+}
+function guildLine(){
+  var g=guildState(), f;
+  f=(g.s==='done')?(g.pass?GUILD.say.pass:GUILD.say.fail):GUILD.say[g.s];
+  return f(g);
+}
+function guildPanel(){
+  var g=guildState(), ri=rkCur(), lvn=lvInfo(totalXP()).L, wins=rkWins(), k=fmt(TODAY), h, set, tt;
+  h='<div class="card" style="padding:12px 16px 14px"><div class="rk-nx" style="margin:0 0 8px"><div class="rk-mini">'+rkBadge(ri,lvn,true)+'</div><div class="rk-info"><b>'+RANKS[ri].n+'</b><span>마왕 토벌 승리 '+wins+'승'+(RANKS[ri+1]?' · 다음 '+RANKS[ri+1].n+' '+RANKS[ri+1].w+'승':'')+'</span></div></div>';
+  if(g.s==='ready' || g.s==='resume'){
+    set=exSetOf(diffOn(k),g.nx?rkCur()+1:1); tt=[];
+    set.items.forEach(function(it){ tt.push(it.n+' '+it.line+(it.t==='r'?'회':'초')); });
+    tt.push(set.run.km+'km '+exDur(set.run.sec)+' 이내');
+    h+='<p class="note" style="margin:0 0 4px"><b>오늘의 시험 · '+RANKS[rkCur()].n+' → '+g.nx.n+'</b></p><p class="note" style="margin:0 0 8px">'+tt.join(' · ')+'</p>';
+    h+='<p class="note" style="margin:0 0 4px">시험은 하루에 한 번이에요. 통증이 있거나 몸이 좋지 않으면 응시하지 말고 쉬세요.</p>';
+    h+='<button type="button" class="primary" data-g="open">'+(g.s==='resume'?'이어서 하기':'시험 보기')+'</button><button type="button" class="ghost big" data-g="ok" style="width:100%;margin-top:8px">다음에 올게요</button>';
+  }else{
+    h+='<button type="button" class="ghost big" data-g="ok" style="width:100%;margin-top:4px">알겠어요</button>';
+  }
+  return h+'</div>';
+}
+function viewGuild(){
+  return backBtn()+'<div class="phrow"><h1 class="ph">길드</h1><span class="phsub">모험가 랭크를 올리는 곳</span></div>'+sceneCard('guild')+'<div id="npcpanel">'+(npcOpen.guild?guildPanel():npcHint('guild'))+'</div>';
+}
+/* ===== 접수원 (원점: 카운터 위 중앙) ===== */
+function npcReceptionist(){
+  var hair='#6B3B2A', vest='#2E3F86', trim='#F6C445', blouse='#FFF6E0', s='';
+  s+='<g class="an-sway">'+sP('M12,-72 Q40,-70 36,-40 Q31,-22 19,-32 Q26,-46 14,-58 Z',hair,2.4)+sC(16,-62,5,'#E5484D',1.8)+'</g>';
+  s+='<g class="an-breathe">'+sP('M-26,0 L-23,-16 Q-14,-27 0,-27 Q14,-27 23,-16 L26,0 Z',vest,2.4)+sP('M-9,-27 Q0,-15 9,-27 L8,-16 Q0,-8 -8,-16 Z',blouse,2)+sL(-23,-16,-26,0,trim,2.2)+sL(23,-16,26,0,trim,2.2)+sR(9,-15,12,6,'#FFE08A',1,1.4)+'</g>';
+  s+=bLimb(-20,-14,-30,2,9,vest)+sC(-30,3,5,FACE,2)+sR(-42,-4,22,15,'#F2E3C4',2,1.8)+sL(-38,0,-24,0,'#B9763A',1.4)+sL(-38,5,-24,5,'#B9763A',1.4);
+  s+='<g class="an-sway">'+sC(0,-44,19,FACE,2.6)+sP('M-20,-46 Q-19,-69 0,-67 Q19,-69 20,-46 Q12,-57 0,-55 Q-12,-57 -20,-46 Z',hair,2.4)+sP('M-20,-46 Q-23,-34 -18,-26 Q-19,-38 -14,-48 Z',hair,2)+
+     '<g class="an-blink"><path d="M-10,-44 Q-6.5,-48.5 -3,-44 M3,-44 Q6.5,-48.5 10,-44" fill="none" stroke="'+OL+'" stroke-width="2.4" stroke-linecap="round"/></g>'+
+     sE(-12,-37,4.2,2.7,'#FF8FA3',0)+sE(12,-37,4.2,2.7,'#FF8FA3',0)+'<path d="M-5,-34 Q0,-28 5,-34" fill="none" stroke="'+OL+'" stroke-width="2.2" stroke-linecap="round"/></g>';
+  return s;
+}
+/* ===== 길드 내부 ===== */
+function scnGuild(){
+  var eq=curEq(), s='', i, r, c, nt;
+  var G={ idle:{arms:[[-36,20,-34,4],[36,20,34,4]],legs:[[-14,44],[14,44]],sword:null},
+          point:{arms:[[-36,20,-34,4],[40,-52,44,-24]],legs:[[-14,44],[14,44]],sword:null} };
+  s+=scnDefs()+'</defs>';
+  s+='<rect width="340" height="176" fill="#B9AFA0"/>';
+  for(r=0;r<8;r++){ s+=sL(0,r*22,340,r*22,'rgba(43,33,56,.2)',1.6); for(c=0;c<9;c++) s+=sL(c*44+(r%2)*22,r*22,c*44+(r%2)*22,r*22+22,'rgba(43,33,56,.16)',1.4); }
+  s+='<rect y="132" width="340" height="44" fill="#9C9080"/>'+sL(0,132,340,132,'#5B4A3A',2.4);
+  s+='<rect y="176" width="340" height="74" fill="#8B5A2B"/>';
+  for(i=0;i<9;i++) s+=sL(0,184+i*8,340,184+i*8,'rgba(43,33,56,.22)',1.4);
+  s+=sR(-4,-2,348,16,'#4B3A2B',0,2.6)+sR(-4,0,12,176,'#4B3A2B',0,2.6)+sR(332,0,12,176,'#4B3A2B',0,2.6);
+  /* 의뢰 게시판 (왼쪽 벽) */
+  s+=sR(16,30,116,96,'#8B5A2B',4,2.8)+sR(22,36,104,84,'#D3AE74',2,1.6)+sR(34,18,80,16,'#4B3A8F',3,2.4)+'<text x="74" y="30" text-anchor="middle" font-size="10" style="font-family:var(--disp)" fill="#FFE08A">의뢰 게시판</text>';
+  [[30,44,-4,'#F6EBD2'],[62,42,3,'#E8F4FF'],[92,48,-3,'#F6EBD2'],[34,84,5,'#FFF1C9'],[70,82,-2,'#F6EBD2'],[98,86,4,'#E8F4FF']].forEach(function(n){
+    s+='<g transform="rotate('+n[2]+' '+(n[0]+12)+' '+(n[1]+15)+')">'+sR(n[0],n[1],24,30,n[3],1,1.8)+sL(n[0]+4,n[1]+9,n[0]+20,n[1]+9,'#B9763A',1.4)+sL(n[0]+4,n[1]+15,n[0]+20,n[1]+15,'#B9763A',1.4)+sL(n[0]+4,n[1]+21,n[0]+14,n[1]+21,'#B9763A',1.4)+sC(n[0]+12,n[1]+3,2.2,'#E5484D',1.2)+'</g>';
+  });
+  /* 길드 깃발 (가운데) */
+  s+=sL(170,12,170,20,OL,2.4)+sP('M150,20 L190,20 L190,78 L170,66 L150,78 Z','#2E3F86',2.8)+sP('M161,30 L179,30 L179,48 Q170,60 161,48 Z','#F6C445',2.4)+sP('M165,34 L175,34 L175,46 Q170,52 165,46 Z','#2E3F86',1.6);
+  /* 랭크 현판 (오른쪽 벽): 10개 랭크 색 */
+  s+=sR(206,26,120,30,'#4B3A2B',3,2.4);
+  for(i=0;i<10;i++) s+=sC(218+i*10.8,41,4.2,(typeof RKP!=='undefined'&&RKP[i])?RKP[i].ac:'#B3BAC8',1.4);
+  s+=lanternArt(196,0,26)+lanternGlow(196,40);
+  /* 카운터 */
+  s+=sR(150,176,176,56,'#B9763A',4,2.8)+sR(146,170,184,10,'#2E3F86',3,2.6);
+  for(i=0;i<4;i++) s+=sL(176+i*40,184,176+i*40,230,'rgba(43,33,56,.28)',1.6);
+  /* 장부 · 종 · 깃펜 */
+  s+=sR(262,162,26,8,'#F2E3C4',2,1.8)+sL(262,166,288,166,'#B9763A',1.4)+sP('M170,170 Q170,158 180,158 Q190,158 190,170 Z','#F6C445',2)+sC(180,155,2.6,'#F6C445',1.4)+sL(300,168,312,152,OL,2.4)+sL(300,168,312,152,'#EAF1F9',1);
+  /* 접수원 */
+  s+='<g transform="translate(250,172) scale(.6)">'+npcReceptionist()+'</g>';
+  /* 용사 */
+  s+='<g transform="translate(86,208) scale(.52)">'+scnPoseFrame('in-g1',G.idle,eq,'cheer')+scnPoseFrame('in-g2',G.point,eq,'cheer')+'</g>';
+  [[60,110,0],[150,96,-2],[270,100,-3]].forEach(function(m){ s+='<circle class="in-mote" style="animation-delay:'+m[2]+'s" cx="'+m[0]+'" cy="'+m[1]+'" r="1.3" fill="#FFD9A0"/>'; });
+  s+='<rect width="340" height="250" fill="#1B1020" opacity=".08"/><rect width="340" height="250" fill="url(#scVig)"/><rect width="340" height="250" fill="url(#scVigR)"/>';
+  return s;
+}
+
 /* ===== NPC 대사 · 말 걸기 ===== */
 var NPCS={
+  guild:{n:'길드 접수원',nick:'세라',box:[222,112,56,64],greet:['어서 오세요, 용사님!'],lines:['어서 오세요, 용사님!']},
   inn:{n:'여관 여주인',nick:'로사',box:[134,82,76,64],
     lines:[
       '어서 오세요, 용사님! 오늘의 퀘스트는 어땠나요?',
@@ -4156,7 +4273,7 @@ function npcLine(id){
 }
 function npcTalk(id){
   var n=NPCS[id]; if(!n) return;
-  var first=(id!=='inn' && !npcOpen[id]), line=first?npcPick(n.greet,id):npcLine(id);
+  var first=(id!=='inn' && id!=='guild' && !npcOpen[id]), line=(id==='guild')?guildLine():(first?npcPick(n.greet,id):npcLine(id));
   var box=document.querySelector('.scn .scnsay');
   if(box){
     box.innerHTML='<b>'+n.n+' '+n.nick+'</b>'+line; box.hidden=false;
@@ -4164,15 +4281,16 @@ function npcTalk(id){
     clearTimeout(sayTimer); sayTimer=setTimeout(function(){ box.hidden=true; },9000);
   }
   try{ tone(784,0,0.08,0.05); tone(988,0.07,0.1,0.04); }catch(e){}
-  if(first){
+  if(id==='guild'){ npcOpen.guild=true; var pg=document.getElementById('npcpanel'); if(pg) pg.innerHTML=guildPanel(); }
+  else if(first){
     npcOpen[id]=true;
     var p=document.getElementById('npcpanel');
     if(p) p.innerHTML=(id==='train'?trainPanel():(id==='trade'?tradePanel():forgePanel()));
   }
 }
-var SCNLAB={inn:'여관 내부: 여주인과 용사가 있는 모습',train:'훈련장 내부: 교관 앞에서 용사가 허수아비를 치는 모습',forge:'대장간 내부: 드워프 대장장이가 모루를 두드리는 모습',trade:'교역소 내부: 상인이 저울 앞에서 재료를 맞바꿔 주는 모습'};
+var SCNLAB={inn:'여관 내부: 여주인과 용사가 있는 모습',train:'훈련장 내부: 교관 앞에서 용사가 허수아비를 치는 모습',forge:'대장간 내부: 드워프 대장장이가 모루를 두드리는 모습',trade:'교역소 내부: 상인이 저울 앞에서 재료를 맞바꿔 주는 모습',guild:'길드 내부: 접수원이 카운터에서 용사를 맞이하는 모습'};
 function sceneCard(id){
-  var fn={inn:scnInn,train:scnTrain,forge:scnForge,trade:scnTrade}[id], n=NPCS[id], b=n.box;
+  var fn={inn:scnInn,train:scnTrain,forge:scnForge,trade:scnTrade,guild:scnGuild}[id], n=NPCS[id], b=n.box;
   function pc(v,tot){ return (v*100/tot).toFixed(2)+'%'; }
   return '<div class="card scn" data-scn="'+id+'"><svg class="scnsvg live" viewBox="0 0 '+SCN_W+' '+SCN_H+'" role="img" aria-label="'+SCNLAB[id]+'">'+fn()+'</svg>'+
     '<button type="button" class="npcbtn" style="left:'+pc(b[0],SCN_W)+';top:'+pc(b[1],SCN_H)+';width:'+pc(b[2],SCN_W)+';height:'+pc(b[3],SCN_H)+'" data-a="npc" data-n="'+id+'" aria-label="'+n.n+' '+n.nick+'에게 말 걸기"></button>'+
@@ -4180,7 +4298,7 @@ function sceneCard(id){
 }
 function npcHint(id){
   var n=NPCS[id];
-  return '<p class="npchint"><b>'+n.n+' '+n.nick+'</b>에게 말을 걸어 보세요. <span>'+(id==='train'?'훈련 기록은 교관에게 말을 걸면 열려요.':(id==='trade'?'재료 교환은 상인에게 말을 걸면 열려요.':'장비 제작은 대장장이에게 말을 걸면 열려요.'))+'</span></p>';
+  return '<p class="npchint"><b>'+n.n+' '+n.nick+'</b>에게 말을 걸어 보세요. <span>'+(id==='train'?'훈련 기록은 교관에게 말을 걸면 열려요.':(id==='trade'?'재료 교환은 상인에게 말을 걸면 열려요.':(id==='guild'?'승급 시험은 접수원에게 말을 걸면 열려요.':'장비 제작은 대장장이에게 말을 걸면 열려요.')))+'</span></p>';
 }
 function kRefresh(){
   var p=document.getElementById('npcpanel');
@@ -4884,10 +5002,10 @@ function viewRank(){
   h+='<h2>다음 승급</h2><div class="card" style="padding:14px 16px 16px">';
   if(nx){
     var pct=Math.min(100,Math.round(wins*100/nx.w)), ok=(wins>=nx.w);
-    h+='<div class="rk-nx"><div class="rk-mini">'+rkBadge(ri+1,lvn,true)+'</div><div class="rk-info"><b>'+nx.n+'</b><span>마왕 토벌 승리 '+nx.w+'승이 되면 승급 시험을 볼 수 있어요</span></div></div>'+
+    h+='<div class="rk-nx"><div class="rk-mini">'+rkBadge(ri+1,lvn,true)+'</div><div class="rk-info"><b>'+nx.n+'</b><span>마왕 토벌 승리 '+nx.w+'승이 되면 길드에서 승급 시험을 볼 수 있어요</span></div></div>'+
       '<div class="xpbar" role="progressbar" aria-label="승급 조건 진행" aria-valuemin="0" aria-valuemax="'+nx.w+'" aria-valuenow="'+Math.min(wins,nx.w)+'"><i style="width:'+pct+'%"></i></div>'+
       '<div class="xpt"><span>'+Math.min(wins,nx.w)+' / '+nx.w+'승</span><span>'+(ok?'응시 조건을 채웠어요':'남은 승리 '+(nx.w-wins)+'승')+'</span></div>'+
-      (ok?'<p class="note" style="margin:8px 2px 0">승급 시험은 아직 준비 중이에요. 열리면 여기서 볼 수 있어요.</p>':'');
+      '<button type="button" class="primary" data-a="goguild" style="margin-top:12px"'+(ok?'':' disabled')+'>길드로 승급시험 보러가기</button>'+(ok?'<p class="note" style="margin:8px 2px 0">조건을 채웠어요. 왕국의 길드 접수원에게 말을 걸어 보세요.</p>':'');
   }else{
     h+='<p style="margin:0;font-family:var(--disp);font-size:20px">가장 높은 랭크예요</p><p class="note" style="margin:4px 2px 0">더 오를 곳은 없지만, 이 자리를 지키는 건 꾸준한 용사만의 특권이에요.</p>';
   }
@@ -4900,6 +5018,273 @@ function viewRank(){
   }
   return h+'</div>';
 }
+
+/* ---------- v1.44.3 승급 시험 (길드·랭크 2단계) ----------
+   확정 설계는 인수인계서 1-0 ⑥. 시험 기록은 S.ex={날짜:{r:목표 랭크id,p:합격 0/1,c:퀘스트 인정 0/1,d:난이도,v:[항목1,항목2,항목3,러닝 초]}}(하루 한 번)예요.
+   합격하면 S.rk[랭크id]=날짜. 시험 날 퀘스트 인정은 그날의 세트·러닝 체크를 모두 채우고 fin(잠금)을 거는 방식이라, 기존 XP·클리어·보상 계산이 그대로 돌아요.
+   작성 중인 기록(제출 전)은 이 기기의 localStorage에만 남겨요(밖에서 달리는 동안 앱을 닫아도 이어서 할 수 있게). */
+var EXKEY2='home-training-exm';
+var EX_REPMAX=200, EX_HOLDMAX=900, EX_RUNMAX=10800, EX_VMAX=99999, EX_RUNPACE=150;
+/* 운동 시험표: [이름, 종류(r 1분 안의 횟수 · h 유지 시간 · s 좌우 각각 유지), 합격선, 좌우 합계(1)] — 승급 시험 9번 순서(카퍼→아다만타이트) */
+var EXI={
+  body:[
+    [['스쿼트','r',25],['푸시업','r',15],['크런치','r',25]],
+    [['리버스 런지','r',25,1],['의자 딥스','r',20],['플랭크','h',45]],
+    [['글루트 브릿지','r',30],['슈퍼맨','r',20],['바이시클 크런치','r',30,1]],
+    [['월 싯','h',60],['파이크 푸시업','r',10],['레그 레이즈','r',20]],
+    [['불가리안 스플릿 스쿼트','r',20,1],['Y-T-W','r',15],['데드버그','r',25,1]],
+    [['3초 스쿼트','r',10],['스노우 엔젤','r',20],['사이드 플랭크','s',40]],
+    [['깊게 월 싯','h',75],['다이아몬드 푸시업','r',20],['마운틴 클라이머(빠르게)','r',80]],
+    [['불가리안 스플릿 스쿼트','r',30,1],['인치웜','r',10],['사이드 라잉 레그 리프트','r',40,1]],
+    [['스쿼트','r',55],['푸시업','r',35],['크런치','r',50]]
+  ],
+  adv:[
+    [['스쿼트','r',20],['무릎 푸시업','r',15],['크런치','r',20]],
+    [['리버스 런지','r',15,1],['의자 딥스','r',15],['플랭크','h',30]],
+    [['글루트 브릿지','r',20],['슈퍼맨','r',15],['바이시클 크런치','r',20,1]],
+    [['월 싯','h',40],['쉬운 파이크 푸시업','r',10],['레그 레이즈','r',15]],
+    [['불가리안 스플릿 스쿼트','r',15,1],['Y-T-W','r',10],['데드버그','r',15,1]],
+    [['스쿼트','r',30],['스노우 엔젤','r',15],['사이드 플랭크','s',30]],
+    [['월 싯','h',50],['푸시업','r',15],['마운틴 클라이머','r',60]],
+    [['불가리안 스플릿 스쿼트','r',20,1],['인치웜','r',5],['사이드 라잉 레그 리프트','r',30,1]],
+    [['스쿼트','r',40],['푸시업','r',25],['크런치','r',35]]
+  ],
+  sprout:[
+    [['의자 스쿼트','r',15],['무릎 푸시업','r',5],['쉬운 크런치','r',15]],
+    [['벽 잡고 런지','r',10,1],['쉬운 딥스','r',10],['무릎 플랭크','h',25]],
+    [['쉬운 브릿지','r',15],['쉬운 슈퍼맨','r',10],['쉬운 바이시클','r',15,1]],
+    [['높은 월 싯','h',30],['쉬운 파이크','r',5],['쉬운 레그 레이즈','r',10]],
+    [['쉬운 불가리안','r',10,1],['쉬운 Y-T-W','r',10],['쉬운 데드버그','r',10,1]],
+    [['의자 스쿼트','r',20],['쉬운 스노우 엔젤','r',10],['무릎 굽힌 사이드 플랭크','s',20]],
+    [['높은 월 싯','h',40],['무릎 푸시업','r',15],['천천히 마운틴 클라이머','r',40]],
+    [['쉬운 불가리안','r',15,1],['쉬운 인치웜','r',5],['쉬운 레그 리프트','r',20,1]],
+    [['의자 스쿼트','r',30],['무릎 푸시업','r',20],['쉬운 크런치','r',25]]
+  ]
+};
+/* 러닝 시험: 거리(km) · 걷기를 허용하는 앞쪽 시험 수 · 합격 시간(초, 카퍼→아다만타이트) */
+var EXR={
+  sprout:{km:2,walk:3,t:[1200,1170,1140,1110,1050,990,930,900,870]},
+  adv:{km:3,walk:2,t:[1800,1740,1440,1380,1320,1260,1230,1200,1170]},
+  body:{km:5,walk:0,t:[2100,2040,1980,1920,1830,1770,1710,1680,1650]}
+};
+function exSetOf(df,t){   /* t = 목표 랭크 번호(1~9) */
+  var it=(EXI[df]||EXI.body)[t-1], r=EXR[df]||EXR.body;
+  return {items:it.map(function(x){ return {n:x[0],t:x[1],line:x[2],lr:!!x[3]}; }), run:{km:r.km,sec:r.t[t-1],walk:(t<=r.walk)}};
+}
+function exDur(sec){ var m=Math.floor(sec/60), s=sec%60; return (m?m+'분':'')+(s?(m?' ':'')+s+'초':(m?'':'0초')); }
+function exRec(k){ return (S.ex&&S.ex[k])||null; }
+function exCan(){
+  var ri=rkCur(), nx=RANKS[ri+1], k=fmt(TODAY);
+  if(!nx) return {ok:false,why:'가장 높은 랭크예요.'};
+  if(rkWins()<nx.w) return {ok:false,why:'아직 응시 조건을 채우지 못했어요.'};
+  if(exRec(k)) return {ok:false,done:true,why:'오늘은 이미 승급 시험을 봤어요. 다음 응시는 내일부터예요.'};
+  if(isEnded(k)) return {ok:false,why:'오늘의 모험을 이미 마쳐서 오늘은 응시할 수 없어요. 내일 응시해 주세요.'};
+  return {ok:true,t:ri+1};
+}
+var exSt=null, exRes=null, exW=null, examNoExec=false;
+function exLoad(){ try{ var o=JSON.parse(localStorage.getItem(EXKEY2)||'null'); return (o&&typeof o==='object')?o:null; }catch(e){ return null; } }
+function exKeep(){ try{ if(exSt) localStorage.setItem(EXKEY2,JSON.stringify({k:exSt.k,t:exSt.t,d:exSt.d,go:exSt.go?1:0,v:exSt.v})); }catch(e){} }
+function exDrop(){ try{ localStorage.removeItem(EXKEY2); }catch(e){} }
+function exSaved(t){ var o=exLoad(), k=fmt(TODAY); return (o&&o.k===k&&o.t===t&&o.d===diffOn(k)&&o.v&&o.v.length===4)?o:null; }
+function toGuild(){ tab='home'; kv='guild'; npcOpen={}; }
+function exOpen(){
+  var c=exCan(); if(!c.ok){ toast(c.why); return; }
+  var k=fmt(TODAY), sv=exSaved(c.t);
+  sel=TODAY; stopTimer();
+  exSt=sv?{k:k,t:c.t,d:sv.d,go:!!sv.go,v:sv.v,stage:(sv.go?'do':'intro')}:{k:k,t:c.t,d:diffOn(k),go:false,v:[[],[],[],[]],stage:'intro'};
+  exRes=null; tab='exam'; armed=false; render(); window.scrollTo(0,0);
+}
+function exBack(){ stopTimer(); exKeep(); toGuild(); render(); window.scrollTo(0,0); }
+/* 입력칸 검사: 값이 비어 있으면 null(아직), 잘못된 값이면 {bad:문구}, 괜찮으면 숫자 */
+function exNum(raw){ if(raw===undefined||raw===null||raw==='') return null; var n=+raw; return (isNaN(n)||n<0||Math.floor(n)!==n)?NaN:n; }
+function exCheckItem(set,i,v){
+  var it, a, b, lim, cnt, j, vals, tot;
+  if(i<3){
+    it=set.items[i]; lim=(it.t==='r')?EX_REPMAX:EX_HOLDMAX; cnt=(it.t==='s')?2:1; vals=[];
+    for(j=0;j<cnt;j++){
+      a=exNum(v[j]); if(a===null) return {need:true};
+      if(isNaN(a)||a>lim) return {bad:(it.t==='r'?'횟수는 0~':'시간(초)은 0~')+lim+' 사이의 정수로 입력해 주세요.'};
+      vals.push(a);
+    }
+    return {x:(it.t==='s')?Math.min(vals[0],vals[1]):vals[0]};
+  }
+  a=exNum(v[0]); b=exNum(v[1]);
+  if(a===null && b===null) return {need:true};
+  if(a===null) a=0; if(b===null) b=0;       /* 분만 또는 초만 적어도 돼요 */
+  if(isNaN(a)||isNaN(b)||a>180||b>59) return {bad:'분은 0~180, 초는 0~59 사이의 정수로 입력해 주세요.'};
+  tot=a*60+b;
+  if(tot>EX_RUNMAX) return {bad:'시간이 너무 길어요. 분 단위를 확인해 주세요.'};
+  if(tot<set.run.km*EX_RUNPACE) return {bad:set.run.km+'km를 '+exDur(tot)+'에 달릴 수는 없어요. 분·초를 확인해 주세요.'};
+  return {x:tot};
+}
+function exAll(st){
+  var set=exSetOf(st.d,st.t), r=[], ok=true, bad=null, i;
+  for(i=0;i<4;i++){ var c=exCheckItem(set,i,st.v[i]||[]); r.push(c); if(c.need) ok=false; if(c.bad&&!bad) bad=c.bad; }
+  return {set:set,r:r,ok:ok&&!bad,bad:bad};
+}
+function exEval(set,r){
+  var rows=[], pass=true, half=true;
+  set.items.forEach(function(it,i){ var x=r[i].x, ok=x>=it.line, hf=x>=Math.ceil(it.line/2); rows.push({n:it.n,t:it.t,x:x,line:it.line,ok:ok,hf:hf,lr:it.lr}); if(!ok) pass=false; if(!hf) half=false; });
+  var rs=r[3].x, rok=rs<=set.run.sec, rhf=rs<=set.run.sec*2;
+  rows.push({n:set.run.km+'km '+(set.run.walk?'달리기 또는 걷기':'달리기'),t:'run',x:rs,line:set.run.sec,ok:rok,hf:rhf});
+  if(!rok) pass=false; if(!rhf) half=false;
+  return {rows:rows,pass:pass,half:half};
+}
+function exLine(row){   /* 기록·합격선 문구 */
+  if(row.t==='run') return {rec:exDur(row.x),line:exDur(row.line)+' 이내'};
+  if(row.t==='r') return {rec:row.x+'회',line:row.line+'회 이상'};
+  return {rec:row.x+'초',line:row.line+'초 이상'};
+}
+function exInput(i,j,label,val,max){
+  return '<label class="ex-f"><span>'+label+'</span><input id="exv-'+i+'-'+j+'" type="number" inputmode="numeric" min="0" max="'+max+'" step="1" placeholder="0" value="'+((val===undefined||val===null)?'':val)+'"></label>';
+}
+function viewExam(){
+  var st=exSt, h, i;
+  if(!st){ return '<div class="card"><p style="margin:12px 0">시험 화면을 열 수 없어요.</p><button type="button" class="ghost" data-x="back">‹ 돌아가기</button></div>'; }
+  var set=exSetOf(st.d,st.t), cur=RANKS[st.t-1], nx=RANKS[st.t], dn=DIFF[st.d].n;
+  var top='<div style="display:flex;align-items:center;min-height:36px;margin:0 0 4px"><button type="button" class="kback" data-x="back" style="margin:0">‹ 길드로 돌아가기</button></div>'+
+    '<div class="phrow tab"><h1 class="ph">승급 시험</h1><span class="phsub">'+cur.n+' → '+nx.n+' · '+dn+'</span></div>';
+  if(st.stage==='result' && exRes){
+    var R=exRes, ev=R.ev, tx;
+    h=top+'<div class="card rk-hero" style="padding:14px 16px 16px"><p class="rk-name" style="color:var(--'+(ev.pass?'clear':'muted')+')">'+(ev.pass?'합격!':'불합격')+'</p><p class="rk-sub">'+(ev.pass?(nx.n+' 랭크 승급 시험에 합격했어요'):'이번에는 합격선에 닿지 못했어요')+'</p></div>';
+    h+='<h2>기록</h2><div class="card" style="padding:4px 16px">';
+    ev.rows.forEach(function(rw){ var l=exLine(rw); h+='<div class="rk-row"><div class="rk-info"><b>'+rw.n+'</b><span>합격선 '+l.line+(rw.lr?' · 좌우 합계':'')+'</span></div><span class="rk-tag" style="font-size:15px;color:var(--'+(rw.ok?'clear':'boss')+')">'+l.rec+' '+(rw.ok?'✔':'✖')+'</span></div>'; });
+    h+='</div>';
+    if(R.sun) tx='오늘은 일요일이라 오늘의 퀘스트 인정은 없어요.';
+    else if(R.credit) tx='4개 항목이 모두 합격선의 절반 이상이어서 오늘의 메인 퀘스트와 러닝이 완료로 인정됐어요. 러닝 거리는 누적 거리에 올라가지 않아요. [계속]을 누르면 오늘의 보상을 보여 드려요.';
+    else if(R.wasDone) tx='오늘의 퀘스트는 이미 모두 마친 상태라서 따로 인정할 것은 없었어요.';
+    else tx='4개 항목이 모두 합격선의 절반 이상이어야 오늘의 퀘스트가 인정돼요. 이번에는 인정되지 않았어요.';
+    h+='<p class="note" style="margin:12px 2px 0">'+tx+'</p>';
+    if(!ev.pass) h+='<p class="note" style="margin:6px 2px 0">괜찮아요. 다음 응시는 내일부터 할 수 있어요.</p>';
+    return h+'<button type="button" class="primary" data-x="cont" style="margin-top:14px">계속</button>';
+  }
+  if(st.stage==='intro'){
+    h=top+'<div class="card" style="padding:14px 16px 16px"><p style="margin:0;font-family:var(--disp);font-size:20px">운동 3종목과 러닝 1종목을 오늘 한 번에 봐요</p>'+
+      '<p class="note" style="margin:6px 0 0">4개 항목이 <b>모두 합격선 이상</b>이어야 합격이에요.</p></div>';
+    h+='<h2>오늘의 종목</h2><div class="card" style="padding:4px 16px">';
+    set.items.forEach(function(it,ix){ h+='<div class="rk-row"><div class="rk-info"><b>'+(ix+1)+'. '+it.n+'</b><span>'+(it.t==='r'?'1분 안에 '+it.line+'회 이상'+(it.lr?' (좌우 합계)':''):(it.t==='h'?it.line+'초 이상 버티기':'양쪽 모두 '+it.line+'초 이상 버티기'))+'</span></div></div>'; });
+    h+='<div class="rk-row"><div class="rk-info"><b>4. '+set.run.km+'km '+(set.run.walk?'달리기 또는 걷기':'달리기')+'</b><span>'+exDur(set.run.sec)+' 이내'+(set.run.walk?' · 이 시험은 걷기도 인정돼요':' · 러닝 전용이에요(걷기는 인정되지 않아요)')+'</span></div></div></div>';
+    h+='<h2>시험 방법</h2><div class="card" style="padding:12px 16px 14px"><p class="note" style="margin:0 0 6px">횟수는 1분 안의 최대 횟수예요. 앱의 1분 타이머를 쓰고, 한쪽씩 하는 동작은 좌우를 합쳐서 세요. 버티는 동작은 버틴 시간(초)이고, 사이드 플랭크는 양쪽 모두 합격선 이상이어야 해요.</p>'+
+      '<p class="note" style="margin:0 0 6px">러닝은 밖에서 달리고, 끝난 뒤 달린 시간을 입력해요. 러닝 거리는 누적 거리·여정에는 올라가지 않아요.</p>'+
+      '<p class="note" style="margin:0">입력한 기록은 제출하기 전까지 이 기기에 남아서, 밖에 나갔다 와도 이어서 할 수 있어요.</p></div>';
+    h+='<h2>응시 규칙</h2><div class="card" style="padding:12px 16px 14px"><p class="note" style="margin:0 0 6px">시험은 하루에 한 번이고, 기록을 <b>제출</b>하면 그날의 응시로 쳐요. 떨어져도 괜찮아요. 다음 응시는 내일부터예요.</p>'+
+      '<p class="note" style="margin:0 0 6px"><b>월~토</b>에 응시하면 4개 항목이 모두 합격선의 절반 이상일 때 합격·불합격과 관계없이 오늘의 메인 퀘스트와 러닝이 완료로 인정돼요. 이때 오늘의 메인 퀘스트와 러닝은 확정돼서 더 이상 바꿀 수 없어요. 식단은 평소처럼 직접 체크해요.'+(DK[TODAY.getDay()]==='sun'?' 오늘은 일요일이라 퀘스트 인정은 없어요.':'')+'</p>'+
+      '<p class="note" style="margin:0">비·눈이 와도 실내 대체는 없어요. 그런 날은 응시하지 않으면 돼요.</p></div>';
+    h+='<h2>시작하기 전에</h2><div class="card" style="padding:12px 16px 14px"><p class="note" style="margin:0 0 6px">5분 정도 가볍게 걷고 관절을 충분히 풀어 주세요.</p>'+
+      '<p class="note" style="margin:0 0 6px"><b>통증이 있거나 몸이 좋지 않으면 응시하지 말고 쉬세요.</b></p><p class="note" style="margin:0">통증이 있거나 건강이 걱정되면 무리하지 말고 전문가와 상의하세요.</p></div>';
+    return h+'<button type="button" class="primary" data-x="start" style="margin-top:14px">시험 시작</button>';
+  }
+  /* 작성 단계 · 확인 단계 */
+  var A=exAll(st);
+  if(st.stage==='confirm'){
+    var ev2=exEval(set,A.r), warn=[];
+    h=top+'<h2>기록 확인</h2><div class="card" style="padding:4px 16px">';
+    ev2.rows.forEach(function(rw,ix){
+      var l=exLine(rw), w='';
+      if(rw.t==='run'){ if(rw.x<rw.line*0.6) w='합격선보다 훨씬 빨라요'; }
+      else if(rw.x>=rw.line*3) w='합격선의 3배가 넘어요';
+      if(w) warn.push(rw.n);
+      h+='<div class="rk-row"><div class="rk-info"><b>'+rw.n+'</b><span>합격선 '+l.line+(w?' · <span style="color:var(--boss)">'+w+'</span>':'')+'</span></div><span class="rk-tag" style="font-size:15px">'+l.rec+'</span></div>';
+    });
+    h+='</div>';
+    if(warn.length) h+='<p class="note" style="margin:10px 2px 0;color:var(--boss)">평소보다 눈에 띄게 큰 기록이 있어요. 숫자가 맞는지 한 번 더 확인해 주세요.</p>';
+    h+='<p class="note" style="margin:10px 2px 0">제출하면 오늘의 응시로 기록되고 고칠 수 없어요.</p>';
+    return h+'<button type="button" class="primary" data-x="submit" style="margin-top:12px">제출하기</button><button type="button" class="ghost big" data-x="edit" style="width:100%;margin-top:8px">기록 고치기</button>';
+  }
+  h=top+'<div class="card" style="padding:12px 16px"><p class="note" style="margin:0">'+'타이머를 쓰거나 직접 입력해도 돼요. 입력한 기록은 이 기기에 저장돼요.</p></div>';
+  set.items.forEach(function(it,ix){
+    var v=st.v[ix]||[], c=A.r[ix], btn='', inp='';
+    if(it.t==='r'){ btn='<button type="button" class="swbtn" data-x="t60" data-i="'+ix+'">▶ 1분 타이머</button>'; inp='<div class="ex-line">'+exInput(ix,0,'1분 안의 횟수'+(it.lr?' (좌우 합계)':''),v[0],EX_REPMAX)+'</div>'; }
+    else if(it.t==='h'){ btn='<button type="button" class="swbtn" data-x="watch" data-i="'+ix+'" data-j="0">▶ 스톱워치</button>'; inp='<div class="ex-line">'+exInput(ix,0,'버틴 시간(초)',v[0],EX_HOLDMAX)+'</div>'; }
+    else{ btn='<button type="button" class="swbtn" data-x="watch" data-i="'+ix+'" data-j="0">▶ 왼쪽 스톱워치</button><button type="button" class="swbtn" data-x="watch" data-i="'+ix+'" data-j="1" style="margin-left:6px">▶ 오른쪽 스톱워치</button>'; inp='<div class="ex-line">'+exInput(ix,0,'왼쪽(초)',v[0],EX_HOLDMAX)+exInput(ix,1,'오른쪽(초)',v[1],EX_HOLDMAX)+'</div>'; }
+    h+='<div class="q ex"><div class="ex-head"><span class="idx" aria-hidden="true">'+(ix+1)+'</span><h3 class="ex-name">'+it.n+'</h3><span class="bonustag">합격선 '+(it.t==='r'?it.line+'회':it.line+'초')+'</span></div>'+
+      '<p class="desc">'+(it.t==='r'?'1분 안에 최대한 많이'+(it.lr?' · 좌우를 합쳐서 세요':''):(it.t==='h'?'자세를 유지하며 최대한 오래 버티기':'왼쪽과 오른쪽을 각각 버티기 · 둘 다 합격선 이상이어야 해요'))+'</p>'+btn+inp+
+      '<p class="note ex-err" id="exe-'+ix+'" style="margin:0 0 10px;color:var(--boss)">'+(c.bad||'')+'</p></div>';
+  });
+  var v3=st.v[3]||[];
+  h+='<div class="q ex"><div class="ex-head"><span class="idx" aria-hidden="true">4</span><h3 class="ex-name">'+set.run.km+'km '+(set.run.walk?'달리기 또는 걷기':'달리기')+'</h3><span class="bonustag">합격선 '+exDur(set.run.sec)+'</span></div>'+
+    '<p class="desc">밖에서 '+set.run.km+'km를 '+(set.run.walk?'달리거나 걷고':'달리고')+', 끝난 뒤 걸린 시간을 입력해요.'+(set.run.walk?' 이 시험은 걷기도 인정돼요.':' 러닝 전용이에요(걷기는 인정되지 않아요).')+'</p>'+
+    '<div class="ex-line">'+exInput(3,0,'분',v3[0],180)+exInput(3,1,'초',v3[1],59)+'</div><p class="note ex-err" id="exe-3" style="margin:0 0 10px;color:var(--boss)">'+(A.r[3].bad||'')+'</p></div>';
+  h+='<button type="button" class="primary" id="exgo" data-x="review"'+(A.ok?'':' disabled')+'>기록 확인하기</button>';
+  return h;
+}
+/* 스톱워치: 3초 준비 뒤 올라가는 초시계. [멈춤]을 누르면 입력칸에 넣어 줘요(기존 휴식 타이머 칸을 같이 써요) */
+function exWatchStart(i,j,name,line){
+  stopTimer();
+  var prep=Date.now()+3000, started=false, sk=document.getElementById('tskip');
+  tEl.hidden=false; tNum.textContent='3'; tLab.textContent='준비'; tFill.style.width='0%'; sk.textContent='멈춤';
+  exW={i:i,j:j,t0:prep};
+  tInt=setInterval(function(){
+    var now=Date.now();
+    if(now<prep){ tNum.textContent=Math.ceil((prep-now)/1000); return; }
+    if(!started){ started=true; tLab.textContent=name; tone(660,0,0.18,0.08); try{ if(navigator.vibrate) navigator.vibrate(80); }catch(e){} }
+    var s=Math.floor((now-prep)/1000); tNum.textContent=s; tFill.style.width=Math.min(100,s*100/Math.max(1,line))+'%';
+  },250);
+}
+function exWatchStop(){
+  var w=exW; if(!w) return; exW=null;
+  var s=Math.floor((Date.now()-w.t0)/1000); if(s<0) return;
+  s=Math.min(s,EX_HOLDMAX);
+  var el=document.getElementById('exv-'+w.i+'-'+w.j); if(el){ el.value=s; exInputSet(w.i,w.j,String(s)); }
+  try{ tone(880,0,0.2,0.08); if(navigator.vibrate) navigator.vibrate([120,60,120]); }catch(e){}
+}
+function exInputSet(i,j,val){
+  if(!exSt||exSt.stage!=='do') return;
+  if(!exSt.v[i]) exSt.v[i]=[]; exSt.v[i][j]=val; exKeep();
+  var A=exAll(exSt), e=document.getElementById('exe-'+i), b=document.getElementById('exgo');
+  if(e) e.textContent=A.r[i].bad||''; if(b) b.disabled=!A.ok;
+}
+function exSubmit(){
+  var st=exSt; if(!st) return;
+  var k=fmt(TODAY);
+  if(st.k!==k){ toast('날짜가 바뀌어서 시험 기록을 정리했어요. 오늘 다시 응시해 주세요.'); exDrop(); exSt=null; toGuild(); render(); return; }
+  if(exRec(k)){ toast('오늘은 이미 응시했어요'); exSt=null; toGuild(); render(); return; }
+  var A=exAll(st); if(!A.ok) return;
+  var ev=exEval(A.set,A.r), dk=DK[TODAY.getDay()], sun=(dk==='sun'), from=rkCur();
+  sel=TODAY; var before=snap(), wasDone=isDone(TODAY), credit=(!sun && ev.half && !wasDone);
+  if(!S.ex||typeof S.ex!=='object') S.ex={};
+  S.ex[k]={r:RANKS[st.t].id,p:ev.pass?1:0,c:credit?1:0,d:st.d,v:[A.r[0].x,A.r[1].x,A.r[2].x,A.r[3].x]};
+  if(ev.pass){ if(!S.rk||typeof S.rk!=='object') S.rk={}; S.rk[RANKS[st.t].id]=k; }
+  if(credit){ var L=wr(k); idsFor(dk,k).forEach(function(id){ L.done[id]=true; }); L.fin=true; }
+  save(); exDrop(); stopTimer();
+  exRes={ev:ev,pass:ev.pass,credit:credit,wasDone:wasDone,sun:sun,before:before,t:st.t,from:from};
+  st.stage='result'; render(); window.scrollTo(0,0);
+  try{ if(navigator.vibrate) navigator.vibrate(ev.pass?[80,50,80]:[60]); }catch(e){}
+}
+function exContinue(){
+  var R=exRes; if(!R) return; var k=fmt(TODAY);
+  function done(){
+    exRes=null; exSt=null;
+    if(R.credit){
+      sel=TODAY; tab='today'; render(); window.scrollTo(0,0);
+      examNoExec=true; try{ afterAction(R.before,k); }finally{ examNoExec=false; }
+    }else{ toGuild(); render(); window.scrollTo(0,0); }
+  }
+  if(R.pass) RANKUP.play(R.from,R.t,done); else done();
+}
+app.addEventListener('click',function(e){
+  var t=e.target.closest&&e.target.closest('[data-x]'); if(!t||t.disabled) return;
+  var x=t.getAttribute('data-x'), i, j, set, it;
+  if(x==='open'){ exOpen(); }
+  else if(x==='back'){ exBack(); }
+  else if(x==='start'&&exSt){ exSt.go=true; exSt.stage='do'; exKeep(); render(); window.scrollTo(0,0); }
+  else if(x==='t60'){ i=parseInt(t.getAttribute('data-i'),10); it=exSetOf(exSt.d,exSt.t).items[i]; startHold(60,'1분 측정'); }
+  else if(x==='watch'&&exSt){ i=parseInt(t.getAttribute('data-i'),10); j=parseInt(t.getAttribute('data-j'),10); it=exSetOf(exSt.d,exSt.t).items[i]; exWatchStart(i,j,it.n+(it.t==='s'?(j?' · 오른쪽':' · 왼쪽'):''),it.line); }
+  else if(x==='review'&&exSt){ var A=exAll(exSt); if(!A.ok) return; stopTimer(); exSt.stage='confirm'; render(); window.scrollTo(0,0); }
+  else if(x==='edit'&&exSt){ exSt.stage='do'; render(); window.scrollTo(0,0); }
+  else if(x==='submit'){ exSubmit(); }
+  else if(x==='cont'){ exContinue(); }
+});
+app.addEventListener('click',function(e){
+  var t=e.target.closest&&e.target.closest('[data-g]'); if(!t||t.disabled) return;
+  var g=t.getAttribute('data-g');
+  if(g==='open') exOpen();
+  else if(g==='ok'){ npcOpen.guild=false; var p=document.getElementById('npcpanel'); if(p) p.innerHTML=npcHint('guild'); var sb=document.querySelector('.scn .scnsay'); if(sb) sb.hidden=true; }
+});
+app.addEventListener('input',function(e){
+  var id=e.target&&e.target.id, m=/^exv-(\d)-(\d)$/.exec(id||''); if(!m) return;
+  exInputSet(+m[1],+m[2],e.target.value);
+});
 
 function hud(){
   var li=lvInfo(totalXP()), p=Math.round(li.cur*100/li.need);
@@ -4965,7 +5350,10 @@ function viewToday(){
     ids.map(function(id){return '<i'+(L.done[id]?' class="on"':'')+'></i>';}).join('')+'</div>'+
     '<div class="qm"><span><b>'+c.done+'</b> / '+c.total+' 완료</span><span>보상 최대 +'+maxXp+' XP</span></div>'+bossHtml+
     (rs?'<button type="button" class="ghost" style="margin-top:12px" data-a="result">결과 다시 보기</button>':'')+'</section>';
-  if(L.fin && !lock) h+='<p class="note" style="margin:10px 2px 0">보스를 쓰러뜨려서 메인 퀘스트와 러닝 기록이 잠겼어요. 식단(사이드 퀘스트)은 오늘의 모험을 종료하기 전까지 계속 체크할 수 있어요.</p>';
+  var exr=exRec(k);
+  if(exr && exr.c) h+='<p class="note" style="margin:10px 2px 0">오늘은 승급 시험('+RANKS[rkIdx(exr.r)].n+')에 응시해서 메인 퀘스트와 러닝이 완료로 인정됐고, 기록이 잠겼어요. 식단(사이드 퀘스트)은 오늘의 모험을 종료하기 전까지 계속 체크할 수 있어요.</p>';
+  else if(L.fin && !lock) h+='<p class="note" style="margin:10px 2px 0">보스를 쓰러뜨려서 메인 퀘스트와 러닝 기록이 잠겼어요. 식단(사이드 퀘스트)은 오늘의 모험을 종료하기 전까지 계속 체크할 수 있어요.</p>';
+  if(exr && !exr.c) h+='<p class="note" style="margin:10px 2px 0">오늘은 승급 시험('+RANKS[rkIdx(exr.r)].n+')에 응시했어요'+(exr.p?' · 합격':' · 불합격')+'. 오늘의 퀘스트는 평소처럼 직접 체크해요.</p>';
 
   var run = p.rest?RUN_REST:RUN, rmin=runMinOn(k);
   if(!p.rest && dfc!=='body'){
@@ -5116,8 +5504,9 @@ function bkParse(text){
   var trd2={}; ['a','b','c','d'].forEach(function(k6){ var v=(d.trade&&typeof d.trade==='object')?parseInt(d.trade[k6],10):0; trd2[k6]=(v>0)?Math.min(v,9999):0; });
   var crf2={}; if(d.crafted&&typeof d.crafted==='object') Object.keys(d.crafted).forEach(function(id){ if(d.crafted[id]&&known[id]&&known[id].craft) crf2[id]=true; });
   var dl2={}; if(d.dl&&typeof d.dl==='object') Object.keys(d.dl).forEach(function(k7){ if(ok.test(k7)&&DIFF[d.dl[k7]]) dl2[k7]=d.dl[k7]; });
-  var bds2=null; if(d.bdSeen&&typeof d.bdSeen==='object'){ bds2={}; Object.keys(d.bdSeen).forEach(function(k8){ if(({today:1,boss:1,run:1,kingdom:1,forge:1})[k8]&&d.bdSeen[k8]) bds2[k8]=(typeof d.bdSeen[k8]==='string'&&ok.test(d.bdSeen[k8]))?d.bdSeen[k8]:'2000-01-01'; }); }
+  var bds2=null; if(d.bdSeen&&typeof d.bdSeen==='object'){ bds2={}; Object.keys(d.bdSeen).forEach(function(k8){ if(({today:1,boss:1,run:1,kingdom:1,forge:1,inn:1,train:1,trade:1,guild:1})[k8]&&d.bdSeen[k8]) bds2[k8]=(typeof d.bdSeen[k8]==='string'&&ok.test(d.bdSeen[k8]))?d.bdSeen[k8]:'2000-01-01'; }); }
   var rk2={}; if(d.rk&&typeof d.rk==='object') Object.keys(d.rk).forEach(function(k9){ if(RKIDS[k9]&&k9!=='unr'&&ok.test(d.rk[k9])) rk2[k9]=d.rk[k9]; });
+  var ex2={}; if(d.ex&&typeof d.ex==='object') Object.keys(d.ex).forEach(function(k10){ var e=d.ex[k10]; if(!ok.test(k10)||!e||typeof e!=='object'||!RKIDS[e.r]||e.r==='unr') return; var o={r:e.r,p:e.p?1:0,c:e.c?1:0,d:DIFF[e.d]?e.d:'body',v:[]}, j; for(j=0;j<4;j++){ var n=e.v?parseFloat(e.v[j]):0; o.v.push((n>=0&&n<=EX_VMAX)?Math.round(n):0); } ex2[k10]=o; });
   var aat={}, akn=achKnown(); if(d.achAt&&typeof d.achAt==='object') Object.keys(d.achAt).forEach(function(k5){ if(akn[k5]&&ok.test(d.achAt[k5])) aat[k5]=d.achAt[k5]; });
   var jsn2={}; if(d.jny&&d.jny.seen&&typeof d.jny.seen==='object') Object.keys(d.jny.seen).forEach(function(id){ if(d.jny.seen[id]&&(JNYIDS[id]||isSupId(id))) jsn2[id]=true; });
   if(d.trainLog&&typeof d.trainLog==='object') Object.keys(d.trainLog).forEach(function(k4){
@@ -5128,7 +5517,7 @@ function bkParse(text){
     o.h=[]; if(Array.isArray(e.h)) e.h.slice(-80).forEach(function(x){ var m=/^(\w+):([01])$/.exec(String(x)); if(m && (m[1]==='run' || X[m[1]])) o.h.push(m[1]+':'+m[2]); });
     tlog[k4]=o;
   });
-  var outd={start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,crafted:crf2,trade:trd2,dl:dl2,bdSeen:bds2,rk:rk2,char:(CHARN[d.char]?d.char:'hero')};
+  var outd={start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,crafted:crf2,trade:trd2,dl:dl2,bdSeen:bds2,rk:rk2,ex:ex2,char:(CHARN[d.char]?d.char:'hero')};
   migrateRest(outd);
   return {data:outd};
 }
@@ -5377,9 +5766,9 @@ function viewSettings(){
 
 function render(){
   try{ achStamp(); }catch(e){}
-  var v=tab==='today'?viewToday():(tab==='run'?viewRun():tab==='week'?viewWeek():(tab==='ach'?viewAch():(tab==='set'?viewSettings():(tab==='rank'?viewRank():viewKingdom()))));
+  var v=tab==='today'?viewToday():(tab==='run'?viewRun():tab==='week'?viewWeek():(tab==='ach'?viewAch():(tab==='set'?viewSettings():(tab==='rank'?viewRank():(tab==='exam'?viewExam():viewKingdom())))));
   app.innerHTML=v;
-  if(tab!=='set' && tab!=='rank'){
+  if(tab!=='set' && tab!=='rank' && tab!=='exam'){
     if(!app.firstElementChild||!app.firstElementChild.classList.contains('eyebrow')) app.insertAdjacentHTML('afterbegin','<p class="eyebrow" aria-hidden="true"></p>');
     app.insertAdjacentHTML('afterbegin','<button type="button" class="gearbtn" data-a="gear" aria-label="설정"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>');
     app.insertAdjacentHTML('afterbegin','<button type="button" class="bdbtn" data-a="bandi" aria-label="반디에게 물어보기">'+BANDI.face()+'</button>');
@@ -5540,7 +5929,7 @@ function afterAction(before,k){
   if(justClear){wr(k).cleared=true; save();}
   var act=lastAct; lastAct=null; if(act && act.k!==k) act=null;
   var exWin=false;   /* v1.43.0 보스 토벌 성공(월~토 승리)이면 메인 퀘스트·러닝 잠금 + 처형 컷씬 */
-  if(justClear && dk!=='sun'){ var rs0=dayResult(d); if(rs0 && rs0.res==='win'){ exWin=true; } }   /* 잠금(fin)은 [예]·[건너뛰기]·[확인]을 누를 때 걸려요 */
+  if(justClear && dk!=='sun' && !examNoExec){ var rs0=dayResult(d); if(rs0 && rs0.res==='win'){ exWin=true; } }   /* 잠금(fin)은 [예]·[건너뛰기]·[확인]을 누를 때 걸려요 */
   if(justClear||lvUp){
     var b='', kk, tt, mode='win';
     if(justClear && dk!=='sun'){
@@ -5598,7 +5987,8 @@ var tInt=null, tEnd=0, tTotal=60, tHide=null;
 function stopTimer(){
   if(tInt){clearInterval(tInt); tInt=null;}
   if(tHide){clearTimeout(tHide); tHide=null;}
-  tEl.hidden=true;
+  tEl.hidden=true; exW=null;
+  var sk=document.getElementById('tskip'); if(sk) sk.textContent='건너뛰기';   /* v1.44.3 시험 스톱워치는 [멈춤]으로 바뀌어요 */
 }
 function startTimer(sec){
   stopTimer(); tLab.textContent='휴식';
@@ -5636,7 +6026,7 @@ function startHold(sec,name){
   };
   tick(); tInt=setInterval(tick,250);
 }
-document.getElementById('tskip').addEventListener('click',stopTimer);
+document.getElementById('tskip').addEventListener('click',function(){ exWatchStop(); stopTimer(); });
 
 /* ---------- 이벤트 ---------- */
 document.getElementById('nav').addEventListener('click',function(e){
@@ -5747,6 +6137,8 @@ app.addEventListener('click',function(e){
     kbOpen(t.getAttribute('data-b')); render(); window.scrollTo(0,0);
   }else if(a==='rank'){
     if(tab!=='rank') rankFrom=tab; tab='rank'; armed=false; render(); window.scrollTo(0,0);
+  }else if(a==='goguild'){
+    tab='home'; kv='guild'; npcOpen={}; armed=false; render(); window.scrollTo(0,0);
   }else if(a==='rankback'){
     tab=(rankFrom&&rankFrom!=='rank')?rankFrom:'today'; if(tab==='week') wxRefresh(false,wxAfter); armed=false; render(); window.scrollTo(0,0);
   }else if(a==='gear'){
@@ -5933,6 +6325,10 @@ var BANDI={
       }},
     run:{h:'달린 거리는 여기에 쌓여요',x:function(){ return '거리는 퀘스트 탭에서 적어요. 걷기도 똑같이 인정돼요. 달리기·걷기가 있는 날엔 '+runMinOn(fmt(TODAY))+'km 이상 적으면 그날 퀘스트가 완료돼요. 비·눈 오는 날엔 퀘스트 탭에서 집 안 유산소로 바꿀 수도 있어요.'; }},
     kingdom:{h:'여기가 몸짱왕국이에요',x:'퀘스트와 토벌로 건축 자재가 쌓이면 무너진 건물을 하나씩 되살릴 수 있어요. 마왕과 중간보스를 이기면 장비를 만들 재료도 얻어요. 건물을 눌러 들어가 보세요!'},
+    inn:{h:'여기는 여관이에요!',x:'얻은 장비를 입어 보고, 장비 도감을 볼 수 있어요. 동료가 합류하면 함께 모험할 캐릭터도 여기서 골라요. 여주인 로사에게 말을 걸어 보세요.'},
+    train:{h:'훈련장이에요!',x:'마왕전을 앞두고 XP가 모자랄 때 추가로 훈련할 수 있어요. 교관 가론에게 말을 걸면 훈련 기록이 열려요. 훈련 XP는 월~금 누적에 더해지지만 1000을 넘는 부분은 기록만 남아요.'},
+    trade:{h:'교역소예요!',x:'남는 재료를 다른 등급의 재료로 바꿔 줘요. 내림은 후하게, 올림은 박하게 쳐 줘요. 상인 마르코에게 말을 걸면 교환이 열리고, 교환은 되돌릴 수 없어요.'},
+    guild:{h:'길드예요!',x:'마왕을 쓰러뜨려 승리를 쌓으면 랭크를 올리는 승급 시험을 볼 수 있어요. 접수원 세라에게 말을 걸어 보세요. 시험은 몸 상태가 좋은 날에, 무리하지 말고 봐요.'},
     forge:{h:'대장간이에요!',x:'보스에게서 얻은 재료로 전용 장비를 만들어요. 같은 등급의 재료로 같은 등급 장비를 만들 수 있어요. 재료가 모자라면 교역소가 열린 뒤 바꿀 수도 있어요.'}
   },
   /* 난이도 추천 질문 (확정 문구) — 가장 낮은 점수 기준: 0~1점 새싹, 2점 모험, 3점 몸짱 */
@@ -5961,12 +6357,17 @@ function bdBusy(){
   if(titleEl && !titleEl.hidden) return true;
   if(btEl && !btEl.hidden) return true;
   var exc=document.getElementById('excut'); if(exc && !exc.hidden) return true;
+  var ruc=document.getElementById('rkup'); if(ruc && !ruc.hidden) return true;
   if(tm && !tm.hidden) return true;
   return false;
 }
+var BLDTIP={inn:1,guild:1,train:1,trade:1,forge:1};
 function bdTipId(){
   var sn=S.bdSeen, t=fmt(TODAY), dk;
-  if(!sn || typeof sn!=='object') return null;
+  if(!sn || typeof sn!=='object'){   /* 예전부터 쓰던 사용자도 왕국 건물에는 처음 들어갈 때 한 번씩 안내해요(다른 안내는 안 떠요) */
+    if(tab==='home' && BLDTIP[kv] && (kv==='inn'||kv==='guild'||bState(kv)==='done')) return {id:kv};
+    return null;
+  }
   if(tab==='today'){
     if(!sn.today) return {id:'today'};
     dk=DK[TODAY.getDay()];
@@ -5975,7 +6376,7 @@ function bdTipId(){
     if(!sn.run) return {id:'run'};
   }else if(tab==='home'){
     if(kv==='map' && !sn.kingdom) return {id:'kingdom'};
-    if(kv==='forge' && bState('forge')==='done' && !sn.forge) return {id:'forge'};
+    if(BLDTIP[kv] && !sn[kv] && (kv==='inn'||kv==='guild'||bState(kv)==='done')) return {id:kv};   /* 건물 안에 처음 들어갔을 때(성벽·성은 없어요) */
   }
   return null;
 }
@@ -6000,6 +6401,7 @@ function bandiOpen(mode,tip,when){
   bdRender(); bdEl.hidden=false;
 }
 function bandiClose(){
+  if(bd.mode==='tip' && bd.tip && (!S.bdSeen || typeof S.bdSeen!=='object') && BLDTIP[bd.tip]){ var ol='2000-01-01'; S.bdSeen={today:ol,boss:ol,run:ol,kingdom:ol}; }   /* 예전 사용자: 다른 안내는 이미 본 것으로 두고 건물 안내만 켜요 */
   if(bd.mode==='tip' && bd.tip && S.bdSeen && typeof S.bdSeen==='object'){ S.bdSeen[bd.tip]=fmt(TODAY); bd.tip=null; save(); }  /* 본 안내는 다시 안 나와요 */
   bdEl.hidden=true; bdC.innerHTML='';
 }
@@ -6123,7 +6525,7 @@ var introSeen=false; try{introSeen=!!localStorage.getItem('home-training-intro')
 var cqEl=document.getElementById('cq'), cqD=document.getElementById('cqd'), cqB=document.getElementById('cqb');
 function withTimeout(p,ms){ return Promise.race([p,new Promise(function(_,rej){setTimeout(function(){rej({code:'timeout'});},ms);})]); }
 function isEmptyData(x){ return !x || (!Object.keys(x.log||{}).length && !(x.body||[]).length); }
-function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{}}; }
+function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{}}; }
 function dayScore(L){ return Object.keys(L.done||{}).length+Object.keys(L.diet||{}).length+(L.km>0?1:0)+(L.out?1:0); }
 function mergeData(a,b){
   var log={}, keys={};
@@ -6152,18 +6554,19 @@ function mergeData(a,b){
   var dlm={}, dk6; for(dk6 in (b.dl||{})) dlm[dk6]=b.dl[dk6]; for(dk6 in (a.dl||{})) dlm[dk6]=a.dl[dk6];
   var bds=null; if((a.bdSeen&&typeof a.bdSeen==='object')||(b.bdSeen&&typeof b.bdSeen==='object')){ bds={}; [a.bdSeen||{},b.bdSeen||{}].forEach(function(m){ Object.keys(m).forEach(function(k){ if(!bds[k]||String(m[k])<String(bds[k])) bds[k]=m[k]; }); }); }
   var rkm={}; [a.rk||{},b.rk||{}].forEach(function(m){ Object.keys(m).forEach(function(k){ if(!rkm[k]||String(m[k])<String(rkm[k])) rkm[k]=m[k]; }); });
+  var exm={}; [a.ex||{},b.ex||{}].forEach(function(m){ Object.keys(m).forEach(function(k){ var o=m[k]; if(!exm[k] || (o&&o.p&&!exm[k].p)) exm[k]=o; }); });
   var aam={}; [a.achAt||{},b.achAt||{}].forEach(function(m){ Object.keys(m).forEach(function(k){ if(!aam[k]||m[k]<aam[k]) aam[k]=m[k]; }); });
   var tlog={}, tks={};
   Object.keys(a.trainLog||{}).forEach(function(k){tks[k]=1;}); Object.keys(b.trainLog||{}).forEach(function(k){tks[k]=1;});
   function trScore(e){ return e?trSetCount(e)+(e.run||0):-1; }
   Object.keys(tks).forEach(function(k){ var x=(a.trainLog||{})[k], y=(b.trainLog||{})[k]; tlog[k]=JSON.parse(JSON.stringify(trScore(x)>=trScore(y)?x:y)); });
-  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,crafted:crf,trade:trd,dl:dlm,bdSeen:bds,rk:rkm,char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
+  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,crafted:crf,trade:trd,dl:dlm,bdSeen:bds,rk:rkm,ex:exm,char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
 }
 function applyData(x,dirty){
   if(migrateLog(x.log)) dirty=true;
   if(migrateRest(x)) dirty=true;
   noDirty=true;
-  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
+  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{},lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
   save(); noDirty=false;
 }
 function hm(){var d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes());}
@@ -6649,7 +7052,7 @@ var TRACKS={
 
 /* ---------- 배경음악 연결 ---------- */
 var BGMK='home-training-bgm', BGMV='home-training-bgm-vol';
-var TABTRK={today:'quest',run:'run',week:'map',ach:'ach',home:'home',set:'settings',rank:'settings'};
+var TABTRK={today:'quest',run:'run',week:'map',ach:'ach',home:'home',set:'settings',rank:'settings',exam:'settings'};
 var bgmReady=false, tsSoundTried=false;
 function bgmOn(){ try{ return localStorage.getItem(BGMK)!=='off'; }catch(e){ return true; } }
 function bgmSetOn(v){ try{ localStorage.setItem(BGMK,v?'on':'off'); }catch(e){} }
@@ -7742,6 +8145,185 @@ var EXEC={};
   EXEC.flow=function(c,k,cont,undo,commit){ csOpt.c=c||'hero'; csOpt.k=k||'demon'; csCont=cont||null; csUndo=undo||null; csCommit=commit||null; csPopup(); };
   EXEC.play=csPlay;
 })();
+
+/* ===== v1.44.3 랭크업 연출 =====
+   승급 시험에 합격하면 지금 랭크 배지가 다음 랭크 배지로 변하는 연출이에요(시험판은 v1.44.2까지 미리보기 도구에 있었어요).
+   밖에서는 RANKUP.play(이전랭크번호,새랭크번호,끝난뒤할일)로만 불러요. 배지 그림은 rkBadge()가 돌려준 것을 몸통·장식·배경 세 겹으로 나눠 쓰므로,
+   rkBadge의 그리는 순서(배경 → 날개 → 월계수 → 왕관 → 몸통 → 질감)를 바꾸면 layers()의 구분(정육각형 테두리 폴리곤 stroke-width=2가 몸통의 시작, 처음 나오는 <g transform="translate(가 장식의 시작)이 깨져요. */
+var RANKUP={};
+  (function(){
+    var ruAn=[], ruTm=[], ruDone=null, ruLast=null;
+    var rcss='#rkup{position:fixed;left:0;top:0;right:0;bottom:0;z-index:950;background:#04060d;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation;color:#fff;font-family:inherit}'+
+      '#rkup[hidden]{display:none}#rkup svg{max-width:none !important;width:100%;height:100%;display:block;overflow:visible}'+
+      '#rkup .ru-bg{position:absolute;left:0;top:0;right:0;bottom:0;background:radial-gradient(circle at 50% 44%,#1a2036 0%,#0a0e1c 45%,#04060d 80%)}'+
+      '#rkup .ru-rays{position:absolute;left:50%;top:44%;width:170vmax;height:170vmax;margin:-85vmax 0 0 -85vmax;opacity:0;-webkit-mask-image:radial-gradient(circle,#000 0,rgba(0,0,0,.55) 9%,transparent 24%);mask-image:radial-gradient(circle,#000 0,rgba(0,0,0,.55) 9%,transparent 24%)}'+
+      '#rkup .ru-cap{position:absolute;left:0;right:0;top:calc(9% + env(safe-area-inset-top,0px));margin:0;text-align:center;font-family:var(--disp);font-size:20px;letter-spacing:2px;color:#e9eefc;opacity:0}'+
+      '#rkup .ru-anchor{position:absolute;left:50%;top:44%;width:0;height:0}'+
+      '#rkup .ru-stage{position:absolute;--w:min(84vw,340px);width:var(--w);height:calc(var(--w)*124/150);left:calc(var(--w)/-2);top:calc(var(--w)*124/150/-2)}'+
+      '#rkup .ru-old,#rkup .ru-new{position:absolute;left:0;top:0;width:100%;height:100%}#rkup .ru-new{pointer-events:none}'+
+      '#rkup .ru-ring{position:absolute;left:-70px;top:-70px;width:140px;height:140px;border-radius:50%;border:4px solid #fff;opacity:0;box-sizing:border-box}'+
+      '#rkup .ru-fx{position:absolute;left:0;top:0;width:0;height:0}#rkup .ru-fx i{position:absolute;left:0;top:0;border-radius:50%;opacity:0}'+
+      '#rkup .ru-flash{position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;pointer-events:none}'+
+      '#rkup .ru-txt{position:absolute;left:0;right:0;bottom:calc(128px + env(safe-area-inset-bottom,0px));text-align:center;padding:0 16px}'+
+      '#rkup .ru-nm{margin:0;font-family:var(--disp);font-size:40px;line-height:1.15;letter-spacing:3px;opacity:0}'+
+      '#rkup .ru-sub{margin:6px 0 0;font-size:15px;color:#c9d2ea;opacity:0}'+
+      '#rkup button{font-family:inherit;font-size:16px;font-weight:700;min-height:48px;border-radius:14px;border:3px solid #2B2138;padding:0 22px;background:#fff;color:#2B2138;box-shadow:0 4px 0 rgba(0,0,0,.4)}'+
+      '#rkup button.gold{background:#F6C445}#rkup .ru-skip{position:absolute;right:12px;top:calc(12px + env(safe-area-inset-top,0px));min-height:34px;font-size:13px;padding:0 12px;opacity:.85;box-shadow:none}'+
+      '#rkup .ru-btns{position:absolute;left:0;right:0;bottom:calc(40px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:10px;opacity:0;pointer-events:none}';
+    var rst=document.createElement('style'); rst.textContent=rcss; document.head.appendChild(rst);
+    var rov=document.createElement('div'); rov.id='rkup'; rov.hidden=true; document.body.appendChild(rov);
+    /* ===== 랭크업 효과음 (v1.44.5) =====
+       화면 순서에 맞춰 소리를 짜요: 기 모으기(0.7~1.9초: 올라가는 소리 + 고리 3번) → 번쩍임(1.9초: 쿵 + 파열음 + 쇠 울림) → 몸통(1.96초) → 장식(2.35초: 휙) → 배경·화음(2.65초) → 이름(2.8초: 종소리) → 반짝임.
+       sfxBuild(컨텍스트,출력)이 소리 그래프를 만들어요(미리 렌더링해서 검사할 수 있게 분리). 실제 재생은 sfxStart/sfxStop. */
+    var ruSfx=null;
+    function sfxBuild(c,dest){
+      var t0=c.currentTime+0.03, master=c.createGain(), comp=c.createDynamicsCompressor(), nb=null;
+      master.gain.value=0.85; comp.threshold.value=-14; comp.ratio.value=5; comp.attack.value=0.003; comp.release.value=0.2;
+      master.connect(comp); comp.connect(dest);
+      function env(g,t,a,pk,d){ g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(pk,t+a); g.gain.exponentialRampToValueAtTime(0.0001,t+a+d); }
+      function osc(type,f0,f1,t,d,pk,a,flt){
+        var o=c.createOscillator(), g=c.createGain(), n=o; o.type=type; o.frequency.setValueAtTime(f0,t0+t); if(f1) o.frequency.exponentialRampToValueAtTime(f1,t0+t+d);
+        env(g,t0+t,a||0.01,pk,d); if(flt){ var f=c.createBiquadFilter(); f.type='lowpass'; f.frequency.setValueAtTime(flt[0],t0+t); f.frequency.exponentialRampToValueAtTime(flt[1],t0+t+d); o.connect(f); f.connect(g); }else o.connect(g);
+        g.connect(master); o.start(t0+t); o.stop(t0+t+d+(a||0.01)+0.05);
+      }
+      function noise(t,d,pk,type,f0,f1){
+        if(!nb){ nb=c.createBuffer(1,Math.floor(c.sampleRate*1.2),c.sampleRate); var ch=nb.getChannelData(0), i, sd=12345; for(i=0;i<ch.length;i++){ sd=(sd*1103515245+12345)&0x7fffffff; ch[i]=sd/0x3fffffff-1; } }
+        var src=c.createBufferSource(), f=c.createBiquadFilter(), g=c.createGain(); src.buffer=nb; f.type=type; f.Q.value=0.8; f.frequency.setValueAtTime(f0,t0+t); f.frequency.exponentialRampToValueAtTime(f1,t0+t+d);
+        env(g,t0+t,0.02,pk,d); src.connect(f); f.connect(g); g.connect(master); src.start(t0+t); src.stop(t0+t+d+0.05);
+      }
+      var k;
+      /* 기 모으기 */
+      /* 상승감: ① 두꺼운 상승음 ② 점점 빨라지는 부르르 떨림 ③ 계단식으로 올라가는 음계 ④ 고리마다 올라가는 소리 ⑤ 번쩍이기 직전 치솟는 소리 */
+      osc('sawtooth',110,1900,0.7,1.2,0.085,0.3,[300,7000]); osc('sawtooth',111.6,1930,0.7,1.2,0.05,0.3,[300,6000]); osc('sine',220,4200,0.7,1.2,0.05,0.3);
+      (function(){
+        var car=c.createOscillator(), g1=c.createGain(), g2=c.createGain(), lfo=c.createOscillator(), dep=c.createGain();
+        car.type='sine'; car.frequency.setValueAtTime(70,t0+0.7); car.frequency.exponentialRampToValueAtTime(160,t0+1.9);
+        env(g1,t0+0.7,0.6,0.16,0.6); g2.gain.value=0.5; lfo.type='sine'; lfo.frequency.setValueAtTime(7,t0+0.7); lfo.frequency.exponentialRampToValueAtTime(24,t0+1.9); dep.gain.value=0.5;
+        lfo.connect(dep); dep.connect(g2.gain); car.connect(g1); g1.connect(g2); g2.connect(master);
+        car.start(t0+0.7); car.stop(t0+2.0); lfo.start(t0+0.7); lfo.stop(t0+2.0);
+      })();
+      var pen=[0,2,4,7,9,12,14,16,19,21,24,26], pn=pen.length;
+      pen.forEach(function(st,j){ var f=261.63*Math.pow(2,st/12), tt=0.72+1.12*Math.pow(j/(pn-1),1.4); osc('triangle',f,null,tt,0.24,0.075,0.005); osc('sine',f*2,null,tt,0.2,0.03,0.005); });
+      [440,554,659].forEach(function(f,j){ osc('sine',f,f*1.5,0.7+j*0.43,0.3,0.09,0.01); noise(0.7+j*0.43,0.2,0.04,'bandpass',900,5000); });
+      osc('sine',1200,5200,1.68,0.22,0.07,0.03); noise(1.68,0.22,0.05,'highpass',2500,9000);
+      /* 번쩍임: 쿵 + 파열음 + 쇠 울림 */
+      osc('sine',170,36,1.9,0.8,0.5,0.005); noise(1.9,0.7,0.25,'highpass',4000,500);
+      [1320,2110,3170].forEach(function(f,j){ osc('sine',f,null,1.93,0.7,[0.06,0.045,0.03][j],0.004); });
+      /* 새 배지: 몸통 · 장식 · 배경 */
+      osc('triangle',98,58,1.96,0.28,0.24,0.005); osc('sine',600,1500,2.0,0.25,0.04,0.02);
+      noise(2.35,0.5,0.07,'bandpass',700,3200); osc('triangle',392,784,2.35,0.4,0.06,0.03);
+      noise(2.65,0.9,0.045,'highpass',5000,9000);
+      [523.25,659.25,783.99,1046.5].forEach(function(f){ osc('triangle',f,null,2.65,1.5,0.09,0.03); }); osc('sine',2093,null,2.7,1.3,0.03,0.03);
+      /* 랭크 이름: 종소리 */
+      osc('sine',1046.5,null,2.8,1.3,0.07,0.004); osc('sine',1568,null,2.8,1.0,0.045,0.004); osc('sine',2637,null,2.8,0.6,0.025,0.004);
+      /* 반짝임 */
+      var sp=[1568,1976,2349,2637,3136,2093,2794,3520];
+      for(k=0;k<sp.length;k++) osc('sine',sp[k],null,2.95+k*0.13,0.28,0.035,0.004);
+      return {master:master,t0:t0};
+    }
+    function sfxStart(){
+      sfxStop();
+      try{
+        var sc=sndScale(); if(!(sc>0.01)) return;
+        var C=window.AudioContext||window.webkitAudioContext; if(!C) return; if(!AC) AC=new C();
+        if(AC.state==='suspended' && AC.resume) AC.resume();
+        var g=AC.createGain(); g.gain.value=Math.min(1.6,sc*1.6); g.connect(AC.destination);
+        var r=sfxBuild(AC,g); ruSfx={out:g,m:r.master};
+      }catch(e){}
+    }
+    function sfxStop(){
+      var r=ruSfx; ruSfx=null; if(!r) return;
+      try{ var t=AC.currentTime; r.out.gain.cancelScheduledValues(t); r.out.gain.setTargetAtTime(0,t,0.04); setTimeout(function(){ try{ r.out.disconnect(); }catch(e){} },400); }catch(e){}
+    }
+    function rg(h,a){ var n=parseInt(h.slice(1),16); return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')'; }
+    function an(el,kf,o){ if(!el||!el.animate) return null; o=o||{}; if(o.fill==null) o.fill='forwards'; if(o.easing==null) o.easing='linear'; var a=el.animate(kf,o); ruAn.push(a); return a; }
+    function at(ms,fn){ ruTm.push(setTimeout(fn,ms)); }
+    function stop(){ ruAn.forEach(function(a){ try{ a.cancel(); }catch(e){} }); ruAn=[]; ruTm.forEach(clearTimeout); ruTm=[]; sfxStop(); }
+    function q(s){ return rov.querySelector(s); }
+    /* 새 배지를 몸통·장식·배경 세 겹으로 나눠요(그림은 rkBadge 그대로, 순서만 보고 나눔) */
+    function layers(i,lv){
+      var host=document.createElement('div'); host.innerHTML=rkBadge(i,lv); var svg=host.firstChild, kids=[].slice.call(svg.childNodes), bg=[], orn=[], core=[], ph='bg', defs=[];
+      kids.forEach(function(n){
+        if(n.nodeType!==1) return;
+        if(n.tagName.toLowerCase()==='defs'){ defs.push(n); return; }
+        if(ph!=='core' && n.tagName.toLowerCase()==='polygon' && n.getAttribute('stroke-width')==='2') ph='core';
+        else if(ph==='bg' && n.tagName.toLowerCase()==='g' && /^translate\(/.test(n.getAttribute('transform')||'')) ph='orn';
+        (ph==='bg'?bg:(ph==='orn'?orn:core)).push(n);
+      });
+      function grp(cls,arr,org){ var g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.setAttribute('class',cls); g.style.transformOrigin=org; arr.forEach(function(n){ g.appendChild(n); }); return g; }
+      var gb=grp('ru-bgl',bg,'75px 64px'), go=grp('ru-orn',orn,'75px 60px'), gc=grp('ru-core',core,'75px 64px');
+      while(svg.firstChild) svg.removeChild(svg.firstChild);
+      defs.forEach(function(d){ svg.appendChild(d); }); svg.appendChild(gb); svg.appendChild(go); svg.appendChild(gc);
+      [gb,go,gc].forEach(function(g){ g.style.opacity='0'; });
+      return {svg:svg,bg:gb,orn:go,core:gc};
+    }
+    function idle(cb){
+      an(q('.ru-rays'),[{transform:'rotate(0deg)'},{transform:'rotate(360deg)'}],{duration:18000,iterations:Infinity});
+      an(q('.ru-new'),[{transform:'translateY(0)'},{transform:'translateY(-5px)'}],{duration:1800,iterations:Infinity,direction:'alternate',easing:'ease-in-out'});
+      an(q('.ru-bgl'),[{transform:'scale(1)'},{transform:'scale(1.04)'}],{duration:1800,iterations:Infinity,direction:'alternate',easing:'ease-in-out'});
+    }
+    function finish(){
+      stop(); var cb=ruLast; if(!cb) return;
+      q('.ru-bg').style.opacity=1; q('.ru-old').style.opacity=0; ['.ru-bgl','.ru-orn','.ru-core'].forEach(function(s){ q(s).style.opacity=1; q(s).style.transform='none'; });
+      q('.ru-rays').style.opacity=.9; q('.ru-cap').style.opacity=1; q('.ru-cap').style.letterSpacing='9px';
+      q('.ru-nm').style.opacity=1; q('.ru-sub').style.opacity=1; q('.ru-flash').style.opacity=0; var b=q('.ru-btns'); b.style.opacity=1; b.style.pointerEvents='auto'; q('.ru-skip').style.display='none';
+      idle(cb);
+    }
+    function play(a,b,done){
+      stop(); ruDone=done||null; ruLast={a:a,b:b};
+      var ca=RKP[a], cb=RKP[b], lv=lvInfo(totalXP()).L, L=layers(b,lv), k, i, ang, R, d, el, fx, an0, cols=[cb.ac,cb.hi,'#ffffff'];
+      rov.innerHTML='<div class="ru-bg"></div><div class="ru-rays" style="background:repeating-conic-gradient(from 0deg,'+rg(cb.ac,.55)+' 0deg 5deg,transparent 5deg 20deg)"></div>'+
+        '<p class="ru-cap">랭크 승급</p><div class="ru-anchor"><div class="ru-stage"><div class="ru-old">'+rkBadge(a,lv)+'</div><div class="ru-new"></div></div><div class="ru-fx"></div></div>'+
+        '<div class="ru-flash" style="background:radial-gradient(circle at 50% 44%,#fff 0,'+rg(cb.hi,.9)+' 35%,transparent 78%)"></div>'+
+        '<div class="ru-txt"><p class="ru-nm" style="color:'+cb.ac+';text-shadow:0 0 18px '+rg(cb.ac,.55)+'">'+RANKS[b].n+'</p><p class="ru-sub">축하해요! '+RANKS[a].n+' → '+RANKS[b].n+' 랭크가 되었어요</p></div>'+
+        '<button type="button" class="ru-skip">건너뛰기</button><div class="ru-btns"><button type="button" data-ru="again">다시 보기</button><button type="button" class="gold" data-ru="close">계속</button></div>';
+      q('.ru-new').appendChild(L.svg); rov.hidden=false;
+      var stage=q('.ru-stage'), old=q('.ru-old'), nb=q('.ru-new'), anchor=q('.ru-anchor'), fxs=q('.ru-fx'), flash=q('.ru-flash');
+      if(typeof reduceMotion==='function' && reduceMotion()){ finish(); return; }
+      /* 고리(기를 모을 때 3번 안쪽으로, 번쩍일 때 2번 바깥으로) */
+      function ring(col){ var r=document.createElement('div'); r.className='ru-ring'; r.style.borderColor=col; anchor.insertBefore(r,anchor.firstChild); return r; }
+      var charge=[ring(cb.ac),ring(cb.hi),ring(cb.ac)], shock=[ring('#fff'),ring(cb.ac)];
+      an(q('.ru-bg'),[{opacity:0},{opacity:1}],{duration:400});
+      an(q('.ru-cap'),[{opacity:0,letterSpacing:'2px'},{opacity:1,letterSpacing:'9px'}],{duration:900,delay:300,easing:'ease-out'});
+      an(old,[{opacity:0,transform:'scale(.7)'},{opacity:1,transform:'scale(1)'}],{duration:550,delay:150,easing:'cubic-bezier(.2,1.4,.4,1)'});
+      var sh=[]; for(k=0;k<14;k++){ d=1+k*0.5; sh.push({transform:'translate('+((k%2?1:-1)*d)+'px,'+(((k%3)-1)*d*.5)+'px) scale('+(1+k*0.006)+')'}); }
+      an(stage,sh,{duration:1200,delay:700});
+      charge.forEach(function(r,j){ an(r,[{opacity:0,transform:'scale(2.6)'},{opacity:.85,transform:'scale(1.4)',offset:.5},{opacity:0,transform:'scale(.7)'}],{duration:650,delay:700+j*430,easing:'ease-in'}); });
+      for(i=0;i<28;i++){ ang=Math.random()*6.283; R=150+Math.random()*120; d=4+Math.random()*4; el=document.createElement('i'); el.style.cssText='width:'+d+'px;height:'+d+'px;margin:'+(-d/2)+'px 0 0 '+(-d/2)+'px;background:'+cols[i%3]+';box-shadow:0 0 7px '+cols[i%3]; fxs.appendChild(el);
+        an(el,[{transform:'translate('+(Math.cos(ang)*R)+'px,'+(Math.sin(ang)*R)+'px) scale(1)',opacity:0},{opacity:1,offset:.3},{transform:'translate(0,0) scale(.2)',opacity:0}],{duration:650+Math.random()*500,delay:650+Math.random()*1150,easing:'ease-in'}); }
+      /* 번쩍 */
+      an(flash,[{opacity:0},{opacity:.95,offset:.18},{opacity:0}],{duration:850,delay:1900,easing:'ease-out'});
+      shock.forEach(function(r,j){ an(r,[{opacity:.95,transform:'scale(.3)'},{opacity:0,transform:'scale(5)'}],{duration:1050,delay:1900+j*150,easing:'ease-out'}); });
+      an(old,[{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(1.4)'}],{duration:260,delay:1880,easing:'ease-in'});
+      var sh2=[{transform:'translate(0,0)'}]; for(k=1;k<12;k++){ d=11*(1-k/12); sh2.push({transform:'translate('+((k%2?1:-1)*d)+'px,'+(((k%3)-1)*d*.55)+'px)'}); } sh2.push({transform:'translate(0,0)'});
+      an(stage,sh2,{duration:420,delay:1900});
+      for(i=0;i<46;i++){ ang=Math.random()*6.283; R=100+Math.random()*150; d=3+Math.random()*5; el=document.createElement('i'); el.style.cssText='width:'+d+'px;height:'+d+'px;margin:'+(-d/2)+'px 0 0 '+(-d/2)+'px;background:'+cols[i%3]+';box-shadow:0 0 8px '+cols[i%3]; fxs.appendChild(el);
+        an(el,[{transform:'translate(0,0) scale(1)',opacity:1},{transform:'translate('+(Math.cos(ang)*R)+'px,'+(Math.sin(ang)*R)+'px) scale(.2)',opacity:0}],{duration:700+Math.random()*800,delay:1900+Math.random()*200,easing:'cubic-bezier(.1,.7,.3,1)'}); }
+      /* 새 배지 형성: 몸통 → 장식 → 배경 */
+      an(L.core,[{opacity:0,transform:'scale(.3)'},{opacity:1,transform:'scale(1.18)',offset:.6},{opacity:1,transform:'scale(1)'}],{duration:620,delay:1960,easing:'ease-out'});
+      an(L.orn,[{opacity:0,transform:'scale(.2,.7)'},{opacity:1,transform:'scale(1.12,1.03)',offset:.65},{opacity:1,transform:'scale(1,1)'}],{duration:700,delay:2350,easing:'ease-out'});
+      an(L.bg,[{opacity:0,transform:'scale(.6)'},{opacity:1,transform:'scale(1)'}],{duration:800,delay:2650,easing:'ease-out'});
+      an(q('.ru-rays'),[{opacity:0},{opacity:.9}],{duration:700,delay:2000});
+      an(q('.ru-nm'),[{opacity:0,transform:'translateY(16px) scale(.9)'},{opacity:1,transform:'none'}],{duration:600,delay:2800,easing:'cubic-bezier(.2,1.3,.4,1)'});
+      an(q('.ru-sub'),[{opacity:0},{opacity:1}],{duration:500,delay:3150});
+      an(q('.ru-btns'),[{opacity:0},{opacity:1}],{duration:400,delay:3700});
+      at(3700,function(){ var bt=q('.ru-btns'); if(bt) bt.style.pointerEvents='auto'; });
+      at(3300,function(){ if(!q('.ru-new')) return; an(nb,[{transform:'translateY(0)'},{transform:'translateY(-5px)'}],{duration:1800,iterations:Infinity,direction:'alternate',easing:'ease-in-out'}); an(q('.ru-rays'),[{transform:'rotate(0deg)'},{transform:'rotate(360deg)'}],{duration:18000,iterations:Infinity}); });
+      at(3800,function(){ var sk=q('.ru-skip'); if(sk) sk.style.display='none'; });
+      /* 소리·진동 */
+      sfxStart();
+      at(1900,function(){ try{ if(navigator.vibrate) navigator.vibrate([30,40,90]); }catch(e){} });
+      at(2400,function(){ try{ if(navigator.vibrate) navigator.vibrate(20); }catch(e){} });
+    }
+    function close(){ stop(); rov.hidden=true; rov.innerHTML=''; var f=ruDone; ruDone=null; if(f) f(); }
+    rov.addEventListener('click',function(e){
+      var t=e.target; if(!t||!t.classList) return;
+      if(t.classList.contains('ru-skip')){ finish(); return; }
+      var r=t.getAttribute('data-ru'); if(r==='close') close(); else if(r==='again'&&ruLast) play(ruLast.a,ruLast.b,ruDone);
+    });
+    RANKUP.play=play; RANKUP.finish=finish; RANKUP.sfxBuild=sfxBuild;
+  })();
+
 execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 취소 */
 })();
 </script>

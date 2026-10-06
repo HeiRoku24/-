@@ -1367,8 +1367,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.0', APP_DATE='2026-10-06', showChg=false;
+var APP_VER='1.46.2', APP_DATE='2026-10-06', showChg=false;
 var CHANGES=[
+  ['1.46.2','식단 사이드 퀘스트와 반디 안내의 줄바꿈을 다듬었어요. 긴 안내 글의 마지막 줄에 짧은 말만 남지 않게 하고, "사용 중"·"한 끼"처럼 붙어 있어야 할 말이 갈라지지 않게 했어요'],
+  ['1.46.1','식단 사이드 퀘스트 문구를 누구나 따라 하기 쉽게 바꿨어요. 점심과 운동 후 식사는 예시를 보고 고를 수 있고, 영주의 특별보급은 오늘의 연회로 이름을 바꾸고 설명을 더했어요'],
   ['1.46.0','테스트 기간에는 앱을 연 날짜가 기록돼요. 로그인하면 개발자가 볼 수 있어요. 처형 기술 이름 몸짱일도양단은 일도양단으로 바꿨어요'],
   ['1.45.7','몸짱파자마, 몸짱일지도 붙여 쓰도록 통일했어요'],
   ['1.45.6','몸짱소울, 몸짱용사, 몸짱왕국은 모두 붙여 쓰도록 통일했어요. 시작화면 로고도 몸짱소울로 되돌렸어요'],
@@ -5457,11 +5459,11 @@ function viewToday(){
 
   var out=!!L.out, both=!!(L.diet.lunch&&L.diet.post);
   h+='<h2>사이드 퀘스트</h2><div class="q">';
-  h+=check(!!L.diet.lunch,'점심 오트밀',(out&&!L.diet.lunch)?'영주의 특별보급 사용 중 · 경험치 없음':'두유 300ml + 오트밀 + 견과류 + 코코넛','diet','data-k="lunch"',lock||out,(out&&!L.diet.lunch)?0:XP_MEAL);
-  h+=check(!!L.diet.post,'운동 후 식사',(out&&!L.diet.post)?'영주의 특별보급 사용 중 · 경험치 없음':'닭가슴살·닭다리살 250~300g + 밥 한 공기(또는 고구마) + 채소 · 밤 9시 전에','diet','data-k="post"',lock||out,(out&&!L.diet.post)?0:XP_MEAL);
+  h+=check(!!L.diet.lunch,'점심 챙기기',(out&&!L.diet.lunch)?'오늘의 연회 사용\u00a0중\u00a0· 경험치 없음':'든든한 한\u00a0끼에 채소를 곁들여요. 예: 비빔밥, 샌드위치, 도시락, 오트밀','diet','data-k="lunch"',lock||out,(out&&!L.diet.lunch)?0:XP_MEAL);
+  h+=check(!!L.diet.post,'운동 후 식사',(out&&!L.diet.post)?'오늘의 연회 사용\u00a0중\u00a0· 경험치 없음':'단백질\u00a0+ 탄수화물\u00a0+ 채소 한\u00a0끼. 예: 계란, 두부, 닭가슴살, 참치\u00a0+ 밥, 고구마, 바나나. 직접 요리하지 않아도 돼요. 자기 직전은 피해요','diet','data-k="post"',lock||out,(out&&!L.diet.post)?0:XP_MEAL);
   h+=check(!!L.diet.water,'물 2L','하루 동안 나눠서 마시기','diet','data-k="water"',lock,XP_MEAL);
-  h+=check(out,'영주의 특별보급',(both&&!out)?'점심과 운동 후 식사를 모두 체크해서 잠겼어요':'아싸! 오늘은 연회다!','out','',lock||(both&&!out));
-  h+='</div><p class="note">영주의 특별보급을 쓰면 점심·운동 후 식사 체크가 잠기고 경험치가 없어요. 특별보급 날에도 식사는 거르지 말고, 다음 날 굶어서 만회하지 않기.</p>';
+  h+=check(out,'오늘의 연회',out?'오늘의 연회 사용\u00a0중\u00a0· 점심과 운동 후 식사 경험치는 없어요':((both)?'점심과 운동 후 식사를 이미 체크해서 쓸 수 없어요':'외식·회식·약속으로 식단을 못 챙긴 날에 눌러요'),'out','',lock||(both&&!out));
+  h+='</div><p class="note">오늘의 연회를 쓰면 점심·운동 후 식사 체크가 잠기고 경험치가 없어요. 연회 날에도 식사는 거르지 말고, 다음 날 굶어서 만회하지 않기.</p>';
   if(lock){
     h+='<div class="endedbar"><b>'+(isToday?'오늘의 모험이 종료됐어요':'이 날의 모험은 종료됐어요')+'</b><span>'+(isToday||L.ended?'기록이 확정되어 더 이상 수정할 수 없어요':'지난 날짜는 자동으로 종료돼서 더 이상 수정할 수 없어요')+'</span></div>';
   }else{
@@ -6426,7 +6428,7 @@ BANDI.cheer={
   alt:['밖이 힘든 날에도 해냈어요, 멋져요!','집 안에서도 모험은 계속돼요!'],
   boss:['마왕이 비틀거려요! 조금만 더!','보스의 체력이 얼마 안 남았어요!'],
   sun:['푹 쉬는 것도 모험이에요.','오늘은 천천히, 몸을 풀어 줘요.'],
-  lunch:['점심 잘 챙겼네요! 든든해야 힘이 나요.','맛있게 먹었어요? 잘 먹는 것도 모험이에요.'],
+  lunch:['점심 잘 챙겼네요! 든든해야 힘이 나요.','맛있게 먹었어요? 잘\u00a0먹는 것도 모험이에요.'],
   post:['운동 후에 챙겨 먹는 것도 훈련이에요.','몸이 고마워할 거예요. 잘했어요!'],
   water:['물 챙기는 것도 멋진 습관이에요!','물 한 잔, 몸이 좋아해요!']
 };
@@ -6557,6 +6559,8 @@ function bdDcard(id,rec){
   var on=(bd.pick===id);
   return '<button type="button" class="dcard'+(on?' on':'')+'" data-b="pick" data-id="'+id+'" aria-pressed="'+(on?'true':'false')+'"><b>'+DIFF[id].n+(rec?' · 추천':'')+'</b><span>'+DIFF[id].who+'</span><small>'+DIFF[id].sum+'</small></button>';
 }
+/* 긴 안내 글(7줄 이상)은 줄 길이 맞춤이 안 먹어서, 마지막 두 단어를 붙여(U+00A0) 마지막 줄에 짧은 말만 남지 않게 해요 */
+function glue(t){ t=String(t); var n=(t.length-t.lastIndexOf(' ')>1)?1:0, i, j, k; for(k=0;k<2;k++){ i=t.lastIndexOf(' '); if(i<=0||i>=t.length-1) break; t=t.slice(0,i)+'\u00a0'+t.slice(i+1); j=t.lastIndexOf(' '); if(k===0 && !(j>0 && t.length-j-1<=7)) break; } return t; }
 function bdRender(){
   var st=bd.step, h='', i, q, rec;
   if(st==='hello'){
@@ -6586,11 +6590,11 @@ function bdRender(){
       '<p class="bdsm">'+BANDI.say.health+'</p><button type="button" class="skip" data-b="close">닫기</button>';
   }else if(st==='tip'){
     var tp=BANDI.tips[bd.tip]||BANDI.tips.today, tw=bd.when;
-    h=BANDI.scene('안내하는 반디의 그림')+'<p class="bdq">'+(typeof tp.h==='function'?tp.h(tw):tp.h)+'</p><p class="bdans">'+(typeof tp.x==='function'?tp.x(tw):tp.x)+'</p>'+
+    h=BANDI.scene('안내하는 반디의 그림')+'<p class="bdq">'+(typeof tp.h==='function'?tp.h(tw):tp.h)+'</p><p class="bdans">'+glue(typeof tp.x==='function'?tp.x(tw):tp.x)+'</p>'+
       '<div class="bdrow col"><button type="button" class="primary" data-b="close">알겠어요</button></div>'+
       (bd.tip==='today'?'<p class="bdsm">궁금한 게 생기면 오른쪽 위 반디를 눌러요. 도움말을 다시 볼 수 있어요.</p>':'');
   }else if(st==='ans'){
-    h=BANDI.scene('설명하는 반디의 그림')+'<p class="bdq">'+BANDI.help[bd.topic][0]+'</p><p class="bdans">'+(typeof BANDI.help[bd.topic][1]==='function'?BANDI.help[bd.topic][1]():BANDI.help[bd.topic][1])+'</p>'+
+    h=BANDI.scene('설명하는 반디의 그림')+'<p class="bdq">'+BANDI.help[bd.topic][0]+'</p><p class="bdans">'+glue(typeof BANDI.help[bd.topic][1]==='function'?BANDI.help[bd.topic][1]():BANDI.help[bd.topic][1])+'</p>'+
       '<div class="bdrow"><button type="button" class="ghost" data-b="helpback">다른 질문</button><button type="button" class="primary" data-b="close">알았어요</button></div>';
   }
   bdC.innerHTML=h;

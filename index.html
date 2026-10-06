@@ -214,6 +214,17 @@ svg.chart{width:100%; height:auto; display:block;}
 .toast{position:fixed; left:50%; transform:translateX(-50%); top:calc(14px + env(safe-area-inset-top,0px)); z-index:60;
   background:var(--gold); color:var(--gold-ink); font-family:var(--disp); font-size:19px; padding:6px 18px; border-radius:999px; box-shadow:0 4px 0 var(--edge); max-width:calc(100% - 24px); text-align:center;}
 .toast[hidden]{display:none;}
+/* v1.45.4 한글 줄바꿈: 단어 중간에서 끊지 않고, 짧은 글은 줄 길이를 고르게, 긴 글은 마지막 줄에 한 단어만 남지 않게 */
+body{word-break:keep-all; overflow-wrap:break-word;}
+body{text-wrap:pretty;}
+.bnote,.ovh,.ovt,.askt,.toast,.cht,.ph,.phsub,.bdq,.bdsm,.bdans,.comfort,.stage-w,.klab,.rs,.dcard small,.dcard span,.note{text-wrap:balance;}
+.cheer{position:fixed; left:50%; transform:translateX(-50%); width:calc(100% - 24px); max-width:536px; bottom:calc(160px + env(safe-area-inset-bottom,0px)); z-index:30; display:flex; flex-direction:row-reverse; align-items:flex-end; gap:6px; pointer-events:none;}
+.cheer[hidden]{display:none;}
+.cheer.show{animation:chin .25s ease-out;}
+@keyframes chin{from{opacity:0;} to{opacity:1;}}
+.chf{flex:none; width:44px; height:38px; border-radius:50%; background:var(--surface); border:2px solid var(--line); box-shadow:0 2px 0 var(--edge); display:flex; align-items:center; justify-content:center;}
+.chf svg{width:38px; height:32px; display:block;}
+.cht{background:var(--surface); border:2px solid var(--line); border-radius:16px 16px 4px 16px; padding:8px 12px; font-size:14px; font-weight:700; line-height:1.4; color:var(--ink); box-shadow:0 3px 0 var(--edge);}
 .toast.show{animation:tin .25s ease-out;}
 @keyframes tin{from{transform:translate(-50%,-14px); opacity:0;}to{transform:translate(-50%,0); opacity:1;}}
 .nav{position:fixed; left:50%; transform:translateX(-50%); width:calc(100% - 24px); max-width:536px;
@@ -234,7 +245,7 @@ svg.chart{width:100%; height:auto; display:block;}
 .achl{margin:8px 0 0; display:inline-block; background:var(--soft); border-radius:999px; padding:2px 14px; font-size:14px; font-weight:700;}
 .xpt2{margin:0 0 16px; font-size:13px; color:var(--muted);}
 @media (prefers-reduced-motion: reduce){
-  .xpbar i,.timer .tbar i,.pop,.ovc,.toast.show{transition:none; animation:none;}
+  .xpbar i,.timer .tbar i,.pop,.ovc,.toast.show,.cheer.show{transition:none; animation:none;}
 }
 
 /* 보스전 */
@@ -1029,9 +1040,9 @@ svg.chart{width:100%; height:auto; display:block;}
 
 <div class="ov" id="ask" hidden role="alertdialog" aria-modal="true" aria-labelledby="askt">
   <div class="ovc" data-mode="lose">
-    <h2 class="ovh" id="askt">오늘의 모험을 마치겠습니까?</h2>
+    <h2 class="ovh" id="askt">오늘의 모험을 마칠까요?</h2>
     <p class="bnote">종료하면 오늘의 기록이 확정되고, 더 이상 수정할 수 없어요.</p>
-    <div class="askbtns"><button type="button" class="ghost big" id="askno">아니오</button><button type="button" class="primary" id="askyes">예</button></div>
+    <div class="askbtns"><button type="button" class="ghost big" id="askno">아니요</button><button type="button" class="primary" id="askyes">예</button></div>
   </div>
 </div>
 <div class="ov" id="intro" hidden role="dialog" aria-modal="true" aria-label="몸짱용사 시작 안내">
@@ -1356,8 +1367,17 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.44.6', APP_DATE='2026-10-06', showChg=false;
+var APP_VER='1.45.6', APP_DATE='2026-10-06', showChg=false;
 var CHANGES=[
+  ['1.45.6','몸짱소울, 몸짱용사, 몸짱왕국은 모두 붙여 쓰도록 통일했어요. 시작화면 로고도 몸짱소울로 되돌렸어요'],
+  ['1.45.5','문구를 다듬었어요. 확인창과 팝업의 말투를 ~요체로 맞추고, 사라진 휴식 의상 문구와 어색한 대사 한 줄을 고쳤어요. 말줄임표와 종료됐어요 표기도 통일했어요'],
+  ['1.45.4','한글 줄바꿈을 다듬었어요(단어 중간에서 끊지 않고, 토벌 완료 창처럼 "+20 XP"만 둘째 줄에 덩그러니 남지 않게). 아니오를 아니요로, 띄어쓰기 몇 곳을 바로잡았어요'],
+  ['1.45.3','반디의 응원 말풍선이 오른쪽에서 나와요'],
+  ['1.45.2','반디가 옆에서 응원해요. 운동 세트를 체크하고, 러닝 거리를 적고, 식단을 체크할 때마다 반디가 한마디씩 힘을 줘요. 설정에서 켜고 끌 수 있어요'],
+  ['1.45.1','왕국의 건물 5개를 성 둘레에 같은 간격으로 다시 놓았어요. 여관이 성 아래 가운데에, 길드와 교역소가 양옆에, 훈련장과 대장간이 위쪽 좌우에 있어요'],
+  ['1.45.0','지도 탭과 일지 탭에 처음 들어갈 때 반디가 한 번씩 설명해 줘요'],
+  ['1.44.8','아다만타이트에서 마왕전에 져서 오리하르콘으로 내려가는 날, 패배 결과 창에 "아다만타이트에서 내려갔어요" 한 줄이 나와요'],
+  ['1.44.7','아다만타이트에 강등과 복귀가 생겼어요. 토요일 마왕전에서 지면 오리하르콘으로 내려가고, 내려온 다음 주부터 연속 4주 마왕을 쓰러뜨리면 길드에서 아다만타이트 시험을 다시 볼 수 있어요(합격하면 복귀). 랭크 화면과 길드 접수원 세라의 대사에 이 상태가 반영돼요'],
   ['1.44.6','랭크업 연출에서 이전 배지가 빛나며 떨릴 때의 소리를 더 "올라간다"는 느낌이 나게 바꿨어요(점점 올라가는 음계, 빨라지는 떨림 소리, 번쩍이기 직전 치솟는 소리)'],
   ['1.44.5','랭크업 연출에 효과음이 생겼어요(기를 모을 때 올라가는 소리, 번쩍일 때 쿵 하는 울림, 새 배지가 만들어질 때 쇠 울림과 화음, 랭크 이름이 나올 때 종소리와 반짝임). 랭크 화면의 "다음 승급"에 [길드로 승급시험 보러가기] 버튼이 생겼어요(승급 시험 자격을 채우면 눌러서 길드로 갈 수 있어요)'],
   ['1.44.4','왕국에 새 건물 "길드"가 생겼어요(처음부터 열려 있어요). 승급 시험은 이제 길드에서 접수원 세라에게 말을 걸어 볼 수 있고, 랭크 화면에서는 다음 승급까지 남은 조건을 보고, 조건을 채우면 [길드로 승급시험 보러가기] 버튼으로 길드로 갈 수 있어요. 반디가 왕국의 건물(여관·훈련장·대장간·교역소·길드)에 처음 들어갈 때마다 한 번씩 안내해요(성벽과 성은 없어요). 기존 기록·XP·레벨에는 영향이 없어요'],
@@ -1365,7 +1385,7 @@ var CHANGES=[
   ['1.44.2','랭크 배지의 육각형을 정육각형으로 바로잡고(예전엔 옆으로 퍼져 찌그러져 보였어요), LV 숫자를 배지 정중앙에 오도록 글자 높이에 맞춰 정렬했어요'],
   ['1.44.1','퀘스트 화면 위의 랭크 배지를 날개·후광·왕관까지 모두 보이는 큰 모양으로 바꿨어요(위쪽 칸이 조금 높아졌어요)'],
   ['1.44.0','랭크 추가(길드·랭크 1단계): 퀘스트 화면 위의 육각형이 랭크 배지로 바뀌었어요(언랭크·카퍼·아이언·브론즈·실버·골드·플래티넘·미스릴·오리하르콘·아다만타이트 10종, 금속마다 질감과 모양이 달라요). 배지를 누르면 현재 랭크, 다음 승급 조건, 누적 마왕 토벌 승리 수, 랭크 목록을 볼 수 있어요. 랭크는 승급 시험으로 오르고, 승급 시험은 다음 업데이트에서 열려요(그때까지는 모두 언랭크예요). 기존 기록·XP·레벨에는 영향이 없어요'],
-  ['1.43.0','보스를 쓰러뜨리면 그로기 팝업이 뜨고, [예]를 누르면 직업마다 다른 처형 컷씬이 나와요(몸짱 용사 일도양단·드워프 대지 분쇄·엘프 별빛 관통·현자 마법사 유성 대폭발). 팝업에서 [건너뛰기]로 넘기거나, [아니요]로 마지막 체크를 취소하고 보스 체력을 되돌릴 수 있고, 설정 > 처형 컷씬을 끄면 컷씬 없이 토벌 완료 창이 뜨고, 거기서 [확인]을 누르면 확정, [해치웠나?]를 누르면 마지막 체크가 취소돼요. 확정하기 전에 앱을 닫으면 취소로 처리돼요. 보스를 쓰러뜨리면 그날의 메인 퀘스트·러닝 기록은 잠기고, 식단(사이드 퀘스트)은 오늘의 모험을 종료하기 전까지 계속 체크할 수 있어요. 이미 클리어한 지난 날짜는 그대로예요'],
+  ['1.43.0','보스를 쓰러뜨리면 그로기 팝업이 뜨고, [예]를 누르면 직업마다 다른 처형 컷씬이 나와요(몸짱용사 일도양단·드워프 대지 분쇄·엘프 별빛 관통·현자 마법사 유성 대폭발). 팝업에서 [건너뛰기]로 넘기거나, [아니요]로 마지막 체크를 취소하고 보스 체력을 되돌릴 수 있고, 설정 > 처형 컷씬을 끄면 컷씬 없이 토벌 완료 창이 뜨고, 거기서 [확인]을 누르면 확정, [해치웠나?]를 누르면 마지막 체크가 취소돼요. 확정하기 전에 앱을 닫으면 취소로 처리돼요. 보스를 쓰러뜨리면 그날의 메인 퀘스트·러닝 기록은 잠기고, 식단(사이드 퀘스트)은 오늘의 모험을 종료하기 전까지 계속 체크할 수 있어요. 이미 클리어한 지난 날짜는 그대로예요'],
   ['1.42.5','새로 시작할 때 순서를 바꿈: 규칙 설명창이 먼저 나오고, 닫으면 반디가 인사하며 난이도를 추천해 줘요'],
   ['1.42.4','반디 안내 추가(새로 시작한 사용자만): 첫 퀘스트 화면, 첫 마왕전 전날(금요일), 러닝 탭·왕국 탭·대장간에 처음 들어갔을 때 반디가 짧게 알려 줘요(각 한 번). 운동 중에는 나오지 않아요. 반디 도움말에 달리기·걷기 거리, 왕국, 대장간 설명도 추가. 기존 기록이 있으면 자동 안내는 나오지 않아요'],
   ['1.42.3','안내 캐릭터 반디(임시)를 요정 모습으로 바꿈: 날개·뾰족한 귀·민트색 머리·별 지팡이'],
@@ -1405,7 +1425,7 @@ var CHANGES=[
   ['1.39.5','일지 업적에 동료 수집 업적 추가(드워프 전사 합류·엘프 궁수 합류·현자 마법사 합류·전원 집결), 동료 그림이 업적 아이콘으로 표시'],
   ['1.39.4','엘프 궁수에게 초록 튜닉과 소매 추가(맨살 가슴 제거) / 보스전과 안내 그림의 공격 모습을 엘프는 활 쏘기(날아가는 화살), 현자 마법사는 마법 쏘기(날아가는 마법 구체)로 변경'],
   ['1.39.3','현자 마법사에게 보라색 로브와 소매 추가(웃통 맨살 제거, 정면·옆모습·성벽 뒷모습 공통) / 훈련장에서 엘프 궁수는 허수아비에게 화살을 쏘고 현자 마법사는 마법을 쏘도록 변경'],
-  ['1.39.2','러닝 탭에서 달리는 캐릭터를 정면이 아닌 옆모습(오른쪽을 보고 달림)으로 변경: 팔다리를 앞뒤로 크게 흔드는 8프레임, 몸짱 용사·드워프 전사·엘프 궁수·현자 마법사 모두 옆모습'],
+  ['1.39.2','러닝 탭에서 달리는 캐릭터를 정면이 아닌 옆모습(오른쪽을 보고 달림)으로 변경: 팔다리를 앞뒤로 크게 흔드는 8프레임, 몸짱용사·드워프 전사·엘프 궁수·현자 마법사 모두 옆모습'],
   ['1.39.1','러닝 탭 화면을 시작화면처럼 캐릭터가 달리는 장면으로 변경(총 달린 거리·다음 지점 표시, 원정 지도와 지나온 여정은 토글), 러닝 탭 전용 배경음악 \'가볍게 한 바퀴\' 추가'],
   ['1.39.0','러닝 콘텐츠 추가: 일일 러닝은 체크란 없이 3km 이상 거리를 입력하면 완료, 러닝 탭(누적 거리·원정 여정 지도), 누적 거리에 따른 여정 이벤트 팝업과 동료(드워프 전사·엘프 궁수·현자 마법사) 합류, 여관에서 캐릭터 선택(시작화면·퀘스트·지도·장면 모두 반영), 훈련장 러닝 이름을 자유 러닝으로 변경'],
   ['1.38.17','설정 > 기본 설정의 \'시작 안내 다시 보기\'·\'모든 기록 초기화\' 버튼을 위의 버튼들과 같은 너비로 맞춰 정렬'],
@@ -1421,7 +1441,7 @@ var CHANGES=[
   ['1.38.7','벅지짱 미노타우르스 다리를 굵게 키우고 허벅지 근육 선 표시(둥글게 부풀린 모양은 되돌림)'],
   ['1.38.6','벅지짱 미노타우르스 디자인 변경: 허벅지를 크고 단단하게, 상체는 조금 작게'],
   ['1.38.5','대장간·여관·성 제목 오른쪽에 설명 추가'],
-  ['1.38.4','탭 제목 옆 설명 정리: 훈련장 설명 간소화, 몸짱 왕국 띄어쓰기와 설명을 제목 오른쪽으로 이동, 모험 지도·몸짱 일지·설정에 제목 오른쪽 설명 추가'],
+  ['1.38.4','탭 제목 옆 설명 정리: 훈련장 설명 간소화, 몸짱왕국 띄어쓰기와 설명을 제목 오른쪽으로 이동, 모험 지도·몸짱 일지·설정에 제목 오른쪽 설명 추가'],
   ['1.38.3','훈련장: 제목 옆 설명 추가, 운동마다 + − 대신 \'훈련\' 버튼 하나(누를 때마다 1세트·XP 반영), 러닝 5km도 훈련 버튼으로 몇 번이고 기록, 시간 재는 운동에 타이머 버튼 추가'],
   ['1.38.2','성벽 복구 단계에 따른 마왕성 보스전 연출 변화를 삭제하고 예전 연출로 되돌림'],
   ['1.38.1','건물 내부 장면에서 NPC 머리 위에 떠 있던 말풍선(...) 삭제'],
@@ -1536,7 +1556,7 @@ var JOB_SLOTS={hero:['sword','helm','armor','shield'],dwarf:['axe','dhelm','dmai
 var JOBW={hero:'sword',dwarf:'axe',elf:'bow',mage:'staff'};   /* 직업별 무기 칸 */
 (function(){
   function A(id,slot,job,rar,name,o){ var it={id:id,slot:slot,craft:1,job:job,rar:rar,name:name},k; for(k in o) it[k]=o[k]; ITEMS.push(it); }
-  /* 몸짱 용사: 투구·갑옷·방패 (기존 3종씩 + 6종씩 완성) */
+  /* 몸짱용사: 투구·갑옷·방패 (기존 3종씩 + 6종씩 완성) */
   A('helm4','helm','hero','n','구리 투구',{fill:'#C8864A',trim:'#8B5A2B',metal:1});
   A('helm5','helm','hero','n','쇠 투구',{fill:'#9AA5B5',trim:'#5E6878',metal:1});
   A('helm6','helm','hero','r','은빛 투구',{fill:'#E6EEF8',trim:'#9FB0D8'});
@@ -1859,7 +1879,7 @@ function heroArtBase(o){
 }
 
 /* ===== 동료 (v1.39): 드워프 전사 · 엘프 궁수 · 현자 마법사 ===== */
-var CHARN={hero:'몸짱 용사',dwarf:'드워프 전사',elf:'엘프 궁수',mage:'현자 마법사'};
+var CHARN={hero:'몸짱용사',dwarf:'드워프 전사',elf:'엘프 궁수',mage:'현자 마법사'};
 var CHARIDS=['hero','dwarf','elf','mage'];
 function jnySeen(id){ return !!(S&&S.jny&&S.jny.seen&&S.jny.seen[id]); }
 function curChar(){ var c=(typeof S!=='undefined'&&S)?S.char:null; if(c&&c!=='hero'&&CHARN[c]&&jnySeen(c)) return c; return 'hero'; }
@@ -2677,19 +2697,20 @@ function resultPopup(d,r){
     var sum=(wd>0||wkm>0)?('이번 주 '+(wd>0?wd+'일 클리어':'')+(wd>0&&wkm>0?', ':'')+(wkm>0?kmFmt(wkm)+'km 달리기':'')+' — 정말 대단해요!'):'이번 주는 조금 쉬어 갔어도 괜찮아요. 돌아온 것만으로 충분해요.';
     var got=itemById(S.restLog&&S.restLog[fmt(d)]);
     var gb=got?('<div class="lootcard r-n"><div class="lootimg">'+itemIcon(got,true)+'</div><p class="lootn">'+got.name+'</p><p class="lootr">특별 장비 · 여관에서 입어 보세요</p></div>'):'';
-    return {k:'BLESSING',t:'몸짱신의 가호',b:godScene()+'<p class="bnote">용사는 몸짱신의 가호를 받았습니다</p><p class="comfort">“'+msg+'”</p><p class="bnote">'+sum+'</p>'+gb,mode:'calm'};
+    return {k:'BLESSING',t:'몸짱신의 가호',b:godScene()+'<p class="bnote">용사는 몸짱신의 가호를 받았어요</p><p class="comfort">“'+msg+'”</p><p class="bnote">'+sum+'</p>'+gb,mode:'calm'};
   }
   if(r.res==='win'){
     return {k:'BOSS DEFEATED',t:dk==='sat'?B.n+' 토벌!':B.n+' 토벌 완료!',
-      b:battleScene(B.k,'win')+rewardNote(d,'win')+'<p class="bnote">'+(dk==='sat'?'월~금 누적 '+r.xp+' XP로 마왕성을 돌파! '+B.n+eul(B.n)+' 쓰러뜨렸어요. 승리 보너스 +150 XP · 전리품 상자 1개 획득! 여관에서 열어 보세요':'몸짱용사가 '+B.n+eul(B.n)+' 쓰러뜨렸어요! 토벌 보너스 +'+MID_XP+' XP')+'</p>',mode:'win'};
+      b:battleScene(B.k,'win')+rewardNote(d,'win')+'<p class="bnote">'+(dk==='sat'?'월~금 누적 '+r.xp+' XP로 마왕성을 돌파! '+B.n+eul(B.n)+' 쓰러뜨렸어요. 승리 보너스 +150 XP · 전리품 상자 1개 획득! 여관에서 열어 보세요':'몸짱용사가 '+B.n+eul(B.n)+' 쓰러뜨렸어요! 토벌 보너스 +'+MID_XP+' XP')+'</p>',mode:'win'};
   }
   if(r.res==='free'){
-    return {k:'PRACTICE',t:'첫 마왕전은 연습전이에요',b:'<p class="bnote">월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에는 못 미쳤지만, 시작하고 첫 7일 안의 마왕전이라 마왕의 저주가 없어요. 이번 마왕전은 승패 기록에 들어가지 않아요.</p><p class="comfort">“괜찮아요. 다음 주엔 '+SAT_GOAL+' XP를 향해 천천히 가 봐요.”</p>',mode:'calm'};
+    return {k:'PRACTICE',t:'첫 마왕전은 연습전이에요',b:'<p class="bnote">월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에는 못 미쳤지만, 시작하고 첫 7일 안의 마왕전이라 마왕의 저주가 없어요. 이번 마왕전은 승패 기록에 들어가지 않아요.</p><p class="comfort">“괜찮아요. 다음 주엔 '+SAT_GOAL+' XP를 향해 천천히 가 봐요.”</p>',mode:'calm'};
   }
   var why;
-  if(dk==='sat') why=(r.why==='ended')?'마왕성 퀘스트(메인 퀘스트와 일일 러닝)를 다 채우지 못하고 모험을 마쳤어요. '+B.n+'에게 패배했어요...':'월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에 못 미쳐 마왕의 저주에 걸렸어요...';
+  if(dk==='sat') why=(r.why==='ended')?'마왕성 퀘스트(메인 퀘스트와 일일 러닝)를 다 채우지 못하고 모험을 마쳤어요. '+B.n+'에게 패배했어요...':'월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에 못 미쳐 마왕의 저주에 걸렸어요...';
   else why='메인 퀘스트와 일일 러닝을 다 채우지 못하고 모험을 마쳐서 '+B.n+'에게 졌어요...';
-  return {k:'DEFEAT',t:dk==='sat'?'패배...':'토벌 실패...',b:battleScene(B.k,'lose')+'<p class="bnote">'+why+'</p>'+rewardNote(d,'lose'),mode:'lose'};
+  var dn=(dk==='sat' && rkAda().down===fmt(d))?'<p class="bnote">아다만타이트에서 오리하르콘으로 내려갔어요. 다음 주부터 연속 '+ADA_NEED+'주 이기면 길드에서 다시 시험을 볼 수 있어요.</p>':'';
+  return {k:'DEFEAT',t:dk==='sat'?'패배...':'토벌 실패...',b:battleScene(B.k,'lose')+'<p class="bnote">'+why+'</p>'+dn+rewardNote(d,'lose'),mode:'lose'};
 }
 
 
@@ -2867,7 +2888,7 @@ function openChest(){
   var pool=ITEMS.filter(function(it){ return !it.special && !it.craft && !S.inv[it.id]; });
   if(!pool.length){
     S.chestOpened=(S.chestOpened||0)+1; S.bonusXp=(S.bonusXp||0)+100; save(); render();
-    showOverlay({k:'LOOT',t:'모든 장비를 모았어요!',b:'<div class="lootbox">'+chestSvg(true)+'</div><p class="bnote">대신 보너스 100 XP를 받았어요.</p>',mode:'win'}); return;
+    showOverlay({k:'LOOT',t:'모든 장비를 모았어요!',b:'<div class="lootbox">'+chestSvg(true)+'</div><p class="bnote">대신 보너스 100 XP를 받았어요.</p>',mode:'win'}); return;
   }
   var w={n:60,r:30,l:10}, avail={}, tot=0;
   pool.forEach(function(it){avail[it.rar]=1;});
@@ -2918,11 +2939,11 @@ var ACH = [
   {id:'cs_plume',n:'깃털 수집가',d:'깃털 6종을 모두 모으기',t:function(c){return c.eqs.cs.plume>=6;}},
   {id:'cs_shoes',n:'신발 수집가',d:'신발 6종을 모두 모으기',t:function(c){return c.eqs.cs.shoes>=6;}},
   {id:'cs_belt',n:'허리띠 수집가',d:'허리띠 6종을 모두 모으기',t:function(c){return c.eqs.cs.belt>=6;}},
-  {id:'wp_hero',n:'검의 달인',d:'몸짱 용사의 검 6종을 모두 제작하기',b:'char:hero',t:function(c){return c.eqs.wpn.hero>=6;}},
+  {id:'wp_hero',n:'검의 달인',d:'몸짱용사의 검 6종을 모두 제작하기',b:'char:hero',t:function(c){return c.eqs.wpn.hero>=6;}},
   {id:'wp_dwarf',n:'도끼의 달인',d:'드워프 전사의 양손 도끼 6종을 모두 제작하기',b:'char:dwarf',t:function(c){return c.eqs.wpn.dwarf>=6;}},
   {id:'wp_elf',n:'활의 달인',d:'엘프 궁수의 활 6종을 모두 제작하기',b:'char:elf',t:function(c){return c.eqs.wpn.elf>=6;}},
   {id:'wp_mage',n:'지팡이의 달인',d:'현자 마법사의 지팡이 6종을 모두 제작하기',b:'char:mage',t:function(c){return c.eqs.wpn.mage>=6;}},
-  {id:'jb_hero',n:'몸짱 용사 전용장비 완성',d:'몸짱 용사의 전용장비 24종을 모두 제작하기',b:'char:hero',t:function(c){return c.eqs.job.hero>=24;}},
+  {id:'jb_hero',n:'몸짱용사 전용장비 완성',d:'몸짱용사의 전용장비 24종을 모두 제작하기',b:'char:hero',t:function(c){return c.eqs.job.hero>=24;}},
   {id:'jb_dwarf',n:'드워프 전사 전용장비 완성',d:'드워프 전사의 전용장비 24종을 모두 제작하기',b:'char:dwarf',t:function(c){return c.eqs.job.dwarf>=24;}},
   {id:'jb_elf',n:'엘프 궁수 전용장비 완성',d:'엘프 궁수의 전용장비 24종을 모두 제작하기',b:'char:elf',t:function(c){return c.eqs.job.elf>=24;}},
   {id:'jb_mage',n:'현자 마법사 전용장비 완성',d:'현자 마법사의 전용장비 24종을 모두 제작하기',b:'char:mage',t:function(c){return c.eqs.job.mage>=24;}},
@@ -3331,9 +3352,9 @@ var BVB={castle:'-80 -122 160 176',wall:'-166 -158 332 322',train:'-84 -54 168 1
 function bSvg(id){ return '<svg viewBox="'+BVB[id]+'" aria-hidden="true">'+bArt(id,bState(id),bProg(id))+'</svg>'; }
 /* 왕국 전경 */
 var KW=360, KH=500, KCX=180, KCY=240, KRX=160, KRY=150;
-/* 성(가운데)을 중심으로 훈련장·여관·교역소·대장간이 좌우 대칭, 인접 간격 약 78으로 고르게 놓였고 서로 겹치지 않아요(실제 그림 영역으로 계산) */
-var KPOS={castle:[180,246,.92],train:[111,166,.58],forge:[249,166,.61],inn:[102,299,.56],trade:[258,299,.55],guild:[182,344,.5]};
-var KBOX={castle:[149,134,66,164],train:[68,142,80,56],forge:[216,120,70,76],inn:[66,268,80,58],trade:[218,262,84,66],guild:[154,306,56,64],wall:[96,398,168,40]};
+/* v1.45.1: 성(가운데)을 중심으로 5개 건물이 역오각형(여관이 아래 가운데) 꼭짓점에 놓여요. 반지름 100·중심 (180,238)의 정오각형 꼭짓점에 건물의 실제 그림 영역 중심을 맞췄고(훈련장·대장간만 바깥으로 4씩), 건물 크기는 그대로예요. 시계 방향: 여관(아래) → 길드(왼쪽) → 훈련장(왼쪽 위) → 대장간(오른쪽 위) → 교역소(오른쪽) */
+var KPOS={castle:[180,246,.92],train:[117,155,.58],forge:[243,163,.61],inn:[179,339,.56],trade:[273,275,.55],guild:[85,275,.5]};
+var KBOX={castle:[149,134,66,164],train:[77,131,72,53],forge:[215,121,68,73],inn:[140,309,80,58],trade:[235,236,80,66],guild:[57,238,56,63],wall:[96,398,168,40]};
 function kfield(x,y,w,h,c){ var s='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3" fill="'+c+'" stroke="'+OL+'" stroke-width="2"/>', i; for(i=1;i<4;i++) s+='<line x1="'+(x+4)+'" y1="'+(y+i*h/4)+'" x2="'+(x+w-4)+'" y2="'+(y+i*h/4)+'" stroke="rgba(43,33,56,.28)" stroke-width="2" stroke-linecap="round"/>'; return s; }
 function ksw(inner,i){ return '<g class="an-sway" style="animation-duration:'+(2.6+(i%4)*.5).toFixed(1)+'s;animation-delay:-'+((i*.83)%3).toFixed(2)+'s">'+inner+'</g>'; }
 function kfish(x,y,d){
@@ -3354,7 +3375,7 @@ function kingdomSvg(){
   s+=kfish(37,148,-3)+kfish(322,336,-7.5);
   s+='<ellipse cx="'+KCX+'" cy="'+KCY+'" rx="'+KRX+'" ry="'+KRY+'" fill="#C9E5A6"/>';
   s+='<ellipse cx="'+KCX+'" cy="'+(KCY+16)+'" rx="46" ry="30" fill="#BBDC95"/>';
-  [pine(52,236,.5),pine(308,236,.5),mBush(128,352,.7),mBush(236,354,.6),mBush(150,196,.5),mBush(212,196,.5)].forEach(function(d,j){ s+=ksw(d,j+10); });
+  [pine(54,212,.5),pine(306,210,.5),mBush(128,352,.7),mBush(236,354,.6),mBush(128,208,.5),mBush(234,210,.5)].forEach(function(d,j){ s+=ksw(d,j+10); });
   s+=wallRing(KCX,KCY,KRX,KRY,st,wp,12);
   if(st==='done'){
     s+='<path d="M158,'+(KCY+KRY+10)+' L158,'+(KCY+KRY+34)+' M202,'+(KCY+KRY+10)+' L202,'+(KCY+KRY+34)+'" stroke="'+OL+'" stroke-width="9" stroke-linecap="round"/><path d="M158,'+(KCY+KRY+10)+' L158,'+(KCY+KRY+34)+' M202,'+(KCY+KRY+10)+' L202,'+(KCY+KRY+34)+'" stroke="#B9783A" stroke-width="4" stroke-linecap="round"/>';
@@ -3416,7 +3437,7 @@ function mapTimeWeek(){
   return h+'</div>';
 }
 function kingdomMapView(){
-  var h=matBarHtml()+'<div class="phrow tab" style="margin-top:14px"><h1 class="ph">몸짱 왕국</h1><span class="phsub">모험으로 되살리는 곳</span></div>';
+  var h=matBarHtml()+'<div class="phrow tab" style="margin-top:14px"><h1 class="ph">몸짱왕국</h1><span class="phsub">모험으로 되살리는 곳</span></div>';
   var btn=''; ['castle','train','forge','inn','guild','trade','wall'].forEach(function(id){ btn+=kBuildBtn(id); });
   h+='<div class="gmap kmap">'+kingdomSvg()+mapTime()+mapWeather()+btn+'</div>';
   h+='<p class="note">건물이나 성벽을 누르면 건물 화면으로 들어가요. 평일 퀘스트와 토벌로 얻은 자재는 모험이 종료된 날부터 쌓여요.</p>';
@@ -3451,12 +3472,12 @@ function trainPanel(){
   h+='<section class="weekq '+(wi.total>=SAT_GOAL?'ok':'')+'"><div class="wq-top"><p class="wq-k">이번 주 월~금 누적</p><span class="wq-range">훈련 XP 포함</span></div>'+
      '<div class="wq-xp"><span>퀘스트 '+wi.q+' + 훈련 '+wi.g+'</span><b>'+wi.total+' <small>/ '+SAT_GOAL+'</small></b></div>'+
      '<div class="wq-bar"><i class="cur" style="width:'+Math.min(100,Math.round(wi.total*100/SAT_GOAL))+'%"></i></div>'+
-     '<p class="wq-sub">'+(wi.raw>wi.g?'합계가 '+SAT_GOAL+'을 넘은 '+(wi.raw-wi.g)+' XP는 기록만 남았어요. ':'')+
+     '<p class="wq-sub">'+(wi.raw>wi.g?'합계가 '+SAT_GOAL+'을 넘은 '+(wi.raw-wi.g)+' XP는 기록만 남았어요. ':'')+
      (!open?'일요일은 회복의 신전에서 쉬는 날이에요. 훈련장은 월~토에 열려요.':(earn?'오늘 한 훈련은 XP로 인정돼요 (세트 '+XP_SET+', 러닝 '+XP_RUN+').':'마왕성 판정이 끝나서 오늘 훈련은 기록만 남아요.'))+'</p></section>';
   if(!open) return h;
   var lh=trLast();
   if(lh) h+='<div class="trundo"><button type="button" class="ghost" data-a="trundo">↶ 마지막 훈련 취소</button><small>'+lh.name+' 1'+lh.unit+' 기록을 지워요</small></div>';
-  h+='<div class="q"><div class="trrow"><div class="trn"><b>자유 러닝</b><small>'+(te.run?'오늘 '+te.run+'회 · ':'')+'한 번 뛸 때마다 눌러요'+(earn?' (회당 '+XP_RUN+' XP)':'')+'</small></div><button type="button" class="trgo" data-a="trrun" aria-label="자유 러닝 훈련 기록">훈련</button></div></div>';
+  h+='<div class="q"><div class="trrow"><div class="trn"><b>자유 러닝</b><small>'+(te.run?'오늘 '+te.run+'회 · ':'')+'한 번 뛸 때마다 눌러요'+(earn?' (회당 '+XP_RUN+' XP)':'')+'</small></div><button type="button" class="trgo" data-a="trrun" aria-label="자유 러닝 훈련 기록">훈련</button></div></div>';
   TGR.forEach(function(g,gi){
     var on=!!trOpen[gi], cnt=0;
     g.ids.forEach(function(id){ cnt+=(te.sets[id]||0); });
@@ -3471,7 +3492,7 @@ function trainPanel(){
     }
     h+='</div>';
   });
-  h+='<p class="note">훈련장 운동은 건축 자재를 주지 않아요. 합계가 '+SAT_GOAL+' XP를 넘는 부분은 XP 없이 기록만 남아요.</p>';
+  h+='<p class="note">훈련장 운동은 건축 자재를 주지 않아요. 합계가 '+SAT_GOAL+' XP를 넘는 부분은 XP 없이 기록만 남아요.</p>';
   return h;
 }
 function viewKingdom(){
@@ -4061,23 +4082,25 @@ function scnTrade(){
 var GUILD={
   name:'길드 접수원', nick:'세라',
   say:{
+    down:function(g){ return g.streak===0?'용사님, 오리하르콘으로 내려오셨지만 아직 끝이 아니에요. 지난 마왕전은 잊고, 내려온 다음 주부터 마왕을 연속 '+ADA_NEED+'주 쓰러뜨리면 아다만타이트 재시험 자격이 열려요. 천천히 다시 올라가요!':'조금씩 되찾고 계세요, 용사님! 연속 '+g.streak+'주 쓰러뜨리셨고, 재시험 자격까지 '+g.left+'주 남았어요. 한 주를 놓치면 처음부터 다시 세지만, 포기하지만 않으면 돼요.'; },
     short:function(g){ return '어서 오세요, 용사님! 길드 접수원 세라예요. 다음은 '+g.nx.n+' 승급인데, 마왕 토벌 승리가 '+g.left+'승 더 필요해요. 조건이 차면 그때 시험을 안내해 드릴게요!'; },
-    ready:function(g){ return '승급 시험 조건을 모두 채우셨네요, 축하해요! '+g.nx.n+' 시험을 보시겠어요? 오늘 몸 상태는 어떠세요? 통증이 있으면 무리하지 말고 쉬어 가세요.'; },
+    ready:function(g){ if(g.back) return '재시험 자격이 열렸어요, 용사님! 마왕을 '+ADA_NEED+'주 연속으로 쓰러뜨리다니 정말 대단해요. 아다만타이트 복귀 시험을 보시겠어요? 오늘 몸 상태는 어떠세요? 통증이 있으면 무리하지 말고 쉬어 가세요.'; return '승급 시험 조건을 모두 채우셨네요, 축하해요! '+g.nx.n+' 시험을 보시겠어요? 오늘 몸 상태는 어떠세요? 통증이 있으면 무리하지 말고 쉬어 가세요.'; },
     resume:function(){ return '아까 적던 시험 기록이 남아 있어요. 이어서 하시겠어요?'; },
-    pass:function(){ return '합격 축하드려요, 용사님! 다음 승급 시험은 내일부터 볼 수 있어요.'; },
-    fail:function(){ return '이번에는 합격선에 아쉽게 닿지 못했어요. 괜찮아요, 다음 응시는 내일부터예요. 내일 다시 오세요!'; },
+    pass:function(g){ if(g&&g.ada&&g.back) return '복귀를 축하드려요, 용사님! 아다만타이트 자리가 다시 용사님을 맞이하네요. 길드 모두가 기뻐하고 있어요!'; if(g&&g.ada) return '아다만타이트 합격이라니... 길드 최고 등급이에요, 축하드려요 용사님! 마왕전에서 지면 내려가는 자리니, 꾸준히 지켜 주세요.'; return '합격 축하드려요, 용사님! 다음 승급 시험은 내일부터 볼 수 있어요.'; },
+    fail:function(g){ if(g&&g.ada&&g.back) return '이번에는 합격선에 아쉽게 닿지 못했어요. 괜찮아요, 재시험 자격은 그대로예요. 내일 다시 오세요!'; return '이번에는 합격선에 아쉽게 닿지 못했어요. 괜찮아요, 다음 응시는 내일부터예요. 내일 다시 오세요!'; },
     ended:function(){ return '오늘은 접수가 끝났어요. 모험을 마친 날에는 시험을 볼 수 없거든요. 내일 오세요!'; },
-    max:function(){ return '아다만타이트라니… 길드 최고 등급이에요! 이 자리를 지키는 건 꾸준한 용사님만의 특권이에요.'; }
+    max:function(){ return '아다만타이트라니... 길드 최고 등급이에요! 마왕전에서 지면 오리하르콘으로 내려가는 자리라서, 이 자리를 지키는 건 꾸준한 용사님만의 특권이에요.'; }
   }
 };
 function guildState(){
-  var ri=rkCur(), nx=RANKS[ri+1], wins=rkWins(), k=fmt(TODAY), rec=exRec(k), sv;
-  if(rec) return {s:'done',pass:!!rec.p};
+  var ri=rkCur(), nx=RANKS[ri+1], wins=rkWins(), k=fmt(TODAY), rec=exRec(k), sv, ad=rkAda();
+  if(rec) return {s:'done',pass:!!rec.p,ada:rec.r==='ada',back:(rec.r==='ada'&&!!S.rk&&!!S.rk.ada&&S.rk.ada<k)};
   if(!nx) return {s:'max'};
-  if(wins<nx.w) return {s:'short',nx:nx,left:nx.w-wins};
+  if(ad.st==='down') return {s:'down',streak:ad.streak,left:ADA_NEED-ad.streak};
+  if(ad.st!=='elig' && wins<nx.w) return {s:'short',nx:nx,left:nx.w-wins};
   if(isEnded(k)) return {s:'ended'};
   sv=exSaved(ri+1);
-  return {s:(sv&&sv.go)?'resume':'ready',nx:nx};
+  return {s:(sv&&sv.go)?'resume':'ready',nx:nx,back:ad.st==='elig'};
 }
 function guildLine(){
   var g=guildState(), f;
@@ -4086,15 +4109,16 @@ function guildLine(){
 }
 function guildPanel(){
   var g=guildState(), ri=rkCur(), lvn=lvInfo(totalXP()).L, wins=rkWins(), k=fmt(TODAY), h, set, tt;
-  h='<div class="card" style="padding:12px 16px 14px"><div class="rk-nx" style="margin:0 0 8px"><div class="rk-mini">'+rkBadge(ri,lvn,true)+'</div><div class="rk-info"><b>'+RANKS[ri].n+'</b><span>마왕 토벌 승리 '+wins+'승'+(RANKS[ri+1]?' · 다음 '+RANKS[ri+1].n+' '+RANKS[ri+1].w+'승':'')+'</span></div></div>';
+  h='<div class="card" style="padding:12px 16px 14px"><div class="rk-nx" style="margin:0 0 8px"><div class="rk-mini">'+rkBadge(ri,lvn,true)+'</div><div class="rk-info"><b>'+RANKS[ri].n+'</b><span>마왕 토벌 승리 '+wins+'승'+(g.s==='down'?' · 복귀까지 연속 '+g.streak+'/'+ADA_NEED+'주':(RANKS[ri+1]?' · 다음 '+RANKS[ri+1].n+(g.back?' 복귀 시험':' '+RANKS[ri+1].w+'승'):''))+'</span></div></div>';
   if(g.s==='ready' || g.s==='resume'){
     set=exSetOf(diffOn(k),g.nx?rkCur()+1:1); tt=[];
     set.items.forEach(function(it){ tt.push(it.n+' '+it.line+(it.t==='r'?'회':'초')); });
     tt.push(set.run.km+'km '+exDur(set.run.sec)+' 이내');
-    h+='<p class="note" style="margin:0 0 4px"><b>오늘의 시험 · '+RANKS[rkCur()].n+' → '+g.nx.n+'</b></p><p class="note" style="margin:0 0 8px">'+tt.join(' · ')+'</p>';
+    h+='<p class="note" style="margin:0 0 4px"><b>오늘의 시험 · '+RANKS[rkCur()].n+' → '+g.nx.n+(g.back?' (복귀)':'')+'</b></p><p class="note" style="margin:0 0 8px">'+tt.join(' · ')+'</p>';
     h+='<p class="note" style="margin:0 0 4px">시험은 하루에 한 번이에요. 통증이 있거나 몸이 좋지 않으면 응시하지 말고 쉬세요.</p>';
     h+='<button type="button" class="primary" data-g="open">'+(g.s==='resume'?'이어서 하기':'시험 보기')+'</button><button type="button" class="ghost big" data-g="ok" style="width:100%;margin-top:8px">다음에 올게요</button>';
   }else{
+    if(g.s==='down'){ h+='<div class="xpbar" role="progressbar" aria-label="복귀 조건 진행" aria-valuemin="0" aria-valuemax="'+ADA_NEED+'" aria-valuenow="'+g.streak+'"><i style="width:'+Math.round(g.streak*100/ADA_NEED)+'%"></i></div><div class="xpt" style="margin-bottom:6px"><span>연속 '+g.streak+' / '+ADA_NEED+'주</span><span>남은 '+g.left+'주</span></div>'; }
     h+='<button type="button" class="ghost big" data-g="ok" style="width:100%;margin-top:4px">알겠어요</button>';
   }
   return h+'</div>';
@@ -4173,7 +4197,7 @@ var NPCS={
     ctxW:{
       clear:['오늘은 하늘이 맑아서 러닝하기 딱 좋겠어요!'],
       cloudy:['구름이 잔뜩 꼈네요. 선선해서 달리기엔 오히려 좋을지도요.'],
-      rain:['오늘은 비가 오니 임무에 조심하세요. 길이 미끄러워요!','비 오는 날엔 따뜻한 차 한 잔이 최고예요. 나가기 전에 한 잔 어때요?'],
+      rain:['오늘은 비가 오니 나갈 때 조심하세요. 길이 미끄러워요!','비 오는 날엔 따뜻한 차 한 잔이 최고예요. 나가기 전에 한 잔 어때요?'],
       storm:['천둥번개가 치네요! 오늘은 밖에 나가지 말고 집에서 홈트를 하는 게 좋겠어요.'],
       snow:['눈이 내려요! 따뜻하게 입고 나가세요. 길이 미끄러울 수 있어요.'],
       fog:['안개가 자욱해요. 달리기는 앞을 잘 보고 조심하세요.']}},
@@ -4228,7 +4252,7 @@ function npcQLines(id){
       if(q.win) o.push('마왕을 쓰러뜨렸다고요?! 여관 사람들이 모두 환호하고 있어요!','마왕 토벌 축하드려요, 용사님! 오늘은 제가 크게 한턱 낼게요.');
       else if(q.lose) o.push('마왕성에서 아쉽게 졌지만, 용사님은 분명 더 강해지고 있어요. 푹 쉬고 다시 도전해요.');
       else if(q.wk>=q.goal) o.push('이번 주 평일 누적이 목표를 넘겼네요! 마왕을 만날 준비는 끝났어요.','오늘은 마왕과 싸우는 날이죠? 준비는 완벽해 보여요!');
-      else o.push('오늘은 마왕과 싸우는 날인데, 평일 누적이 '+q.wk+' / '+q.goal+' XP예요. 훈련장에서 더 채울 수 있다던데요?');
+      else o.push('오늘은 마왕과 싸우는 날인데, 평일 누적이 '+q.wk+' / '+q.goal+' XP예요. 훈련장에서 더 채울 수 있다던데요?');
     }else{
       if(q.done) o.push('오늘 퀘스트를 다 끝내셨네요! 정말 대단해요. 오늘은 푹 쉬어도 좋아요.','퀘스트 완료! 따뜻한 수프는 제가 쏠게요.','역시 용사님! 오늘도 해내셨군요.');
       else if(q.none) o.push('오늘의 퀘스트는 아직 시작 전이네요. 가볍게 몸부터 풀어 볼까요?','오늘 퀘스트가 기다리고 있어요. 첫 세트만 해 보면 금방 탄력이 붙어요!');
@@ -4240,12 +4264,12 @@ function npcQLines(id){
       if(q.win) o.push('마왕을 쓰러뜨렸다고? 내 제자답군! 오늘은 푹 쉬어라.');
       else if(q.lose) o.push('졌다고 고개 숙이지 마라. 다음에 이기면 된다!');
       else if(q.wk>=q.goal) o.push('평일 누적이 충분하군. 마왕성에서 당당히 싸워라!');
-      else o.push('마왕성 자격까지 '+(q.goal-q.wk)+' XP가 부족하다. 지금이라도 여기서 채워라!');
+      else o.push('마왕성 자격까지 '+(q.goal-q.wk)+' XP가 부족하다. 지금이라도 여기서 채워라!');
     }else{
       if(q.done) o.push('오늘 퀘스트를 마쳤군, 훌륭하다! 이제 추가 훈련으로 한계를 넘어 보자.');
       else if(q.none) o.push('오늘 퀘스트부터 끝내고 오는 게 순서다! 추가 훈련은 그다음이다.');
       else o.push('퀘스트가 '+q.left+'개 남았군. 마저 끝내고 단련하러 오게.');
-      o.push(q.wk>=q.goal?'이번 주 목표는 이미 채웠군. 이제부터는 기록만 남지만, 근육은 정직하다!':'마왕성 자격까지 '+(q.goal-q.wk)+' XP 남았다. 지금 채워 두게!');
+      o.push(q.wk>=q.goal?'이번 주 목표는 이미 채웠군. 이제부터는 기록만 남지만, 근육은 정직하다!':'마왕성 자격까지 '+(q.goal-q.wk)+' XP 남았다. 지금 채워 두게!');
     }
   }else if(id==='trade'){
     var fs=forgeStats(), b=fs.bal;
@@ -4467,8 +4491,8 @@ function trainAfter(before,adding){
   if(a.lv>before.lv){
     showOverlay({k:'LEVEL UP',t:'Lv.'+a.lv+' 달성!',b:'<p class="lvup">Lv.'+before.lv+' → <b>Lv.'+a.lv+'</b> · '+titleOf(a.lv)+'</p>'+xpBarHtml(),mode:'win'});
   }else if(newAch.length){ toast('업적 해금 · '+a.ach[newAch[0]]); }
-  else if(gain>0){ toast('+'+gain+' XP'); }
-  else if(gain<0){ toast(gain+' XP'); }
+  else if(gain>0){ toast('+'+gain+' XP'); }
+  else if(gain<0){ toast(gain+' XP'); }
   else if(adding){ toast('기록만 남았어요 · XP는 없어요'); }
 }
 function bldDone(id){
@@ -4813,7 +4837,7 @@ var app = document.getElementById('app');
 function rewChip(x,done){
   if(done) return '<span class="rew ok">CLEAR</span>';
   if(x===0) return '<span class="rew none">XP 없음</span>';
-  return '<span class="rew">+'+x+' XP</span>';
+  return '<span class="rew">+'+x+' XP</span>';
 }
 function check(on,label,sub,act,extra,dis,rew){
   return '<button type="button" class="row" aria-pressed="'+(on?'true':'false')+'" data-a="'+act+'" '+extra+(dis?' disabled':'')+'>'+
@@ -4990,30 +5014,57 @@ return '<svg viewBox="'+(sm?'37 4 76 94':'0 0 150 124')+'" width="100%" style="m
 var RANKS=[{id:'unr',n:'언랭크',w:0},{id:'cop',n:'카퍼',w:1},{id:'iro',n:'아이언',w:3},{id:'bro',n:'브론즈',w:6},{id:'sil',n:'실버',w:9},{id:'gol',n:'골드',w:13},{id:'pla',n:'플래티넘',w:18},{id:'mit',n:'미스릴',w:24},{id:'ori',n:'오리하르콘',w:31},{id:'ada',n:'아다만타이트',w:40}];
 var RKIDS={}; RANKS.forEach(function(r){ RKIDS[r.id]=true; });
 function rkIdx(id){ var i; for(i=0;i<RANKS.length;i++){ if(RANKS[i].id===id) return i; } return -1; }
-function rkCur(){ var best=0, m=S.rk||{}; Object.keys(m).forEach(function(id){ var ix=rkIdx(id); if(ix>best) best=ix; }); return best; }
+function rkCur(){ var best=0, m=S.rk||{}; Object.keys(m).forEach(function(id){ var ix=rkIdx(id); if(ix>best) best=ix; }); if(best===9){ var a=rkAda(); if(a.st==='down'||a.st==='elig') return 8; } return best; }
+/* ---------- v1.44.7 아다만타이트 강등·복귀 (인수인계서 1-0 ⑥ 12번) ----------
+   새 저장 항목은 없어요. S.rk.ada(처음 승급한 날짜)·S.ex(복귀 시험 합격 기록, r:'ada' p:1)·마왕전 승패(dayResult)에서 매번 계산해요.
+   st: none(아다만타이트에 오른 적 없음) / on(아다만타이트) / down(강등, 연속 승리를 쌓는 중) / elig(재응시 자격이 열림, 합격할 때까지 유지). */
+var ADA_NEED=4;
+function rkAda(){
+  var d1=S.rk&&S.rk.ada; if(!d1) return {st:'none',streak:0};
+  var ex=S.ex||{}, passes=[], pi=0, st='on', streak=0, down=null, since=d1, d=parse(d1), end=fmt(TODAY), k, r;
+  Object.keys(ex).forEach(function(x){ var e=ex[x]; if(e&&e.r==='ada'&&e.p&&x>d1) passes.push(x); });
+  passes.sort();
+  for(; (k=fmt(d))<=end; d=addDays(d,1)){
+    if(DK[d.getDay()]==='sat'){
+      r=dayResult(d);
+      if(r){
+        if(st==='on'){ if(r.res==='lose'){ st='down'; streak=0; down=k; } }
+        else if(st==='down'){ if(r.res==='win'){ streak++; if(streak>=ADA_NEED) st='elig'; } else if(r.res==='lose'){ streak=0; } }
+      }
+    }
+    while(pi<passes.length && passes[pi]===k){ if(st==='elig'){ st='on'; streak=0; down=null; since=k; } pi++; }
+  }
+  return {st:st,streak:streak,down:down,since:since};
+}
 function rkWins(){ var n=0; Object.keys(S.log).forEach(function(k){ var d=parse(k); if(DK[d.getDay()]==='sat'){ var r=dayResult(d); if(r && r.res==='win') n++; } }); return n; }
 
 var rankFrom='today';
 function viewRank(){
-  var ri=rkCur(), cur=RANKS[ri], nx=RANKS[ri+1]||null, wins=rkWins(), lvn=lvInfo(totalXP()).L, i, h;
+  var ri=rkCur(), cur=RANKS[ri], nx=RANKS[ri+1]||null, wins=rkWins(), lvn=lvInfo(totalXP()).L, i, h, ad=rkAda(), dn=(ad.st==='down'||ad.st==='elig'), el=(ad.st==='elig');
   h='<div style="display:flex;align-items:center;min-height:36px;margin:0 0 4px"><button type="button" class="kback" data-a="rankback" style="margin:0">‹ 돌아가기</button></div>'+
     '<div class="phrow tab"><h1 class="ph">랭크</h1><span class="phsub">마왕을 쓰러뜨려 올리는 모험가 등급</span></div>'+
     '<div class="card rk-hero"><div class="rk-big">'+rkBadge(ri,lvn,false)+'</div><p class="rk-name">'+cur.n+'</p><p class="rk-sub">누적 마왕 토벌 승리 <b>'+wins+'</b>승</p></div>';
   h+='<h2>다음 승급</h2><div class="card" style="padding:14px 16px 16px">';
-  if(nx){
+  if(nx && dn){
+    var n4=Math.min(ad.streak,ADA_NEED);
+    h+='<div class="rk-nx"><div class="rk-mini">'+rkBadge(9,lvn,true)+'</div><div class="rk-info"><b>아다만타이트 복귀</b><span>'+(el?'재응시 자격을 얻었어요. 길드에서 승급 시험에 합격하면 돌아가요':'마왕전에서 져서 내려왔어요. 내려온 다음 주부터 연속 '+ADA_NEED+'주 마왕을 쓰러뜨리면 길드에서 다시 시험을 볼 수 있어요')+'</span></div></div>'+
+      '<div class="xpbar" role="progressbar" aria-label="복귀 조건 진행" aria-valuemin="0" aria-valuemax="'+ADA_NEED+'" aria-valuenow="'+n4+'"><i style="width:'+Math.round((el?ADA_NEED:n4)*100/ADA_NEED)+'%"></i></div>'+
+      '<div class="xpt"><span>연속 '+(el?ADA_NEED:n4)+' / '+ADA_NEED+'주</span><span>'+(el?'재응시 자격을 얻었어요':'남은 '+(ADA_NEED-n4)+'주')+'</span></div>'+
+      '<button type="button" class="primary" data-a="goguild" style="margin-top:12px"'+(el?'':' disabled')+'>길드로 승급시험 보러가기</button>'+(el?'<p class="note" style="margin:8px 2px 0">자격을 얻었어요. 왕국의 길드 접수원에게 말을 걸어 보세요.</p>':'<p class="note" style="margin:8px 2px 0">한 주라도 마왕전에서 지면 연속 기록이 0으로 돌아가요. 자격은 한 번 얻으면 시험에 합격할 때까지 그대로예요.</p>');
+  }else if(nx){
     var pct=Math.min(100,Math.round(wins*100/nx.w)), ok=(wins>=nx.w);
     h+='<div class="rk-nx"><div class="rk-mini">'+rkBadge(ri+1,lvn,true)+'</div><div class="rk-info"><b>'+nx.n+'</b><span>마왕 토벌 승리 '+nx.w+'승이 되면 길드에서 승급 시험을 볼 수 있어요</span></div></div>'+
       '<div class="xpbar" role="progressbar" aria-label="승급 조건 진행" aria-valuemin="0" aria-valuemax="'+nx.w+'" aria-valuenow="'+Math.min(wins,nx.w)+'"><i style="width:'+pct+'%"></i></div>'+
       '<div class="xpt"><span>'+Math.min(wins,nx.w)+' / '+nx.w+'승</span><span>'+(ok?'응시 조건을 채웠어요':'남은 승리 '+(nx.w-wins)+'승')+'</span></div>'+
       '<button type="button" class="primary" data-a="goguild" style="margin-top:12px"'+(ok?'':' disabled')+'>길드로 승급시험 보러가기</button>'+(ok?'<p class="note" style="margin:8px 2px 0">조건을 채웠어요. 왕국의 길드 접수원에게 말을 걸어 보세요.</p>':'');
   }else{
-    h+='<p style="margin:0;font-family:var(--disp);font-size:20px">가장 높은 랭크예요</p><p class="note" style="margin:4px 2px 0">더 오를 곳은 없지만, 이 자리를 지키는 건 꾸준한 용사만의 특권이에요.</p>';
+    h+='<p style="margin:0;font-family:var(--disp);font-size:20px">가장 높은 랭크예요</p><p class="note" style="margin:4px 2px 0">더 오를 곳은 없지만, 이 자리를 지키는 건 꾸준한 용사만의 특권이에요.</p><p class="note" style="margin:8px 2px 0">마왕전에서 지면 오리하르콘으로 내려가요. 다시 올라오려면 내려온 다음 주부터 연속 '+ADA_NEED+'주 마왕을 쓰러뜨리고, 길드에서 아다만타이트 시험에 다시 합격해야 해요.</p>';
   }
   h+='<p class="note" style="margin:10px 2px 0">마왕 토벌 승리는 토요일 마왕전에서 이긴 횟수예요. 난이도와 상관없이 세고, 시작하고 첫 7일 안의 연습전은 세지 않아요. 승급이 늦어져도 계속 쌓여요.</p></div>';
   h+='<h2>랭크 목록</h2><div class="card" style="padding:4px 16px">';
   for(i=0;i<RANKS.length;i++){
     var r=RANKS[i], cls=(i===ri)?' now':(i<ri?'':' lock'), tag='';
-    if(i===ri) tag='현재'; else if(i<ri) tag=((S.rk&&S.rk[r.id])?String(S.rk[r.id]).slice(5).replace('-','/'):'달성'); else if(i===ri+1 && wins>=r.w) tag='응시 조건 충족';
+    if(i===ri) tag='현재'; else if(i<ri) tag=((S.rk&&S.rk[r.id])?String(S.rk[r.id]).slice(5).replace('-','/'):'달성'); else if(i===ri+1){ if(dn) tag=(el?'재응시 자격':'강등 중'); else if(wins>=r.w) tag='응시 조건 충족'; }
     h+='<div class="rk-row'+cls+'"><div class="rk-mini">'+rkBadge(i,lvn,true)+'</div><div class="rk-info"><b>'+r.n+'</b><span>'+(r.w?('마왕 토벌 승리 '+r.w+'승 이상'):'승급 시험을 보기 전')+'</span></div>'+(tag?'<span class="rk-tag">'+tag+'</span>':'')+'</div>';
   }
   return h+'</div>';
@@ -5076,7 +5127,9 @@ function exRec(k){ return (S.ex&&S.ex[k])||null; }
 function exCan(){
   var ri=rkCur(), nx=RANKS[ri+1], k=fmt(TODAY);
   if(!nx) return {ok:false,why:'가장 높은 랭크예요.'};
-  if(rkWins()<nx.w) return {ok:false,why:'아직 응시 조건을 채우지 못했어요.'};
+  var ad=rkAda();
+  if(ad.st==='down') return {ok:false,why:'아다만타이트에서 내려온 상태예요. 연속 '+ADA_NEED+'주 마왕을 쓰러뜨리면 다시 응시할 수 있어요.'};
+  if(ad.st!=='elig' && rkWins()<nx.w) return {ok:false,why:'아직 응시 조건을 채우지 못했어요.'};
   if(exRec(k)) return {ok:false,done:true,why:'오늘은 이미 승급 시험을 봤어요. 다음 응시는 내일부터예요.'};
   if(isEnded(k)) return {ok:false,why:'오늘의 모험을 이미 마쳐서 오늘은 응시할 수 없어요. 내일 응시해 주세요.'};
   return {ok:true,t:ri+1};
@@ -5244,7 +5297,7 @@ function exSubmit(){
   sel=TODAY; var before=snap(), wasDone=isDone(TODAY), credit=(!sun && ev.half && !wasDone);
   if(!S.ex||typeof S.ex!=='object') S.ex={};
   S.ex[k]={r:RANKS[st.t].id,p:ev.pass?1:0,c:credit?1:0,d:st.d,v:[A.r[0].x,A.r[1].x,A.r[2].x,A.r[3].x]};
-  if(ev.pass){ if(!S.rk||typeof S.rk!=='object') S.rk={}; S.rk[RANKS[st.t].id]=k; }
+  if(ev.pass){ if(!S.rk||typeof S.rk!=='object') S.rk={}; if(!S.rk[RANKS[st.t].id]) S.rk[RANKS[st.t].id]=k; }
   if(credit){ var L=wr(k); idsFor(dk,k).forEach(function(id){ L.done[id]=true; }); L.fin=true; }
   save(); exDrop(); stopTimer();
   exRes={ev:ev,pass:ev.pass,credit:credit,wasDone:wasDone,sun:sun,before:before,t:st.t,from:from};
@@ -5291,7 +5344,7 @@ function hud(){
   return '<section class="hud" aria-label="내 레벨"><button type="button" class="rkb" data-a="rank" aria-label="'+RANKS[rkCur()].n+' 랭크 · 레벨 '+li.L+' · 눌러서 랭크 보기">'+rkBadge(rkCur(),li.L,2)+'</button>'+
     '<div class="hud-main"><div class="hud-top"><span class="ttl">'+titleOf(li.L)+'</span><span class="stk">연속 <b>'+streak()+'</b>일</span></div>'+
     '<div class="xpbar" role="progressbar" aria-label="경험치" aria-valuemin="0" aria-valuemax="'+li.need+'" aria-valuenow="'+li.cur+'"><i style="width:'+p+'%"></i></div>'+
-    '<div class="xpt"><span>'+li.cur+' / '+li.need+' XP</span><span>다음 레벨까지 '+(li.need-li.cur)+'</span></div></div></section>';
+    '<div class="xpt"><span>'+li.cur+' / '+li.need+' XP</span><span>다음 레벨까지 '+(li.need-li.cur)+'</span></div></div></section>';
 }
 
 /* ---------- 주간 퀘스트: 월~금 누적 XP로 이번 주 마왕성 도전 가능 여부 확인 ---------- */
@@ -5314,14 +5367,14 @@ function weeklyHtml(d){
   var tOpen=trainOpenWeek(d), tBuilt=trainBuilt();
   if(st!=='ok' && tOpen && tBuilt){ st='go'; need=Math.max(0,G-W.cur); }
   if(st==='ok'){
-    msg=sp?(G+' XP 달성 · 마왕성 도전 자격을 얻은 주였어요'):(W.allOver?(G+' XP 달성 · 마왕성에 도전할 수 있어요'):(G+' XP 달성! 토요일 마왕성에 도전할 수 있어요'));
+    msg=sp?(G+' XP 달성 · 마왕성 도전 자격을 얻은 주였어요'):(W.allOver?(G+' XP 달성 · 마왕성에 도전할 수 있어요'):(G+' XP 달성! 토요일 마왕성에 도전할 수 있어요'));
     sub=sp?'':'마왕성에서 이기려면 토요일 퀘스트도 모두 완료해야 해요.';
   }else if(st==='go'){
-    msg=need+' XP 더 필요해요';
-    sub=(tOpen&&tBuilt)?'남은 날의 퀘스트와 훈련장 운동으로 채울 수 있어요. 훈련장 XP도 월~금 누적에 더해져요.':'남은 날을 모두 채우면 최대 +'+(W.mx-W.cur)+' XP · 마왕성 도전이 가능해요.';
+    msg=need+' XP 더 필요해요';
+    sub=(tOpen&&tBuilt)?'남은 날의 퀘스트와 훈련장 운동으로 채울 수 있어요. 훈련장 XP도 월~금 누적에 더해져요.':'남은 날을 모두 채우면 최대 +'+(W.mx-W.cur)+' XP · 마왕성 도전이 가능해요.';
   }else{
-    msg=W.allOver?(W.cur+' XP로 '+G+' XP에 못 미'+(sp?'친 주였어요':'쳤어요')):('이번 주는 최대 '+W.mx+' XP라 마왕성 도전이 어려워요');
-    sub=W.allOver?(sp?'마왕의 저주로 마왕성에서 패배한 주였어요.':'마왕의 저주로 마왕성에서는 패배하는 주예요.'):'남은 날을 모두 채워도 '+G+' XP에 닿지 못해요.';
+    msg=W.allOver?(W.cur+' XP로 '+G+' XP에 못 미'+(sp?'친 주였어요':'쳤어요')):('이번 주는 최대 '+W.mx+' XP라 마왕성 도전이 어려워요');
+    sub=W.allOver?(sp?'마왕의 저주로 마왕성에서 패배한 주였어요.':'마왕의 저주로 마왕성에서는 패배하는 주예요.'):'남은 날을 모두 채워도 '+G+' XP에 닿지 못해요.';
     if(firstWeekFree(addDays(W.mon,5))) sub=(W.allOver?(sp?'시작한 첫 7일 안의 마왕전이라 마왕의 저주 없이 연습전으로 끝난 주였어요.':'시작한 첫 7일 안의 마왕전이라 마왕의 저주 없이 연습전으로 치러요.'):'시작한 첫 7일 안의 마왕전이라, 못 채워도 마왕의 저주는 없어요.');
     if(tOpen && !tBuilt) sub+=' 왕국에서 훈련장을 복구하면 XP를 보충할 수 있어요.';
   }
@@ -5339,7 +5392,7 @@ function viewToday(){
   var isToday=(k===fmt(TODAY)), ids=idsFor(dk,k), lock=isEnded(k), lockM=lock||!!L.fin, rs=dayResult(d), bossHtml='';
   if(p.circuit){
     bossHtml='<div class="bossrule">'+
-      '<p>'+SAT_GOAL+' XP 이상이면 마왕성에서 승리할 수 있어요 (+150 XP 보너스). 못 미치거나 오늘 메인 퀘스트와 러닝·걷기를 못 채우고 모험을 마치면 패배해요.'+(firstWeekFree(d)?' 시작한 첫 7일 안의 마왕전이라 XP가 모자라도 마왕의 저주는 없어요.':'')+'</p></div>';
+      '<p>'+SAT_GOAL+' XP 이상이면 마왕성에서 승리할 수 있어요 (+150 XP 보너스). 못 미치거나 오늘 메인 퀘스트와 러닝·걷기를 못 채우고 모험을 마치면 패배해요.'+(firstWeekFree(d)?' 시작한 첫 7일 안의 마왕전이라 XP가 모자라도 마왕의 저주는 없어요.':'')+'</p></div>';
   }
   var maxXp = 3*XP_MEAL+XP_CLEAR+(p.circuit?BOSS_WIN_XP:(p.rest?0:MID_XP)); ids.forEach(function(id){ maxXp+=xpOf(id,k); });
   var h='<p class="eyebrow">'+longDate(d)+(isToday?' · 오늘':'')+'</p>'+hud()+weeklyHtml(d);
@@ -5348,7 +5401,7 @@ function viewToday(){
     '<p class="qs">'+themeOf(dk,k)+' · <b>'+weekNo()+'주차</b> · '+stageText(st)+'</p></div></div>'+lmIcon(ORDER.indexOf(dk),!!(rs&&rs.res==='win'&&dk!=='sun'),!rs&&!lock&&k>=fmt(TODAY))+
     '<div class="segs" role="progressbar" aria-label="퀘스트 진행" aria-valuemin="0" aria-valuemax="'+c.total+'" aria-valuenow="'+c.done+'">'+
     ids.map(function(id){return '<i'+(L.done[id]?' class="on"':'')+'></i>';}).join('')+'</div>'+
-    '<div class="qm"><span><b>'+c.done+'</b> / '+c.total+' 완료</span><span>보상 최대 +'+maxXp+' XP</span></div>'+bossHtml+
+    '<div class="qm"><span><b>'+c.done+'</b> / '+c.total+' 완료</span><span>보상 최대 +'+maxXp+' XP</span></div>'+bossHtml+
     (rs?'<button type="button" class="ghost" style="margin-top:12px" data-a="result">결과 다시 보기</button>':'')+'</section>';
   var exr=exRec(k);
   if(exr && exr.c) h+='<p class="note" style="margin:10px 2px 0">오늘은 승급 시험('+RANKS[rkIdx(exr.r)].n+')에 응시해서 메인 퀘스트와 러닝이 완료로 인정됐고, 기록이 잠겼어요. 식단(사이드 퀘스트)은 오늘의 모험을 종료하기 전까지 계속 체크할 수 있어요.</p>';
@@ -5407,7 +5460,7 @@ function viewToday(){
   h+=check(out,'영주의 특별보급',(both&&!out)?'점심과 운동 후 식사를 모두 체크해서 잠겼어요':'아싸! 오늘은 연회다!','out','',lock||(both&&!out));
   h+='</div><p class="note">영주의 특별보급을 쓰면 점심·운동 후 식사 체크가 잠기고 경험치가 없어요. 특별보급 날에도 식사는 거르지 말고, 다음 날 굶어서 만회하지 않기.</p>';
   if(lock){
-    h+='<div class="endedbar"><b>'+(isToday?'오늘의 모험이 종료되었어요':'이 날의 모험은 종료되었어요')+'</b><span>'+(isToday||L.ended?'기록이 확정되어 더 이상 수정할 수 없어요':'지난 날짜는 자동으로 종료돼서 더 이상 수정할 수 없어요')+'</span></div>';
+    h+='<div class="endedbar"><b>'+(isToday?'오늘의 모험이 종료됐어요':'이 날의 모험은 종료됐어요')+'</b><span>'+(isToday||L.ended?'기록이 확정되어 더 이상 수정할 수 없어요':'지난 날짜는 자동으로 종료돼서 더 이상 수정할 수 없어요')+'</span></div>';
   }else{
     h+='<button type="button" class="endbtn" data-a="end">오늘의 모험 종료</button>';
   }
@@ -5504,7 +5557,7 @@ function bkParse(text){
   var trd2={}; ['a','b','c','d'].forEach(function(k6){ var v=(d.trade&&typeof d.trade==='object')?parseInt(d.trade[k6],10):0; trd2[k6]=(v>0)?Math.min(v,9999):0; });
   var crf2={}; if(d.crafted&&typeof d.crafted==='object') Object.keys(d.crafted).forEach(function(id){ if(d.crafted[id]&&known[id]&&known[id].craft) crf2[id]=true; });
   var dl2={}; if(d.dl&&typeof d.dl==='object') Object.keys(d.dl).forEach(function(k7){ if(ok.test(k7)&&DIFF[d.dl[k7]]) dl2[k7]=d.dl[k7]; });
-  var bds2=null; if(d.bdSeen&&typeof d.bdSeen==='object'){ bds2={}; Object.keys(d.bdSeen).forEach(function(k8){ if(({today:1,boss:1,run:1,kingdom:1,forge:1,inn:1,train:1,trade:1,guild:1})[k8]&&d.bdSeen[k8]) bds2[k8]=(typeof d.bdSeen[k8]==='string'&&ok.test(d.bdSeen[k8]))?d.bdSeen[k8]:'2000-01-01'; }); }
+  var bds2=null; if(d.bdSeen&&typeof d.bdSeen==='object'){ bds2={}; Object.keys(d.bdSeen).forEach(function(k8){ if(({today:1,boss:1,run:1,kingdom:1,forge:1,inn:1,train:1,trade:1,guild:1,map:1,diary:1})[k8]&&d.bdSeen[k8]) bds2[k8]=(typeof d.bdSeen[k8]==='string'&&ok.test(d.bdSeen[k8]))?d.bdSeen[k8]:'2000-01-01'; }); }
   var rk2={}; if(d.rk&&typeof d.rk==='object') Object.keys(d.rk).forEach(function(k9){ if(RKIDS[k9]&&k9!=='unr'&&ok.test(d.rk[k9])) rk2[k9]=d.rk[k9]; });
   var ex2={}; if(d.ex&&typeof d.ex==='object') Object.keys(d.ex).forEach(function(k10){ var e=d.ex[k10]; if(!ok.test(k10)||!e||typeof e!=='object'||!RKIDS[e.r]||e.r==='unr') return; var o={r:e.r,p:e.p?1:0,c:e.c?1:0,d:DIFF[e.d]?e.d:'body',v:[]}, j; for(j=0;j<4;j++){ var n=e.v?parseFloat(e.v[j]):0; o.v.push((n>=0&&n<=EX_VMAX)?Math.round(n):0); } ex2[k10]=o; });
   var aat={}, akn=achKnown(); if(d.achAt&&typeof d.achAt==='object') Object.keys(d.achAt).forEach(function(k5){ if(akn[k5]&&ok.test(d.achAt[k5])) aat[k5]=d.achAt[k5]; });
@@ -5748,6 +5801,7 @@ function viewSettings(){
     '<div class="field"><label>루틴 시작일 (주차 계산 기준)<input type="date" id="startd" value="'+S.start+'"></label></div>'+
     '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost nw" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost nw" data-a="title-show">시작화면 보기</button></div>'+
     '<div class="bk-btns" style="margin:0 0 4px"><button type="button" class="ghost nw" data-a="exec-toggle" aria-pressed="'+(execOn()?'true':'false')+'">처형 컷씬 '+(execOn()?'켜짐':'꺼짐')+'</button></div><p class="note" style="margin:0 2px 12px">끄면 처형 컷씬 없이 토벌 완료 창이 떠요. 거기서 [확인]을 누르면 메인 퀘스트와 러닝 기록이 잠기고, [해치웠나?]를 누르면 마지막 체크가 취소돼요.</p>'+
+    '<div class="bk-btns" style="margin:0 0 4px"><button type="button" class="ghost nw" data-a="cheer-toggle" aria-pressed="'+(cheerOn()?'true':'false')+'">반디 응원 '+(cheerOn()?'켜짐':'꺼짐')+'</button></div><p class="note" style="margin:0 2px 12px">퀘스트를 체크하고 러닝을 기록할 때마다 반디가 옆에서 한마디씩 응원해요.</p>'+
     
     '<div class="bk-btns" style="margin:0 0 6px"><button type="button" class="ghost nw" data-a="wx-toggle" aria-pressed="'+(wxOn()?'true':'false')+'">날씨 반영 '+(wxOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost nw" data-a="wx-check"'+(wxOn()?'':' disabled')+'>지금 날씨 확인</button></div>'+
     '<p class="note" id="wxstat" style="margin:0 2px 12px">'+wxStatus()+'</p>'+
@@ -5916,7 +5970,7 @@ function showOverlay(o){
 }
 function xpBarHtml(){
   var li=lvInfo(totalXP());
-  return '<div class="xpbar big" aria-hidden="true"><i style="width:'+Math.round(li.cur*100/li.need)+'%"></i></div><p class="xpt2">Lv.'+li.L+' · '+li.cur+' / '+li.need+' XP</p>';
+  return '<div class="xpbar big" aria-hidden="true"><i style="width:'+Math.round(li.cur*100/li.need)+'%"></i></div><p class="xpt2">Lv.'+li.L+' · '+li.cur+' / '+li.need+' XP</p>';
 }
 
 /* 행동 후 보상 처리 */
@@ -5937,7 +5991,7 @@ function afterAction(before,k){
       b+=rp.b; kk=rp.k; tt=rp.t; mode=rp.mode;
     }else if(justClear){ kk='TEMPLE CLEAR'; tt=QN[dk]+' 클리어!'; }
     else{ kk='LEVEL UP'; tt='Lv.'+a.lv+' 달성!'; }
-    if(justClear) b+='<p class="lab">오늘 획득</p><p class="bigxp">+'+dayXP(k)+' XP</p>';
+    if(justClear) b+='<p class="lab">오늘 획득</p><p class="bigxp">+'+dayXP(k)+' XP</p>';
     if(lvUp) b+='<p class="lvup">Lv.'+before.lv+' → <b>Lv.'+a.lv+'</b> · '+titleOf(a.lv)+'</p>';
     newAch.forEach(function(x){b+='<p class="achl">업적 해금 · '+x.n+'</p>';});
     b+=xpBarHtml();
@@ -5951,7 +6005,7 @@ function afterAction(before,k){
       if(execOn()){
         goRes=function(){ EXEC.flow(curChar(),BKEY[ORDER.indexOf(dk)],function(){ showRes(); exFlush(); },exUndo,exCommit); };
       }else{
-        goRes=function(){ showOverlay({k:kk,t:tt,b:b+'<p class="bnote" style="margin-top:8px">확인 버튼을 누르면 오늘의 퀘스트가 확정됩니다.</p>',mode:mode,confirm:function(){ exCommit(); exFlush(); },undo:exUndo}); };
+        goRes=function(){ showOverlay({k:kk,t:tt,b:b+'<p class="bnote" style="margin-top:8px">확인 버튼을 누르면 오늘의 퀘스트가 확정돼요.</p>',mode:mode,confirm:function(){ exCommit(); exFlush(); },undo:exUndo}); };
       }
     }
     if(dl>0){ setTimeout(goRes,dl); }
@@ -5960,7 +6014,7 @@ function afterAction(before,k){
   }else if(newAch.length){
     toast('업적 해금 · '+newAch[0].n);
   }else if(gain>0){
-    toast('+'+gain+' XP');
+    toast('+'+gain+' XP');
   }
 }
 function endAdventure(){
@@ -6052,6 +6106,7 @@ app.addEventListener('click',function(e){
     if(on && !fin && !t.getAttribute('data-one')) startTimer(60);
     if(!on || fin) stopTimer();
     afterAction(before,k);
+    if(on) cheerSay(cheerKindSet(k,id,hp0),k,before,sel);
   }else if(a==='altopen'){
     altOpen[k]=!altOpen[k]; render();
   }else if(a==='altwhy'){
@@ -6059,7 +6114,7 @@ app.addEventListener('click',function(e){
     altSel[k]=(altSel[k]===wid)?null:wid; render();
   }else if(a==='alt'){
     var as=altState(k); if(!as) return;
-    before=snap(); L=wr(k); var hpa=bossHp(sel); actMark('alt',k);
+    before=snap(); L=wr(k); var hpa=bossHp(sel); actMark('alt',k); var wasAlt=!!L.alt;
     if(L.alt){ delete L.alt; delete L.altr; if(!(L.km>=runMinOn(k))) delete L.done.run; }
     else{
       if(!as.can) return;
@@ -6070,14 +6125,14 @@ app.addEventListener('click',function(e){
       else return;
       L.alt=akind; if(awhy) L.altr=awhy; L.done.run=true;
     }
-    save(); render(); pop('[data-a="alt"]'); btDelay=battleHit(sel,hpa,bossHp(sel),runXpOn(k)); afterAction(before,k);
+    save(); render(); pop('[data-a="alt"]'); btDelay=battleHit(sel,hpa,bossHp(sel),runXpOn(k)); afterAction(before,k); if(!wasAlt && L.alt) cheerSay('alt',k,before,sel);
   }else if(a==='diffpick'){
     pickDiff(t.getAttribute('data-id'),false);
   }else if(a==='run'){
     if(DK[sel.getDay()]!=='sun') return;
-    before=snap(); L=wr(k); var hpr=bossHp(sel); L.done.run=!L.done.run; save(); render(); pop('[data-a="run"]'); btDelay=battleHit(sel,hpr,bossHp(sel),XP_RUN); afterAction(before,k);
+    before=snap(); L=wr(k); var hpr=bossHp(sel); L.done.run=!L.done.run; save(); render(); pop('[data-a="run"]'); btDelay=battleHit(sel,hpr,bossHp(sel),XP_RUN); afterAction(before,k); if(L.done.run) cheerSay('sun',k,before,sel);
   }else if(a==='diet'){
-    before=snap(); L=wr(k); var dkey=t.getAttribute('data-k'); L.diet[dkey]=!L.diet[dkey]; save(); render(); pop('[data-k="'+dkey+'"]'); afterAction(before,k);
+    before=snap(); L=wr(k); var dkey=t.getAttribute('data-k'); L.diet[dkey]=!L.diet[dkey]; save(); render(); pop('[data-k="'+dkey+'"]'); afterAction(before,k); if(L.diet[dkey]) cheerSay(dkey,k,before,sel);
   }else if(a==='out'){
     before=snap(); L=wr(k); L.out=!L.out; save(); render(); afterAction(before,k);
   }else if(a.indexOf('bk-')===0){
@@ -6085,13 +6140,15 @@ app.addEventListener('click',function(e){
   }else if(a.indexOf('cl-')===0){
     cloudAction(a);
   }else if(a==='end'){
-    askOpen({title:'오늘의 모험을 마치겠습니까?',note:(DK[sel.getDay()]==='sun'&&!isDone(sel))?'스트레칭 퀘스트를 모두 마치지 못해서, 지금 종료하면 몸짱신의 가호와 휴식 의상을 받을 수 없어요. 종료하면 기록이 확정되고 더 이상 수정할 수 없어요.':'종료하면 오늘의 기록이 확정되고, 더 이상 수정할 수 없어요.',yes:'예',no:'아니오',act:endAdventure});
+    askOpen({title:'오늘의 모험을 마칠까요?',note:(DK[sel.getDay()]==='sun'&&!isDone(sel))?'스트레칭 퀘스트를 모두 마치지 못해서, 지금 종료하면 몸짱신의 가호를 받을 수 없어요. 종료하면 기록이 확정되고 더 이상 수정할 수 없어요.':'종료하면 오늘의 기록이 확정되고, 더 이상 수정할 수 없어요.',yes:'예',no:'아니요',act:endAdventure});
   }else if(a==='result'){
     var rr=dayResult(sel); if(rr){ showOverlay(resultPopup(sel,rr)); }
   }else if(a==='title-toggle'){
     titleSet(!titleOn()); render(); toast(titleOn()?'앱을 켤 때 시작화면이 나와요':'시작화면을 건너뛰어요');
   }else if(a==='exec-toggle'){
     execSet(!execOn()); render(); toast(execOn()?'보스를 쓰러뜨리면 처형 컷씬이 나와요':'처형 컷씬 없이 토벌 완료 창만 떠요');
+  }else if(a==='cheer-toggle'){
+    cheerSet(!cheerOn()); render(); toast(cheerOn()?'반디가 옆에서 응원해요':'반디 응원을 껐어요');
   }else if(a==='bgm-toggle'){
     bgmSetOn(!bgmOn()); render();
     if(bgmOn()){ BGM.unlock().then(function(){ bgmSync(); }); }
@@ -6168,7 +6225,7 @@ app.addEventListener('click',function(e){
     if(trAdd(tid,1)){ kRefresh(); pop('.trgo[data-id="'+tid+'"]'); try{ if(navigator.vibrate) navigator.vibrate(18); }catch(e){} trainAfter(tb1,true); }
   }else if(a==='trundo'){
     var tb3=snap();
-    if(trUndo()){ kRefresh(); var g3=snap().xp-tb3.xp; toast('마지막 훈련을 취소했어요'+(g3?' · '+g3+' XP':'')); }
+    if(trUndo()){ kRefresh(); var g3=snap().xp-tb3.xp; toast('마지막 훈련을 취소했어요'+(g3?' · '+g3+' XP':'')); }
   }else if(a==='trrun'){
     var tb2=snap();
     if(trRun()){ kRefresh(); pop('.trgo[data-a="trrun"]'); try{ if(navigator.vibrate) navigator.vibrate(18); }catch(e){} trainAfter(tb2,true); }
@@ -6190,7 +6247,7 @@ app.addEventListener('click',function(e){
     var dd=t.getAttribute('data-d');
     S.body=S.body.filter(function(b){return b.date!==dd;}); save(); render();
   }else if(a==='reset'){
-    askOpen({title:'정말로 초기화 하시겠습니까?',note:'운동 기록, 체중 기록, 레벨, 장비가 모두 지워지고 되돌릴 수 없어요. 클라우드에 로그인한 상태라면 클라우드에 저장된 기록도 함께 비워져요. 필요하면 먼저 "백업 만들기"로 저장해 두세요.',yes:'초기화',no:'취소',danger:true,act:doReset});
+    askOpen({title:'정말 초기화할까요?',note:'운동 기록, 체중 기록, 레벨, 장비가 모두 지워지고 되돌릴 수 없어요. 클라우드에 로그인한 상태라면 클라우드에 저장된 기록도 함께 비워져요. 필요하면 먼저 "백업 만들기"로 저장해 두세요.',yes:'초기화',no:'취소',danger:true,act:doReset});
   }
 });
 var KM_MAX=15, KM_ASK=10;
@@ -6206,6 +6263,7 @@ function commitKm(kk,dsel,v){
   if(now&&!was) toast('러닝 완료 · '+kmFmt(Lk.km)+'km');
   else if(Lk.km>0) toast('거리 기록 · '+kmFmt(Lk.km)+'km');
   afterAction(bf,kk);
+  if(!restDay){ if(now&&!was) cheerSay('run',kk,bf,dsel); else if(!now && Lk.km>0) cheerSay('runpart',kk,bf,dsel); }
   if(execPend) execPendJny=true; else jnyCheck();   /* 그로기 팝업에서 정하기 전에는 여정 이벤트를 미뤄요 */
 }
 app.addEventListener('change',function(e){
@@ -6328,6 +6386,8 @@ var BANDI={
     inn:{h:'여기는 여관이에요!',x:'얻은 장비를 입어 보고, 장비 도감을 볼 수 있어요. 동료가 합류하면 함께 모험할 캐릭터도 여기서 골라요. 여주인 로사에게 말을 걸어 보세요.'},
     train:{h:'훈련장이에요!',x:'마왕전을 앞두고 XP가 모자랄 때 추가로 훈련할 수 있어요. 교관 가론에게 말을 걸면 훈련 기록이 열려요. 훈련 XP는 월~금 누적에 더해지지만 1000을 넘는 부분은 기록만 남아요.'},
     trade:{h:'교역소예요!',x:'남는 재료를 다른 등급의 재료로 바꿔 줘요. 내림은 후하게, 올림은 박하게 쳐 줘요. 상인 마르코에게 말을 걸면 교환이 열리고, 교환은 되돌릴 수 없어요.'},
+    map:{h:'여기는 모험 지도예요!',x:'이번 주 월요일부터 일요일까지의 스테이지가 길로 이어져 있어요. 스테이지를 누르면 그날의 퀘스트가 열리고, 마친 날에는 표시가 남아요. 길 끝에는 토요일의 마왕성이 기다려요.'},
+    diary:{h:'여기는 몸짱 일지예요!',x:'모험을 하며 달성한 업적이 하나씩 쌓여요. 업적을 누르면 자세한 내용을 볼 수 있어요. 체중을 기록하면 변화를 그래프로 볼 수 있지만, 하고 싶을 때만 해도 괜찮아요.'},
     guild:{h:'길드예요!',x:'마왕을 쓰러뜨려 승리를 쌓으면 랭크를 올리는 승급 시험을 볼 수 있어요. 접수원 세라에게 말을 걸어 보세요. 시험은 몸 상태가 좋은 날에, 무리하지 말고 봐요.'},
     forge:{h:'대장간이에요!',x:'보스에게서 얻은 재료로 전용 장비를 만들어요. 같은 등급의 재료로 같은 등급 장비를 만들 수 있어요. 재료가 모자라면 교역소가 열린 뒤 바꿀 수도 있어요.'}
   },
@@ -6347,6 +6407,83 @@ var BANDI={
     ['대장간은 뭘 하는 곳이에요?',function(){ return BANDI.tips.forge.x; }]
   ]
 };
+/* ---------- 반디 응원 (v1.45.2): 세트·러닝·식단을 체크할 때마다 반디가 옆에서 한마디씩 응원해요. 문구는 BANDI.cheer 한곳 ---------- */
+var CHKEY='home-training-cheer';
+function cheerOn(){ try{ return localStorage.getItem(CHKEY)!=='off'; }catch(e){ return true; } }
+function cheerSet(on){ try{ localStorage.setItem(CHKEY,on?'on':'off'); }catch(e){} }
+BANDI.cheer={
+  gen:['잘하고 있어요, 용사님!','정말 대단해요!','한 세트 해냈네요!','그 느낌 그대로 가요!','좋아요, 이 페이스예요!','천천히, 하지만 꾸준히요. 멋져요!','용사님이라면 할 수 있어요!','숨 한 번 크게 쉬고, 다음 세트도 같이 해요.','지금 이 한 세트가 몸을 바꾸고 있어요.','제가 옆에서 지켜보고 있어요!','무리하지 말고, 할 수 있는 만큼만 해요.','오늘도 와 줘서 고마워요.','혼자가 아니에요. 제가 옆에 있어요!','저는 언제나 용사님 편이에요!'],
+  first:['첫걸음을 뗐어요! 오늘도 같이 가요.','시작이 제일 어려운데, 해냈어요!','좋은 시작이에요, 용사님!','오늘의 모험이 시작됐어요!'],
+  exdone:['한 동작 끝! 정말 잘했어요.','이 동작은 깔끔하게 마쳤어요!','한 가지 해냈어요! 다음도 문제없어요.','수고했어요, 잠깐 숨 돌려요.'],
+  half:['벌써 절반이에요! 조금만 더 힘을 내요.','반이나 왔어요, 거의 다 왔어요!','여기까지 온 것만으로도 대단해요.'],
+  last1:['마지막 한 번만 더! 할 수 있어요!','딱 하나 남았어요, 조금만 더 힘을 내요!','끝이 보여요, 용사님!'],
+  allsets:['오늘 운동을 전부 마쳤어요! 정말 멋져요.','해냈어요! 푹 쉬고 잘 챙겨 먹어요.'],
+  run:['오늘 거리를 채웠어요! 정말 대단해요.','한 걸음 한 걸음이 쌓였어요. 멋져요!','달리고 걸어 줘서 고마워요, 용사님!'],
+  runpart:['기록해 줬네요! 목표까지 조금만 더 가 봐요.','한 걸음씩이면 충분해요. 천천히 가요.'],
+  alt:['밖이 힘든 날에도 해냈어요, 멋져요!','집 안에서도 모험은 계속돼요!'],
+  boss:['마왕이 비틀거려요! 조금만 더!','보스의 체력이 얼마 안 남았어요!'],
+  sun:['푹 쉬는 것도 모험이에요.','오늘은 천천히, 몸을 풀어 줘요.'],
+  lunch:['점심 잘 챙겼네요! 든든해야 힘이 나요.','맛있게 먹었어요? 잘 먹는 것도 모험이에요.'],
+  post:['운동 후에 챙겨 먹는 것도 훈련이에요.','몸이 고마워할 거예요. 잘했어요!'],
+  water:['물 챙기는 것도 멋진 습관이에요!','물 한 잔, 몸이 좋아해요!']
+};
+var cheerBag={}, cheerLast='', cheerEl=null, cheerT=null, cheerT2=null;
+function cheerPick(kind){
+  var src=BANDI.cheer[kind]; if(!src || !src.length) return '';
+  var bag=cheerBag[kind], i, j, t;
+  if(!bag || !bag.length){
+    bag=src.slice(); for(i=bag.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=bag[i]; bag[i]=bag[j]; bag[j]=t; }
+    if(bag.length>1 && bag[bag.length-1]===cheerLast){ t=bag[0]; bag[0]=bag[bag.length-1]; bag[bag.length-1]=t; }   /* 한 바퀴가 새로 시작될 때 바로 전과 같은 말이 먼저 나오지 않게 */
+    cheerBag[kind]=bag;
+  }
+  t=bag.pop(); cheerLast=t; return t;
+}
+function cheerBusy(){   /* 큰 창이 떠 있을 때는 쉬어요(전투 연출은 위쪽, 휴식 타이머는 아래쪽이라 응원과 겹치지 않아서 허용) */
+  var ovs=document.querySelectorAll('.ov'), i;
+  for(i=0;i<ovs.length;i++){ if(!ovs[i].hidden) return true; }
+  if(titleEl && !titleEl.hidden) return true;
+  var exc=document.getElementById('excut'); if(exc && !exc.hidden) return true;
+  var ruc=document.getElementById('rkup'); if(ruc && !ruc.hidden) return true;
+  return false;
+}
+function cheerShow(text){
+  if(!cheerEl){
+    cheerEl=document.createElement('div'); cheerEl.className='cheer'; cheerEl.id='cheer'; cheerEl.hidden=true; cheerEl.setAttribute('aria-live','polite');
+    cheerEl.innerHTML='<span class="chf" aria-hidden="true">'+BANDI.face()+'</span><span class="cht"></span>';
+    document.body.appendChild(cheerEl);
+  }
+  cheerEl.querySelector('.cht').textContent=text; cheerEl.hidden=false;
+  cheerEl.classList.remove('show'); void cheerEl.offsetWidth; cheerEl.classList.add('show');
+  clearTimeout(cheerT); clearTimeout(cheerT2);
+  cheerT=setTimeout(function(){ cheerEl.hidden=true; },2800);
+}
+function cheerSkip(before,d){   /* 하루가 막 클리어됐거나 레벨이 올라 결과 창이 뜨는 순간에는 말하지 않아요 */
+  try{ if(before && !before.done && isDone(d)) return true; if(before && lvInfo(totalXP()).L>before.lv) return true; }catch(e){}
+  return false;
+}
+function cheerSay(kind,k,before,d){
+  try{
+    if(!kind || !cheerOn()) return;
+    if(k!==fmt(TODAY) || isEnded(k)) return;   /* 오늘 퀘스트에만 */
+    if(cheerSkip(before,d) || cheerBusy()) return;
+    var t=cheerPick(kind); if(t) cheerShow(t);
+  }catch(e){}
+}
+function cheerKindSet(k,id,hp0){
+  var dk=DK[parse(k).getDay()], L=rd(k), n=0, total, ids, ex, exIds, hp1;
+  if(dk==='sun') return 'sun';
+  ids=idsFor(dk,k).filter(function(x){ return x!=='run'; }); total=ids.length;
+  ids.forEach(function(x){ if(L.done[x]) n++; });
+  hp1=bossHp(parse(k));
+  if(total>0 && n>=total) return 'allsets';
+  if(BOSSES[dk] && hp0 && hp1.left>0 && hp0.left>hp0.max*0.25 && hp1.left<=hp1.max*0.25) return 'boss';
+  if(total>=3 && total-n===1) return 'last1';
+  if(total>=6 && n===Math.ceil(total/2)) return 'half';
+  ex=String(id).replace(/-\d+$/,''); exIds=ids.filter(function(x){ return x.replace(/-\d+$/,'')===ex; });
+  if(exIds.length>=2 && exIds.every(function(x){ return L.done[x]; })) return 'exdone';
+  if(n===1) return 'first';
+  return 'gen';
+}
 var bdEl=document.getElementById('bandi'), bdC=document.getElementById('bdc');
 var bd={mode:'help',step:'help',ans:[null,null,null],pick:null,topic:null};
 /* 상황별 첫 안내 띄우기: 새 사용자(S.bdSeen이 있는 사용자)만, 다른 창이 없고 운동 중이 아닐 때 */
@@ -6362,16 +6499,23 @@ function bdBusy(){
   return false;
 }
 var BLDTIP={inn:1,guild:1,train:1,trade:1,forge:1};
+var TABTIP={map:1,diary:1};   /* 지도·일지 탭 첫 안내(v1.45.0): 예전 사용자도 한 번씩 받아요 */
 function bdTipId(){
   var sn=S.bdSeen, t=fmt(TODAY), dk;
   if(!sn || typeof sn!=='object'){   /* 예전부터 쓰던 사용자도 왕국 건물에는 처음 들어갈 때 한 번씩 안내해요(다른 안내는 안 떠요) */
     if(tab==='home' && BLDTIP[kv] && (kv==='inn'||kv==='guild'||bState(kv)==='done')) return {id:kv};
+    if(tab==='week') return {id:'map'};
+    if(tab==='ach') return {id:'diary'};
     return null;
   }
   if(tab==='today'){
     if(!sn.today) return {id:'today'};
     dk=DK[TODAY.getDay()];
     if(!sn.boss && sn.today!==t && (dk==='fri' || dk==='sat')) return {id:'boss',when:dk};
+  }else if(tab==='week'){
+    if(!sn.map) return {id:'map'};
+  }else if(tab==='ach'){
+    if(!sn.diary) return {id:'diary'};
   }else if(tab==='run'){
     if(!sn.run) return {id:'run'};
   }else if(tab==='home'){
@@ -6401,7 +6545,7 @@ function bandiOpen(mode,tip,when){
   bdRender(); bdEl.hidden=false;
 }
 function bandiClose(){
-  if(bd.mode==='tip' && bd.tip && (!S.bdSeen || typeof S.bdSeen!=='object') && BLDTIP[bd.tip]){ var ol='2000-01-01'; S.bdSeen={today:ol,boss:ol,run:ol,kingdom:ol}; }   /* 예전 사용자: 다른 안내는 이미 본 것으로 두고 건물 안내만 켜요 */
+  if(bd.mode==='tip' && bd.tip && (!S.bdSeen || typeof S.bdSeen!=='object') && (BLDTIP[bd.tip]||TABTIP[bd.tip])){ var ol='2000-01-01'; S.bdSeen={today:ol,boss:ol,run:ol,kingdom:ol}; }   /* 예전 사용자: 다른 안내는 이미 본 것으로 두고 건물 안내만 켜요 */
   if(bd.mode==='tip' && bd.tip && S.bdSeen && typeof S.bdSeen==='object'){ S.bdSeen[bd.tip]=fmt(TODAY); bd.tip=null; save(); }  /* 본 안내는 다시 안 나와요 */
   bdEl.hidden=true; bdC.innerHTML='';
 }
@@ -6483,12 +6627,12 @@ document.addEventListener('keydown',function(e){
 
 var INTRO_TXT=[
   "당신은 몸짱용사입니다. 각 모험지의 적들을 물리치며 '전신짱 마왕'을 토벌할 힘을 기르십시오.",
-  "매일 모험지를 돌며 퀘스트를 수행하고 중간보스를 토벌하십시오. 퀘스트 완료시 상응하는 경험치를 획득할 수 있습니다.",
+  "매일 모험지를 돌며 퀘스트를 수행하고 중간보스를 토벌하십시오. 퀘스트 완료 시 상응하는 경험치를 획득할 수 있습니다.",
   "하루의 퀘스트 진행은 하단의 오늘의 모험 종료 버튼을 눌러 종료할 수 있습니다. 종료하지 않아도 날짜가 지나면 자동으로 종료되며, 종료된 날의 기록은 수정할 수 없으니 신중해 주세요.",
   "평일 5일간의 퀘스트 진행으로 누적 1000XP 이상 획득 시 마왕성에 도전할 수 있습니다. 하지만 1000XP 미만 획득 시에는 마왕의 저주에 걸려 패배하게 됩니다.",
   "1000XP 이상 획득하여 마왕성에 도전한 경우, 마왕성 퀘스트를 모두 완료하면 마왕을 토벌할 수 있습니다. 하지만 퀘스트 실패 시 마왕에게 패배하게 됩니다.",
   "매주 일요일은 회복의 신전을 방문하게 됩니다. 몸짱신의 가호를 받으며 다음 토벌을 위한 회복을 진행하세요.",
-  "몸짱용사가 되어 마왕을 무찌르고 몸짱왕국을 되살려보세요."
+  "몸짱용사가 되어 마왕을 무찌르고 몸짱왕국을 되살려 보세요."
 ];
 var introEl=document.getElementById('intro'), introImg=document.getElementById('introimg'), introTxt=document.getElementById('introtxt'),
     introDots=document.getElementById('introdots'), introPrev=document.getElementById('introprev'), introNext=document.getElementById('intronext'), iN=0;
@@ -6593,7 +6737,7 @@ async function cloudSync(){
   if(!cloudOn()||!CL.user) return;
   if(CL.busy){ CL.again=true; return; }
   if(!navigator.onLine){ setStat('오프라인이에요. 연결되면 자동으로 저장돼요.'); return; }
-  CL.busy=true; CL.last=Date.now(); setStat('동기화 중…');
+  CL.busy=true; CL.last=Date.now(); setStat('동기화 중...');
   try{
     var uid=CL.user.uid, r=await withTimeout(window.__fb.get(uid),15000), rdata=null, rts=0;
     if(r && r.data){ try{rdata=JSON.parse(r.data);}catch(e){rdata=null;} rts=r.updated||0; }
@@ -6637,7 +6781,7 @@ function authMsg(e){
 }
 async function cloudAuth(signup,em,pw){
   if(!em||!pw){ clMsg('이메일과 비밀번호를 입력해 주세요.',true); return; }
-  clMsg(signup?'가입하는 중…':'로그인하는 중…',false);
+  clMsg(signup?'가입하는 중...':'로그인하는 중...',false);
   try{ if(signup) await window.__fb.signUp(em,pw); else await window.__fb.signIn(em,pw); }
   catch(e){ clMsg(authMsg(e),true); }
 }
@@ -6658,7 +6802,7 @@ function cloudHtml(){
     return h+'<p class="clnote">로그인하면 기록이 구글 서버에 저장돼서, 폰을 바꿔도 다른 기기에서도 볼 수 있어요.</p><p class="clmsg err">이 화면에서는 클라우드를 쓸 수 없어요. GitHub 등으로 올린 앱 주소에서 사용해 주세요.</p></div>';
   }
   if(!CL.ready){
-    return h+'<p class="clnote">클라우드에 연결하는 중이에요…</p></div>';
+    return h+'<p class="clnote">클라우드에 연결하는 중이에요...</p></div>';
   }
   if(CL.user){
     return h+'<p class="cluser">로그인됨 · <b>'+String(CL.user.email||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</b></p>'+
@@ -7785,7 +7929,7 @@ var EXEC={};
 (function(){
 
   /* ===== v1.43.0 처형 컷씬 =====
-     직업별 1개씩: 몸짱 용사 일도양단 / 드워프 대지 분쇄 / 엘프 별빛 관통 / 마법사 유성 대폭발
+     직업별 1개씩: 몸짱용사 일도양단 / 드워프 대지 분쇄 / 엘프 별빛 관통 / 마법사 유성 대폭발
      흐름: 그로기 팝업 → [예, 마무리 일격!] → 컷씬 → 토벌 완료 → [계속] (팝업에서 [건너뛰기]도 가능)
      이 블록은 자기 함수 안에 있어서 앱의 다른 이름과 겹치지 않아요. 밖에서는 EXEC.flow(직업,보스키,끝난뒤할일)로만 불러요. */
   var OVL='', G=452, FEET=50, HS=1.25, anims=[], timers=[], Q=[], uid=0, csOpt={c:'hero',k:'demon'}, csDone=false, csCont=null, csUndo=null, csCommit=null;
@@ -7925,7 +8069,7 @@ var EXEC={};
       '<rect id="cs_bt" width="360" height="0" fill="#000"/><rect id="cs_bb" y="640" width="360" height="0" fill="#000"/>'+ov+'</svg>';
   }
 
-  /* ---------- 몸짱 용사: 일도양단 ---------- */
+  /* ---------- 몸짱용사: 일도양단 ---------- */
   function sHero(key){
     var bx=fitX(key,222), hx=62, hy=G-FEET*HS, B=bossG(key,bx), L='', cl1=cid(), cl2=cid(), whole=cid(), hA=cid(), hB=cid(), pA=cid(), pB=cid(), pC=cid(), hs=cid(), hq=cid(), trail=cid(), spd=cid(), i;
     B.wid=cid(); var dx=230, tH=1640;
@@ -8114,7 +8258,7 @@ var EXEC={};
     cov.hidden=false;
     cov.innerHTML='<div class="exc-pop"><div class="exc-card"><div class="exc-gt">GROGGY!</div>'+
       '<svg class="exc-bs" viewBox="-115 -135 230 195" aria-hidden="true"><ellipse cx="0" cy="50" rx="60" ry="9" fill="#000" opacity=".15"/><g style="animation:excWob .45s ease-in-out infinite alternate;transform-origin:0 46px"><g transform="scale(1)">'+art+'</g></g><g id="cs_pdz" transform="translate(0,-100) scale(1,.34)"><g style="animation:excOrb 1.3s linear infinite">'+ds+'</g></g></svg>'+
-      '<p class="exc-n">'+bossNm(key)+' · 체력 0</p><p class="exc-q">보스가 그로기 상태입니다.<br>마무리 일격을 가하겠습니까?</p><p class="exc-note">마무리 일격을 가하면 오늘의 퀘스트가 확정됩니다.</p>'+
+      '<p class="exc-n">'+bossNm(key)+' · 체력 0</p><p class="exc-q">보스가 그로기 상태입니다.<br>마무리 일격을 가하겠습니까?</p><p class="exc-note">마무리 일격을 가하면 오늘의 퀘스트가 확정돼요.</p>'+
       '<div class="exc-bt"><button class="gold" data-cs="go">예, 마무리 일격!</button><button data-cs="nope">건너뛰기</button>'+(csUndo?'<button data-cs="no">아니요 · 마지막 체크 취소</button>':'')+'</div></div></div>';
     try{ var bb=cov.querySelector('.exc-bs g g').getBBox(); var dz=document.getElementById('cs_pdz'); if(bb&&bb.height) dz.setAttribute('transform','translate(0,'+Math.round(bb.y-6)+') scale(1,.34)'); }catch(e){}
   }

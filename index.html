@@ -218,13 +218,13 @@ svg.chart{width:100%; height:auto; display:block;}
 body{word-break:keep-all; overflow-wrap:break-word;}
 body{text-wrap:pretty;}
 .bnote,.ovh,.ovt,.askt,.toast,.cht,.ph,.phsub,.bdq,.bdsm,.bdans,.comfort,.stage-w,.klab,.rs,.dcard small,.dcard span,.note{text-wrap:balance;}
-.cheer{position:fixed; left:50%; transform:translateX(-50%); width:calc(100% - 24px); max-width:536px; bottom:calc(160px + env(safe-area-inset-bottom,0px)); z-index:30; display:flex; flex-direction:row-reverse; align-items:flex-end; gap:6px; pointer-events:none;}
+.cheer{position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:calc(100% - 24px); max-width:536px; z-index:30; display:flex; flex-direction:row-reverse; align-items:flex-end; gap:6px; pointer-events:none;}
 .cheer[hidden]{display:none;}
 .cheer.show{animation:chin .25s ease-out;}
 @keyframes chin{from{opacity:0;} to{opacity:1;}}
 .chf{flex:none; width:44px; height:38px; border-radius:50%; background:var(--surface); border:2px solid var(--line); box-shadow:0 2px 0 var(--edge); display:flex; align-items:center; justify-content:center;}
 .chf svg{width:38px; height:32px; display:block;}
-.cht{background:var(--surface); border:2px solid var(--line); border-radius:16px 16px 4px 16px; padding:8px 12px; font-size:14px; font-weight:700; line-height:1.4; color:var(--ink); box-shadow:0 3px 0 var(--edge);}
+.cht{background:var(--gold); border:2px solid var(--gold-ink); border-radius:16px 16px 4px 16px; padding:8px 12px; font-size:14px; font-weight:700; line-height:1.4; color:var(--gold-ink); box-shadow:0 3px 0 var(--edge);}
 .toast.show{animation:tin .25s ease-out;}
 @keyframes tin{from{transform:translate(-50%,-14px); opacity:0;}to{transform:translate(-50%,0); opacity:1;}}
 .nav{position:fixed; left:50%; transform:translateX(-50%); width:calc(100% - 24px); max-width:536px;
@@ -1367,8 +1367,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.6', APP_DATE='2026-10-07', showChg=false;
+var APP_VER='1.46.8', APP_DATE='2026-10-07', showChg=false;
 var CHANGES=[
+  ['1.46.8','반디의 응원 말풍선 색을 바꿔서 잘 보이게 했어요. 노란 바탕에 짙은 글씨예요. 모양과 위치는 그대로예요'],
+  ['1.46.7','반디의 응원 말풍선이 화면 아래쪽이 아니라 가운데쯤에 나오도록 옮겼어요. 오른쪽에서 나오는 모양은 그대로예요'],
   ['1.46.6','시작화면을 다듬었어요. 수요일 먼 산의 탑 꼭대기가 잘려 보이던 것을 고쳤어요. 부제목 "몸짱용사의 모험" 글씨가 알약 모양 칸의 정가운데에 오도록 맞췄어요'],
   ['1.46.5','앱 아이콘을 새로 바꿨어요. 랭크 배지와 같은 금빛 육각형 안에 검이 똑바로 서 있어요. 이미 설치한 폰에서는 아이콘이 바로 바뀌지 않을 수 있어요'],
   ['1.46.4','첫 주 안내를 더 부드럽게 했어요. 첫 마왕전이 있는 토요일에도 주간 퀘스트 카드가 빨간 "못 미쳤어요" 대신 "첫 주는 연습전이에요"로 보여요. 일요일에 처음 시작하면 시작하기 전의 주를 "패배한 주"라고 하지 않고 "이번 주는 시작하기 전이었어요"로 보여 줘요'],

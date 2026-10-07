@@ -1,7 +1,7 @@
 /* 몸짱소울 서비스 워커: 한 번 열어 두면 오프라인에서도 열려요.
    앱을 수정해서 다시 올릴 때는 아래 VERSION 숫자를 올려 주세요. */
-var VERSION = 'momjjang-soul-v46-2';
-var SHELL = ['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
+var VERSION = 'momjjang-soul-v46-6';
+var SHELL = ['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./apple-touch-icon.png'];
 
 self.addEventListener('install', function(e){
   e.waitUntil(caches.open(VERSION).then(function(c){ return c.addAll(SHELL.map(function(u){ return new Request(u,{cache:'reload'}); })); }).then(function(){ return self.skipWaiting(); }));

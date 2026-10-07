@@ -1,10 +1,10 @@
-몸짱소울 앱 설치용 파일 묶음 (버전 1.46.2)
+몸짱소울 앱 설치용 파일 묶음 (버전 1.46.6)
 
 이 폴더 안의 파일을 그대로 인터넷 주소(https)에 올리면,
 폰에서 그 주소를 열어 앱처럼 설치할 수 있어요.
 
 - index.html : 앱 본체 (파이어베이스 로그인/저장 포함)
-- manifest.webmanifest, icon-*.png, apple-touch-icon.png : 앱 이름과 아이콘
+- manifest.webmanifest, icon-*.png(icon-maskable-512.png 포함), apple-touch-icon.png : 앱 이름과 아이콘
 - sw.js : 한 번 열어 두면 인터넷이 없어도 열리게 해 주는 파일
 
 이미 예전 버전을 올려 두었다면, 이 폴더 안의 파일들을 같은 자리에 다시 올려서 덮어쓰면 돼요.

@@ -501,7 +501,7 @@ body{text-wrap:pretty;}
 .ts-cheer{display:none;}
 .ts-logo{position:absolute; left:0; right:0; top:calc(12vh + env(safe-area-inset-top,0px)); text-align:center; animation:tsDrop .8s cubic-bezier(.3,1.5,.5,1) both;}
 .ts-logo svg{display:block; width:min(86%,400px); height:auto; margin:0 auto;}
-.ts-sub{display:inline-block; margin-top:2px; font-family:var(--disp); font-size:18px; letter-spacing:.04em; background:#2B2138; color:#FFF3B0; padding:2px 16px 3px; border-radius:999px;}
+.ts-sub{display:inline-block; margin-top:2px; font-family:var(--disp); font-size:18px; letter-spacing:.04em; background:#2B2138; color:#FFF3B0; padding:4.5px 16px .5px; border-radius:999px;}
 @keyframes tsDrop{from{transform:translateY(-40px); opacity:0;}to{transform:none; opacity:1;}}
 .ts-info{position:absolute; top:calc(12px + env(safe-area-inset-top,0px)); font-size:13px; font-weight:700; background:rgba(20,14,34,.35); padding:2px 10px; border-radius:999px;}
 .ts-day{left:14px;} .ts-ver{right:14px; font-weight:500;}
@@ -1321,7 +1321,7 @@ var D = {
   sideplank:'옆으로 누워 팔꿈치로 몸을 받치고 일자로 버티는 동작이에요.',
   sidelift:'옆으로 누워 몸을 일자로 둔 채, 위쪽 다리를 천천히 들어 올렸다 내리는 동작이에요. 허벅지 바깥과 엉덩이 옆 근육을 써요.',
   inchworm:'서서 허리를 숙여 손으로 바닥을 걸어 플랭크 자세까지 갔다가, 다시 손으로 걸어 돌아와 일어서는 동작이에요.',
-  s1:'고개를 옆으로 기울이고 손으로 살짝 눌러 목과 어깨 옆을 늘려요.',
+  s1:'고개를 옆으로 기울이고 손으로 살짝 눌러 목과 어깨\u00a0옆을\u00a0늘려요.',
   s2:'문틀에 팔을 걸고 몸을 앞으로 내밀어 가슴 앞쪽을 늘려요.',
   s3:'한쪽 발목을 잡아 엉덩이 쪽으로 당겨 허벅지 앞을 늘리고, 앉아서 다리를 펴 뒤쪽도 늘려요.',
   s4:'벽을 밀며 한 다리를 뒤로 빼고, 뒤꿈치를 바닥에 붙여 종아리를 늘려요.'
@@ -1367,8 +1367,12 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.2', APP_DATE='2026-10-06', showChg=false;
+var APP_VER='1.46.6', APP_DATE='2026-10-07', showChg=false;
 var CHANGES=[
+  ['1.46.6','시작화면을 다듬었어요. 수요일 먼 산의 탑 꼭대기가 잘려 보이던 것을 고쳤어요. 부제목 "몸짱용사의 모험" 글씨가 알약 모양 칸의 정가운데에 오도록 맞췄어요'],
+  ['1.46.5','앱 아이콘을 새로 바꿨어요. 랭크 배지와 같은 금빛 육각형 안에 검이 똑바로 서 있어요. 이미 설치한 폰에서는 아이콘이 바로 바뀌지 않을 수 있어요'],
+  ['1.46.4','첫 주 안내를 더 부드럽게 했어요. 첫 마왕전이 있는 토요일에도 주간 퀘스트 카드가 빨간 "못 미쳤어요" 대신 "첫 주는 연습전이에요"로 보여요. 일요일에 처음 시작하면 시작하기 전의 주를 "패배한 주"라고 하지 않고 "이번 주는 시작하기 전이었어요"로 보여 줘요'],
+  ['1.46.3','새싹의 길에서 "쉬운 동작" 안내 문장을 자연스럽게 고쳤어요(예: "처음엔 발 간격을 넓혀서 해 봐요"). 자세 팁의 "~로·으로" 조사도 바로잡았어요. 첫 7일 안에는 주간 퀘스트 카드가 빨간 "어려워요" 대신 "첫 주는 연습전이에요"로 보여요. 달리기와 걷기 안내가 줄 끝에서 갈라지지 않게 다듬었어요'],
   ['1.46.2','식단 사이드 퀘스트와 반디 안내의 줄바꿈을 다듬었어요. 긴 안내 글의 마지막 줄에 짧은 말만 남지 않게 하고, "사용 중"·"한 끼"처럼 붙어 있어야 할 말이 갈라지지 않게 했어요'],
   ['1.46.1','식단 사이드 퀘스트 문구를 누구나 따라 하기 쉽게 바꿨어요. 점심과 운동 후 식사는 예시를 보고 고를 수 있고, 영주의 특별보급은 오늘의 연회로 이름을 바꾸고 설명을 더했어요'],
   ['1.46.0','테스트 기간에는 앱을 연 날짜가 기록돼요. 로그인하면 개발자가 볼 수 있어요. 처형 기술 이름 몸짱일도양단은 일도양단으로 바꿨어요'],
@@ -4879,7 +4883,7 @@ function altHtml(k,L,lock){
   h+='<ol>'+R.steps.map(function(t){ return '<li>'+t+'</li>'; }).join('')+'</ol>';
   h+='<ul class="altmv">'+ALT_MOVES.map(function(m){ return '<li><b>'+m[0]+'</b> · '+m[1]+' '+vidQ(ALT_VID[m[0]]||m[0])+'</li>'; }).join('')+'</ul>';
   h+='<p class="note" style="margin:6px 0 8px">점프 없이 발이 바닥에서 떨어지지 않는 동작만 골랐어요. 요가 매트나 푹신한 슬리퍼를 쓰면 소리가 더 줄어요. 늦은 밤에는 섀도복싱과 서서 니업 크런치 위주로 해도 좋아요. 통증이 있으면 바로 멈춰요.</p>';
-  var sub=(need&&!sv)?'먼저 위에서 이유를 골라 주세요':'거리(km)는 올라가지 않지만 XP와 퀘스트 완료는 러닝·걷기와 똑같이 인정돼요';
+  var sub=(need&&!sv)?'먼저 위에서 이유를 골라 주세요':'거리(km)는 올라가지 않지만 XP와 퀘스트 완료는 러닝과 걷기와 똑같이 인정돼요';
   h+=check(!!L.alt,'실내 유산소 완료',sub,'alt','',lock||!st.can||(need&&!sv),runXpOn(k));
   return h+'</div>';
 }
@@ -5380,8 +5384,10 @@ function weeklyHtml(d){
   }else{
     msg=W.allOver?(W.cur+' XP로 '+G+' XP에 못 미'+(sp?'친 주였어요':'쳤어요')):('이번 주는 최대 '+W.mx+' XP라 마왕성 도전이 어려워요');
     sub=W.allOver?(sp?'마왕의 저주로 마왕성에서 패배한 주였어요.':'마왕의 저주로 마왕성에서는 패배하는 주예요.'):'남은 날을 모두 채워도 '+G+' XP에 닿지 못해요.';
+    if((!W.allOver || !sp) && firstWeekFree(addDays(W.mon,5))){ st='go'; msg='첫 주는 연습전이에요'; }   /* v1.46.4: 첫 마왕전 당일(토요일)에도 같아요 */   /* v1.46.3: 새 사용자에게 첫날부터 빨간 "어려워요"를 보이지 않아요 */
     if(firstWeekFree(addDays(W.mon,5))) sub=(W.allOver?(sp?'시작한 첫 7일 안의 마왕전이라 마왕의 저주 없이 연습전으로 끝난 주였어요.':'시작한 첫 7일 안의 마왕전이라 마왕의 저주 없이 연습전으로 치러요.'):'시작한 첫 7일 안의 마왕전이라, 못 채워도 마왕의 저주는 없어요.');
-    if(tOpen && !tBuilt) sub+=' 왕국에서 훈련장을 복구하면 XP를 보충할 수 있어요.';
+    if(W.cur===0 && fmt(addDays(W.mon,5))<fmt(parse(S.start))){ st='go'; msg='이번 주는 시작하기 전이었어요'; sub='시작한 첫 7일 안의 마왕전은 연습전이라, 못 채워도 마왕의 저주는\u00a0없어요.'; }   /* v1.46.4: 시작하기 전 주에 \"패배한 주\"라고 하지 않아요 */
+    if(tOpen && !tBuilt) sub+=' 왕국에서 훈련장을 복구하면 XP를 보충할\u00a0수\u00a0있어요.';
   }
   var dd=W.days.map(function(x){
     return '<div class="wq-day'+(x.done?' done':'')+(x.isT?' cur':'')+(x.fut?' fut':'')+'"><small>'+x.lab+(x.isT?' · 오늘':'')+'</small><b>'+(x.fut?'–':x.xp)+'</b></div>';
@@ -5392,12 +5398,16 @@ function weeklyHtml(d){
     '<p class="wq-st">'+msg+'</p>'+(sub?'<p class="wq-sub">'+sub+'</p>':'')+'<div class="wq-days">'+dd+'</div></section>';
 }
 
+/* v1.46.3 새싹의 길 "쉬운 동작" 문장(예전 "처음엔 ○○(으)로 시작해요" 틀은 문장이 어색한 동작이 많았어요) / 받침에 맞는 "로·으로" */
+var EASYS={pushup:['무릎 푸시업','부터 해 봐요'],pike:['엉덩이를 낮춘 파이크','부터 해 봐요'],dips:['무릎을 굽혀서',' 해 봐요'],squat:['의자에 앉았다 일어나기','부터 해 봐요'],lunge:['벽을 잡고 런지','부터 해 봐요'],bridge:['발 간격을 넓혀서',' 해 봐요'],calf:['양발 동시에',' 해 봐요'],crunch:['팔을 무릎 쪽으로 뻗는 동작','부터 해 봐요'],legraise:['무릎을 굽힌 레그 레이즈','부터 해 봐요'],bicycle:['천천히',' 해 봐요'],deadbug:['팔만 움직이는 동작','부터 해 봐요'],superman:['팔과 다리를 번갈아',' 들어 봐요'],snow:['팔을 낮게',' 들고 해 봐요'],ytw:['가슴을 바닥에 둔 채 팔만 드는 동작','부터 해 봐요'],bulg:['뒤 발을 바닥에 두고',' 해 봐요'],sidelift:['무릎을 굽힌 채 올리는 동작','부터 해 봐요'],inchworm:['무릎을 굽힌 채로',' 해 봐요'],plank:['무릎 플랭크','부터 해 봐요'],mtn:['천천히 걷듯이',' 해 봐요'],wallsit:['조금 높게 앉아서',' 해 봐요'],sideplank:['무릎을 굽혀서',' 해 봐요']};
+function easyHtml(id,e){ var a=EASYS[id]||[e.e,' 해 봐요']; return '처음엔 <b>'+a[0]+'</b>'+a[1]; }
+function roP(t){ t=String(t); var c=t.charCodeAt(t.length-1), f; if(c>=0xAC00 && c<=0xD7A3){ f=(c-0xAC00)%28; return (f===0||f===8)?'로':'으로'; } return '으로'; }
 function viewToday(){
   var d=sel, k=fmt(d), dk=DK[d.getDay()], p=PLAN[dk], L=rd(k), dfc=diffOn(k), st=(dfc==='sprout')?Math.min(stageIdx(),1):stageIdx(), c=count(d);
   var isToday=(k===fmt(TODAY)), ids=idsFor(dk,k), lock=isEnded(k), lockM=lock||!!L.fin, rs=dayResult(d), bossHtml='';
   if(p.circuit){
     bossHtml='<div class="bossrule">'+
-      '<p>'+SAT_GOAL+' XP 이상이면 마왕성에서 승리할 수 있어요 (+150 XP 보너스). 못 미치거나 오늘 메인 퀘스트와 러닝·걷기를 못 채우고 모험을 마치면 패배해요.'+(firstWeekFree(d)?' 시작한 첫 7일 안의 마왕전이라 XP가 모자라도 마왕의 저주는 없어요.':'')+'</p></div>';
+      '<p>'+SAT_GOAL+' XP 이상이면 마왕성에서 승리할 수 있어요 (+150 XP 보너스). 못 미치거나 오늘 메인 퀘스트와 러닝과 걷기를 못 채우고 모험을 마치면 패배해요.'+(firstWeekFree(d)?' 시작한 첫 7일 안의 마왕전이라 XP가 모자라도 마왕의 저주는 없어요.':'')+'</p></div>';
   }
   var maxXp = 3*XP_MEAL+XP_CLEAR+(p.circuit?BOSS_WIN_XP:(p.rest?0:MID_XP)); ids.forEach(function(id){ maxXp+=xpOf(id,k); });
   var h='<p class="eyebrow">'+longDate(d)+(isToday?' · 오늘':'')+'</p>'+hud()+weeklyHtml(d);
@@ -5415,13 +5425,13 @@ function viewToday(){
 
   var run = p.rest?RUN_REST:RUN, rmin=runMinOn(k);
   if(!p.rest && dfc!=='body'){
-    run={label:(dfc==='sprout'?'걷기 또는 달리기 '+rmin+'km':'러닝 또는 걷기 '+rmin+'km'),sub:rmin+'km 이상 입력하면 완료'+(dfc==='sprout'?' · 걷기만으로도 충분해요':'')+((dfc==='adv'&&(dk==='wed'||dk==='fri'))?' · 어제 하체 운동을 했으니 가볍게 걷거나 천천히 뛰어도 인정돼요':'')};
+    run={label:(dfc==='sprout'?'걷기 또는 달리기 '+rmin+'km':'러닝 또는 걷기 '+rmin+'km'),sub:rmin+'km 이상 입력하면 완료'+(dfc==='sprout'?'돼요. 걷기만으로도 충분해요':'')+((dfc==='adv'&&(dk==='wed'||dk==='fri'))?'돼요. 어제 하체 운동을 했으니 가볍게 걷거나 천천히 뛰어도 인정돼요':'')};
   }
   if(hasRun(dk,k)){
     h+='<h2>'+(p.rest?'일일 러닝':'러닝 또는 걷기')+'</h2><div class="q">'+(p.rest?check(!!L.done.run,run.label,run.sub,'run','',lock,XP_RUN):runRow(!!L.done.run,run.label,run.sub,runXpOn(k)))+kmRow(L,p.rest,lockM,k)+'</div>';
     if(!p.rest) h+=altHtml(k,L,lockM);
   }else{
-    h+='<p class="note" style="margin:14px 2px 0">오늘은 '+themeOf(dk,k).replace(/ ·.*$/,'')+'이에요. 러닝·걷기는 쉬어요.</p>';
+    h+='<p class="note" style="margin:14px 2px 0">오늘은 '+themeOf(dk,k).replace(/ ·.*$/,'')+'이에요. 러닝과 걷기는 쉬어요.</p>';
   }
   if(exFor(dk,k).length) h+='<h2>메인 퀘스트</h2>';
 
@@ -5433,7 +5443,7 @@ function viewToday(){
     var exDone=(doneN===n), swBtn='';
     if(e.t){ var sm=String(dose).match(/(\d+)\s*초/); if(sm){ var side=String(dose).indexOf('한쪽')>=0; swBtn='<button type="button" class="swbtn" data-a="sw" data-sec="'+sm[1]+'" data-name="'+e.n+'">▶ '+(side?'한쪽 ':'')+sm[1]+'초 타이머</button>'; } }
     h+='<div class="q ex'+(exDone?' ok':'')+'"><div class="ex-head"><span class="idx" aria-hidden="true">'+(ix+1)+'</span><h3 class="ex-name">'+e.n+'</h3>'+(isB?'<span class="bonustag">보너스</span>':'')+rewChip(n*setXpOn(k),exDone)+'</div>'+
-       '<p class="desc">'+(D[id]||'')+'</p>'+((dfc==='sprout'&&e.e)?'<p class="easy">처음엔 <b>'+e.e+'</b>(으)로 시작해요</p>':'')+
+       '<p class="desc">'+(D[id]||'')+'</p>'+((dfc==='sprout'&&e.e)?'<p class="easy">'+easyHtml(id,e)+'</p>':'')+
        '<p class="dose">목표 <b>'+(e.one?dose:(SETS+(p.circuit?'라운드':'세트')+' × '+dose))+'</b></p>'+swBtn+(isB?'<p class="note" style="margin:6px 0 0">오늘은 이미 확정된 날이라 보너스로 해요. 클리어 여부는 그대로이고 XP만 더해져요.</p>':'');
     if(e.one){
       h+='<div class="sets"><button type="button" class="set wide" aria-pressed="'+(L.done[id+'-1']?'true':'false')+'" data-a="set" data-id="'+id+'-1" data-one="1"'+(lk?' disabled':'')+'>'+(L.done[id+'-1']?'완료':'했어요')+'</button></div>';
@@ -5449,7 +5459,7 @@ function viewToday(){
       h+=figHtml(id,e.n);
       h+='<ul class="tips">'+e.tips.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ul>';
       if(e.e){
-        h+=(dfc==='sprout'?'<ul class="var"><li>쉬운 동작으로 시작해요: '+e.e+'</li><li>익숙해지면 표준 동작 "'+e.n+'"으로 올려요</li></ul>':'<ul class="var"><li>어려우면: '+e.e+'</li><li'+(st===2?' class="push"':'')+'>'+(st===2?'이번 주부터 도전: ':'익숙해지면: ')+e.h+'</li></ul>');
+        h+=(dfc==='sprout'?'<ul class="var"><li>'+easyHtml(id,e)+'</li><li>익숙해지면 표준 동작 "'+e.n+'"'+roP(e.n)+' 올려요</li></ul>':'<ul class="var"><li>어려우면: '+e.e+'</li><li'+(st===2?' class="push"':'')+'>'+(st===2?'이번 주부터 도전: ':'익숙해지면: ')+e.h+'</li></ul>');
       }
       h+=vidLink(e.n);
     }
@@ -6379,14 +6389,14 @@ var BANDI={
   },
   /* 상황별 첫 안내(v1.42.4): 새 사용자에게만, 각 한 번. h=제목, x=본문(문자열 또는 함수). 문구 교체는 여기만 */
   tips:{
-    today:{h:'오늘 할 일은 여기 있어요!',x:'운동 동작은 세트마다 체크하고, 식단 세 가지도 체크해요. 달리기·걷기는 하는 날에만 있어요. 다 못 해도 괜찮아요. 내일 다시 시작하면 돼요.'},
+    today:{h:'오늘 할 일은 여기 있어요!',x:'운동 동작은 세트마다 체크하고, 식단 세 가지도 체크해요. 달리기와 걷기는 하는 날에만 있어요. 다 못 해도 괜찮아요. 내일 다시 시작하면 돼요.'},
     boss:{h:function(w){ return w==='sat'?'오늘은 마왕전이에요!':'내일은 마왕전이에요!'; },
       x:function(w){
         var d=(w==='sat')?TODAY:addDays(TODAY,1);
         return (w==='sat'?'평일 퀘스트로 모은 XP가 ':'이번 주 평일 퀘스트로 모은 XP가 ')+SAT_GOAL+' 이상이면 마왕성에 도전할 수 있어요. '+
           (firstWeekFree(d)?'처음 한 번은 XP가 모자라도 연습전이라 패배로 기록되지 않아요. 편하게 도전해 봐요!':'못 미치면 마왕의 저주로 패배로 기록되지만, 괜찮아요. 다음 주에 다시 도전하면 돼요.');
       }},
-    run:{h:'달린 거리는 여기에 쌓여요',x:function(){ return '거리는 퀘스트 탭에서 적어요. 걷기도 똑같이 인정돼요. 달리기·걷기가 있는 날엔 '+runMinOn(fmt(TODAY))+'km 이상 적으면 그날 퀘스트가 완료돼요. 비·눈 오는 날엔 퀘스트 탭에서 집 안 유산소로 바꿀 수도 있어요.'; }},
+    run:{h:'달린 거리는 여기에 쌓여요',x:function(){ return '거리는 퀘스트 탭에서 적어요. 걷기도 똑같이 인정돼요. 달리기와 걷기가 있는 날엔 '+runMinOn(fmt(TODAY))+'km 이상 적으면 그날 퀘스트가 완료돼요. <span style="white-space:nowrap">비·눈</span> 오는 날엔 퀘스트 탭에서 집 안 유산소로 바꿀 수도 있어요.'; }},
     kingdom:{h:'여기가 몸짱왕국이에요',x:'퀘스트와 토벌로 건축 자재가 쌓이면 무너진 건물을 하나씩 되살릴 수 있어요. 마왕과 중간보스를 이기면 장비를 만들 재료도 얻어요. 건물을 눌러 들어가 보세요!'},
     inn:{h:'여기는 여관이에요!',x:'얻은 장비를 입어 보고, 장비 도감을 볼 수 있어요. 동료가 합류하면 함께 모험할 캐릭터도 여기서 골라요. 여주인 로사에게 말을 걸어 보세요.'},
     train:{h:'훈련장이에요!',x:'마왕전을 앞두고 XP가 모자랄 때 추가로 훈련할 수 있어요. 교관 가론에게 말을 걸면 훈련 기록이 열려요. 훈련 XP는 월~금 누적에 더해지지만 1000을 넘는 부분은 기록만 남아요.'},
@@ -6404,10 +6414,10 @@ var BANDI={
   ],
   /* 언제든 부르는 도움말: [제목, 답] */
   help:[
-    ['오늘은 뭘 하면 돼요?','퀘스트 탭에 오늘 할 일이 모두 나와요. 운동 동작을 세트마다 체크하고, 달리기·걷기는 거리를 적고(하는 날만 있어요), 식단 세 가지를 체크해요. 다 마치면 \'오늘의 모험 종료\'를 눌러 마무리하면 돼요. 못 마친 날이 있어도 괜찮아요. 다음 날 다시 시작하면 돼요.'],
+    ['오늘은 뭘 하면 돼요?','퀘스트 탭에 오늘 할 일이 모두 나와요. 운동 동작을 세트마다 체크하고, 달리기와 걷기는 거리를 적고(하는 날만 있어요), 식단 세 가지를 체크해요. 다 마치면 \'오늘의 모험 종료\'를 눌러 마무리하면 돼요. 못 마친 날이 있어도 괜찮아요. 다음 날 다시 시작하면 돼요.'],
     ['마왕전이 뭐예요?','토요일엔 마왕과 싸워요. 월~금 퀘스트로 1000XP 이상 모으면 도전할 수 있고, 마왕성 퀘스트를 모두 하면 마왕을 토벌해요. 1000XP에 못 미치면 \'마왕의 저주\'로 패배해요. 단, 시작하고 7일 안의 마왕전은 XP가 모자라도 연습전이라 패배로 기록되지 않아요.'],
-    ['비 오는 날엔 어떡해요?','비·눈이 오는 날엔 달리기·걷기를 집 안 유산소로 바꿀 수 있어요(층간소음이 적은 동작만이에요). XP와 클리어는 똑같이 인정되지만, 달린 거리(km)는 올라가지 않아요. 폭염·한파·미세먼지·빙판길 같은 날엔 이유를 골라 주 3회까지 바꿀 수 있어요.'],
-    ['달리기·걷기 거리는 어디에 적어요?',function(){ return BANDI.tips.run.x(); }],
+    ['비 오는 날엔 어떡해요?','<span style="white-space:nowrap">비·눈</span>이 오는 날엔 달리기와 걷기를 집 안 유산소로 바꿀 수 있어요(층간소음이 적은 동작만이에요). XP와 클리어는 똑같이 인정되지만, 달린 거리(km)는 올라가지 않아요. <span style="white-space:nowrap">폭염·한파·미세먼지·빙판길</span> 같은 날엔 이유를 골라 주 3회까지 바꿀 수 있어요.'],
+    ['달리기와 걷기 거리는 어디에 적어요?',function(){ return BANDI.tips.run.x(); }],
     ['왕국에서는 뭘 해요?',function(){ return BANDI.tips.kingdom.x; }],
     ['대장간은 뭘 하는 곳이에요?',function(){ return BANDI.tips.forge.x; }]
   ]
@@ -7597,7 +7607,7 @@ var titleBuildD=null;
     '.td-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;pointer-events:none;}'+
     '.td-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}'+
     '.td-dest svg{display:block;width:100px;height:auto;margin-top:2px;}'+
-    '@media (max-height:700px){.td-dest svg{width:80px;} .td .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .td .ts-logo svg{width:min(54%,220px);} .td .ts-day,.td .ts-wx{font-size:11px;padding:1px 8px;} .td .ts-sub{font-size:14px;padding:1px 12px 2px;}}'+
+    '@media (max-height:700px){.td-dest svg{width:80px;} .td .ts-logo{top:calc(1.5vh + env(safe-area-inset-top,0px));} .td .ts-logo svg{width:min(54%,220px);} .td .ts-day,.td .ts-wx{font-size:11px;padding:1px 8px;} .td .ts-sub{font-size:14px;padding:2.75px 12px .25px;}}'+
     '.td .ts-cl{bottom:auto;top:15vh;}'+
     '.td .ts-logo{top:calc(11vh + env(safe-area-inset-top,0px));}'+
     '.td .ts-stars{inset:0 0 auto 0;height:'+YH+'vh;}'+
@@ -7707,9 +7717,11 @@ var titleBuildD=null;
       s+='<path d="M0,210 L0,166 C80,138 150,150 230,168 S380,136 470,160 S590,150 640,164 L640,210 Z" fill="'+c2+'"/>';
       s+='<path d="M0,166 C80,138 150,150 230,168 S380,136 470,160 S590,150 640,164" fill="none" stroke="'+OL+'" stroke-width="3" opacity=".4"/>';
     }else if(kind==='towers'){
+      s+='<g transform="translate(0,12)">';
       s+='<path d="M0,210 L0,120 L70,66 L130,112 L210,34 L300,120 L360,84 L440,138 L520,54 L600,114 L640,122 L640,210 Z" fill="'+c1+'"/>';
       [[70,66],[210,34],[520,54],[360,84]].forEach(function(p){ s+='<g fill="#E9E1F5" stroke="'+OL+'" stroke-width="1.6" opacity=".92"><rect x="'+(p[0]-6)+'" y="'+(p[1]-26)+'" width="12" height="26"/><path d="M'+(p[0]-9)+','+(p[1]-26)+' L'+p[0]+','+(p[1]-42)+' L'+(p[0]+9)+','+(p[1]-26)+' Z" fill="#6A8FE0"/></g>'; });
       s+='<path d="M0,210 L0,164 L60,138 L150,172 L240,112 L330,168 L420,128 L500,178 L580,124 L640,160 L640,210 Z" fill="'+c2+'"/>';
+      s+='</g>';
     }else{ /* peaks */
       s+='<path d="M0,210 L0,120 L70,62 L130,108 L210,30 L300,118 L360,82 L440,138 L520,50 L600,112 L640,120 L640,210 Z" fill="'+c1+'"/>';
       s+='<path d="M0,210 L0,160 L60,132 L140,170 L230,106 L320,166 L400,126 L490,176 L570,122 L640,160 L640,210 Z" fill="'+c2+'"/>';

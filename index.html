@@ -7,6 +7,9 @@
 <title>몸짱소울</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0C1716">
+<script>/* 화면 모드(v1.46.9): 첫 화면이 그려지기 전에 저장된 밝게/어둡게 설정을 먼저 적용해요 */
+(function(){try{var m=localStorage.getItem('home-training-theme');if(m==='light'||m==='dark'){document.documentElement.setAttribute('data-theme',m);var a=document.querySelector('meta[name="color-scheme"]');if(a)a.setAttribute('content',m);var b=document.querySelector('meta[name="theme-color"]');if(b)b.setAttribute('content',m==='light'?'#E8F1EE':'#0C1716');}}catch(e){}})();
+</script>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="몸짱소울">
@@ -187,7 +190,12 @@ svg.fig{width:100%; height:auto; display:block; background:var(--soft); border-r
 
 /* record */
 .field{display:flex; gap:8px; flex-wrap:wrap; margin:8px 0;}
-.field label{flex:1 1 90px; font-size:13px; color:var(--muted);}
+.field label{flex:1 1 90px; min-width:0; font-size:13px; color:var(--muted);}
+/* 아이폰 사파리(v1.46.10): 날짜칸이 카드 밖으로 튀어나오고 글씨가 위로 쏠리는 것 방지 (아이폰에만 적용) */
+@supports (-webkit-touch-callout:none){
+  .field input[type="date"]{-webkit-appearance:none; appearance:none; min-width:0; max-width:100%; text-align:left; line-height:46px;}
+  .field input[type="date"]::-webkit-date-and-time-value{text-align:left; min-height:1.2em; margin:0;}
+}
 .field input{display:block; width:100%; margin-top:4px; height:50px; border-radius:14px; border:2px solid var(--line); background:var(--soft); color:var(--ink); padding:0 12px; font:inherit;}
 .primary{width:100%; min-height:54px; border-radius:16px; border:0; background:var(--gold); color:var(--gold-ink); font-family:var(--disp); font-size:19px; margin-top:6px; box-shadow:0 4px 0 var(--edge);}
 .ghost{min-height:44px; border-radius:14px; border:2px solid var(--line); background:none; padding:0 16px; font-weight:500;}
@@ -1367,8 +1375,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.8', APP_DATE='2026-10-07', showChg=false;
+var APP_VER='1.46.10', APP_DATE='2026-10-07', showChg=false;
 var CHANGES=[
+  ['1.46.10','아이폰에서 설정의 "루틴 시작일" 날짜칸이 카드 밖으로 튀어나오고 글씨가 위로 쏠려 보이던 것을 고쳤어요'],
+  ['1.46.9','설정의 기본 설정에 "화면 모드"를 넣었어요. 기기 설정, 밝게, 어둡게 중에서 고를 수 있어요'],
   ['1.46.8','반디의 응원 말풍선 색을 바꿔서 잘 보이게 했어요. 노란 바탕에 짙은 글씨예요. 모양과 위치는 그대로예요'],
   ['1.46.7','반디의 응원 말풍선이 화면 아래쪽이 아니라 가운데쯤에 나오도록 옮겼어요. 오른쪽에서 나오는 모양은 그대로예요'],
   ['1.46.6','시작화면을 다듬었어요. 수요일 먼 산의 탑 꼭대기가 잘려 보이던 것을 고쳤어요. 부제목 "몸짱용사의 모험" 글씨가 알약 모양 칸의 정가운데에 오도록 맞췄어요'],
@@ -5817,6 +5827,7 @@ function viewSettings(){
   h+='<h2>기본 설정</h2><div class="card" style="padding:10px 16px 16px">'+
     '<div class="field"><label>루틴 시작일 (주차 계산 기준)<input type="date" id="startd" value="'+S.start+'"></label></div>'+
     '<div class="bk-btns" style="margin:4px 0 10px"><button type="button" class="ghost nw" data-a="title-toggle" aria-pressed="'+(titleOn()?'true':'false')+'">시작화면 '+(titleOn()?'켜짐':'꺼짐')+'</button><button type="button" class="ghost nw" data-a="title-show">시작화면 보기</button></div>'+
+    themeCardHtml()+
     '<div class="bk-btns" style="margin:0 0 4px"><button type="button" class="ghost nw" data-a="exec-toggle" aria-pressed="'+(execOn()?'true':'false')+'">처형 컷씬 '+(execOn()?'켜짐':'꺼짐')+'</button></div><p class="note" style="margin:0 2px 12px">끄면 처형 컷씬 없이 토벌 완료 창이 떠요. 거기서 [확인]을 누르면 메인 퀘스트와 러닝 기록이 잠기고, [해치웠나?]를 누르면 마지막 체크가 취소돼요.</p>'+
     '<div class="bk-btns" style="margin:0 0 4px"><button type="button" class="ghost nw" data-a="cheer-toggle" aria-pressed="'+(cheerOn()?'true':'false')+'">반디 응원 '+(cheerOn()?'켜짐':'꺼짐')+'</button></div><p class="note" style="margin:0 2px 12px">퀘스트를 체크하고 러닝을 기록할 때마다 반디가 옆에서 한마디씩 응원해요.</p>'+
     
@@ -6143,6 +6154,8 @@ app.addEventListener('click',function(e){
       L.alt=akind; if(awhy) L.altr=awhy; L.done.run=true;
     }
     save(); render(); pop('[data-a="alt"]'); btDelay=battleHit(sel,hpa,bossHp(sel),runXpOn(k)); afterAction(before,k); if(!wasAlt && L.alt) cheerSay('alt',k,before,sel);
+  }else if(a==='theme-set'){
+    themeSet(t.getAttribute('data-m')); render(); toast(themeMode()==='light'?'밝은 화면으로 바꿨어요':themeMode()==='dark'?'어두운 화면으로 바꿨어요':'폰의 다크 모드 설정을 따라가요');
   }else if(a==='diffpick'){
     pickDiff(t.getAttribute('data-id'),false);
   }else if(a==='run'){
@@ -6428,6 +6441,23 @@ var BANDI={
 var CHKEY='home-training-cheer';
 function cheerOn(){ try{ return localStorage.getItem(CHKEY)!=='off'; }catch(e){ return true; } }
 function cheerSet(on){ try{ localStorage.setItem(CHKEY,on?'on':'off'); }catch(e){} }
+/* ---------- 화면 모드 (v1.46.9): 기기 설정 따라가기(auto, 기본) / 밝게(light) / 어둡게(dark). 이 기기에만 저장돼요 ---------- */
+var THKEY='home-training-theme';
+function themeMode(){ try{ var m=localStorage.getItem(THKEY); return (m==='light'||m==='dark')?m:'auto'; }catch(e){ return 'auto'; } }
+function themeApply(){
+  var m=themeMode(), r=document.documentElement;
+  try{
+    if(m==='auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme',m);
+    var a=document.querySelector('meta[name="color-scheme"]'); if(a) a.setAttribute('content',m==='auto'?'light dark':m);
+    var b=document.querySelector('meta[name="theme-color"]'); if(b) b.setAttribute('content',m==='light'?'#E8F1EE':'#0C1716');
+  }catch(e){}
+}
+function themeSet(m){ try{ if(m==='light'||m==='dark') localStorage.setItem(THKEY,m); else localStorage.removeItem(THKEY); }catch(e){} themeApply(); }
+function themeCardHtml(){
+  var m=themeMode(), o=[['auto','기기 설정'],['light','밝게'],['dark','어둡게']], h='<div class="field" style="margin:4px 0 6px"><label>화면 모드</label></div><div class="bk-btns" style="margin:0 0 4px">';
+  o.forEach(function(x){ h+='<button type="button" class="ghost nw" style="flex:1 1 0;padding-left:6px;padding-right:6px" data-a="theme-set" data-m="'+x[0]+'" aria-pressed="'+(m===x[0]?'true':'false')+'">'+x[1]+'</button>'; });
+  return h+'</div><p class="note" style="margin:0 2px 12px">'+(m==='auto'?'폰의 다크 모드 설정을 따라가요.':m==='light'?'폰 설정과 상관없이 항상 밝은 화면으로 보여요.':'폰 설정과 상관없이 항상 어두운 화면으로 보여요.')+'</p>';
+}
 BANDI.cheer={
   gen:['잘하고 있어요, 용사님!','정말 대단해요!','한 세트 해냈네요!','그 느낌 그대로 가요!','좋아요, 이 페이스예요!','천천히, 하지만 꾸준히요. 멋져요!','용사님이라면 할 수 있어요!','숨 한 번 크게 쉬고, 다음 세트도 같이 해요.','지금 이 한 세트가 몸을 바꾸고 있어요.','제가 옆에서 지켜보고 있어요!','무리하지 말고, 할 수 있는 만큼만 해요.','오늘도 와 줘서 고마워요.','혼자가 아니에요. 제가 옆에 있어요!','저는 언제나 용사님 편이에요!'],
   first:['첫걸음을 뗐어요! 오늘도 같이 가요.','시작이 제일 어려운데, 해냈어요!','좋은 시작이에요, 용사님!','오늘의 모험이 시작됐어요!'],

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>몸짱소울</title>
+<title>몸짱용사</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0C1716">
 <script>/* 화면 모드(v1.46.9): 첫 화면이 그려지기 전에 저장된 밝게/어둡게 설정을 먼저 적용해요 */
@@ -12,7 +12,7 @@
 </script>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="몸짱소울">
+<meta name="apple-mobile-web-app-title" content="몸짱용사">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -1057,19 +1057,19 @@ body{text-wrap:pretty;}
 .fev[data-ph="work"] .fv-pill{background:var(--gold); color:var(--gold-ink); border-color:var(--gold);}
 .fv-name{text-wrap:balance; font-family:var(--disp); font-weight:400; font-size:28px; line-height:1.2; margin:6px 0 0; padding:0; border:0;}
 .fv-sub{margin:2px 0 6px; font-size:14px; color:var(--muted); text-wrap:balance;}
-.fv-stage{display:flex; align-items:flex-end; gap:8px; margin:4px 0 0;}
-.fv-fig{flex:1; min-width:0;}
+.fv-stage{display:flex; align-items:flex-end; gap:0; margin:4px 0 0;}
+.fv-fig{flex:0 0 auto; width:min(60%,224px);}
 .fv-fig .figs{margin:0;}
-.fv-coach{position:relative; flex:none; width:92px; padding-top:46px;}
+.fv-coach{position:relative; flex:1 1 0; min-width:0; max-width:min(150px,24vh); margin:0 auto; padding-top:24px;}
 .fv-ch{display:none;}
 .fv-coach[data-p="stand"] .fv-stand,.fv-coach[data-p="flex"] .fv-flex,.fv-coach[data-p="cheer"] .fv-cheer{display:block;}
 .fv-ch svg{display:block; width:100%; height:auto; overflow:visible;}
 .fv-coach.bn .fv-ch{animation:fvB .2s ease-out;}
 @keyframes fvB{0%{transform:translateY(0) scale(1);}40%{transform:translateY(-6px) scale(1.04);}100%{transform:none;}}
-.fv-say{position:absolute; left:0; top:0; white-space:nowrap; text-align:center; background:var(--gold); color:var(--gold-ink); border:2px solid var(--gold-ink); border-radius:14px; padding:2px 10px; font-family:var(--disp); font-size:17px; line-height:1.25;}
+.fv-say{position:absolute; left:0; top:0; white-space:nowrap; text-align:center; background:var(--gold); color:var(--gold-ink); border:2px solid var(--gold-ink); border-radius:15px; padding:2px 11px; font-family:var(--disp); font-size:20px; line-height:1.25;}
 .fv-say::before,.fv-say::after{content:''; position:absolute; left:var(--tl,50%); width:0; height:0; border-style:solid; border-color:transparent; margin-left:-9px;}
-.fv-say::before{bottom:-12px; border-width:11px 9px 0 9px; border-top-color:var(--gold-ink);}
-.fv-say::after{bottom:-8px; border-width:9px 7px 0 7px; margin-left:-7px; border-top-color:var(--gold);}
+.fv-say::before{bottom:-14px; border-width:13px 10px 0 10px; border-top-color:var(--gold-ink); margin-left:-10px;}
+.fv-say::after{bottom:-9px; border-width:10px 8px 0 8px; margin-left:-8px; border-top-color:var(--gold);}
 .fv-say[hidden]{display:none;}
 .fv-count{margin:8px 0 2px; display:grid; grid-template-columns:1fr auto 1fr; align-items:baseline; column-gap:8px;}
 .fv-count b{font-family:var(--disp); font-weight:400; font-size:84px; line-height:1; color:var(--link); font-variant-numeric:tabular-nums;}
@@ -1084,6 +1084,7 @@ body{text-wrap:pretty;}
 .fv-pause p{font-family:var(--disp); font-size:26px; margin:0;}
 .fv-pause .primary{width:min(280px,100%);}
 .fv-endc{width:120px; margin:6px auto; padding-top:0;}
+@media (max-height:600px){ .fv-coach{max-width:104px;} .fv-count b{font-size:68px;} .fv-say{font-size:18px;} }
 @media (prefers-reduced-motion: reduce){ .fv-coach.bn .fv-ch{animation:none;} .fv-bar i{transition:none;} }
 </style>
 </head>
@@ -1142,7 +1143,7 @@ body{text-wrap:pretty;}
   </div>
 </div>
 
-<div id="title" hidden role="button" tabindex="0" aria-label="몸짱소울 시작화면. 화면을 누르면 모험을 시작해요"></div>
+<div id="title" hidden role="button" tabindex="0" aria-label="몸짱용사 시작화면. 화면을 누르면 모험을 시작해요"></div>
 <div id="tsflash" hidden aria-hidden="true"></div>
 <script type="module">
 (async function(){
@@ -1444,8 +1445,15 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.18', APP_DATE='2026-10-08', showChg=false;
+var APP_VER='1.46.25', APP_DATE='2026-10-08', showChg=false;
 var CHANGES=[
+  ['1.46.25','피버모드에서 용사와 응원 말풍선이 그림 칸 반대편 구간의 한가운데에 오도록 맞췄어요(넓은 화면에서 오른쪽으로 치우치던 것 수정)'],
+  ['1.46.24','피버모드 운동 그림 칸을 다시 키우고 용사 그림은 줄여서 둘의 크기 균형을 맞췄어요'],
+  ['1.46.23','피버모드 운동 화면에서 운동 그림 칸의 빈 여백을 줄여 컴팩트하게 하고, 그만큼 용사 그림과 응원 말풍선을 키웠어요'],
+  ['1.46.22','앱 이름을 "몸짱소울"에서 "몸짱용사"로 바꿨어요. 시작화면은 "몸짱용사" 제목 아래 "몸짱왕국 대모험"이 나오고, 홈 화면 아이콘 이름·앱 정보·백업 파일 이름도 새 이름으로 바뀌어요'],
+  ['1.46.21','피버모드 메트로놈·3·2·1·GO! 소리를 키우고, 동작 사이 전환(15초)과 라운드 사이 휴식(60초)의 마지막에도 3·2·1·GO!(GO!는 강조음)를 넣었어요'],
+  ['1.46.20','피버모드 시작 카운트를 3·2·1·GO!로 바꾸고(GO!는 강조음), 운동·전환·휴식 내내 0.5초 간격 메트로놈(운동별 박자 마디, 첫 음 강조)을 넣었어요'],
+  ['1.46.19','피버모드에 들어가는 순간부터 끝날 때까지 배경음악이 꺼지고, 끝나면 다시 켜져요'],
   ['1.46.18','피버모드 시작 화면의 운동 이름표를 두 칸씩 가지런히 맞추고, 진행 화면의 큰 숫자를 정확히 가운데로 맞췄어요'],
   ['1.46.17','피버모드 용사의 말풍선에 꼬리를 달고, 캐릭터 가운데 위에 오도록 고쳤어요'],
   ['1.46.16','피버모드 용사의 응원 말투를 "좋아!", "힘내자!"처럼 남성스럽게 바꿨어요'],
@@ -5622,7 +5630,7 @@ function chart(pts,label,unit){
 /* ---------- 백업 · 복원 ---------- */
 var bkMode=null, bkText='', bkPending=null, bkErr='';
 function bkNow(){var d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
-function bkName(){return 'momjjang-soul-backup-'+bkNow()+'.json';}
+function bkName(){return 'momjjang-backup-'+bkNow()+'.json';}
 function bkStamp(){try{localStorage.setItem('home-training-backup-at',new Date().toISOString());}catch(e){}}
 function bkLast(){
   try{
@@ -5634,7 +5642,7 @@ function bkBuild(){return JSON.stringify({app:'momjjang-soul',v:1,at:new Date().
 function bkParse(text){
   var o; try{o=JSON.parse(text);}catch(e){return {err:'백업 내용을 읽을 수 없어요. 파일이나 붙여넣은 글자를 확인해 주세요.'};}
   var d=(o&&o.data)?o.data:o;
-  if(!d||typeof d!=='object'||!d.log||typeof d.log!=='object'||!Array.isArray(d.body)) return {err:'몸짱소울 백업이 아니에요.'};
+  if(!d||typeof d!=='object'||!d.log||typeof d.log!=='object'||!Array.isArray(d.body)) return {err:'몸짱용사 백업이 아니에요.'};
   var ok=/^\d{4}-\d{2}-\d{2}$/, log={};
   Object.keys(d.log).forEach(function(k){
     var L=d.log[k];
@@ -5708,7 +5716,7 @@ function bkAction(a){
   }else if(a==='bk-share'){
     try{
       var f=new File([bkText],bkName(),{type:'application/json'});
-      navigator.share({files:[f],title:'몸짱소울 백업'}).then(function(){bkStamp(); render();}).catch(function(){});
+      navigator.share({files:[f],title:'몸짱용사 백업'}).then(function(){bkStamp(); render();}).catch(function(){});
     }catch(e){ toast('공유가 안 돼요. 다른 방법을 써 주세요'); }
   }else if(a==='bk-copy'){
     try{
@@ -5916,7 +5924,7 @@ function viewSettings(){
   h+=soundCardHtml();
   h+=cloudHtml();
   h+=bkHtml();
-  h+='<h2>앱 정보</h2><div class="card" style="padding:12px 16px 14px"><p class="ver" style="margin:0"><b>몸짱소울</b> 버전 <span class="vnum">'+APP_VER+'</span></p>';
+  h+='<h2>앱 정보</h2><div class="card" style="padding:12px 16px 14px"><p class="ver" style="margin:0"><b>몸짱용사</b> 버전 <span class="vnum">'+APP_VER+'</span></p>';
   h+='<div class="bk-btns" style="margin:10px 0 4px"><button type="button" class="ghost" data-a="upd-check">업데이트 확인</button></div><p class="note" id="updstat" style="margin:0 2px">'+(updMsg||'새 버전이 있는지 확인해요 · 기록은 그대로 유지')+'</p>';
   h+='</div>';
   return h;
@@ -6203,7 +6211,9 @@ var FEVB={
   bulg:{b:3,m:'seq',sw:8},wallsit:{b:1,h:1},sideplank:{b:1,h:1,m:'seq'},sidelift:{b:3,m:'seq'},
   inchworm:{b:6}
 };
-var FEV_PREP=3, FEV_TRANS=15, FEV_REST=60, FEV_SWITCH=5;   /* 시작 전 준비 · 동작 사이 전환 · 라운드 사이 휴식 · 좌우 바꾸는 시간(초) */
+var FEV_VB='24 4 146 117';   /* v1.46.23 운동 그림 칸을 실제 그려지는 영역(전 동작 합집합 가로 136×세로 112)에 맞춘 보임 창 */
+var FEV_VOL=2.2;   /* v1.46.21 메트로놈·카운트다운 소리 크기 배율(소리가 작으면 올리고, 크면 내려요) */
+var FEV_PREP=4, FEV_TRANS=15, FEV_REST=60, FEV_SWITCH=6;   /* 시작 전 준비 · 동작 사이 전환 · 라운드 사이 휴식 · 좌우 바꾸는 시간(초) */
 var fv=null, fevOn=false, fevEl=null, fevTm=null, fevLock=null, fevSpd=1;
 function fevStage(k){ var dfc=diffOn(k); return (dfc==='sprout')?Math.min(stageIdx(),1):stageIdx(); }
 /* 아직 안 마친 세트를 라운드 순서(동작1·2·3·4 → 다음 라운드)로 */
@@ -6256,9 +6266,9 @@ function fevWake(on){   /* 운동 중에 화면이 꺼지지 않게(되는 폰�
 function fevFig(id,dur){
   var def=FIG[id], d;
   if(!def) return '';
-  if(reduceMotion()) return figHtml(id,X[id].n);
+  if(reduceMotion()) return figHtml(id,X[id].n).split('viewBox="0 0 220 124"').join('viewBox="'+FEV_VB+'"');
   d={poses:def.poses,props:def.props,tie:def.tie,dur:dur||def.dur};
-  return '<div class="figs">'+figSvg(d,true,X[id].n)+'</div>';
+  return '<div class="figs">'+figSvg(d,true,X[id].n).replace('viewBox="0 0 220 124"','viewBox="'+FEV_VB+'"')+'</div>';
 }
 function fevAnim(on){
   var sv=fevEl?fevEl.querySelectorAll('#fvfig svg'):[], i;
@@ -6266,7 +6276,7 @@ function fevAnim(on){
 }
 function fevDom(){
   if(fevEl) return fevEl;
-  var HV='-80 -120 170 176', c;
+  var HV='-85 -120 170 176', c;   /* 몸 중심(x=0)이 상자 정중앙에 오도록 보임 창을 좌우 대칭으로 */
   fevEl=document.createElement('div'); fevEl.className='fev'; fevEl.id='fev'; fevEl.hidden=true; fevEl.setAttribute('role','dialog'); fevEl.setAttribute('aria-modal','true'); fevEl.setAttribute('aria-label','피버모드');
   fevEl.innerHTML=
     '<div class="fv-in">'+
@@ -6302,11 +6312,11 @@ function fevOpen(){
   ph=fevPhases(items,k);
   stopTimer();
   el=fevDom();
-  fv={k:k,items:items,ph:ph,i:-1,t:0,paused:false,hold:false,last:Date.now(),bk:'',done:0,tx:{},say:'',cs:0,xp0:totalXP(),st:fevStage(k),circ:!!PLAN[DK[parse(k).getDay()]].circuit,fig:''};
+  fv={k:k,items:items,ph:ph,i:-1,t:0,paused:false,hold:false,last:Date.now(),bk:'',done:0,tx:{},say:'',mi:0,nx:false,ci:0,cs:0,xp0:totalXP(),st:fevStage(k),circ:!!PLAN[DK[parse(k).getDay()]].circuit,fig:''};
   items.forEach(function(it){ if(!seen[it.id]){ seen[it.id]=1; names.push(X[it.id].n); } });
   document.getElementById('fvisum').innerHTML=items.length+(fv.circ?'동작':'세트')+' · '+fevMinText(ph)+'<br>라운드 사이에는 '+FEV_REST+'초 쉬어요';
   document.getElementById('fvilist').innerHTML=names.map(function(n){ return '<li>'+n+'</li>'; }).join('');
-  el.setAttribute('data-s','intro'); el.classList.remove('ps'); el.hidden=false; fevOn=true;
+  el.setAttribute('data-s','intro'); el.classList.remove('ps'); el.hidden=false; fevOn=true; BGM.stop();   /* 피버모드 중에는 배경음악을 꺼요(끝나면 bgmSync가 다시 켜요) */
   document.getElementById('fvpz').textContent='일시정지';
   fevEl.querySelector('.fv-in').scrollTop=0;
   fevWake(true);
@@ -6314,9 +6324,9 @@ function fevOpen(){
 }
 function fevStart(){
   if(!fv || fv.i>=0) return;
-  fv.i=0; fv.t=0; fv.last=Date.now(); fv.bk=''; fv.fig=''; fv.tx={};
+  fv.i=0; fv.t=0; fv.last=Date.now(); fv.bk=''; fv.fig=''; fv.tx={}; fv.mi=0; fv.nx=false; fv.ci=0;
   fevEl.setAttribute('data-s','run');
-  fevPaint(true);
+  fevPaint(true); fevMetro();   /* 첫 "3"이 시작 버튼을 누른 바로 그 순간에 나오게 해요 */
 }
 function fevPause(on){
   if(!fv || fv.i<0 || fevEl.getAttribute('data-s')!=='run') return;
@@ -6337,7 +6347,7 @@ function fevClose(silent){
   if(fevTm){ clearInterval(fevTm); fevTm=null; }
   fevOn=false; fv=null;
   if(fevEl){ fevEl.hidden=true; fevEl.classList.remove('ps'); }
-  fevWake(false);
+  fevWake(false); bgmSync();
   if(!silent && d>0) toast('피버모드를 끝냈어요 · '+d+u+(u==='동작'?'이':'가')+' 체크됐어요');
 }
 /* 세트 자동 체크: 손으로 누르는 체크(data-a="set")와 같은 경로. 이미 체크된 세트는 건드리지 않아요(끄지 않음). 돌려주는 값: 'ok' · 'clear'(오늘이 클리어돼 평소 결과 흐름으로 넘어감) · 'stop'(잠겨서 중단) */
@@ -6386,15 +6396,57 @@ function fevCheer(sp,bt){
   do{ s=pool[fv.cs%pool.length]; fv.cs++; k++; }while(s===fv.say && k<pool.length);
   return s;
 }
+/* 메트로놈(v1.46.20): 0.5초마다 한 번(8분음표). 첫 음은 강조음.
+   횟수로 세는 운동은 1회(1박) 길이가 한 마디예요: 2초=4/8, 2.5초=5/8, 3초=6/8, 3.5초=7/8, 4초=8/8, 6초=4/8.
+   초로 세는 운동(플랭크·월 싯·사이드 플랭크·마운틴 클라이머), 좌우 바꾸는 시간, 동작 사이 전환, 라운드 사이 휴식은 모두 4/8이에요.
+   준비 카운트(3·2·1·GO!)에는 메트로놈이 없어요. 소리는 오디오 시계에 미리 예약해서 박이 흔들리지 않게 해요. */
+function fevMetN(sp){ return sp.h?4:((sp.b<=4)?Math.round(sp.b*2):4); }
+function fevMetAcc(p,t){   /* 단계 안의 t초 지점이 마디의 첫 음이면 true */
+  var sp=p.sp, a, N;
+  if(p.t!=='work') return Math.floor(t/0.5+1e-6)%4===0;
+  N=fevMetN(sp);
+  if(sp.mode==='seq'){
+    a=sp.n*sp.b;
+    if(t>=a+sp.sw) t-=a+sp.sw;                       /* 반대쪽 시작부터 마디를 새로 세요 */
+    else if(t>=a) return Math.floor((t-a)/0.5+1e-6)%4===0;   /* 좌우 바꾸는 시간은 4/8 */
+  }
+  return Math.floor(t/0.5+1e-6)%N===0;
+}
+function fevClick(acc,when){
+  try{
+    if(acc){ tone(1175,when,0.1,0.11*FEV_VOL); tone(587,when,0.1,0.06*FEV_VOL); }
+    else tone(880,when,0.06,0.05*FEV_VOL);
+  }catch(e){}
+}
+function fevMetro(){
+  var p=fv.ph[fv.i], np, tt, look=0.18;
+  if(!p) return;
+  if(p.t==='ready' || p.t==='trans' || p.t==='rest'){   /* 단계의 마지막 4초는 3·2·1·GO!예요(GO!는 강조 화음). 정확한 시각에 미리 예약해요 */
+    while(fv.ci<4 && (p.len-4+fv.ci)<=fv.t+look*fevSpd){ fevSound((fv.ci>=3)?'gor':'cd',null,null,Math.max(0,((p.len-4+fv.ci)-fv.t)/fevSpd)); fv.ci++; }
+  }
+  if(fevSpd!==1) return;      /* 미리보기 빨리 감기(속도≠1)에서는 메트로놈은 쉬어요 */
+  if(p.t!=='ready'){
+    while(true){
+      tt=fv.mi*0.5;
+      if(tt>=p.len-0.001 || tt>fv.t+look) break;
+      if(fv.t-tt<=0.15 && !((p.t==='trans'||p.t==='rest') && tt>=p.len-4-1e-6 && Math.abs(tt-Math.round(tt))<1e-6)) fevClick(fevMetAcc(p,tt),Math.max(0,tt-fv.t));   /* 마지막 4초는 정수 초에 3·2·1·GO! 소리가 나서 그 자리의 틱은 비워요 */
+      fv.mi++;
+    }
+  }
+  /* 다음 단계의 첫 음(마디 첫 박)은 단계가 끝나기 직전에 미리 예약해서 경계에서 늦지 않게 해요 */
+  np=fv.ph[fv.i+1];
+  if(np && !fv.nx && fv.t+look>=p.len){ fevClick(fevMetAcc(np,0),Math.max(0,p.len-fv.t)); fv.nx=true; }
+}
 function fevBuzz(v){ try{ if(navigator.vibrate) navigator.vibrate(v); }catch(e){} }
-function fevSound(kind,sp,bt){
+function fevSound(kind,sp,bt,w){
+  w=w||0;
   try{
     if(kind==='beat'){
       var last=(bt.n===bt.tot), acc=(bt.n%5===0), f=sp.h?520:660;
       if(bt.n===1) f=784; else if(last) f=1047; else if(acc) f=880;
       tone(f,0,last?0.2:0.09,sp.h?0.05:0.07);
-    }else if(kind==='cd'){ tone(523,0,0.12,0.07); }
-    else if(kind==='sw'){ tone(587,0,0.1,0.06); }
+    }else if(kind==='cd'){ tone(587,w,0.16,0.09*FEV_VOL); }
+    else if(kind==='gor'){ tone(784,w,0.55,0.1*FEV_VOL); tone(1047,w,0.55,0.1*FEV_VOL); tone(1568,w+0.04,0.45,0.08*FEV_VOL); fevBuzz(120); }
     else if(kind==='done'){ tone(784,0,0.12,0.09); tone(988,0.12,0.12,0.09); tone(1319,0.24,0.34,0.1); fevBuzz([60,40,120]); }
     else if(kind==='go'){ tone(784,0,0.14,0.09); tone(1047,0.1,0.22,0.09); fevBuzz(80); }
     else if(kind==='end'){ fanfare(); fevBuzz([120,60,120,60,240]); }
@@ -6414,7 +6466,7 @@ function fevSay(txt){
   /* 말풍선 꼬리가 캐릭터 몸 중심(그림 좌표 x=0) 바로 위를 가리키게 해요. 화면 가장자리에서는 말풍선만 안쪽으로 밀고 꼬리는 그대로 캐릭터를 가리켜요 */
   co=document.getElementById('fvcoach'); sv=co.querySelector('.fv-ch[style*="block"] svg, .fv-'+co.getAttribute('data-p')+' svg')||co.querySelector('svg');
   cr=co.getBoundingClientRect(); r=sv.getBoundingClientRect();
-  cx=r.left+r.width*80/170; bw=s.offsetWidth;
+  cx=r.left+r.width*0.5; bw=s.offsetWidth;
   vl=cx-bw/2; vl=Math.max(8,Math.min(window.innerWidth-8-bw,vl));
   tl=Math.max(14,Math.min(bw-14,cx-vl));
   s.style.left=(vl-cr.left)+'px'; s.style.setProperty('--tl',tl+'px');
@@ -6456,22 +6508,22 @@ function fevPaint(force){
     if(fv.paused) fevAnim(false);
   }
   if(p.t==='ready'){
-    left=Math.max(1,Math.ceil(p.len-fv.t)); pill='준비'; sub='곧 시작해요 · 자세를 잡아요'; nTxt=String(left); tTxt='초'; prog=fv.t/p.len; pose='cheer'; say=null;
-    key='c'+left; if(fv.bk!==key){ fv.bk=key; fevSound('cd'); fevCoach('cheer',true); }
+    left=Math.min(3,Math.floor(fv.t)); pill='준비'; sub='곧 시작해요 · 자세를 잡아요'; nTxt=(left>=3)?'GO!':String(3-left); tTxt=(left>=3)?'':'초'; prog=fv.t/p.len; pose='cheer'; say=null;
+    key='c'+left; if(fv.bk!==key){ fv.bk=key; fevCoach('cheer',true); }
     hint=fevEasy(it.id);
   }else if(p.t==='work'){
     bt=fevBeat(sp,fv.t); key=bt.key; prog=fv.t/p.len;
     if(bt.sw){ pill='반대쪽으로 바꿔요'; sub='오른쪽을 준비해요'; nTxt=String(bt.left); tTxt='초'; pose='stand'; sw=true; }
     else{ pill=(bt.side?bt.side+' · ':'')+'운동'; sub='목표 '+fevTarget(sp); nTxt=String(bt.n); tTxt='/ '+bt.tot+sp.unit; pose=sp.h?'flex':((bt.n%2===1)?'flex':'stand'); }
-    if(fv.bk!==key){ fv.bk=key; fv.say=bt.sw?'반대쪽!':fevCheer(sp,bt); if(bt.sw) fevSound('sw'); else fevSound('beat',sp,bt); fevCoach(pose,true); }
+    if(fv.bk!==key){ fv.bk=key; fv.say=bt.sw?'반대쪽!':fevCheer(sp,bt); fevCoach(pose,true); }
     say=fv.say;
     hint=fevEasy(it.id);
   }else{   /* trans · rest */
-    left=Math.max(1,Math.ceil(p.len-fv.t)); prog=fv.t/p.len; nTxt=String(left); tTxt='초'; say=null;
+    left=(p.len-1)-fv.t; prog=fv.t/p.len; nTxt=(left<=0)?'GO!':String(Math.ceil(left)); tTxt=(left<=0)?'':'초'; say=null;
     if(p.t==='rest'){ pill='휴식'; sub='숨을 고르고 '+it.r+(fv.circ?'라운드':'세트')+'를 준비해요'; pose='stand'; }
     else{ pill='다음 동작 준비'; sub='다음 · '+(fv.circ?it.r+'라운드':it.r+'세트')+' · 목표 '+fevTarget(fevSpec(it.id,fv.st)); pose='cheer'; }
     hint=X[it.id].tips[0]+(fevEasy(it.id)?'\n'+fevEasy(it.id):'');
-    key='c'+left; if(fv.bk!==key){ fv.bk=key; if(left<=3) fevSound('cd'); fevCoach(pose,false); }
+    key='c'+nTxt; if(fv.bk!==key){ fv.bk=key; fevCoach(pose,(left<=0)); }
   }
   fevSet('fvname',nm); fevSet('fvpill',pill); fevSet('fvsub',sub); fevSet('fvn',nTxt); fevSet('fvt',tTxt); fevSet('fvhint',hint);
   document.getElementById('fvbar').style.width=Math.min(100,Math.round(prog*200)/2)+'%';
@@ -6495,8 +6547,7 @@ function fevAdvance(){
     }
     fv.i++;
     if(fv.i>=fv.ph.length){ fevFinish(); return; }
-    p=fv.ph[fv.i]; fv.bk=''; fv.say='';
-    if(p.t==='work') fevSound('go');
+    p=fv.ph[fv.i]; fv.bk=''; fv.say=''; fv.mi=fv.nx?1:0; fv.nx=false; fv.ci=0;
     fevPaint(true);
   }
 }
@@ -6519,6 +6570,7 @@ function fevTick(){
   if(fv.paused || held) return;
   fv.t+=dt*fevSpd;
   fevAdvance();
+  if(fv && fevOn && fevEl.getAttribute('data-s')==='run') fevMetro();
   if(fv && fevOn && fevEl.getAttribute('data-s')==='run') fevPaint(false);
 }
 document.addEventListener('visibilitychange',function(){ if(document.hidden && fevOn && fv && fv.i>=0 && fevEl.getAttribute('data-s')==='run' && !fv.paused) fevPause(true); });
@@ -7707,7 +7759,7 @@ function bgmWant(){
 function bgmNowUpdate(){ var el=document.getElementById('bgmnow'); if(el) el.textContent=bgmNowText(); }
 function bgmSync(){
   if(!bgmReady) return;
-  if(!bgmOn()){ BGM.stop(); bgmNowUpdate(); return; }
+  if(!bgmOn() || fevOn){ BGM.stop(); bgmNowUpdate(); return; }   /* v1.46.19 피버모드 중에는 음악을 꺼요 */
   BGM.play(bgmWant()); bgmNowUpdate();
 }
 var VMK='home-training-vol-master', VSK='home-training-vol-sfx';
@@ -7952,10 +8004,10 @@ function tsSky(per){
 }
 function tsLogo(){
   var t='<text x="200" y="92" text-anchor="middle" font-size="96" style="font-family:var(--disp)"';
-  return '<svg viewBox="0 0 400 112" role="img" aria-label="몸짱소울">'+
-    t+' fill="'+OL+'" stroke="'+OL+'" stroke-width="16" stroke-linejoin="round" transform="translate(0,7)">몸짱소울</text>'+
-    t+' fill="#F6C445" stroke="'+OL+'" stroke-width="14" stroke-linejoin="round" paint-order="stroke">몸짱소울</text>'+
-    t+' fill="none" stroke="#FFF3B0" stroke-width="2" opacity=".55" transform="translate(-1,-2)">몸짱소울</text></svg>';
+  return '<svg viewBox="0 0 400 112" role="img" aria-label="몸짱용사">'+
+    t+' fill="'+OL+'" stroke="'+OL+'" stroke-width="16" stroke-linejoin="round" transform="translate(0,7)">몸짱용사</text>'+
+    t+' fill="#F6C445" stroke="'+OL+'" stroke-width="14" stroke-linejoin="round" paint-order="stroke">몸짱용사</text>'+
+    t+' fill="none" stroke="#FFF3B0" stroke-width="2" opacity=".55" transform="translate(-1,-2)">몸짱용사</text></svg>';
 }
 function tsDayNo(){ return Math.max(1,Math.floor((TODAY-parse(S.start))/86400000)+1); }
 
@@ -8025,7 +8077,7 @@ function titleBuild(again){
   h+='<div class="ts-l ts-rd" style="background-image:'+tsUri(300,120,tsRoad(w))+(w==='rain'||w==='storm'?';background-color:#D3AE78':'')+'"></div>';
   h+='<div class="ts-hero" style="filter:'+P.hf+'">'+tsHero(eq,um)+'</div>';
   h+=tsWeatherFront(w);
-  h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
+  h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱왕국 대모험</span></div>';
   if(w) h+='<span class="ts-wx">'+WXN[w]+'</span>';
   h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
   h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';
@@ -8312,7 +8364,7 @@ var titleBuildD=null;
     h+=fx(th.fx);
     h+='<div class="td-hero" style="filter:'+P.hf+'">'+tdHero(eq,um)+'</div>';
     h+=tsWeatherFront(w);
-    h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱용사의 모험</span></div>';
+    h+='<div class="ts-logo">'+tsLogo()+'<span class="ts-sub">몸짱왕국 대모험</span></div>';
     if(w) h+='<span class="ts-wx">'+WXN[w]+'</span>';
     h+='<span class="ts-info ts-day">모험 '+tsDayNo()+'일째 · '+({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[dk]+'요일 · '+QN[dk]+'</span><span class="ts-info ts-ver">v'+APP_VER+'</span>';
     h+='<p class="ts-tap" style="margin:0">화면을 눌러 모험 시작</p>';

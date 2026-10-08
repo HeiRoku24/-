@@ -1029,8 +1029,12 @@ body{text-wrap:pretty;}
 .fev[data-s="intro"] .fv-intro,.fev[data-s="run"] .fv-run,.fev[data-s="end"] .fv-end{display:flex; flex-direction:column; flex:1;}
 .fv-intro,.fv-end{justify-content:center; padding:10px 0;}
 .fv-list{list-style:none; margin:10px 0 6px; padding:0; display:flex; flex-wrap:wrap; justify-content:center; gap:6px;}
-.fv-list li{background:var(--soft); border:2px solid var(--line); border-radius:999px; padding:3px 12px; font-size:14px; font-weight:700;}
-.fv-note{font-size:13px; color:var(--muted); margin:8px 4px 14px; line-height:1.5; text-wrap:balance;}
+.fv-list li{white-space:nowrap; background:var(--soft); border:2px solid var(--line); border-radius:999px; padding:3px 12px; font-size:14px; font-weight:700;}
+.fv-note{font-size:13px; color:var(--muted); margin:8px 4px 14px; line-height:1.5;}
+.fv-note span{display:block; margin-top:5px; text-wrap:balance;}
+.fv-note span:first-child{margin-top:0; color:var(--ink); font-weight:700;}
+.nw{white-space:nowrap;}
+#fvisum{text-wrap:balance;}
 .fv-gh{width:100%; margin-top:10px;}
 .fv-run{position:relative;}
 .fv-top{display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:44px;}
@@ -1050,7 +1054,7 @@ body{text-wrap:pretty;}
 .fv-boss em{flex:none; font-style:normal; font-weight:700; color:var(--link); min-width:3.6em; text-align:right;}
 .fv-pill{align-self:center; font-family:var(--disp); font-size:15px; padding:2px 14px; border-radius:999px; background:var(--soft); color:var(--ink); border:2px solid var(--line);}
 .fev[data-ph="work"] .fv-pill{background:var(--gold); color:var(--gold-ink); border-color:var(--gold);}
-.fv-name{font-family:var(--disp); font-weight:400; font-size:28px; line-height:1.2; margin:6px 0 0; padding:0; border:0;}
+.fv-name{text-wrap:balance; font-family:var(--disp); font-weight:400; font-size:28px; line-height:1.2; margin:6px 0 0; padding:0; border:0;}
 .fv-sub{margin:2px 0 6px; font-size:14px; color:var(--muted); text-wrap:balance;}
 .fv-stage{display:flex; align-items:flex-end; gap:8px; margin:4px 0 0;}
 .fv-fig{flex:1; min-width:0;}
@@ -1068,7 +1072,7 @@ body{text-wrap:pretty;}
 .fv-count span{font-size:18px; color:var(--muted); font-weight:700;}
 .fv-bar{height:12px; border-radius:6px; background:var(--soft); overflow:hidden; margin:4px 2px 8px;}
 .fv-bar i{display:block; height:100%; width:0; background:var(--gold); border-radius:6px; transition:width .1s linear;}
-.fv-hint{min-height:2.7em; margin:0 4px 6px; font-size:14px; line-height:1.4; text-wrap:balance;}
+.fv-hint{white-space:pre-line; min-height:2.7em; margin:0 4px 6px; font-size:14px; line-height:1.4; text-wrap:balance;}
 .fv-pain{margin:auto 0 0; font-size:12px; color:var(--muted);}
 .fv-pause{display:none; position:absolute; left:0; right:0; top:48px; bottom:0; background:var(--bg); z-index:2; flex-direction:column; align-items:center; justify-content:center; gap:10px;}
 .fev.ps .fv-pause{display:flex;}
@@ -1435,8 +1439,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.12', APP_DATE='2026-10-08', showChg=false;
+var APP_VER='1.46.14', APP_DATE='2026-10-08', showChg=false;
 var CHANGES=[
+  ['1.46.14','피버모드 설명글을 "용사의 안내에 따라 메인퀘스트를 진행해요"로 바꾸고, 글 줄바꿈을 다듬었어요'],
+  ['1.46.13','피버모드 설명글을 "용사의 안내에 따라 운동을 진행해요"로 바꿨어요'],
   ['1.46.12','피버모드의 동작별 박자를 다듬었어요. 슈퍼맨·브릿지·레그 레이즈·데드버그·Y-T-W·인치웜은 한 번에 걸리는 시간을 늘리고, 불가리안 스플릿 스쿼트는 좌우 바꾸는 시간을 늘렸어요'],
   ['1.46.11','퀘스트 화면에 "피버모드"를 넣었어요. 박자 소리와 숫자에 맞춰 오늘 운동을 한 세트씩 돌아가며 따라 하면, 세트가 끝날 때마다 자동으로 체크돼요'],
   ['1.46.10','아이폰에서 설정의 "루틴 시작일" 날짜칸이 카드 밖으로 튀어나오고 글씨가 위로 쏠려 보이던 것을 고쳤어요'],
@@ -6223,7 +6229,7 @@ function fevHtml(k,dk,p,L,lockM){
   items=fevItems(k); if(!items.length) return '';
   ph=fevPhases(items,k);
   return '<button type="button" class="fevbtn" data-a="fever"><span class="fvi" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28"><path d="M13 2 L5 13.5 H11 L10 22 L19 10 H13 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span>'+
-    '<span class="fvt"><b>피버모드</b><small>박자에 맞춰 남은 '+items.length+(p.circuit?'동작':'세트')+'를 쭉 이어서 해요 · '+fevMinText(ph)+'</small></span></button>';
+    '<span class="fvt"><b>피버모드</b><small>용사의 안내에 따라 메인퀘스트를 진행해요 · 남은 '+items.length+(p.circuit?'동작':'세트')+' · '+fevMinText(ph)+'</small></span></button>';
 }
 function fevHeld(){   /* 레벨업·확인창 같은 큰 창이 떠 있으면 시간이 멈춰요 */
   var o=document.querySelectorAll('.ov'), i, e, r;
@@ -6256,7 +6262,7 @@ function fevDom(){
   fevEl.innerHTML=
     '<div class="fv-in">'+
     '<div class="fv-s fv-intro"><p class="ovk">FEVER MODE</p><h2 class="ovh">피버모드</h2><p class="bnote" id="fvisum"></p><ol class="fv-list" id="fvilist"></ol>'+
-      '<p class="fv-note">동작을 한 세트씩 돌아가며 해요. 박자 소리와 숫자에 맞춰 따라 하고, 세트가 끝날 때마다 자동으로 체크돼요. 일시정지는 할 수 있고, 닫아도 마친 세트는 그대로 체크돼 있어요. 소리는 설정의 효과음 크기를 따라가요.</p>'+
+      '<p class="fv-note"><span>용사의 안내에 따라 메인퀘스트를 진행해요.</span><span>동작을 한 세트씩 돌아가며, 박자 소리와 숫자에 맞춰 따라 하면 세트가 끝날 때마다 자동으로 체크돼요.</span><span>일시정지는 할 수 있고, 닫아도 마친 세트는 그대로 체크돼 있어요. 소리는 설정의 효과음 크기를 따라가요.</span></p>'+
       '<button type="button" class="primary" data-f="start">시작</button><button type="button" class="ghost fv-gh" data-f="close">닫기</button></div>'+
     '<div class="fv-s fv-run">'+
       '<div class="fv-top"><span class="fv-rd" id="fvrd"></span><span class="fv-ctrl"><button type="button" id="fvpz" data-f="pause">일시정지</button><button type="button" data-f="close" aria-label="피버모드 닫기">닫기</button></span></div>'+
@@ -6289,7 +6295,7 @@ function fevOpen(){
   el=fevDom();
   fv={k:k,items:items,ph:ph,i:-1,t:0,paused:false,hold:false,last:Date.now(),bk:'',done:0,tx:{},xp0:totalXP(),st:fevStage(k),circ:!!PLAN[DK[parse(k).getDay()]].circuit,fig:''};
   items.forEach(function(it){ if(!seen[it.id]){ seen[it.id]=1; names.push(X[it.id].n); } });
-  document.getElementById('fvisum').textContent=items.length+(fv.circ?'동작':'세트')+' · '+fevMinText(ph)+' · 라운드 사이에는 '+FEV_REST+'초 쉬어요';
+  document.getElementById('fvisum').innerHTML=items.length+(fv.circ?'동작':'세트')+' · '+fevMinText(ph)+'<br>라운드 사이에는 '+FEV_REST+'초 쉬어요';
   document.getElementById('fvilist').innerHTML=names.map(function(n){ return '<li>'+n+'</li>'; }).join('');
   el.setAttribute('data-s','intro'); el.classList.remove('ps'); el.hidden=false; fevOn=true;
   document.getElementById('fvpz').textContent='일시정지';
@@ -6418,7 +6424,7 @@ function fevPaint(force){
     hint=fevEasy(it.id);
   }else if(p.t==='work'){
     bt=fevBeat(sp,fv.t); key=bt.key; prog=fv.t/p.len;
-    if(bt.sw){ pill='반대쪽으로 바꿔요'; sub=nm+' · 오른쪽 준비'; nTxt=String(bt.left); tTxt='초'; pose='stand'; say=null; sw=true; }
+    if(bt.sw){ pill='반대쪽으로 바꿔요'; sub='오른쪽을 준비해요'; nTxt=String(bt.left); tTxt='초'; pose='stand'; say=null; sw=true; }
     else{ pill=(bt.side?bt.side+' · ':'')+'운동'; sub='목표 '+fevTarget(sp); nTxt=String(bt.n); tTxt='/ '+bt.tot+sp.unit; pose=sp.h?'flex':((bt.n%2===1)?'flex':'stand'); say=bt.n+'!'; }
     if(fv.bk!==key){ fv.bk=key; if(bt.sw) fevSound('sw'); else fevSound('beat',sp,bt); fevCoach(pose,true); }
     hint=fevEasy(it.id);
@@ -6426,7 +6432,7 @@ function fevPaint(force){
     left=Math.max(1,Math.ceil(p.len-fv.t)); prog=fv.t/p.len; nTxt=String(left); tTxt='초'; say=null;
     if(p.t==='rest'){ pill='휴식'; sub='숨을 고르고 '+it.r+(fv.circ?'라운드':'세트')+'를 준비해요'; pose='stand'; }
     else{ pill='다음 동작 준비'; sub='다음 · '+(fv.circ?it.r+'라운드':it.r+'세트')+' · 목표 '+fevTarget(fevSpec(it.id,fv.st)); pose='cheer'; }
-    hint=X[it.id].tips[0]+(fevEasy(it.id)?' · '+fevEasy(it.id):'');
+    hint=X[it.id].tips[0]+(fevEasy(it.id)?'\n'+fevEasy(it.id):'');
     key='c'+left; if(fv.bk!==key){ fv.bk=key; if(left<=3) fevSound('cd'); fevCoach(pose,false); }
   }
   fevSet('fvname',nm); fevSet('fvpill',pill); fevSet('fvsub',sub); fevSet('fvn',nTxt); fevSet('fvt',tTxt); fevSet('fvhint',hint);

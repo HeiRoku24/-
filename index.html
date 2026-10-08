@@ -1028,8 +1028,9 @@ body{text-wrap:pretty;}
 .fev .fv-s{display:none;}
 .fev[data-s="intro"] .fv-intro,.fev[data-s="run"] .fv-run,.fev[data-s="end"] .fv-end{display:flex; flex-direction:column; flex:1;}
 .fv-intro,.fv-end{justify-content:center; padding:10px 0;}
-.fv-list{list-style:none; margin:10px 0 6px; padding:0; display:flex; flex-wrap:wrap; justify-content:center; gap:6px;}
-.fv-list li{white-space:nowrap; background:var(--soft); border:2px solid var(--line); border-radius:999px; padding:3px 12px; font-size:14px; font-weight:700;}
+.fv-list{list-style:none; margin:12px auto 8px; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; width:100%; max-width:420px;}
+.fv-list li{display:flex; align-items:center; justify-content:center; min-height:46px; padding:6px 10px; background:var(--soft); border:2px solid var(--line); border-radius:14px; font-size:14px; font-weight:700; line-height:1.3; text-align:center; text-wrap:balance; word-break:keep-all;}
+.fv-list li:last-child:nth-child(odd){grid-column:1 / -1; justify-self:center; width:calc(50% - 4px);}
 .fv-note{font-size:13px; color:var(--muted); margin:8px 4px 14px; line-height:1.5;}
 .fv-note span{display:block; margin-top:5px; text-wrap:balance;}
 .fv-note span:first-child{margin-top:0; color:var(--ink); font-weight:700;}
@@ -1041,14 +1042,14 @@ body{text-wrap:pretty;}
 .fv-rd{font-family:var(--disp); font-size:20px; color:var(--link);}
 .fv-ctrl{display:flex; gap:6px;}
 .fv-ctrl button{min-height:40px; border-radius:12px; border:2px solid var(--line); background:var(--surface); color:var(--ink); padding:0 12px; font-weight:700; font-size:14px;}
-.fv-pips{display:flex; justify-content:center; align-items:center; gap:4px; margin:6px 0 8px; flex-wrap:wrap;}
+.fv-pips{display:flex; justify-content:center; align-items:center; gap:4px; margin:6px 0 8px; flex-wrap:nowrap;}
 .fv-pips i{width:14px; height:8px; border-radius:4px; background:var(--soft); border:1px solid var(--line);}
 .fv-pips i.on{background:var(--gold); border-color:var(--gold);}
 .fv-pips i.cur{outline:2px solid var(--gold); outline-offset:1px;}
 .fv-pips s{width:6px; text-decoration:none;}
 .fv-boss{display:flex; align-items:center; gap:8px; margin:0 0 8px; font-size:12px;}
-.fv-bn{flex:none; color:#ff8a80; font-weight:700; max-width:38%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.fv-bb{flex:1; height:8px; border-radius:4px; background:var(--soft); overflow:hidden;}
+.fv-bn{flex:0 1 auto; color:#ff8a80; font-weight:700; white-space:nowrap;}
+.fv-bb{flex:1; min-width:36px; height:8px; border-radius:4px; background:var(--soft); overflow:hidden;}
 .fv-bb i{display:block; height:100%; width:100%; background:#e5484d; border-radius:4px; transition:width .4s ease;}
 .fv-boss b{flex:none; font-variant-numeric:tabular-nums; color:var(--muted);}
 .fv-boss em{flex:none; font-style:normal; font-weight:700; color:var(--link); min-width:3.6em; text-align:right;}
@@ -1059,17 +1060,21 @@ body{text-wrap:pretty;}
 .fv-stage{display:flex; align-items:flex-end; gap:8px; margin:4px 0 0;}
 .fv-fig{flex:1; min-width:0;}
 .fv-fig .figs{margin:0;}
-.fv-coach{position:relative; flex:none; width:92px;}
+.fv-coach{position:relative; flex:none; width:92px; padding-top:46px;}
 .fv-ch{display:none;}
 .fv-coach[data-p="stand"] .fv-stand,.fv-coach[data-p="flex"] .fv-flex,.fv-coach[data-p="cheer"] .fv-cheer{display:block;}
 .fv-ch svg{display:block; width:100%; height:auto; overflow:visible;}
 .fv-coach.bn .fv-ch{animation:fvB .2s ease-out;}
 @keyframes fvB{0%{transform:translateY(0) scale(1);}40%{transform:translateY(-6px) scale(1.04);}100%{transform:none;}}
-.fv-say{position:absolute; left:50%; bottom:calc(100% - 2px); transform:translateX(-50%); background:var(--gold); color:var(--gold-ink); border:2px solid var(--gold-ink); border-radius:14px; padding:2px 10px; font-family:var(--disp); font-size:20px; line-height:1.25; white-space:nowrap; box-shadow:0 3px 0 var(--edge);}
+.fv-say{position:absolute; left:0; top:0; white-space:nowrap; text-align:center; background:var(--gold); color:var(--gold-ink); border:2px solid var(--gold-ink); border-radius:14px; padding:2px 10px; font-family:var(--disp); font-size:17px; line-height:1.25;}
+.fv-say::before,.fv-say::after{content:''; position:absolute; left:var(--tl,50%); width:0; height:0; border-style:solid; border-color:transparent; margin-left:-9px;}
+.fv-say::before{bottom:-12px; border-width:11px 9px 0 9px; border-top-color:var(--gold-ink);}
+.fv-say::after{bottom:-8px; border-width:9px 7px 0 7px; margin-left:-7px; border-top-color:var(--gold);}
 .fv-say[hidden]{display:none;}
-.fv-count{margin:8px 0 2px; display:flex; align-items:baseline; justify-content:center; gap:8px;}
+.fv-count{margin:8px 0 2px; display:grid; grid-template-columns:1fr auto 1fr; align-items:baseline; column-gap:8px;}
 .fv-count b{font-family:var(--disp); font-weight:400; font-size:84px; line-height:1; color:var(--link); font-variant-numeric:tabular-nums;}
-.fv-count span{font-size:18px; color:var(--muted); font-weight:700;}
+.fv-count b{grid-column:2;}
+.fv-count span{grid-column:3; justify-self:start; font-size:18px; color:var(--muted); font-weight:700; white-space:nowrap;}
 .fv-bar{height:12px; border-radius:6px; background:var(--soft); overflow:hidden; margin:4px 2px 8px;}
 .fv-bar i{display:block; height:100%; width:0; background:var(--gold); border-radius:6px; transition:width .1s linear;}
 .fv-hint{white-space:pre-line; min-height:2.7em; margin:0 4px 6px; font-size:14px; line-height:1.4; text-wrap:balance;}
@@ -1078,7 +1083,7 @@ body{text-wrap:pretty;}
 .fev.ps .fv-pause{display:flex;}
 .fv-pause p{font-family:var(--disp); font-size:26px; margin:0;}
 .fv-pause .primary{width:min(280px,100%);}
-.fv-endc{width:120px; margin:6px auto;}
+.fv-endc{width:120px; margin:6px auto; padding-top:0;}
 @media (prefers-reduced-motion: reduce){ .fv-coach.bn .fv-ch{animation:none;} .fv-bar i{transition:none;} }
 </style>
 </head>
@@ -1439,8 +1444,12 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.14', APP_DATE='2026-10-08', showChg=false;
+var APP_VER='1.46.18', APP_DATE='2026-10-08', showChg=false;
 var CHANGES=[
+  ['1.46.18','피버모드 시작 화면의 운동 이름표를 두 칸씩 가지런히 맞추고, 진행 화면의 큰 숫자를 정확히 가운데로 맞췄어요'],
+  ['1.46.17','피버모드 용사의 말풍선에 꼬리를 달고, 캐릭터 가운데 위에 오도록 고쳤어요'],
+  ['1.46.16','피버모드 용사의 응원 말투를 "좋아!", "힘내자!"처럼 남성스럽게 바꿨어요'],
+  ['1.46.15','피버모드에서 용사가 숫자를 세는 대신 "하나 더!", "숨쉬고!" 같은 응원 한마디를 해요'],
   ['1.46.14','피버모드 설명글을 "용사의 안내에 따라 메인퀘스트를 진행해요"로 바꾸고, 글 줄바꿈을 다듬었어요'],
   ['1.46.13','피버모드 설명글을 "용사의 안내에 따라 운동을 진행해요"로 바꿨어요'],
   ['1.46.12','피버모드의 동작별 박자를 다듬었어요. 슈퍼맨·브릿지·레그 레이즈·데드버그·Y-T-W·인치웜은 한 번에 걸리는 시간을 늘리고, 불가리안 스플릿 스쿼트는 좌우 바꾸는 시간을 늘렸어요'],
@@ -6293,7 +6302,7 @@ function fevOpen(){
   ph=fevPhases(items,k);
   stopTimer();
   el=fevDom();
-  fv={k:k,items:items,ph:ph,i:-1,t:0,paused:false,hold:false,last:Date.now(),bk:'',done:0,tx:{},xp0:totalXP(),st:fevStage(k),circ:!!PLAN[DK[parse(k).getDay()]].circuit,fig:''};
+  fv={k:k,items:items,ph:ph,i:-1,t:0,paused:false,hold:false,last:Date.now(),bk:'',done:0,tx:{},say:'',cs:0,xp0:totalXP(),st:fevStage(k),circ:!!PLAN[DK[parse(k).getDay()]].circuit,fig:''};
   items.forEach(function(it){ if(!seen[it.id]){ seen[it.id]=1; names.push(X[it.id].n); } });
   document.getElementById('fvisum').innerHTML=items.length+(fv.circ?'동작':'세트')+' · '+fevMinText(ph)+'<br>라운드 사이에는 '+FEV_REST+'초 쉬어요';
   document.getElementById('fvilist').innerHTML=names.map(function(n){ return '<li>'+n+'</li>'; }).join('');
@@ -6361,6 +6370,22 @@ function fevTarget(sp){
   if(sp.mode==='seq') return '한쪽 '+sp.n+sp.unit+'씩 · 왼쪽 다음 오른쪽';
   return sp.n+sp.unit;
 }
+/* 코치 용사의 응원 한마디(말풍선). 숫자는 가운데 큰 카운트가 보여 주니까 여기서는 순간에 맞는 말을 해요 */
+var CH_FAST=['좋아!','리듬 유지!','그대로!','힘내자!','멋지다!','숨쉬고!'];
+var CH_SLOW=['천천히!','자세 유지!','숨쉬고!','그대로!','좋아!','멋지다!','힘내자!'];
+var CH_HOLD=['버텨!','숨쉬고!','자세 유지!','힘 풀지 마!','좋아!','끝까지!'];
+function fevCheer(sp,bt){
+  var n=bt.n, tot=bt.tot, pool, s, k=0;
+  if(n===tot) return sp.h?'끝!':'마지막!';
+  if(n===1) return (bt.side==='오른쪽')?'오른쪽!':((bt.side==='왼쪽')?'왼쪽부터!':'가자!');
+  if(!sp.h && tot>=4 && n===tot-1) return '하나 더!';
+  if(tot>=6 && n===Math.ceil(tot/2)) return '절반 왔다!';
+  if(sp.h && tot-n===3) return '조금만!';
+  if(sp.h && n%5!==1 && fv.say) return fv.say;   /* 유지형은 1초마다 바꾸면 정신없어서 5초마다만 바꿔요 */
+  pool=sp.h?CH_HOLD:((sp.b<=2.5)?CH_FAST:CH_SLOW);
+  do{ s=pool[fv.cs%pool.length]; fv.cs++; k++; }while(s===fv.say && k<pool.length);
+  return s;
+}
 function fevBuzz(v){ try{ if(navigator.vibrate) navigator.vibrate(v); }catch(e){} }
 function fevSound(kind,sp,bt){
   try{
@@ -6381,7 +6406,19 @@ function fevCoach(pose,bounce){
   c.setAttribute('data-p',pose);
   if(bounce){ c.classList.remove('bn'); void c.offsetWidth; c.classList.add('bn'); }
 }
-function fevSay(txt){ var s=document.getElementById('fvsay'); if(!s) return; if(txt==null||txt===''){ s.hidden=true; } else { s.textContent=txt; s.hidden=false; } }
+function fevSay(txt){
+  var s=document.getElementById('fvsay'), co, sv, cr, r, cx, bw, lf, vl, tl;
+  if(!s) return;
+  if(txt==null||txt===''){ s.hidden=true; return; }
+  s.textContent=txt; s.hidden=false;
+  /* 말풍선 꼬리가 캐릭터 몸 중심(그림 좌표 x=0) 바로 위를 가리키게 해요. 화면 가장자리에서는 말풍선만 안쪽으로 밀고 꼬리는 그대로 캐릭터를 가리켜요 */
+  co=document.getElementById('fvcoach'); sv=co.querySelector('.fv-ch[style*="block"] svg, .fv-'+co.getAttribute('data-p')+' svg')||co.querySelector('svg');
+  cr=co.getBoundingClientRect(); r=sv.getBoundingClientRect();
+  cx=r.left+r.width*80/170; bw=s.offsetWidth;
+  vl=cx-bw/2; vl=Math.max(8,Math.min(window.innerWidth-8-bw,vl));
+  tl=Math.max(14,Math.min(bw-14,cx-vl));
+  s.style.left=(vl-cr.left)+'px'; s.style.setProperty('--tl',tl+'px');
+}
 function fevBoss(){   /* 팝업 안의 보스 체력 막대(중간 세트에는 보스 타격 창을 띄우지 않아요) */
   var dk=DK[parse(fv.k).getDay()], B=BOSSES[dk], h, g;
   document.getElementById('fvboss').style.display=B?'':'none';
@@ -6424,9 +6461,10 @@ function fevPaint(force){
     hint=fevEasy(it.id);
   }else if(p.t==='work'){
     bt=fevBeat(sp,fv.t); key=bt.key; prog=fv.t/p.len;
-    if(bt.sw){ pill='반대쪽으로 바꿔요'; sub='오른쪽을 준비해요'; nTxt=String(bt.left); tTxt='초'; pose='stand'; say=null; sw=true; }
-    else{ pill=(bt.side?bt.side+' · ':'')+'운동'; sub='목표 '+fevTarget(sp); nTxt=String(bt.n); tTxt='/ '+bt.tot+sp.unit; pose=sp.h?'flex':((bt.n%2===1)?'flex':'stand'); say=bt.n+'!'; }
-    if(fv.bk!==key){ fv.bk=key; if(bt.sw) fevSound('sw'); else fevSound('beat',sp,bt); fevCoach(pose,true); }
+    if(bt.sw){ pill='반대쪽으로 바꿔요'; sub='오른쪽을 준비해요'; nTxt=String(bt.left); tTxt='초'; pose='stand'; sw=true; }
+    else{ pill=(bt.side?bt.side+' · ':'')+'운동'; sub='목표 '+fevTarget(sp); nTxt=String(bt.n); tTxt='/ '+bt.tot+sp.unit; pose=sp.h?'flex':((bt.n%2===1)?'flex':'stand'); }
+    if(fv.bk!==key){ fv.bk=key; fv.say=bt.sw?'반대쪽!':fevCheer(sp,bt); if(bt.sw) fevSound('sw'); else fevSound('beat',sp,bt); fevCoach(pose,true); }
+    say=fv.say;
     hint=fevEasy(it.id);
   }else{   /* trans · rest */
     left=Math.max(1,Math.ceil(p.len-fv.t)); prog=fv.t/p.len; nTxt=String(left); tTxt='초'; say=null;
@@ -6457,7 +6495,7 @@ function fevAdvance(){
     }
     fv.i++;
     if(fv.i>=fv.ph.length){ fevFinish(); return; }
-    p=fv.ph[fv.i]; fv.bk='';
+    p=fv.ph[fv.i]; fv.bk=''; fv.say='';
     if(p.t==='work') fevSound('go');
     fevPaint(true);
   }

@@ -1016,6 +1016,66 @@ body{text-wrap:pretty;}
 .trundo{display:flex; align-items:center; gap:10px; margin:0 0 10px;}
 .trundo .ghost{min-height:40px; padding:0 14px; font-size:14px;}
 .trundo small{font-size:12px; color:var(--muted); line-height:1.35;}
+/* 피버모드 (v1.46.11) */
+.fevbtn{width:100%; display:flex; align-items:center; gap:12px; text-align:left; margin:6px 0 10px; padding:12px 14px; min-height:60px; border-radius:18px; border:3px solid var(--gold); background:var(--surface); color:var(--ink); box-shadow:0 4px 0 var(--edge);}
+.fevbtn .fvi{flex:none; width:44px; height:44px; border-radius:50%; background:var(--gold); color:var(--gold-ink); display:grid; place-items:center;}
+.fevbtn .fvt{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.fevbtn b{font-family:var(--disp); font-weight:400; font-size:21px; line-height:1.2;}
+.fevbtn small{font-size:13px; color:var(--muted); line-height:1.35; text-wrap:balance;}
+.fev{position:fixed; inset:0; z-index:44; background:var(--bg); color:var(--ink); overflow-y:auto; overscroll-behavior:contain; padding:calc(10px + env(safe-area-inset-top,0px)) 14px calc(12px + env(safe-area-inset-bottom,0px));}
+.fev[hidden]{display:none;}
+.fv-in{max-width:536px; margin:0 auto; min-height:100%; display:flex; flex-direction:column; text-align:center;}
+.fev .fv-s{display:none;}
+.fev[data-s="intro"] .fv-intro,.fev[data-s="run"] .fv-run,.fev[data-s="end"] .fv-end{display:flex; flex-direction:column; flex:1;}
+.fv-intro,.fv-end{justify-content:center; padding:10px 0;}
+.fv-list{list-style:none; margin:10px 0 6px; padding:0; display:flex; flex-wrap:wrap; justify-content:center; gap:6px;}
+.fv-list li{background:var(--soft); border:2px solid var(--line); border-radius:999px; padding:3px 12px; font-size:14px; font-weight:700;}
+.fv-note{font-size:13px; color:var(--muted); margin:8px 4px 14px; line-height:1.5; text-wrap:balance;}
+.fv-gh{width:100%; margin-top:10px;}
+.fv-run{position:relative;}
+.fv-top{display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:44px;}
+.fv-rd{font-family:var(--disp); font-size:20px; color:var(--link);}
+.fv-ctrl{display:flex; gap:6px;}
+.fv-ctrl button{min-height:40px; border-radius:12px; border:2px solid var(--line); background:var(--surface); color:var(--ink); padding:0 12px; font-weight:700; font-size:14px;}
+.fv-pips{display:flex; justify-content:center; align-items:center; gap:4px; margin:6px 0 8px; flex-wrap:wrap;}
+.fv-pips i{width:14px; height:8px; border-radius:4px; background:var(--soft); border:1px solid var(--line);}
+.fv-pips i.on{background:var(--gold); border-color:var(--gold);}
+.fv-pips i.cur{outline:2px solid var(--gold); outline-offset:1px;}
+.fv-pips s{width:6px; text-decoration:none;}
+.fv-boss{display:flex; align-items:center; gap:8px; margin:0 0 8px; font-size:12px;}
+.fv-bn{flex:none; color:#ff8a80; font-weight:700; max-width:38%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.fv-bb{flex:1; height:8px; border-radius:4px; background:var(--soft); overflow:hidden;}
+.fv-bb i{display:block; height:100%; width:100%; background:#e5484d; border-radius:4px; transition:width .4s ease;}
+.fv-boss b{flex:none; font-variant-numeric:tabular-nums; color:var(--muted);}
+.fv-boss em{flex:none; font-style:normal; font-weight:700; color:var(--link); min-width:3.6em; text-align:right;}
+.fv-pill{align-self:center; font-family:var(--disp); font-size:15px; padding:2px 14px; border-radius:999px; background:var(--soft); color:var(--ink); border:2px solid var(--line);}
+.fev[data-ph="work"] .fv-pill{background:var(--gold); color:var(--gold-ink); border-color:var(--gold);}
+.fv-name{font-family:var(--disp); font-weight:400; font-size:28px; line-height:1.2; margin:6px 0 0; padding:0; border:0;}
+.fv-sub{margin:2px 0 6px; font-size:14px; color:var(--muted); text-wrap:balance;}
+.fv-stage{display:flex; align-items:flex-end; gap:8px; margin:4px 0 0;}
+.fv-fig{flex:1; min-width:0;}
+.fv-fig .figs{margin:0;}
+.fv-coach{position:relative; flex:none; width:92px;}
+.fv-ch{display:none;}
+.fv-coach[data-p="stand"] .fv-stand,.fv-coach[data-p="flex"] .fv-flex,.fv-coach[data-p="cheer"] .fv-cheer{display:block;}
+.fv-ch svg{display:block; width:100%; height:auto; overflow:visible;}
+.fv-coach.bn .fv-ch{animation:fvB .2s ease-out;}
+@keyframes fvB{0%{transform:translateY(0) scale(1);}40%{transform:translateY(-6px) scale(1.04);}100%{transform:none;}}
+.fv-say{position:absolute; left:50%; bottom:calc(100% - 2px); transform:translateX(-50%); background:var(--gold); color:var(--gold-ink); border:2px solid var(--gold-ink); border-radius:14px; padding:2px 10px; font-family:var(--disp); font-size:20px; line-height:1.25; white-space:nowrap; box-shadow:0 3px 0 var(--edge);}
+.fv-say[hidden]{display:none;}
+.fv-count{margin:8px 0 2px; display:flex; align-items:baseline; justify-content:center; gap:8px;}
+.fv-count b{font-family:var(--disp); font-weight:400; font-size:84px; line-height:1; color:var(--link); font-variant-numeric:tabular-nums;}
+.fv-count span{font-size:18px; color:var(--muted); font-weight:700;}
+.fv-bar{height:12px; border-radius:6px; background:var(--soft); overflow:hidden; margin:4px 2px 8px;}
+.fv-bar i{display:block; height:100%; width:0; background:var(--gold); border-radius:6px; transition:width .1s linear;}
+.fv-hint{min-height:2.7em; margin:0 4px 6px; font-size:14px; line-height:1.4; text-wrap:balance;}
+.fv-pain{margin:auto 0 0; font-size:12px; color:var(--muted);}
+.fv-pause{display:none; position:absolute; left:0; right:0; top:48px; bottom:0; background:var(--bg); z-index:2; flex-direction:column; align-items:center; justify-content:center; gap:10px;}
+.fev.ps .fv-pause{display:flex;}
+.fv-pause p{font-family:var(--disp); font-size:26px; margin:0;}
+.fv-pause .primary{width:min(280px,100%);}
+.fv-endc{width:120px; margin:6px auto;}
+@media (prefers-reduced-motion: reduce){ .fv-coach.bn .fv-ch{animation:none;} .fv-bar i{transition:none;} }
 </style>
 </head>
 <body>
@@ -1375,8 +1435,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.10', APP_DATE='2026-10-07', showChg=false;
+var APP_VER='1.46.12', APP_DATE='2026-10-08', showChg=false;
 var CHANGES=[
+  ['1.46.12','피버모드의 동작별 박자를 다듬었어요. 슈퍼맨·브릿지·레그 레이즈·데드버그·Y-T-W·인치웜은 한 번에 걸리는 시간을 늘리고, 불가리안 스플릿 스쿼트는 좌우 바꾸는 시간을 늘렸어요'],
+  ['1.46.11','퀘스트 화면에 "피버모드"를 넣었어요. 박자 소리와 숫자에 맞춰 오늘 운동을 한 세트씩 돌아가며 따라 하면, 세트가 끝날 때마다 자동으로 체크돼요'],
   ['1.46.10','아이폰에서 설정의 "루틴 시작일" 날짜칸이 카드 밖으로 튀어나오고 글씨가 위로 쏠려 보이던 것을 고쳤어요'],
   ['1.46.9','설정의 기본 설정에 "화면 모드"를 넣었어요. 기기 설정, 밝게, 어둡게 중에서 고를 수 있어요'],
   ['1.46.8','반디의 응원 말풍선 색을 바꿔서 잘 보이게 했어요. 노란 바탕에 짙은 글씨예요. 모양과 위치는 그대로예요'],
@@ -5445,7 +5507,7 @@ function viewToday(){
   }else{
     h+='<p class="note" style="margin:14px 2px 0">오늘은 '+themeOf(dk,k).replace(/ ·.*$/,'')+'이에요. 러닝과 걷기는 쉬어요.</p>';
   }
-  if(exFor(dk,k).length) h+='<h2>메인 퀘스트</h2>';
+  if(exFor(dk,k).length) h+='<h2>메인 퀘스트</h2>'+fevHtml(k,dk,p,L,lockM);
 
   var EXL=exFor(dk,k), BON=bonusFor(dk,k);
   EXL.concat(BON).forEach(function(id,ix){
@@ -5931,6 +5993,7 @@ function updCheck(){
 })();
 
 function toast(msg){
+  if(fevOn && /^\+\d+\s*XP$/.test(String(msg))) return;   /* v1.46.11 피버모드 중 XP는 팝업 안에 보여요 */
   toastEl.textContent=msg; toastEl.hidden=false;
   toastEl.classList.remove('show'); void toastEl.offsetWidth; toastEl.classList.add('show');
   if(toastT) clearTimeout(toastT);
@@ -6110,6 +6173,313 @@ function startHold(sec,name){
 }
 document.getElementById('tskip').addEventListener('click',function(){ exWatchStop(); stopTimer(); });
 
+/* ---------- 피버모드 (v1.46.11) ----------
+   퀘스트 화면의 [피버모드] → 팝업에서 오늘의 메인 퀘스트를 "돌려 하기" 순서로 박자음 + 숫자 카운트에 맞춰 같이 해요.
+   (동작1 1세트 → 동작2 1세트 → … → 라운드 사이 60초 휴식 → 다음 라운드). 사람 목소리·TTS는 쓰지 않아요.
+   세트가 끝날 때마다 기존 세트 체크와 같은 경로(actMark·battleHit·afterAction)로 자동 체크해요(보스 체력·XP·클리어는 그대로).
+   일시정지는 있고 건너뛰기는 없어요. 닫으면 마친 세트까지만 인정(체크가 하나씩 남아 있어요). 일요일 스트레칭·러닝·식단은 대상이 아니에요. */
+/* 동작별 박자: HeiRoku가 "한번 너가 세팅해 줘"라고 해서 제가 정한 값이에요(폰에서 따라 해 보고 조정).
+   b: 한 번(1박)에 걸리는 초 · h:1 유지형(1초마다 셈) · m:'alt' 좌우 번갈아 하고 좌우 합계로 셈 / 'seq' 한쪽을 끝낸 뒤 반대쪽 · fl: 막대 인간 그림이 한 바퀴 도는 데 몇 박이 드는지 */
+var FEVB={
+  pushup:{b:3},pike:{b:3},dips:{b:3},plank:{b:1,h:1},
+  squat:{b:3},lunge:{b:3.5,m:'alt'},bridge:{b:4},calf:{b:2},
+  crunch:{b:2},legraise:{b:4},bicycle:{b:2.5,m:'alt',fl:2},deadbug:{b:4,m:'alt',fl:2},
+  superman:{b:3},snow:{b:3},ytw:{b:6},mtn:{b:1,h:1,fl:2},
+  bulg:{b:3,m:'seq',sw:8},wallsit:{b:1,h:1},sideplank:{b:1,h:1,m:'seq'},sidelift:{b:3,m:'seq'},
+  inchworm:{b:6}
+};
+var FEV_PREP=3, FEV_TRANS=15, FEV_REST=60, FEV_SWITCH=5;   /* 시작 전 준비 · 동작 사이 전환 · 라운드 사이 휴식 · 좌우 바꾸는 시간(초) */
+var fv=null, fevOn=false, fevEl=null, fevTm=null, fevLock=null, fevSpd=1;
+function fevStage(k){ var dfc=diffOn(k); return (dfc==='sprout')?Math.min(stageIdx(),1):stageIdx(); }
+/* 아직 안 마친 세트를 라운드 순서(동작1·2·3·4 → 다음 라운드)로 */
+function fevItems(k){
+  var dk=DK[parse(k).getDay()], L=rd(k), EXL=exFor(dk,k).filter(function(id){ return X[id] && !X[id].one; }), items=[], r, i, sid;
+  for(r=1;r<=SETS;r++){ for(i=0;i<EXL.length;i++){ sid=EXL[i]+'-'+r; if(!L.done[sid]) items.push({id:EXL[i],r:r,sid:sid}); } }
+  return items;
+}
+function fevSpec(id,st){
+  var e=X[id], B=FEVB[id]||{b:3}, ds=String(e.r[st]), m=ds.match(/\d+/g)||['10'], a=parseInt(m[0],10), c=(m.length>1)?parseInt(m[1],10):a, n=Math.ceil((a+c)/2);
+  var mode=B.m||(ds.indexOf('한쪽')>=0?'seq':'rep');
+  var sw=B.sw||FEV_SWITCH, len=(mode==='alt')?2*n*B.b:((mode==='seq')?2*n*B.b+sw:n*B.b);
+  return {id:id,name:e.n,n:n,b:B.b,sw:sw,h:!!B.h,mode:mode,len:len,unit:B.h?'초':'회',dur:(B.h&&!B.fl)?null:B.b*(B.fl||1)};
+}
+function fevPhases(items,k){
+  var st=fevStage(k), ph=[], i, sp, nx;
+  if(!items.length) return ph;
+  ph.push({t:'ready',len:FEV_PREP,it:items[0]});
+  for(i=0;i<items.length;i++){
+    sp=fevSpec(items[i].id,st);
+    ph.push({t:'work',it:items[i],sp:sp,len:sp.len});
+    if(i<items.length-1){ nx=items[i+1]; ph.push({t:(nx.r!==items[i].r)?'rest':'trans',len:(nx.r!==items[i].r)?FEV_REST:FEV_TRANS,it:nx}); }
+  }
+  return ph;
+}
+function fevSecs(ph){ var s=0; ph.forEach(function(p){ s+=p.len; }); return s; }
+function fevMinText(ph){ return '약 '+Math.max(1,Math.round(fevSecs(ph)/60))+'분'; }
+/* 퀘스트 화면 버튼: 오늘, 아직 안 끝나고 잠기지 않은 날, 운동이 남아 있을 때만 */
+function fevHtml(k,dk,p,L,lockM){
+  var items, ph;
+  if(k!==fmt(TODAY) || lockM || p.rest || dk==='sun') return '';
+  items=fevItems(k); if(!items.length) return '';
+  ph=fevPhases(items,k);
+  return '<button type="button" class="fevbtn" data-a="fever"><span class="fvi" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28"><path d="M13 2 L5 13.5 H11 L10 22 L19 10 H13 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span>'+
+    '<span class="fvt"><b>피버모드</b><small>박자에 맞춰 남은 '+items.length+(p.circuit?'동작':'세트')+'를 쭉 이어서 해요 · '+fevMinText(ph)+'</small></span></button>';
+}
+function fevHeld(){   /* 레벨업·확인창 같은 큰 창이 떠 있으면 시간이 멈춰요 */
+  var o=document.querySelectorAll('.ov'), i, e, r;
+  for(i=0;i<o.length;i++){ if(!o[i].hidden) return true; }
+  e=document.getElementById('excut'); if(e && !e.hidden) return true;
+  r=document.getElementById('rkup'); if(r && !r.hidden) return true;
+  return false;
+}
+function fevWake(on){   /* 운동 중에 화면이 꺼지지 않게(되는 폰에서만) */
+  try{
+    if(on){ if(navigator.wakeLock && !fevLock){ navigator.wakeLock.request('screen').then(function(l){ fevLock=l; l.addEventListener('release',function(){ if(fevLock===l) fevLock=null; }); }).catch(function(){}); } }
+    else if(fevLock){ fevLock.release(); fevLock=null; }
+  }catch(e){}
+}
+function fevFig(id,dur){
+  var def=FIG[id], d;
+  if(!def) return '';
+  if(reduceMotion()) return figHtml(id,X[id].n);
+  d={poses:def.poses,props:def.props,tie:def.tie,dur:dur||def.dur};
+  return '<div class="figs">'+figSvg(d,true,X[id].n)+'</div>';
+}
+function fevAnim(on){
+  var sv=fevEl?fevEl.querySelectorAll('#fvfig svg'):[], i;
+  for(i=0;i<sv.length;i++){ try{ if(on) sv[i].unpauseAnimations(); else sv[i].pauseAnimations(); }catch(e){} }
+}
+function fevDom(){
+  if(fevEl) return fevEl;
+  var HV='-80 -120 170 176', c;
+  fevEl=document.createElement('div'); fevEl.className='fev'; fevEl.id='fev'; fevEl.hidden=true; fevEl.setAttribute('role','dialog'); fevEl.setAttribute('aria-modal','true'); fevEl.setAttribute('aria-label','피버모드');
+  fevEl.innerHTML=
+    '<div class="fv-in">'+
+    '<div class="fv-s fv-intro"><p class="ovk">FEVER MODE</p><h2 class="ovh">피버모드</h2><p class="bnote" id="fvisum"></p><ol class="fv-list" id="fvilist"></ol>'+
+      '<p class="fv-note">동작을 한 세트씩 돌아가며 해요. 박자 소리와 숫자에 맞춰 따라 하고, 세트가 끝날 때마다 자동으로 체크돼요. 일시정지는 할 수 있고, 닫아도 마친 세트는 그대로 체크돼 있어요. 소리는 설정의 효과음 크기를 따라가요.</p>'+
+      '<button type="button" class="primary" data-f="start">시작</button><button type="button" class="ghost fv-gh" data-f="close">닫기</button></div>'+
+    '<div class="fv-s fv-run">'+
+      '<div class="fv-top"><span class="fv-rd" id="fvrd"></span><span class="fv-ctrl"><button type="button" id="fvpz" data-f="pause">일시정지</button><button type="button" data-f="close" aria-label="피버모드 닫기">닫기</button></span></div>'+
+      '<div class="fv-pips" id="fvpips" aria-hidden="true"></div>'+
+      '<div class="fv-boss" id="fvboss" aria-hidden="true"><span class="fv-bn" id="fvbn"></span><span class="fv-bb"><i id="fvbh"></i></span><b id="fvbt"></b><em id="fvxp"></em></div>'+
+      '<div class="fv-pill" id="fvpill"></div><h2 class="fv-name" id="fvname"></h2><p class="fv-sub" id="fvsub"></p>'+
+      '<div class="fv-stage"><div class="fv-fig" id="fvfig"></div><div class="fv-coach" id="fvcoach" data-p="cheer"><div class="fv-say" id="fvsay" hidden></div>'+
+        ['stand','flex','cheer'].map(function(n){ return '<div class="fv-ch fv-'+n+'" aria-hidden="true"><svg viewBox="'+HV+'">'+heroPose(n)+'</svg></div>'; }).join('')+'</div></div>'+
+      '<div class="fv-count"><b id="fvn">3</b><span id="fvt"></span></div><div class="fv-bar"><i id="fvbar"></i></div>'+
+      '<p class="fv-hint" id="fvhint"></p><p class="fv-pain">통증이 있으면 바로 멈추고 쉬운 변형으로 바꾸세요.</p>'+
+      '<div class="fv-pause" id="fvpause"><p>일시정지 중이에요</p><button type="button" class="primary" data-f="pause">이어서 하기</button></div></div>'+
+    '<div class="fv-s fv-end"><p class="ovk">FEVER MODE</p><h2 class="ovh">피버모드 끝!</h2><div class="fv-coach fv-endc" data-p="cheer"><div class="fv-ch fv-cheer" aria-hidden="true"><svg viewBox="'+HV+'">'+heroPose('cheer')+'</svg></div></div><p class="bnote" id="fvesum"></p><button type="button" class="primary" data-f="finish">닫기</button></div>'+
+    '</div>';
+  document.body.appendChild(fevEl);
+  fevEl.addEventListener('click',function(e){
+    var t=e.target.closest('[data-f]'), f; if(!t || !fv) return; f=t.getAttribute('data-f');
+    if(f==='start') fevStart();
+    else if(f==='pause') fevPause(!fv.paused);
+    else if(f==='close') fevAskClose();
+    else if(f==='finish') fevClose(true);
+  });
+  return fevEl;
+}
+function fevOpen(){
+  var k=fmt(sel), items, ph, el, names=[], seen={};
+  if(fevOn || k!==fmt(TODAY) || isEnded(k) || rd(k).fin) return;
+  items=fevItems(k); if(!items.length) return;
+  ph=fevPhases(items,k);
+  stopTimer();
+  el=fevDom();
+  fv={k:k,items:items,ph:ph,i:-1,t:0,paused:false,hold:false,last:Date.now(),bk:'',done:0,tx:{},xp0:totalXP(),st:fevStage(k),circ:!!PLAN[DK[parse(k).getDay()]].circuit,fig:''};
+  items.forEach(function(it){ if(!seen[it.id]){ seen[it.id]=1; names.push(X[it.id].n); } });
+  document.getElementById('fvisum').textContent=items.length+(fv.circ?'동작':'세트')+' · '+fevMinText(ph)+' · 라운드 사이에는 '+FEV_REST+'초 쉬어요';
+  document.getElementById('fvilist').innerHTML=names.map(function(n){ return '<li>'+n+'</li>'; }).join('');
+  el.setAttribute('data-s','intro'); el.classList.remove('ps'); el.hidden=false; fevOn=true;
+  document.getElementById('fvpz').textContent='일시정지';
+  fevEl.querySelector('.fv-in').scrollTop=0;
+  fevWake(true);
+  if(!fevTm) fevTm=setInterval(fevTick,80);
+}
+function fevStart(){
+  if(!fv || fv.i>=0) return;
+  fv.i=0; fv.t=0; fv.last=Date.now(); fv.bk=''; fv.fig=''; fv.tx={};
+  fevEl.setAttribute('data-s','run');
+  fevPaint(true);
+}
+function fevPause(on){
+  if(!fv || fv.i<0 || fevEl.getAttribute('data-s')!=='run') return;
+  fv.paused=on; fv.last=Date.now();
+  fevEl.classList.toggle('ps',on);
+  document.getElementById('fvpz').textContent=on?'이어하기':'일시정지';
+  fevAnim(!on);
+  if(!on) fevWake(true);
+}
+function fevAskClose(){
+  if(!fv) return;
+  if(fv.i<0 || fevEl.getAttribute('data-s')==='end'){ fevClose(false); return; }
+  if(!fv.paused) fevPause(true);
+  askOpen({title:'피버모드를 끝낼까요?',note:'지금까지 마친 세트는 그대로 체크돼 있어요. 남은 세트는 직접 체크하거나 다시 피버모드로 이어서 할 수 있어요.',yes:'끝내기',no:'계속하기',act:function(){ fevClose(false); }});
+}
+function fevClose(silent){
+  var d=fv?fv.done:0, u=(fv&&fv.circ)?'동작':'세트';
+  if(fevTm){ clearInterval(fevTm); fevTm=null; }
+  fevOn=false; fv=null;
+  if(fevEl){ fevEl.hidden=true; fevEl.classList.remove('ps'); }
+  fevWake(false);
+  if(!silent && d>0) toast('피버모드를 끝냈어요 · '+d+u+(u==='동작'?'이':'가')+' 체크됐어요');
+}
+/* 세트 자동 체크: 손으로 누르는 체크(data-a="set")와 같은 경로. 이미 체크된 세트는 건드리지 않아요(끄지 않음). 돌려주는 값: 'ok' · 'clear'(오늘이 클리어돼 평소 결과 흐름으로 넘어감) · 'stop'(잠겨서 중단) */
+function fevMark(sid){
+  var k=fv.k, L=wr(k), before, hp0, fin, clear;
+  if(isEnded(k) || L.fin) return 'stop';
+  if(L.done[sid]) return 'ok';
+  before=snap(); hp0=bossHp(sel); actMark('set',k,{id:sid});
+  L.done[sid]=true; save();
+  fin=isDone(sel); clear=fin && !before.done;
+  fv.done++;
+  render();
+  if(clear){ btDelay=battleHit(sel,hp0,bossHp(sel),setXpOn(k)); fevClose(true); stopTimer(); }
+  else btDelay=0;
+  afterAction(before,k);
+  return clear?'clear':'ok';
+}
+function fevBeat(sp,t){
+  var n=sp.n, b=sp.b, x;
+  if(sp.mode==='alt'){ x=Math.min(2*n,Math.floor(t/b)+1); return {key:'a'+x,n:x,tot:2*n,side:''}; }
+  if(sp.mode==='seq'){
+    if(t<n*b){ x=Math.min(n,Math.floor(t/b)+1); return {key:'p'+x,n:x,tot:n,side:'왼쪽'}; }
+    if(t<n*b+sp.sw){ return {key:'w'+Math.floor(t-n*b),sw:true,left:Math.ceil(n*b+sp.sw-t),n:0,tot:n,side:''}; }
+    x=Math.min(n,Math.floor((t-n*b-sp.sw)/b)+1); return {key:'q'+x,n:x,tot:n,side:'오른쪽'};
+  }
+  x=Math.min(n,Math.floor(t/b)+1); return {key:'r'+x,n:x,tot:n,side:''};
+}
+function fevTarget(sp){
+  if(sp.mode==='alt') return '좌우 번갈아 총 '+(2*sp.n)+'회';
+  if(sp.mode==='seq') return '한쪽 '+sp.n+sp.unit+'씩 · 왼쪽 다음 오른쪽';
+  return sp.n+sp.unit;
+}
+function fevBuzz(v){ try{ if(navigator.vibrate) navigator.vibrate(v); }catch(e){} }
+function fevSound(kind,sp,bt){
+  try{
+    if(kind==='beat'){
+      var last=(bt.n===bt.tot), acc=(bt.n%5===0), f=sp.h?520:660;
+      if(bt.n===1) f=784; else if(last) f=1047; else if(acc) f=880;
+      tone(f,0,last?0.2:0.09,sp.h?0.05:0.07);
+    }else if(kind==='cd'){ tone(523,0,0.12,0.07); }
+    else if(kind==='sw'){ tone(587,0,0.1,0.06); }
+    else if(kind==='done'){ tone(784,0,0.12,0.09); tone(988,0.12,0.12,0.09); tone(1319,0.24,0.34,0.1); fevBuzz([60,40,120]); }
+    else if(kind==='go'){ tone(784,0,0.14,0.09); tone(1047,0.1,0.22,0.09); fevBuzz(80); }
+    else if(kind==='end'){ fanfare(); fevBuzz([120,60,120,60,240]); }
+  }catch(e){}
+}
+function fevSet(id,v){ var e; if(fv.tx[id]===v) return; fv.tx[id]=v; e=document.getElementById(id); if(e) e.textContent=v; }
+function fevCoach(pose,bounce){
+  var c=document.getElementById('fvcoach'); if(!c) return;
+  c.setAttribute('data-p',pose);
+  if(bounce){ c.classList.remove('bn'); void c.offsetWidth; c.classList.add('bn'); }
+}
+function fevSay(txt){ var s=document.getElementById('fvsay'); if(!s) return; if(txt==null||txt===''){ s.hidden=true; } else { s.textContent=txt; s.hidden=false; } }
+function fevBoss(){   /* 팝업 안의 보스 체력 막대(중간 세트에는 보스 타격 창을 띄우지 않아요) */
+  var dk=DK[parse(fv.k).getDay()], B=BOSSES[dk], h, g;
+  document.getElementById('fvboss').style.display=B?'':'none';
+  if(!B) return;
+  h=bossHp(sel); g=totalXP()-fv.xp0;
+  fevSet('fvbn',B.n); fevSet('fvbt',h.left+' / '+h.max); fevSet('fvxp',g>0?'+'+g+' XP':'');
+  document.getElementById('fvbh').style.width=(h.max?Math.round(h.left*100/h.max):0)+'%';
+}
+function fevPips(){
+  var h='', i, it;
+  for(i=0;i<fv.items.length;i++){
+    it=fv.items[i];
+    if(i>0 && fv.items[i-1].r!==it.r) h+='<s></s>';
+    h+='<i class="'+(i<fv.done?'on':'')+(i===fv.wi?' cur':'')+'"></i>';
+  }
+  document.getElementById('fvpips').innerHTML=h;
+}
+/* 화면 그리기. force=true면 단계가 바뀐 직후라 그림·글자를 새로 만들어요 */
+function fevPaint(force){
+  var p=fv.ph[fv.i], sp=p.sp, it=p.it, nm=X[it.id].n, el, bt, left, key, unitW=fv.circ?'라운드':'세트', pill, sub, nTxt, tTxt, prog, hint='', say=null, pose, sw=false, fk;
+  if(p.t==='work') fv.wi=fv.items.indexOf(it);
+  else fv.wi=-1;
+  if(force){
+    fv.fig='';
+    document.getElementById('fvrd').textContent=(fv.circ?'라운드 ':'세트 ')+it.r+' / '+SETS;
+    document.getElementById('fvname').textContent=nm;
+    fevPips(); fevBoss();
+  }
+  /* 그림: 단계가 바뀔 때만 새로 만들어요(움직임이 그 순간부터 박자에 맞춰 돌아요) */
+  fk=fv.i+':'+it.id;
+  if(fv.fig!==fk){
+    fv.fig=fk;
+    var spec=sp||fevSpec(it.id,fv.st);
+    document.getElementById('fvfig').innerHTML=fevFig(it.id,spec.dur);
+    if(fv.paused) fevAnim(false);
+  }
+  if(p.t==='ready'){
+    left=Math.max(1,Math.ceil(p.len-fv.t)); pill='준비'; sub='곧 시작해요 · 자세를 잡아요'; nTxt=String(left); tTxt='초'; prog=fv.t/p.len; pose='cheer'; say=null;
+    key='c'+left; if(fv.bk!==key){ fv.bk=key; fevSound('cd'); fevCoach('cheer',true); }
+    hint=fevEasy(it.id);
+  }else if(p.t==='work'){
+    bt=fevBeat(sp,fv.t); key=bt.key; prog=fv.t/p.len;
+    if(bt.sw){ pill='반대쪽으로 바꿔요'; sub=nm+' · 오른쪽 준비'; nTxt=String(bt.left); tTxt='초'; pose='stand'; say=null; sw=true; }
+    else{ pill=(bt.side?bt.side+' · ':'')+'운동'; sub='목표 '+fevTarget(sp); nTxt=String(bt.n); tTxt='/ '+bt.tot+sp.unit; pose=sp.h?'flex':((bt.n%2===1)?'flex':'stand'); say=bt.n+'!'; }
+    if(fv.bk!==key){ fv.bk=key; if(bt.sw) fevSound('sw'); else fevSound('beat',sp,bt); fevCoach(pose,true); }
+    hint=fevEasy(it.id);
+  }else{   /* trans · rest */
+    left=Math.max(1,Math.ceil(p.len-fv.t)); prog=fv.t/p.len; nTxt=String(left); tTxt='초'; say=null;
+    if(p.t==='rest'){ pill='휴식'; sub='숨을 고르고 '+it.r+(fv.circ?'라운드':'세트')+'를 준비해요'; pose='stand'; }
+    else{ pill='다음 동작 준비'; sub='다음 · '+(fv.circ?it.r+'라운드':it.r+'세트')+' · 목표 '+fevTarget(fevSpec(it.id,fv.st)); pose='cheer'; }
+    hint=X[it.id].tips[0]+(fevEasy(it.id)?' · '+fevEasy(it.id):'');
+    key='c'+left; if(fv.bk!==key){ fv.bk=key; if(left<=3) fevSound('cd'); fevCoach(pose,false); }
+  }
+  fevSet('fvname',nm); fevSet('fvpill',pill); fevSet('fvsub',sub); fevSet('fvn',nTxt); fevSet('fvt',tTxt); fevSet('fvhint',hint);
+  document.getElementById('fvbar').style.width=Math.min(100,Math.round(prog*200)/2)+'%';
+  if(fv.tx.say!==say){ fv.tx.say=say; fevSay(say); }
+  fevEl.setAttribute('data-ph',p.t);
+}
+function fevEasy(id){   /* 새싹의 길: 쉬운 변형부터 해 보라는 안내(퀘스트 카드와 같은 문장) */
+  var e=X[id], a;
+  if(!fv || diffOn(fv.k)!=='sprout' || !e.e) return '';
+  a=EASYS[id]||[e.e,' 해 봐요'];
+  return '처음엔 '+a[0]+a[1];
+}
+function fevAdvance(){
+  var p=fv.ph[fv.i], res, guard=0;
+  while(fv && p && fv.t>=p.len && guard++<6){
+    fv.t-=p.len;
+    if(p.t==='work'){
+      res=fevMark(p.it.sid);
+      if(res==='clear' || res==='stop'){ if(res==='stop') fevClose(true); return; }
+      fevSound('done');
+    }
+    fv.i++;
+    if(fv.i>=fv.ph.length){ fevFinish(); return; }
+    p=fv.ph[fv.i]; fv.bk='';
+    if(p.t==='work') fevSound('go');
+    fevPaint(true);
+  }
+}
+function fevFinish(){
+  var gain=totalXP()-fv.xp0;
+  document.getElementById('fvesum').textContent=fv.done+(fv.circ?'동작을':'세트를')+' 마쳤어요'+(gain>0?' · +'+gain+' XP':'')+'. 남은 퀘스트는 퀘스트 화면에서 이어서 해요.';
+  fevEl.setAttribute('data-s','end'); fevEl.classList.remove('ps'); fevWake(false);
+  fevCoach('cheer',true);
+  fevSound('end');
+  fv.i=fv.ph.length;
+}
+function fevTick(){
+  var now, dt;
+  if(!fv || !fevOn) return;
+  now=Date.now(); dt=Math.min(0.5,(now-fv.last)/1000); fv.last=now;
+  if(fevEl.getAttribute('data-s')!=='run') return;
+  if(document.hidden && !fv.paused){ fevPause(true); return; }   /* 화면이 꺼지거나 다른 앱으로 가면 자동으로 멈춰요 */
+  var held=fevHeld();
+  if(held!==fv.hold){ fv.hold=held; fevAnim(!held && !fv.paused); }
+  if(fv.paused || held) return;
+  fv.t+=dt*fevSpd;
+  fevAdvance();
+  if(fv && fevOn && fevEl.getAttribute('data-s')==='run') fevPaint(false);
+}
+document.addEventListener('visibilitychange',function(){ if(document.hidden && fevOn && fv && fv.i>=0 && fevEl.getAttribute('data-s')==='run' && !fv.paused) fevPause(true); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape' && fevOn && fevHeld()===false) fevAskClose(); });
+
 /* ---------- 이벤트 ---------- */
 document.getElementById('nav').addEventListener('click',function(e){
   var b=e.target.closest('[data-tab]'); if(!b) return;
@@ -6123,6 +6493,7 @@ app.addEventListener('click',function(e){
   if(Lc.fin && ['set','alt','altwhy'].indexOf(a)>=0 && !(a==='set' && k>=fmt(TODAY) && isBonusSet(t.getAttribute('data-id'),k))) return;   /* v1.43.0 보스를 쓰러뜨리면 메인 퀘스트·러닝은 잠겨요 */
   if(a==='diet' && t.getAttribute('data-k')!=='water' && Lc.out) return;
   if(a==='out' && !Lc.out && Lc.diet.lunch && Lc.diet.post) return;
+  if(a==='fever'){ fevOpen(); return; }
   if(a==='sw'){ startHold(parseInt(t.getAttribute('data-sec'),10),t.getAttribute('data-name')); return; }
   if(a==='set'){
     id=t.getAttribute('data-id'); before=snap(); L=wr(k); actMark('set',k,{id:id});
@@ -6486,6 +6857,7 @@ function cheerPick(kind){
   t=bag.pop(); cheerLast=t; return t;
 }
 function cheerBusy(){   /* 큰 창이 떠 있을 때는 쉬어요(전투 연출은 위쪽, 휴식 타이머는 아래쪽이라 응원과 겹치지 않아서 허용) */
+  if(fevOn) return true;   /* v1.46.11 피버모드 중에는 코치 용사가 있어서 반디 응원은 쉬어요 */
   var ovs=document.querySelectorAll('.ov'), i;
   for(i=0;i<ovs.length;i++){ if(!ovs[i].hidden) return true; }
   if(titleEl && !titleEl.hidden) return true;
@@ -6536,6 +6908,7 @@ var bd={mode:'help',step:'help',ans:[null,null,null],pick:null,topic:null};
 /* 상황별 첫 안내 띄우기: 새 사용자(S.bdSeen이 있는 사용자)만, 다른 창이 없고 운동 중이 아닐 때 */
 var bdTipT=null;
 function bdBusy(){
+  if(fevOn) return true;
   var ovs=document.querySelectorAll('.ov'), i, tm=document.getElementById('timer');
   for(i=0;i<ovs.length;i++){ if(!ovs[i].hidden) return true; }
   if(titleEl && !titleEl.hidden) return true;

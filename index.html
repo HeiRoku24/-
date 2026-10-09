@@ -1446,8 +1446,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.35', APP_DATE='2026-10-09', showChg=false;
+var APP_VER='1.46.36', APP_DATE='2026-10-09', showChg=false;
 var CHANGES=[
+  ['1.46.36','여관에 처음 들어갈 때 뜨던 예전 설명 팝업을 없앴어요. 여관 안내는 왕국 탭의 말풍선 안내가 맡아요'],
   ['1.46.35','대장간 장비 목록을 보기 좋게 바꿨어요. 직업을 고른 뒤 착용 부위(예: 검·투구·갑옷·방패) 탭으로 나눠 한 번에 한 부위의 장비만 보여 주고, 장비 칸을 작게 줄였어요. "전체" 버튼은 없애고 직업별로만 보여요. 처음엔 지금 함께하는 캐릭터의 장비가 열려요'],
   ['1.46.34','탭 안내가 처음 켜질 때 앞서 본 안내의 글과 강조 틀이 잠깐 비치던 것을 고쳤어요. 더 이상 쓰지 않는 예전 탭 안내 팝업(퀘스트·지도·일지) 문구와 코드를 지웠어요'],
   ['1.46.33','탭 안내 말풍선에서 강조하는 말을 빨간 글씨 대신 어두운 알약 모양(짙은 바탕에 노란 글씨)으로 바꿨어요'],
@@ -6930,7 +6931,6 @@ var BANDI={
       }},
     run:{h:'달린 거리는 여기에 쌓여요',x:function(){ return '거리는 퀘스트 탭에서 적어요. 걷기도 똑같이 인정돼요. 달리기와 걷기가 있는 날엔 '+runMinOn(fmt(TODAY))+'km 이상 적으면 그날 퀘스트가 완료돼요. <span style="white-space:nowrap">비·눈</span> 오는 날엔 퀘스트 탭에서 집 안 유산소로 바꿀 수도 있어요.'; }},
     kingdom:{h:'여기가 몸짱왕국이에요',x:'퀘스트와 토벌로 건축 자재가 쌓이면 무너진 건물을 하나씩 되살릴 수 있어요. 마왕과 중간보스를 이기면 장비를 만들 재료도 얻어요. 건물을 눌러 들어가 보세요!'},
-    inn:{h:'여기는 여관이에요!',x:'얻은 장비를 입어 보고, 장비 도감을 볼 수 있어요. 동료가 합류하면 함께 모험할 캐릭터도 여기서 골라요. 여주인 로사에게 말을 걸어 보세요.'},
     train:{h:'훈련장이에요!',x:'마왕전을 앞두고 XP가 모자랄 때 추가로 훈련할 수 있어요. 교관 가론에게 말을 걸면 훈련 기록이 열려요. 훈련 XP는 주간 누적에 더해지지만 1000을 넘는 부분은 기록만 남아요.'},
     trade:{h:'교역소예요!',x:'남는 재료를 다른 등급의 재료로 바꿔 줘요. 내림은 후하게, 올림은 박하게 쳐 줘요. 상인 마르코에게 말을 걸면 교환이 열리고, 교환은 되돌릴 수 없어요.'},
     guild:{h:'길드예요!',x:'마왕을 쓰러뜨려 승리를 쌓으면 랭크를 올리는 승급 시험을 볼 수 있어요. 접수원 세라에게 말을 걸어 보세요. 시험은 몸 상태가 좋은 날에, 무리하지 말고 봐요.'},
@@ -7064,18 +7064,18 @@ function bdBusy(){
   if(tm && !tm.hidden) return true;
   return false;
 }
-var BLDTIP={inn:1,guild:1,train:1,trade:1,forge:1};
+var BLDTIP={guild:1,train:1,trade:1,forge:1};   /* 팝업으로 뜨는 건물 첫 안내(여관은 v1.46.36에서 뺐어요: 탭 말풍선 안내가 대신해요) */
 function bdTipId(){
   var sn=S.bdSeen, t=fmt(TODAY), dk;
   if(!sn || typeof sn!=='object'){   /* 예전부터 쓰던 사용자도 왕국 건물에는 처음 들어갈 때 한 번씩 안내해요(다른 안내는 안 떠요) */
-    if(tab==='home' && BLDTIP[kv] && (kv==='inn'||kv==='guild'||bState(kv)==='done')) return {id:kv};
+    if(tab==='home' && BLDTIP[kv] && (kv==='guild'||bState(kv)==='done')) return {id:kv};
     return null;
   }
   if(tab==='today'){
     dk=DK[TODAY.getDay()];
     if(sn.today && !sn.boss && sn.today!==t && (dk==='fri' || dk==='sat')) return {id:'boss',when:dk};   /* v1.46.32: 탭 첫 방문 안내는 새 방식(말풍선)으로 바뀌었고, 마왕전 안내만 팝업이에요 */
   }else if(tab==='home'){
-    if(BLDTIP[kv] && !sn[kv] && (kv==='inn'||kv==='guild'||bState(kv)==='done')) return {id:kv};   /* 건물 안에 처음 들어갔을 때(성벽·성은 없어요) */
+    if(BLDTIP[kv] && !sn[kv] && (kv==='guild'||bState(kv)==='done')) return {id:kv};   /* 건물 안에 처음 들어갔을 때(성벽·성은 없어요) */
   }
   return null;
 }

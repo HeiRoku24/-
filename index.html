@@ -752,25 +752,26 @@ body{text-wrap:pretty;}
 .fgc.mr-l{border-color:var(--gold);} .fgc.mr-l b{color:var(--gold);}
 @media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .fgc.mr-r b{color:#1E8CC4;} :root:not([data-theme="dark"]) .fgc.mr-l b{color:#B8860B;}}
 :root[data-theme="light"] .fgc.mr-r b{color:#1E8CC4;} :root[data-theme="light"] .fgc.mr-l b{color:#B8860B;}
-.fgitem{display:flex; align-items:center; gap:12px; padding:10px 12px; border:2px solid var(--line); border-radius:18px; background:var(--surface); box-shadow:0 4px 0 var(--edge); margin:0 0 10px;}
-.fgitem.r-r{border-color:#5CC8FF;} .fgitem.r-l{border-color:var(--gold);}
+.fgitem{display:flex; align-items:center; gap:10px; padding:6px 10px; border:2px solid var(--line); border-radius:14px; background:var(--surface); box-shadow:0 3px 0 var(--edge); margin:0 0 7px;}
+.fgitem.r-r{border-color:#5CC8FF;}
+.fgitem.r-l{border-color:var(--gold);}
 .fgitem.have{background:var(--soft);}
-.fgi{flex:none; width:64px; background:var(--soft); border-radius:14px; padding:4px;}
+.fgi{flex:none; width:46px; height:46px; box-sizing:border-box; background:var(--soft); border-radius:10px; padding:3px;}
 .fgitem.have .fgi{background:var(--surface);}
-.fgi svg{display:block; width:100%; height:auto;}
+.fgi svg{display:block; width:100%; height:100%;}   /* 세로로 긴 장비(검 등)도 칸 안에 들어가게 */
 .fgt{flex:1; min-width:0;}
-.fgt b{display:block; font-family:var(--disp); font-weight:400; font-size:19px; line-height:1.25;}
-.fgt small{display:block; font-size:12px; color:var(--muted); line-height:1.4;}
-.fgact{flex:none; width:104px;}
-.fgact .primary{margin:0; min-height:46px; font-size:17px;}
-.fgact .ghost{width:100%; min-height:46px; padding:0 6px; font-size:13px; line-height:1.3;}
-.bnote.drops{font-weight:700;}
-
-/* ---------- 장비 도감 토글 · 일지 업적 (v1.37.2) ---------- */
-.dgs{background:var(--surface); border:2px solid var(--line); border-radius:16px; box-shadow:0 3px 0 var(--edge); margin:0 0 10px; overflow:hidden;}
-.dgs.open{border-color:var(--gold);}
-.fgf{display:flex; gap:6px; flex-wrap:wrap; margin:0 0 12px;}
-.fgf button{min-height:38px; padding:0 13px; border-radius:999px; border:2px solid var(--line); background:var(--surface); color:var(--ink); font-size:14px;}
+.fgt b{display:block; font-family:var(--disp); font-weight:400; font-size:17px; line-height:1.25;}
+.fgt small{display:block; font-size:12px; color:var(--muted); line-height:1.35;}
+.fgact{flex:none; width:88px;}
+.fgact .primary{margin:0; min-height:38px; font-size:15px;}
+.fgact .ghost{width:100%; min-height:38px; padding:0 4px; font-size:13px; line-height:1.25;}
+.fgs{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; margin:0 0 10px;}
+.fgs button{min-height:46px; padding:2px 2px; border-radius:12px; border:2px solid var(--line); background:var(--surface); color:var(--ink); font-size:13px; line-height:1.2; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.fgs button small{font-size:11px; color:var(--muted);}
+.fgs button[aria-pressed="true"]{background:var(--gold); border-color:var(--gold); color:var(--gold-ink); font-weight:700;}
+.fgs button[aria-pressed="true"] small{color:var(--gold-ink);}
+.fgf{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; margin:0 0 8px;}
+.fgf button{min-height:40px; padding:2px 3px; border-radius:12px; border:2px solid var(--line); background:var(--surface); color:var(--ink); font-size:12.5px; line-height:1.15;}
 .fgf button[aria-pressed="true"]{background:var(--gold); border-color:var(--gold); color:var(--gold-ink); font-weight:700;}
 .xch{display:flex; align-items:center; gap:10px; padding:10px 12px; margin:0 0 8px; background:var(--surface); border:2px solid var(--line); border-radius:14px; box-shadow:0 2px 0 var(--edge);}
 .xch.off{opacity:.78;}
@@ -1445,8 +1446,12 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.31', APP_DATE='2026-10-09', showChg=false;
+var APP_VER='1.46.35', APP_DATE='2026-10-09', showChg=false;
 var CHANGES=[
+  ['1.46.35','대장간 장비 목록을 보기 좋게 바꿨어요. 직업을 고른 뒤 착용 부위(예: 검·투구·갑옷·방패) 탭으로 나눠 한 번에 한 부위의 장비만 보여 주고, 장비 칸을 작게 줄였어요. "전체" 버튼은 없애고 직업별로만 보여요. 처음엔 지금 함께하는 캐릭터의 장비가 열려요'],
+  ['1.46.34','탭 안내가 처음 켜질 때 앞서 본 안내의 글과 강조 틀이 잠깐 비치던 것을 고쳤어요. 더 이상 쓰지 않는 예전 탭 안내 팝업(퀘스트·지도·일지) 문구와 코드를 지웠어요'],
+  ['1.46.33','탭 안내 말풍선에서 강조하는 말을 빨간 글씨 대신 어두운 알약 모양(짙은 바탕에 노란 글씨)으로 바꿨어요'],
+  ['1.46.32','각 탭(퀘스트·러닝·왕국·일지)에 처음 들어가면 팝업 대신, 화면이 살짝 어두워지고 설명하는 곳만 밝게 보이면서 그 아래에 반디가 말풍선으로 하나씩 알려 줘요. 왕국에서는 여관을 직접 눌러 들어가 여관 설명까지 이어져요. 일지에서는 업적을 맨 아래로 옮기고 "최근 기록"을 없앴어요. 체중 그래프의 점을 누르면 그날 기록한 체중이 뜨고, 거기서 삭제할 수 있어요. 왕국 전경의 건물 위치도 바꿨어요(대장간·교역소는 위쪽, 훈련장은 오른쪽 아래)'],
   ['1.46.31','규칙 설명창 1장의 "전신짱 마왕"을 "마왕"으로 바꿨어요'],
   ['1.46.30','처음 켤 때 나오는 규칙 설명창을 7장에서 3장으로 줄이고 말투를 ~요체로 바꿨어요. 하루 종료 후 기록을 수정할 수 없다는 안내는 반디의 첫 퀘스트 안내로 옮겼어요'],
   ['1.46.29','승급 시험의 운동 횟수 측정 시간을 1분에서 2분으로 바꾸고 합격선 횟수를 새로 정했어요(타이머·안내 문구·입력 칸도 2분 기준). 버티는 동작의 시간과 러닝 기준은 그대로예요'],
@@ -3465,9 +3470,9 @@ var BVB={castle:'-80 -122 160 176',wall:'-166 -158 332 322',train:'-84 -54 168 1
 function bSvg(id){ return '<svg viewBox="'+BVB[id]+'" aria-hidden="true">'+bArt(id,bState(id),bProg(id))+'</svg>'; }
 /* 왕국 전경 */
 var KW=360, KH=500, KCX=180, KCY=240, KRX=160, KRY=150;
-/* v1.45.1: 성(가운데)을 중심으로 5개 건물이 역오각형(여관이 아래 가운데) 꼭짓점에 놓여요. 반지름 100·중심 (180,238)의 정오각형 꼭짓점에 건물의 실제 그림 영역 중심을 맞췄고(훈련장·대장간만 바깥으로 4씩), 건물 크기는 그대로예요. 시계 방향: 여관(아래) → 길드(왼쪽) → 훈련장(왼쪽 위) → 대장간(오른쪽 위) → 교역소(오른쪽) */
-var KPOS={castle:[180,246,.92],train:[117,155,.58],forge:[243,163,.61],inn:[179,339,.56],trade:[273,275,.55],guild:[85,275,.5]};
-var KBOX={castle:[149,134,66,164],train:[77,131,72,53],forge:[215,121,68,73],inn:[140,309,80,58],trade:[235,236,80,66],guild:[57,238,56,63],wall:[96,398,168,40]};
+/* v1.45.1: 성(가운데)을 중심으로 5개 건물이 역오각형(여관이 아래 가운데) 꼭짓점에 놓여요. 반지름 100·중심 (180,238)의 정오각형 꼭짓점에 건물의 실제 그림 영역 중심을 맞췄고(훈련장·대장간만 바깥으로 4씩), 건물 크기는 그대로예요. 시계 방향: 여관(아래) → 길드(왼쪽) → 대장간(왼쪽 위) → 교역소(오른쪽 위) → 훈련장(오른쪽) (v1.46.32에서 훈련장·대장간·교역소 자리를 서로 바꿨어요: 각 건물의 실제 그림 중심을 새 자리 중심에 맞춰 옮겼어요) */
+var KPOS={castle:[180,246,.92],train:[273,269.3,.58],forge:[117.1,163.4,.61],inn:[179,339,.56],trade:[243,160.4,.55],guild:[85,275,.5]};
+var KBOX={castle:[149,134,66,164],train:[233,245.3,72,53],forge:[84,121.4,66,73],inn:[140,309,80,58],trade:[212,121.4,76,66],guild:[57,238,56,63],wall:[96,398,168,40]};
 function kfield(x,y,w,h,c){ var s='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3" fill="'+c+'" stroke="'+OL+'" stroke-width="2"/>', i; for(i=1;i<4;i++) s+='<line x1="'+(x+4)+'" y1="'+(y+i*h/4)+'" x2="'+(x+w-4)+'" y2="'+(y+i*h/4)+'" stroke="rgba(43,33,56,.28)" stroke-width="2" stroke-linecap="round"/>'; return s; }
 function ksw(inner,i){ return '<g class="an-sway" style="animation-duration:'+(2.6+(i%4)*.5).toFixed(1)+'s;animation-delay:-'+((i*.83)%3).toFixed(2)+'s">'+inner+'</g>'; }
 function kfish(x,y,d){
@@ -3733,16 +3738,25 @@ function achDiffToast(before){
 function viewForge(){
   return forgeBar(forgeStats())+backBtn()+'<div class="phrow"><h1 class="ph">대장간</h1><span class="phsub">장비재료로 장비를 만드는 곳</span></div>'+sceneCard('forge')+'<div id="npcpanel">'+(npcOpen.forge?forgePanel():npcHint('forge'))+'</div>';
 }
-var fgFilter='all';   /* 대장간 목록 직업 필터: all 또는 hero·dwarf·elf·mage */
+var fgFilter='', fgSlot='';   /* 대장간 목록: 직업(hero·dwarf·elf·mage)과 부위. 직업별로만 보여요(v1.46.35에서 "전체"를 없앴어요) */
 function forgePanel(){
   var fs=forgeStats(), h='';
   h+='<p class="note" style="margin:0 2px 12px">중간보스를 토벌하면 재료 2개, 마왕을 토벌하면 6개(희귀 이상 2개 확정)를 얻어요. 같은 등급의 재료로 같은 등급 장비를 골라서 만들어요. 필요한 재료: 일반 '+RECIPE.n+' · 희귀 '+RECIPE.r+' · 전설 '+RECIPE.l+'개</p>';
   var seenJobs=CHARIDS.filter(function(id){ return id==='hero' || jnySeen(id); });
-  if(fgFilter!=='all' && seenJobs.indexOf(fgFilter)<0) fgFilter='all';
-  h+='<div class="fgf" role="group" aria-label="직업별로 보기"><button type="button" data-a="fgf" data-j="all" aria-pressed="'+(fgFilter==='all'?'true':'false')+'">전체</button>';
+  if(seenJobs.indexOf(fgFilter)<0){ fgFilter=(seenJobs.indexOf(curChar())>=0)?curChar():'hero'; fgSlot=''; }   /* 처음엔 지금 함께하는 캐릭터의 장비부터 */
+  var slots=JOB_SLOTS[fgFilter]||[];
+  if(slots.indexOf(fgSlot)<0) fgSlot=slots[0]||'';
+  h+='<div class="fgf" role="group" aria-label="직업별로 보기">';
   seenJobs.forEach(function(id){ h+='<button type="button" data-a="fgf" data-j="'+id+'" aria-pressed="'+(fgFilter===id?'true':'false')+'">'+CHARN[id]+'</button>'; });
   h+='</div>';
-  var list=ITEMS.filter(function(it){return it.craft && (!it.job || it.job==='hero' || jnySeen(it.job)) && (fgFilter==='all' || it.job===fgFilter);}), idx={};
+  var jobItems=ITEMS.filter(function(it){return it.craft && it.job===fgFilter;});
+  h+='<div class="fgs" role="group" aria-label="착용 부위별로 보기">';
+  slots.forEach(function(sl){
+    var all=jobItems.filter(function(it){ return it.slot===sl; }), got=all.filter(function(it){ return S.inv&&S.inv[it.id]; }).length;
+    h+='<button type="button" data-a="fgs" data-s="'+sl+'" aria-pressed="'+(fgSlot===sl?'true':'false')+'"><span>'+SLOTN[sl]+'</span><small>'+got+' / '+all.length+'</small></button>';
+  });
+  h+='</div>';
+  var list=jobItems.filter(function(it){ return it.slot===fgSlot; }), idx={};
   list.forEach(function(it,i){ idx[it.id]=i; });
   function rank(it){ return (S.inv&&S.inv[it.id])?2:(fs.bal[it.rar]>=RECIPE[it.rar]?0:1); }
   list.sort(function(a,b){ return (rank(a)-rank(b))||(itemSortKey(a)-itemSortKey(b))||(idx[a.id]-idx[b.id]); });
@@ -3750,8 +3764,8 @@ function forgePanel(){
     var have=!!(S.inv&&S.inv[it.id]), need=RECIPE[it.rar], bal=fs.bal[it.rar], worn=isWorn(it), act;
     if(have) act='<button type="button" class="ghost" data-a="equip" data-id="'+it.id+'">'+(worn?'벗기':'입기')+'</button>';
     else if(bal>=need) act='<button type="button" class="primary" data-a="craft" data-id="'+it.id+'">만들기</button>';
-    else act='<button type="button" class="ghost" disabled>'+MATN[it.rar]+' 재료 '+(need-bal)+'개 더 필요</button>';
-    h+='<div class="fgitem r-'+it.rar+(have?' have':'')+'"><div class="fgi">'+itemIcon(it,true)+'</div><div class="fgt"><b>'+it.name+'</b><small>'+(it.job?CHARN[it.job]+' · ':'')+MATN[it.rar]+' · '+SLOTN[it.slot]+'</small><small>'+(have?(worn?'착용 중':'제작 완료'):MATN[it.rar]+' 재료 '+need+'개')+'</small></div><div class="fgact">'+act+'</div></div>';
+    else act='<button type="button" class="ghost" disabled>재료 '+(need-bal)+'개 더</button>';
+    h+='<div class="fgitem r-'+it.rar+(have?' have':'')+'"><div class="fgi">'+itemIcon(it,true)+'</div><div class="fgt"><b>'+it.name+'</b><small>'+MATN[it.rar]+' · '+(have?(worn?'착용 중':'제작 완료'):'재료 '+need+'개')+'</small></div><div class="fgact">'+act+'</div></div>';
   });
   return h;
 }
@@ -5619,7 +5633,7 @@ function viewWeek(){
   return h;
 }
 
-function chart(pts,label,unit){
+function chart(pts,label,unit,tap){
   if(pts.length<2) return '<p class="empty">'+label+' 기록이 2개 이상이면 그래프가 나타나요.</p>';
   var W=320,H=110,P=16, vs=pts.map(function(p){return p.v;});
   var mn=Math.min.apply(null,vs), mx=Math.max.apply(null,vs);
@@ -5628,10 +5642,21 @@ function chart(pts,label,unit){
   var y=function(v){return H-P-(v-mn)*(H-2*P)/(mx-mn);};
   var line=pts.map(function(p,i){return x(i).toFixed(1)+','+y(p.v).toFixed(1);}).join(' ');
   var dots=pts.map(function(p,i){return '<circle cx="'+x(i).toFixed(1)+'" cy="'+y(p.v).toFixed(1)+'" r="3.5" fill="var(--clear)"/>';}).join('');
+  var hit='';
+  if(tap){   /* 점을 누르면 그날 기록한 정확한 값이 말풍선으로 떠요 */
+    var hr=Math.max(6,Math.min(14,(W-2*P)/(pts.length-1)/2));
+    hit=pts.map(function(p,i){
+      var dd=p.d?((+p.d.slice(5,7))+'/'+(+p.d.slice(8,10))+' · '):'';
+      return '<circle class="cpt" cx="'+x(i).toFixed(1)+'" cy="'+y(p.v).toFixed(1)+'" r="'+hr.toFixed(1)+'" fill="transparent" style="cursor:pointer" role="button" aria-label="'+dd+p.v+unit+' 기록 보기" data-a="chartpt" data-d="'+(p.d||'')+'" data-w="'+p.v+'" data-i="'+i+'" data-x="'+x(i).toFixed(1)+'" data-y="'+y(p.v).toFixed(1)+'" data-t="'+dd+p.v+unit+'"/>';
+    }).join('')+
+    '<circle class="cring" r="7" fill="none" stroke="var(--gold-ink)" stroke-width="2" visibility="hidden" pointer-events="none"/>'+
+    '<g class="ctip" visibility="hidden" pointer-events="none"><rect class="cbg" rx="6" height="22" fill="var(--gold)" stroke="var(--gold-ink)" stroke-width="1.5"/><text class="clb" font-size="11" font-weight="700" fill="var(--gold-ink)"></text>'+
+      '<g class="cdel" transform="translate(-200,-200)" pointer-events="visiblePainted" style="cursor:pointer" role="button" aria-label="이 체중 기록 삭제" data-a="delbodyask" data-d="" data-w=""><rect rx="5" width="30" height="16" fill="var(--gold-ink)"/><text x="15" y="11.5" font-size="10.5" font-weight="700" fill="var(--gold)" text-anchor="middle">삭제</text></g></g>';
+  }
   return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+label+' 변화 그래프">'+
     '<polyline points="'+line+'" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'+dots+
     '<text x="'+P+'" y="12" font-size="10" fill="var(--muted)">'+mx+unit+'</text>'+
-    '<text x="'+P+'" y="'+(H-2)+'" font-size="10" fill="var(--muted)">'+mn+unit+'</text></svg>';
+    '<text x="'+P+'" y="'+(H-2)+'" font-size="10" fill="var(--muted)">'+mn+unit+'</text>'+hit+'</svg>';
 }
 
 
@@ -5783,30 +5808,23 @@ function achPopup(x){
 }
 function viewAch(){
   var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<div class="phrow tab"><h1 class="ph">몸짱일지</h1><span class="phsub">업적과 체중 기록</span></div>';
-  var list=achList();
-  h+='<h2>업적 <span class="cnt">'+list.length+'개</span></h2>';
+  var list=achList(), ah='';
+  ah+='<h2>업적 <span class="cnt">'+list.length+'개</span></h2>';
   if(list.length){
-    h+='<div class="achg">';
+    ah+='<div class="achg">';
     list.forEach(function(x,xi){
-      h+='<button type="button" class="achm" data-a="achinfo" data-i="'+xi+'"><span class="ai'+(x.b?' bimg':'')+'" aria-hidden="true">'+(x.b?achIcon(x.b,true):'★')+'</span><span class="amt"><b>'+x.name+'</b><small>'+achDate(x.at)+' 달성</small></span></button>';
+      ah+='<button type="button" class="achm" data-a="achinfo" data-i="'+xi+'"><span class="ai'+(x.b?' bimg':'')+'" aria-hidden="true">'+(x.b?achIcon(x.b,true):'★')+'</span><span class="amt"><b>'+x.name+'</b><small>'+achDate(x.at)+' 달성</small></span></button>';
     });
-    h+='</div>';
-  }else h+='<p class="note">아직 달성한 업적이 없어요. 모험을 이어가면 이곳에 하나씩 쌓여요.</p>';
-  h+='<div class="divider"></div>';
+    ah+='</div>';
+  }else ah+='<p class="note">아직 달성한 업적이 없어요. 모험을 이어가면 이곳에 하나씩 쌓여요.</p>';
   var body=S.body.slice().sort(function(a,b){return a.date<b.date?-1:1;}).filter(function(b){return b.weight!=null;});
-  var wpts=body.map(function(b){return {v:b.weight};});
+  var wpts=body.map(function(b){return {v:b.weight,d:b.date};});
   h+='<h2>체중 기록하기</h2><div class="card" style="padding:10px 16px 16px">'+
     '<div class="field"><label>날짜<input type="date" id="bd" value="'+fmt(TODAY)+'"></label>'+
     '<label>체중(kg)<input type="number" id="bw" inputmode="decimal" step="0.1" placeholder="70"></label></div>'+
     '<button type="button" class="primary" data-a="addbody">기록 저장</button></div>';
-  h+='<h2>체중 변화</h2><div class="card"><div class="chart-title"><b>체중</b><span>'+(wpts.length?wpts[wpts.length-1].v+'kg':'')+'</span></div>'+chart(wpts,'체중','kg')+'</div>';
-  if(wpts.length){
-    h+='<h2>최근 기록</h2><div class="card">';
-    body.slice(-6).reverse().forEach(function(b){
-      h+='<div class="hist"><span>'+b.date+' · '+b.weight+'kg</span><button type="button" class="del" data-a="delbody" data-d="'+b.date+'">삭제</button></div>';
-    });
-    h+='</div>';
-  }
+  h+='<h2>체중 변화</h2><div class="card"><div class="chart-title"><b>체중</b><span>'+(wpts.length?wpts[wpts.length-1].v+'kg':'')+'</span></div>'+chart(wpts,'체중','kg',true)+'</div>';
+  h+='<div class="divider"></div>'+ah;   /* 업적은 맨 아래로 */
   return h;
 }
 var dogOpen={};
@@ -5955,6 +5973,7 @@ function render(){
   }
   bgmSync();
   bdTipSoon();
+  tourSoon();
 }
 
 /* ---------- 효과: 소리·진동·토스트·오버레이 ---------- */
@@ -6065,6 +6084,7 @@ ovno.addEventListener('click',function(){ var u=ovNoAct; ovNoAct=null; ovOk=null
 ovx.addEventListener('click',closeOv);
 document.addEventListener('keydown',function(e){if(e.key==='Escape' && !ov.hidden){ if(ovNoAct) ovno.click(); else closeOv(); }});   /* 확정 대기 중인 토벌 완료 창에서 Esc는 [해치웠나?]와 같아요 */
 function showOverlay(o){
+  if(tourOn) tourEnd(true);
   var mode=o.mode||'win';
   ovk.textContent=o.k; ovt.textContent=o.t; ovb.innerHTML=o.b;
   ov.querySelector('.ovc').setAttribute('data-mode',mode);
@@ -6725,7 +6745,9 @@ app.addEventListener('click',function(e){
   }else if(a==='npc'){
     npcTalk(t.getAttribute('data-n'));
   }else if(a==='fgf'){
-    fgFilter=t.getAttribute('data-j')||'all'; render();
+    fgFilter=t.getAttribute('data-j')||''; fgSlot=''; render();
+  }else if(a==='fgs'){
+    fgSlot=t.getAttribute('data-s')||''; render();
   }else if(a==='xchg'){
     askTrade(t.getAttribute('data-x'));
   }else if(a==='craft'){
@@ -6753,6 +6775,20 @@ app.addEventListener('click',function(e){
     S.body=S.body.filter(function(b){return b.date!==d;});
     S.body.push({date:d,weight:w});
     save(); render(); afterAction(before,fmt(sel));
+  }else if(a==='chartpt'){
+    var sv=t.closest('svg'), tp=sv.querySelector('.ctip'), rg=sv.querySelector('.cring'), vb=sv.viewBox.baseVal;
+    if(sv.getAttribute('data-sel')===t.getAttribute('data-i')){ tp.setAttribute('visibility','hidden'); rg.setAttribute('visibility','hidden'); sv.removeAttribute('data-sel'); }
+    else{
+      var cx=+t.getAttribute('data-x'), cy=+t.getAttribute('data-y'), tx=t.getAttribute('data-t'), tw=Math.round(tx.length*6.6+12)+40, bx=Math.max(2,Math.min(vb.width-tw-2,cx-tw/2)), by=(cy-34>=2)?(cy-34):(cy+12);
+      var rc=tp.querySelector('.cbg'), tt=tp.querySelector('.clb'), cd=tp.querySelector('.cdel');
+      rc.setAttribute('x',bx); rc.setAttribute('y',by); rc.setAttribute('width',tw);
+      tt.setAttribute('x',bx+8); tt.setAttribute('y',by+15); tt.textContent=tx;
+      cd.setAttribute('transform','translate('+(bx+tw-34)+','+(by+3)+')'); cd.setAttribute('data-d',t.getAttribute('data-d')); cd.setAttribute('data-w',t.getAttribute('data-w'));
+      rg.setAttribute('cx',cx); rg.setAttribute('cy',cy); rg.setAttribute('visibility','visible'); tp.setAttribute('visibility','visible'); sv.setAttribute('data-sel',t.getAttribute('data-i'));
+    }
+  }else if(a==='delbodyask'){
+    var dd2=t.getAttribute('data-d'), ww2=t.getAttribute('data-w');
+    askOpen({title:'이 체중 기록을 삭제할까요?',note:dd2+' · '+ww2+'kg 기록이 지워져요.',yes:'삭제',no:'취소',danger:true,act:function(){ S.body=S.body.filter(function(b){return b.date!==dd2;}); save(); render(); toast('체중 기록을 삭제했어요'); }});
   }else if(a==='delbody'){
     var dd=t.getAttribute('data-d');
     S.body=S.body.filter(function(b){return b.date!==dd;}); save(); render();
@@ -6804,6 +6840,7 @@ app.addEventListener('change',function(e){
 var askEl=document.getElementById('ask'), askYes=document.getElementById('askyes'), askNo=document.getElementById('askno'),
     askT=document.getElementById('askt'), askNote=document.querySelector('#ask .bnote'), askBox=document.querySelector('#ask .ovc'), askAct=null, askCancel=null;
 function askOpen(o){
+  if(tourOn) tourEnd(true);
   askT.textContent=o.title; askNote.textContent=o.note; askYes.textContent=o.yes; askNo.textContent=o.no; askAct=o.act; askCancel=o.cancel||null;
   askYes.classList.toggle('danger',!!o.danger); askBox.classList.toggle('danger',!!o.danger);
   askEl.hidden=false; (o.danger?askNo:askYes).focus();
@@ -6883,8 +6920,8 @@ var BANDI={
     helpHead:'무엇이 궁금해요, 용사님?'
   },
   /* 상황별 첫 안내(v1.42.4): 새 사용자에게만, 각 한 번. h=제목, x=본문(문자열 또는 함수). 문구 교체는 여기만 */
+  /* 팝업으로 뜨는 안내: 마왕전(boss)과 건물(여관·길드·훈련장·교역소·대장간)만 남았어요. 탭 첫 안내(퀘스트·러닝·왕국·지도·일지)는 v1.46.32에서 말풍선 안내로 바뀌었고, 아래 run·kingdom 문구는 반디 도움말(BANDI.help)이 답으로 써요 */
   tips:{
-    today:{h:'오늘 할 일은 여기 있어요!',x:'운동 동작은 세트마다 체크하고, 식단 세\u00A0가지도 체크해요. 달리기와 걷기는 하는 날에만 있어요. 하루를 마치면 \'오늘의\u00A0모험\u00A0종료\'를 눌러요. 종료한\u00A0날의\u00A0기록은 수정할\u00A0수\u00A0없어요. 다\u00A0못\u00A0해도\u00A0괜찮아요. 내일 다시 시작하면 돼요.'},
     boss:{h:function(w){ return w==='sat'?'오늘은 마왕전이에요!':'내일은 마왕전이에요!'; },
       x:function(w){
         var d=(w==='sat')?TODAY:addDays(TODAY,1);
@@ -6896,8 +6933,6 @@ var BANDI={
     inn:{h:'여기는 여관이에요!',x:'얻은 장비를 입어 보고, 장비 도감을 볼 수 있어요. 동료가 합류하면 함께 모험할 캐릭터도 여기서 골라요. 여주인 로사에게 말을 걸어 보세요.'},
     train:{h:'훈련장이에요!',x:'마왕전을 앞두고 XP가 모자랄 때 추가로 훈련할 수 있어요. 교관 가론에게 말을 걸면 훈련 기록이 열려요. 훈련 XP는 주간 누적에 더해지지만 1000을 넘는 부분은 기록만 남아요.'},
     trade:{h:'교역소예요!',x:'남는 재료를 다른 등급의 재료로 바꿔 줘요. 내림은 후하게, 올림은 박하게 쳐 줘요. 상인 마르코에게 말을 걸면 교환이 열리고, 교환은 되돌릴 수 없어요.'},
-    map:{h:'여기는 모험 지도예요!',x:'이번 주 월요일부터 일요일까지의 스테이지가 길로 이어져 있어요. 스테이지를 누르면 그날의 퀘스트가 열리고, 마친 날에는 표시가 남아요. 길 끝에는 토요일의 마왕성이 기다려요.'},
-    diary:{h:'여기는 몸짱일지예요!',x:'모험을 하며 달성한 업적이 하나씩 쌓여요. 업적을 누르면 자세한 내용을 볼 수 있어요. 체중을 기록하면 변화를 그래프로 볼 수 있지만, 하고 싶을 때만 해도 괜찮아요.'},
     guild:{h:'길드예요!',x:'마왕을 쓰러뜨려 승리를 쌓으면 랭크를 올리는 승급 시험을 볼 수 있어요. 접수원 세라에게 말을 걸어 보세요. 시험은 몸 상태가 좋은 날에, 무리하지 말고 봐요.'},
     forge:{h:'대장간이에요!',x:'보스에게서 얻은 재료로 전용 장비를 만들어요. 같은 등급의 재료로 같은 등급 장비를 만들 수 있어요. 재료가 모자라면 교역소가 열린 뒤 바꿀 수도 있어요.'}
   },
@@ -7016,8 +7051,10 @@ var bdEl=document.getElementById('bandi'), bdC=document.getElementById('bdc');
 var bd={mode:'help',step:'help',ans:[null,null,null],pick:null,topic:null};
 /* 상황별 첫 안내 띄우기: 새 사용자(S.bdSeen이 있는 사용자)만, 다른 창이 없고 운동 중이 아닐 때 */
 var bdTipT=null;
+var tourOn=false, tourSoon=function(){}, tourStart=function(){}, tourEnd=function(){};   /* 탭 첫 방문 안내(v1.46.32) · 아래쪽 모듈이 채워 넣어요 */
 function bdBusy(){
   if(fevOn) return true;
+  if(tourOn) return true;
   var ovs=document.querySelectorAll('.ov'), i, tm=document.getElementById('timer');
   for(i=0;i<ovs.length;i++){ if(!ovs[i].hidden) return true; }
   if(titleEl && !titleEl.hidden) return true;
@@ -7028,27 +7065,16 @@ function bdBusy(){
   return false;
 }
 var BLDTIP={inn:1,guild:1,train:1,trade:1,forge:1};
-var TABTIP={map:1,diary:1};   /* 지도·일지 탭 첫 안내(v1.45.0): 예전 사용자도 한 번씩 받아요 */
 function bdTipId(){
   var sn=S.bdSeen, t=fmt(TODAY), dk;
   if(!sn || typeof sn!=='object'){   /* 예전부터 쓰던 사용자도 왕국 건물에는 처음 들어갈 때 한 번씩 안내해요(다른 안내는 안 떠요) */
     if(tab==='home' && BLDTIP[kv] && (kv==='inn'||kv==='guild'||bState(kv)==='done')) return {id:kv};
-    if(tab==='week') return {id:'map'};
-    if(tab==='ach') return {id:'diary'};
     return null;
   }
   if(tab==='today'){
-    if(!sn.today) return {id:'today'};
     dk=DK[TODAY.getDay()];
-    if(!sn.boss && sn.today!==t && (dk==='fri' || dk==='sat')) return {id:'boss',when:dk};
-  }else if(tab==='week'){
-    if(!sn.map) return {id:'map'};
-  }else if(tab==='ach'){
-    if(!sn.diary) return {id:'diary'};
-  }else if(tab==='run'){
-    if(!sn.run) return {id:'run'};
+    if(sn.today && !sn.boss && sn.today!==t && (dk==='fri' || dk==='sat')) return {id:'boss',when:dk};   /* v1.46.32: 탭 첫 방문 안내는 새 방식(말풍선)으로 바뀌었고, 마왕전 안내만 팝업이에요 */
   }else if(tab==='home'){
-    if(kv==='map' && !sn.kingdom) return {id:'kingdom'};
     if(BLDTIP[kv] && !sn[kv] && (kv==='inn'||kv==='guild'||bState(kv)==='done')) return {id:kv};   /* 건물 안에 처음 들어갔을 때(성벽·성은 없어요) */
   }
   return null;
@@ -7070,11 +7096,12 @@ function bdRec(){
   return m<=1?'sprout':(m===2?'adv':'body');
 }
 function bandiOpen(mode,tip,when){
+  if(tourOn) tourEnd(true);
   bd={mode:mode,step:(mode==='first'?'hello':(mode==='ask'?0:(mode==='tip'?'tip':'help'))),ans:[null,null,null],pick:null,topic:null,tip:tip||null,when:when||null};
   bdRender(); bdEl.hidden=false;
 }
 function bandiClose(){
-  if(bd.mode==='tip' && bd.tip && (!S.bdSeen || typeof S.bdSeen!=='object') && (BLDTIP[bd.tip]||TABTIP[bd.tip])){ var ol='2000-01-01'; S.bdSeen={today:ol,boss:ol,run:ol,kingdom:ol}; }   /* 예전 사용자: 다른 안내는 이미 본 것으로 두고 건물 안내만 켜요 */
+  if(bd.mode==='tip' && bd.tip && (!S.bdSeen || typeof S.bdSeen!=='object') && BLDTIP[bd.tip]){ var ol='2000-01-01'; S.bdSeen={today:ol,boss:ol,run:ol,kingdom:ol}; }   /* 예전 사용자: 다른 안내는 이미 본 것으로 두고 건물 안내만 켜요 */
   if(bd.mode==='tip' && bd.tip && S.bdSeen && typeof S.bdSeen==='object'){ S.bdSeen[bd.tip]=fmt(TODAY); bd.tip=null; save(); }  /* 본 안내는 다시 안 나와요 */
   bdEl.hidden=true; bdC.innerHTML='';
 }
@@ -7113,10 +7140,9 @@ function bdRender(){
     h+='<button type="button" class="dcard go" data-b="redo"><b>난이도를 다시 골라 보고 싶어요</b></button><button type="button" class="dcard go" data-b="rules"><b>게임 규칙을 다시 보고 싶어요</b></button></div>'+
       '<p class="bdsm">'+BANDI.say.health+'</p><button type="button" class="skip" data-b="close">닫기</button>';
   }else if(st==='tip'){
-    var tp=BANDI.tips[bd.tip]||BANDI.tips.today, tw=bd.when;
+    var tp=BANDI.tips[bd.tip]||{h:'',x:''}, tw=bd.when;
     h=BANDI.scene('안내하는 반디의 그림')+'<p class="bdq">'+(typeof tp.h==='function'?tp.h(tw):tp.h)+'</p><p class="bdans">'+glue(typeof tp.x==='function'?tp.x(tw):tp.x)+'</p>'+
-      '<div class="bdrow col"><button type="button" class="primary" data-b="close">알겠어요</button></div>'+
-      (bd.tip==='today'?'<p class="bdsm">궁금한 게 생기면 오른쪽 위 반디를 눌러요. 도움말을 다시 볼 수 있어요.</p>':'');
+      '<div class="bdrow col"><button type="button" class="primary" data-b="close">알겠어요</button></div>';
   }else if(st==='ans'){
     h=BANDI.scene('설명하는 반디의 그림')+'<p class="bdq">'+BANDI.help[bd.topic][0]+'</p><p class="bdans">'+glue(typeof BANDI.help[bd.topic][1]==='function'?BANDI.help[bd.topic][1]():BANDI.help[bd.topic][1])+'</p>'+
       '<div class="bdrow"><button type="button" class="ghost" data-b="helpback">다른 질문</button><button type="button" class="primary" data-b="close">알았어요</button></div>';
@@ -7173,7 +7199,7 @@ function introRender(){
   introPrev.disabled=(iN===0);
   introNext.textContent=(iN===INTRO_TXT.length-1)?'모험 시작!':'다음';
 }
-function introOpen(){ iN=0; introRender(); introEl.hidden=false; introNext.focus(); }
+function introOpen(){ if(tourOn) tourEnd(true); iN=0; introRender(); introEl.hidden=false; introNext.focus(); }
 function introClose(){
   introEl.hidden=true; try{localStorage.setItem('home-training-intro','1');}catch(e){} introSeen=true;
   if(introThenBandi){ introThenBandi=false; if(needBandi()){ bandiOpen('first'); return; } }
@@ -8398,6 +8424,7 @@ function tsTapUpdate(){
 }
 var tsScrollY=0;
 function titleOpen(first){
+  if(tourOn) tourEnd(true);
   tsFirst=!!first; tsBusy=false; tsSoundTried=false;
   tsScrollY=window.pageYOffset||0; document.body.classList.add('title-up');
   titleBuild(); titleEl.hidden=false;
@@ -9028,6 +9055,234 @@ var RANKUP={};
   })();
 
 execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 취소 */
+
+/* ===== 탭 첫 방문 안내(v1.46.32): 화면을 살짝 어둡게 하고, 설명하는 섹션만 원래 밝기로 강조하며, 그 섹션 바로 아래에 반디 말풍선으로 설명해요 ===== */
+(function(){
+  var css=''+
+  '#tkov{position:fixed; inset:0; z-index:54; touch-action:none; background:transparent;}'+
+  '#tkspot{position:fixed; z-index:55; border-radius:20px; pointer-events:none;'+
+  ' box-shadow:0 0 0 100vmax rgba(3,10,9,.55), 0 0 0 3px var(--gold), 0 0 18px 4px rgba(246,196,69,.40);}'+
+  '#tkspot.tap{animation:tkpulse 1.2s ease-in-out infinite;}'+
+  '@keyframes tkpulse{0%,100%{box-shadow:0 0 0 100vmax rgba(3,10,9,.55), 0 0 0 3px var(--gold), 0 0 14px 2px rgba(246,196,69,.35);} 50%{box-shadow:0 0 0 100vmax rgba(3,10,9,.55), 0 0 0 5px var(--gold), 0 0 26px 8px rgba(246,196,69,.7);}}'+
+  '#tkbub{position:fixed; z-index:56; left:50%; transform:translateX(-50%); width:calc(100% - 24px); max-width:536px;'+
+  ' display:flex; align-items:flex-start; gap:6px; transition:opacity .18s;}'+
+  '#tkbub.sw{opacity:0;}'+
+  '#tkov[hidden],#tkspot[hidden],#tkbub[hidden]{display:none;}'+
+  '.tkf{flex:none; width:44px; height:38px; border-radius:50%; background:var(--surface); border:2px solid var(--line); box-shadow:0 2px 0 var(--edge); display:flex; align-items:center; justify-content:center;}'+
+  '.tkf svg{width:38px; height:32px; display:block;}'+
+  '.tkb{flex:1; min-width:0; background:var(--gold); border:2px solid var(--gold-ink); border-radius:4px 16px 16px 16px; padding:10px 12px 10px; color:var(--gold-ink); box-shadow:0 3px 0 var(--edge);}'+
+  '.tkd{display:flex; gap:5px; margin:0 0 6px;}'+
+  '.tkd i{width:8px; height:8px; border-radius:50%; background:rgba(43,32,0,.28); cursor:pointer;}'+
+  '.tkd i.on{width:20px; border-radius:4px; background:var(--gold-ink);}'+
+  '.tkt{margin:0; font-size:14.5px; font-weight:700; line-height:1.55; word-break:keep-all; text-wrap:balance; white-space:pre-line;}'+
+  '.tkem{background:var(--gold-ink); color:var(--gold); border-radius:5px; padding:1px 6px; font-weight:800; -webkit-box-decoration-break:clone; box-decoration-break:clone;}'+
+  '.tkem.nw{white-space:nowrap;}'+
+  '.tkc{display:flex; align-items:center; gap:6px; margin-top:8px;}'+
+  '.tks{flex:1; text-align:left; background:none; border:0; padding:0; min-height:40px; color:var(--gold-ink); opacity:.75; font:inherit; font-size:12.5px; text-decoration:underline;}'+
+  '.tkp,.tkn{min-height:40px; border-radius:12px; padding:0 14px; font:inherit; font-size:14px; font-weight:800; cursor:pointer;}'+
+  '.tkp{background:transparent; color:var(--gold-ink); border:2px solid var(--gold-ink);}'+
+  '.tkn{background:var(--gold-ink); color:var(--gold); border:2px solid var(--gold-ink);}'+
+  '.tkp[hidden],.tks[hidden],.tkn[hidden]{display:none;}'+
+  '@media (prefers-reduced-motion: reduce){ #tkbub{transition:none;} #tkspot.tap{animation:none;} }';
+  var stl=document.createElement('style'); stl.textContent=css; document.head.appendChild(stl);
+
+  function reduce(){ try{ return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; } }
+  function q1(sel){ return app.querySelector(sel); }
+  function one(sel){ return function(){ var e=q1(sel); return e?[e]:null; }; }
+  function h2of(txt){ var hs=app.querySelectorAll('h2'), i; for(i=0;i<hs.length;i++){ if(hs[i].textContent.replace(/\s+/g,' ').trim().indexOf(txt)===0) return hs[i]; } return null; }
+  /* 제목(h2)과 그 아래 n개 형제 요소를 한 덩어리로 */
+  function h2plus(txt,n){ return function(){ var h=h2of(txt); if(!h) return null; var r=[h], e=h.nextElementSibling, i; for(i=0;i<n&&e;i++){ r.push(e); e=e.nextElementSibling; } return r; }; }
+  /* 제목(h2)부터 stopSel 요소 앞까지 */
+  function h2until(txt,stopSel){ return function(){ var h=h2of(txt); if(!h) return null; var r=[h], e=h.nextElementSibling; while(e && !(e.matches && e.matches(stopSel))){ r.push(e); e=e.nextElementSibling; } return r; }; }
+
+  /* 설명 글은 반디가 말하는 ~요체로, 한 곳에 두세 문장이에요 */
+  var TOURS={
+    today:[
+      {t:"이곳은 «오늘의 퀘스트»를 진행하는 곳이에요. 하나씩 같이 둘러볼까요?", intro:true},
+      {t:"여기는 용사님의 «랭크»와 «경험치»를 표시해요. 배지를 누르면 현재 랭크를 확인할 수 있어요!", els:one('.hud')},
+            {t:function(){ var W=weekQuest(TODAY), p=firstWeekFree(addDays(W.mon,5)); return '주간 목표는 «1000XP»를 모으는 거예요. 다 채우면 «토요일 마왕성»에 도전할 수 있어요.'+(p?' 첫 주는 «연습전»이니 편하게 해 봐요!':''); }, els:one('section.weekq')},
+      {t:"오늘의 «던전»과 «중간보스», 그리고 «퀘스트 진행 상황»이 여기 나와요. 다 채우면 보스를 물리쳐요!", els:one('section.quest')},
+      {t:"달리는 날에는 러닝이나 걷기 퀘스트가 있어요. «최소 인정 거리» 이상을 입력하면 완료돼요. 걷기도 인정되니 무리하지 마요!", els:function(){ var h=h2of('러닝 또는 걷기'); if(!h) return null; var b=h.nextElementSibling; return b?[h,b]:[h]; }, opt:true},
+      {t:"운동은 세트마다 «직접 체크»해요. 체크하면 «쉬는 시간»이 시작되고, 동작이 헷갈리면 «'그림·자세 팁 보기'»를 눌러 봐요!", els:one('.q.ex')},
+      {t:"오늘 모험을 종료하려면 이 버튼을 눌러요. 종료한 기록은 «수정할 수 없으니», 다 했는지 확인하고 눌러요!", els:one('.endbtn')}
+    ],
+    run:[
+      {t:"이곳은 «달린 거리»와 «이벤트»를 볼 수 있는 곳이에요. 하나씩 같이 둘러볼까요?", intro:true},
+      {t:"달린 거리에 따라 이야기가 진행되는 «스토리 이벤트»와 각종 «돌발 이벤트»가 생겨요!", els:one('section.rn-sc')},
+      {t:"«현재 날씨»와 «시간», 그리고 «왕국 재건 상황»이 배경에 그대로 반영돼요!", els:one('section.rn-sc')},
+      {t:"«퀘스트»에서 입력한 «러닝 기록»이 여기 쌓여요. 누적, 이번 주, 이번 달, 하루 최고를 한눈에 볼 수 있어요. 일요일 걷기와 훈련장 러닝은 포함되지 않아요!", els:h2until('달린 거리','.dgs')},
+      {t:"각종 이벤트 스토리가 여기에 기록돼요. 눌러서 이미 본 이벤트를 다시 볼 수 있어요!", els:one('.dgs')}
+    ],
+    home:[
+      {t:"이곳은 모험으로 되살리는 «몸짱왕국»이에요. 하나씩 같이 둘러볼까요?", intro:true, map:true},
+      {t:"«건축 자재 보유량»이에요. «퀘스트»를 통해 자재를 얻으면 무너진 건물을 복구하는 데 써요!", els:one('.matbar'), map:true},
+      {t:"자, 여관부터 들어가 볼까요? 여관을 눌러 보세요!", els:one('.kb[data-b="inn"]'), tap:function(){ return q1('.kb[data-b="inn"]'); }, map:true},
+      {t:"여기는 여관이에요. «여주인 로사»를 눌러 대화를 할 수 있어요!", els:one('.card.scn'), late:true, noPrev:true},
+      {t:"여기는 현재 용사님의 «캐릭터»와 «장비 상태»를 표시해요!", els:one('section.stage'), late:true},
+      {t:"모험 중에 만난 «동료»들은 여기 모여요. 동료를 눌러서 함께 모험할 캐릭터를 고를 수 있어요!", els:h2plus('동료',1), late:true},
+      {t:"마왕을 토벌하면 «전리품 상자»를 받아요. 상자를 열면 «공용장비»를 얻을 수 있어요!", els:h2plus('전리품 상자',1), late:true},
+      {t:"장비는 «공용·전용·특별장비»로 나뉘고, 선택해서 착용할 수 있어요!", els:h2plus('장비 도감',3), late:true}
+    ],
+    ach:[
+      {t:"이곳은 «몸짱일지»예요. «체중 기록»을 하고, 달성한 «업적»을 모아 볼 수 있어요. 하나씩 같이 둘러볼까요?", intro:true},
+      {t:"«날짜»와 «체중»을 적고 저장하면 체중이 기록돼요. 매일 쓰지 않아도 되고, 필요할 때만 적어도 괜찮아요!", els:h2plus('체중 기록하기',1)},
+      {t:"기록이 2개 이상이면 체중이 어떻게 변했는지 «그래프»로 보여 줘요. 점을 누르면 그날 기록한 정확한 체중을 볼 수 있고, 지울 수도 있어요!", els:h2plus('체중 변화',1)},
+      {t:"모험을 이어가며 달성한 «업적»이 여기 쌓여요. 눌러서 달성한 날짜와 설명을 볼 수 있어요!", els:h2plus('업적',1)}
+    ]
+  };
+
+  var on=false, idx=0, list=[], cur=null, raf=0, PAD=6, tourTab=null, tkTry=0, tkTimer=null;
+  var TK_KEY={today:'today',run:'run',home:'kingdom',ach:'diary'};   /* 탭 첫 방문 기록은 예전 반디 안내가 쓰던 S.bdSeen 칸을 그대로 써요(저장·백업·클라우드 합치기가 이미 되어 있어요) */
+  function setOn(v){ on=v; tourOn=v; }
+  var ov=document.createElement('div'); ov.id='tkov'; ov.hidden=true;
+  var sp=document.createElement('div'); sp.id='tkspot'; sp.hidden=true;
+  var bub=document.createElement('div'); bub.id='tkbub'; bub.hidden=true;
+  bub.innerHTML='<div class="tkf">'+BANDI.face()+'</div><div class="tkb"><div class="tkd" id="tkd"></div><p class="tkt" id="tkt"></p><div class="tkc"><button type="button" class="tks" id="tks">건너뛰기</button><button type="button" class="tkp" id="tkp">이전</button><button type="button" class="tkn" id="tkn">다음</button></div></div>';
+  document.body.appendChild(ov); document.body.appendChild(sp); document.body.appendChild(bub);
+  var elT=bub.querySelector('#tkt'), elD=bub.querySelector('#tkd'), bS=bub.querySelector('#tks'), bP=bub.querySelector('#tkp'), bN=bub.querySelector('#tkn');
+
+  /* 말풍선 글: «강조»는 빨간 굵은 글씨로, 문장마다 줄을 바꿔요(짧은 강조 말은 줄이 갈라지지 않게) */
+  function fmtT(t){ var s=String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); s=s.replace(/«([^»]*)»/g,function(m,x){ return '<b class="tkem'+(x.length<=12?' nw':'')+'">'+x+'</b>'; }); s=s.replace(/([.!?])\s+/g,'$1\n');
+    return s.split('\n').map(function(L){
+      L=L.replace(/([^ \n]+) 수 (있|없)/g,'$1\u00A0수\u00A0$2');
+      var w=L.split(' '), i=w.length-1, plain=/^[^<>"=]*$/;   /* 태그 안쪽 조각은 건드리지 않아요 */
+      if(i>=1 && plain.test(w[i]) && plain.test(w[i-1]) && w[i].length<=6){ w[i-1]=w[i-1]+'\u00A0'+w[i]; w.pop(); i--; }
+      if(i>=1 && plain.test(w[i]) && plain.test(w[i-1]) && w[i].replace(/[\u00A0.!?,]/g,'').length<=5 && w[i-1].length<=8){ w[i-1]=w[i-1]+'\u00A0'+w[i]; w.pop(); }
+      return w.join(' ');
+    }).join('\n'); }   /* 문장 끝말은 앞 단어와 붙여서, 마지막 줄에 짧은 말만 남지 않게 해요 */
+  function present(st){ if(st.intro) return true; var e=st.els(); return !!(e&&e.length); }
+  function reach(st){ if(st.map && !mapOk(tourTab)) return false; return present(st); }
+  function target(){
+    var st=list[idx]; if(!st||st.intro||!st.els) return null;
+    var els=st.els(); if(!els||!els.length) return null;
+    var l=1e9,t=1e9,r=-1e9,b=-1e9,i,rc, sx=window.pageXOffset||0, sy=window.pageYOffset||0;
+    for(i=0;i<els.length;i++){ rc=els[i].getBoundingClientRect(); l=Math.min(l,rc.left+sx); t=Math.min(t,rc.top+sy); r=Math.max(r,rc.right+sx); b=Math.max(b,rc.bottom+sy); }
+    return {l:l-PAD,t:t-PAD,r:r+PAD,b:b+PAD};
+  }
+  function isIntro(){ return !!(list[idx] && list[idx].intro); }
+  function paint(){
+    if(isIntro()){ bub.style.top=Math.round(Math.max(90,window.innerHeight*.36))+'px'; return; }
+    if(!cur) return;
+    var sx=window.pageXOffset||0, sy=window.pageYOffset||0;
+    var L=cur.l-sx, T=cur.t-sy, W=cur.r-cur.l, H=cur.b-cur.t;
+    sp.style.left=L+'px'; sp.style.top=T+'px'; sp.style.width=W+'px'; sp.style.height=H+'px';
+    var bh=bub.offsetHeight||150, vh=window.innerHeight, top=T+H+10;
+    if(top+bh>vh-10){ var up=T-10-bh; if(up>=8) top=up; else top=Math.max(8,vh-10-bh); }   /* 아래에 자리가 없을 때만 위로 */
+    bub.style.top=Math.round(top)+'px';
+  }
+  function frame(){
+    if(!on) return;
+    var tg=target();
+    if(tg){
+      if(!cur||reduce()) cur={l:tg.l,t:tg.t,r:tg.r,b:tg.b};
+      else{ var k=.22; cur.l+=(tg.l-cur.l)*k; cur.t+=(tg.t-cur.t)*k; cur.r+=(tg.r-cur.r)*k; cur.b+=(tg.b-cur.b)*k; }
+      paint();
+    }
+    raf=requestAnimationFrame(frame);
+  }
+  function scrollToTarget(){
+    if(isIntro()){ try{ window.scrollTo({top:0,behavior:reduce()?'auto':'smooth'}); }catch(e){ window.scrollTo(0,0); } return; }
+    var tg=target(); if(!tg) return;
+    var want=Math.max(0,Math.round(tg.t-64));
+    try{ window.scrollTo({top:want,behavior:reduce()?'auto':'smooth'}); }catch(e){ window.scrollTo(0,want); }
+  }
+  var lastIntro=false;
+  function show(first){
+    var st=list[idx], n=list.length, d='', i;
+    for(i=0;i<n;i++) d+='<i data-i="'+i+'"'+(i===idx?' class="on"':'')+'></i>';
+    var isLast=(idx===list.length-1);
+    function fill(){
+      elT.innerHTML=fmtT(typeof st.t==='function'?st.t():st.t); elD.innerHTML=d;
+      bP.hidden=(idx===0)||!!st.noPrev; bS.hidden=isLast; bN.hidden=!!st.tap;
+      bN.textContent=isLast?'알겠어요!':'다음';
+      sp.className=st.tap?'tap':'';
+      sp.hidden=!!st.intro; ov.style.background=st.intro?'rgba(3,10,9,.55)':'transparent';
+      if(!st.intro && lastIntro){ cur=null; }   /* 전체 설명 다음 첫 섹션은 바로 그 자리에서 시작해요 */
+      lastIntro=!!st.intro;
+      bub.classList.remove('sw'); paint();
+    }
+    if(first){ fill(); }
+    else{ bub.classList.add('sw'); setTimeout(fill,reduce()?0:140); }
+    scrollToTarget();
+  }
+  function hasTour(k){ return !!TOURS[k]; }
+  function mapOk(k){ return k!=='home' || (typeof kv==='undefined') || kv==='map'; }
+  /* 오늘 화면에 맞지 않는 날(주말: 마왕성·신전 화면)과 지난 날 보기에서는 퀘스트 탭 안내를 미뤄요 */
+  function todayOk(){ var dk=DK[TODAY.getDay()]; return dk!=='sat' && dk!=='sun' && fmt(sel)===fmt(TODAY); }
+  function eligible(k){
+    if(!TOURS[k]) return false;
+    if(k==='today' && !todayOk()) return false;
+    if(k==='home' && !mapOk(k)) return false;
+    var sn=S.bdSeen;
+    if(!sn || typeof sn!=='object') return k==='ach';   /* 예전부터 쓰던 사용자는 일지 안내만 한 번 받아요(예전 지도·일지 탭 안내와 같아요) */
+    return !sn[TK_KEY[k]];
+  }
+  function markSeen(k){
+    var ol='2000-01-01';
+    if(!S.bdSeen || typeof S.bdSeen!=='object') S.bdSeen={today:ol,boss:ol,run:ol,kingdom:ol};
+    S.bdSeen[TK_KEY[k]]=fmt(TODAY); save();
+  }
+  function start(k,force){
+    if(on || !TOURS[k]) return;
+    tourTab=k;
+    list=TOURS[k].filter(function(s){ return s.late || present(s); });   /* 오늘 없는 섹션(예: 러닝 없는 날)은 처음부터 빼요 */
+    if(!list.length) return;
+    if(!force) markSeen(k);
+    window.scrollTo(0,0);
+    setOn(true); idx=0; lastIntro=false; app.style.marginBottom='220px';   /* 맨 아래 섹션도 말풍선이 아래에 들어가게 스크롤 여유를 줘요 */
+    cur=null; ov.hidden=false; sp.hidden=true; bub.hidden=true;   /* 내용이 준비되기 전에는 말풍선·강조 틀을 보이지 않아요(앞 안내의 글이 잠깐 비치던 것을 막아요) */
+    setTimeout(function(){ if(!on) return; var tg=target(); if(tg) cur={l:tg.l,t:tg.t,r:tg.r,b:tg.b}; bub.style.visibility='hidden'; bub.hidden=false; show(true); paint(); bub.style.visibility=''; cancelAnimationFrame(raf); raf=requestAnimationFrame(frame); bN.hidden?bP.focus():bN.focus(); },60);
+  }
+  function end(keepScroll){
+    setOn(false); cancelAnimationFrame(raf); ov.hidden=true; sp.hidden=true; bub.hidden=true; ov.style.background='transparent'; app.style.marginBottom='';
+    elT.innerHTML=''; elD.innerHTML=''; sp.className=''; sp.style.cssText=''; cur=null;   /* 다음 안내에 앞 안내의 흔적이 남지 않게 비워요 */
+    if(keepScroll===true) return;
+    try{ window.scrollTo({top:0,behavior:reduce()?'auto':'smooth'}); }catch(e){ window.scrollTo(0,0); }
+  }
+  function nextIdx(from,dir){ var i=from+dir; while(i>=0&&i<list.length){ if(reach(list[i])) return i; i+=dir; } return -1; }
+  function go(n){ if(n<0||n>=list.length) return; idx=n; show(false); }
+  function next(){ var n=nextIdx(idx,1); if(n<0) end(); else go(n); }
+  function prev(){ var n=nextIdx(idx,-1); if(n>=0) go(n); }
+  bN.addEventListener('click',next);
+  bP.addEventListener('click',prev);
+  bS.addEventListener('click',end);
+  elD.addEventListener('click',function(e){
+    var i=e.target&&e.target.getAttribute&&e.target.getAttribute('data-i'); if(i==null) return;
+    i=parseInt(i,10); if(list[i] && !list[i].tap && reach(list[i])) go(i);
+  });
+  /* 눌러 보라고 한 곳은 강조 틀 안을 눌렀을 때만 실제로 눌러 줘요 */
+  ov.addEventListener('click',function(e){
+    var st=list[idx]; if(!on||!st||!st.tap) return;
+    var el=st.tap(); if(!el) return;
+    var rc=el.getBoundingClientRect();
+    if(e.clientX>=rc.left-PAD && e.clientX<=rc.right+PAD && e.clientY>=rc.top-PAD && e.clientY<=rc.bottom+PAD){
+      if(tourTab==='home' && S.bdSeen && typeof S.bdSeen==='object'){ S.bdSeen.inn=fmt(TODAY); save(); }   /* 안내가 여관을 설명하니 예전 여관 첫 안내는 건너뛰어요 */
+      el.click();
+      setTimeout(function(){ if(on) next(); },260);
+    }
+  });
+  ov.addEventListener('wheel',function(e){ e.preventDefault(); },{passive:false});
+  ov.addEventListener('touchmove',function(e){ e.preventDefault(); },{passive:false});
+  document.addEventListener('keydown',function(e){
+    if(!on) return;
+    if(e.key==='Escape') end();
+    else if(e.key==='ArrowRight'){ if(!list[idx].tap) next(); }
+    else if(e.key==='ArrowLeft'){ prev(); }
+  });
+  window.addEventListener('resize',function(){ if(on) paint(); });
+
+  /* 탭에 처음 들어가면 그 탭 안내를 시작해요. 다른 창이 떠 있으면 닫힐 때까지 잠깐씩 기다려요 */
+  function check(){
+    if(on) return;
+    var k=tab; if(!eligible(k)) return;
+    if(bdBusy()){ if(++tkTry<30) tkTimer=setTimeout(check,600); return; }
+    start(k);
+  }
+  tourSoon=function(){ clearTimeout(tkTimer); tkTry=0; tkTimer=setTimeout(check,500); };
+  tourStart=function(k){ start(k,true); };   /* 미리보기 전용: 첫 방문 기록은 건드리지 않고 안내만 보여 줘요 */
+  tourEnd=end;
+})();
+
 })();
 </script>
 <script>

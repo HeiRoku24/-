@@ -1445,8 +1445,11 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.25', APP_DATE='2026-10-08', showChg=false;
+var APP_VER='1.46.28', APP_DATE='2026-10-09', showChg=false;
 var CHANGES=[
+  ['1.46.28','앱 안에서 "월~금 누적 XP"·"평일 누적"이라고 쓰던 설명을 모두 "주간 누적 XP"로 바꿨어요(훈련장·주간 퀘스트 카드·마왕전 결과 창·반디와 NPC 대사·도움말·마왕성 규칙). 훈련장 XP는 토요일 퀘스트를 끝내기 전까지 주간 누적에 더해져요'],
+  ['1.46.27','모험의 길 러닝 XP를 80에서 90으로 올렸어요(10월 12일부터). 월·수·금 하루가 280XP, 한 주 만점이 1280XP가 돼서, 월~금 중 어느 하루를 통째로 쉬어도 나머지 4일로 마왕전 1000XP를 채울 수 있어요'],
+  ['1.46.26','피버모드를 열 때마다 코치 그림을 지금 고른 캐릭터(몸짱용사·드워프 전사·엘프 궁수·현자 마법사)로 다시 그리게 했어요(앱을 켠 채 동료를 바꾸면 이전 캐릭터가 남던 것 수정)'],
   ['1.46.25','피버모드에서 용사와 응원 말풍선이 그림 칸 반대편 구간의 한가운데에 오도록 맞췄어요(넓은 화면에서 오른쪽으로 치우치던 것 수정)'],
   ['1.46.24','피버모드 운동 그림 칸을 다시 키우고 용사 그림은 줄여서 둘의 크기 균형을 맞췄어요'],
   ['1.46.23','피버모드 운동 화면에서 운동 그림 칸의 빈 여백을 줄여 컴팩트하게 하고, 그만큼 용사 그림과 응원 말풍선을 키웠어요'],
@@ -2806,13 +2809,13 @@ function resultPopup(d,r){
   }
   if(r.res==='win'){
     return {k:'BOSS DEFEATED',t:dk==='sat'?B.n+' 토벌!':B.n+' 토벌 완료!',
-      b:battleScene(B.k,'win')+rewardNote(d,'win')+'<p class="bnote">'+(dk==='sat'?'월~금 누적 '+r.xp+' XP로 마왕성을 돌파! '+B.n+eul(B.n)+' 쓰러뜨렸어요. 승리 보너스 +150 XP · 전리품 상자 1개 획득! 여관에서 열어 보세요':'몸짱용사가 '+B.n+eul(B.n)+' 쓰러뜨렸어요! 토벌 보너스 +'+MID_XP+' XP')+'</p>',mode:'win'};
+      b:battleScene(B.k,'win')+rewardNote(d,'win')+'<p class="bnote">'+(dk==='sat'?'주간 누적 '+r.xp+' XP로 마왕성을 돌파! '+B.n+eul(B.n)+' 쓰러뜨렸어요. 승리 보너스 +150 XP · 전리품 상자 1개 획득! 여관에서 열어 보세요':'몸짱용사가 '+B.n+eul(B.n)+' 쓰러뜨렸어요! 토벌 보너스 +'+MID_XP+' XP')+'</p>',mode:'win'};
   }
   if(r.res==='free'){
-    return {k:'PRACTICE',t:'첫 마왕전은 연습전이에요',b:'<p class="bnote">월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에는 못 미쳤지만, 시작하고 첫 7일 안의 마왕전이라 마왕의 저주가 없어요. 이번 마왕전은 승패 기록에 들어가지 않아요.</p><p class="comfort">“괜찮아요. 다음 주엔 '+SAT_GOAL+' XP를 향해 천천히 가 봐요.”</p>',mode:'calm'};
+    return {k:'PRACTICE',t:'첫 마왕전은 연습전이에요',b:'<p class="bnote">주간 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에는 못 미쳤지만, 시작하고 첫 7일 안의 마왕전이라 마왕의 저주가 없어요. 이번 마왕전은 승패 기록에 들어가지 않아요.</p><p class="comfort">“괜찮아요. 다음 주엔 '+SAT_GOAL+' XP를 향해 천천히 가 봐요.”</p>',mode:'calm'};
   }
   var why;
-  if(dk==='sat') why=(r.why==='ended')?'마왕성 퀘스트(메인 퀘스트와 일일 러닝)를 다 채우지 못하고 모험을 마쳤어요. '+B.n+'에게 패배했어요...':'월~금 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에 못 미쳐 마왕의 저주에 걸렸어요...';
+  if(dk==='sat') why=(r.why==='ended')?'마왕성 퀘스트(메인 퀘스트와 일일 러닝)를 다 채우지 못하고 모험을 마쳤어요. '+B.n+'에게 패배했어요...':'주간 누적 '+r.xp+' XP로 '+SAT_GOAL+' XP에 못 미쳐 마왕의 저주에 걸렸어요...';
   else why='메인 퀘스트와 일일 러닝을 다 채우지 못하고 모험을 마쳐서 '+B.n+'에게 졌어요...';
   var dn=(dk==='sat' && rkAda().down===fmt(d))?'<p class="bnote">아다만타이트에서 오리하르콘으로 내려갔어요. 다음 주부터 연속 '+ADA_NEED+'주 이기면 길드에서 다시 시험을 볼 수 있어요.</p>':'';
   return {k:'DEFEAT',t:dk==='sat'?'패배...':'토벌 실패...',b:battleScene(B.k,'lose')+'<p class="bnote">'+why+'</p>'+dn+rewardNote(d,'lose'),mode:'lose'};
@@ -2900,7 +2903,9 @@ function setDiff(id){
   save();
 }
 function runMinOn(k){ return DIFF[diffOn(k)].min; }
-function runXpOn(k){ var dk=DK[parse(k).getDay()]; return dk==='sun'?XP_RUN:DIFF[diffOn(k)].run; }
+/* v1.46.27: 모험의 길 러닝 XP 80→90 (월·수·금 하루 280, 주 만점 1280). 어느 하루를 통째로 쉬어도 나머지 4일로 1000을 채우게 하려는 설계예요(몸짱·새싹과 같은 조건). 지난 기록이 바뀌지 않게 적용일 이후부터만 써요 */
+var ADV_RUN_FROM='2026-10-12', ADV_RUN_XP=90;
+function runXpOn(k){ var dk=DK[parse(k).getDay()], df; if(dk==='sun') return XP_RUN; df=diffOn(k); return (df==='adv' && k>=ADV_RUN_FROM)?ADV_RUN_XP:DIFF[df].run; }
 function setXpOn(k){ var dk=DK[parse(k).getDay()]; return dk==='sun'?XP_SET:DIFF[diffOn(k)].set; }
 function xpOf(id,k){ return id==='run'?runXpOn(k):setXpOn(k); }
 function hasRun(dk,k){ return dk==='sun' ? true : !!DRUN[diffOn(k)][dk]; }
@@ -3239,7 +3244,7 @@ function trainTotalXP(){
 function trainBuilt(){ return bState('train')==='done'; }
 function trainDayOpen(){ return DK[TODAY.getDay()]!=='sun'; }
 function trainEarnNow(){ var dk=DK[TODAY.getDay()]; if(dk==='sun') return false; if(dk==='sat') return !dayResult(TODAY); return true; }
-/* 그 주의 훈련 XP가 아직 월~금 누적에 들어갈 수 있는지 (토요일 마왕성 판정 전까지) */
+/* 그 주의 훈련 XP가 아직 주간 누적에 들어갈 수 있는지 (토요일 마왕성 판정 전까지) */
 function trainOpenWeek(d){
   var sat=addDays(weekMonOf(d),5), sk=fmt(sat), tk=fmt(TODAY);
   if(sk<tk) return false;
@@ -3574,7 +3579,7 @@ function viewTrain(){
 }
 function trainPanel(){
   var st=stageIdx(), wi=trainWeekInfo(), te=trDay(fmt(TODAY)), open=trainDayOpen(), earn=trainEarnNow(), h='';
-  h+='<section class="weekq '+(wi.total>=SAT_GOAL?'ok':'')+'"><div class="wq-top"><p class="wq-k">이번 주 월~금 누적</p><span class="wq-range">훈련 XP 포함</span></div>'+
+  h+='<section class="weekq '+(wi.total>=SAT_GOAL?'ok':'')+'"><div class="wq-top"><p class="wq-k">주간 누적 XP</p><span class="wq-range">훈련 XP 포함</span></div>'+
      '<div class="wq-xp"><span>퀘스트 '+wi.q+' + 훈련 '+wi.g+'</span><b>'+wi.total+' <small>/ '+SAT_GOAL+'</small></b></div>'+
      '<div class="wq-bar"><i class="cur" style="width:'+Math.min(100,Math.round(wi.total*100/SAT_GOAL))+'%"></i></div>'+
      '<p class="wq-sub">'+(wi.raw>wi.g?'합계가 '+SAT_GOAL+'을 넘은 '+(wi.raw-wi.g)+' XP는 기록만 남았어요. ':'')+
@@ -4311,8 +4316,8 @@ var NPCS={
     lines:[
       '자세가 중요하다! 무리하지 말고 한 세트씩 정확하게!',
       '숨 쉬는 걸 잊지 마라. 근육은 호흡으로 만들어진다!',
-      '월~금 누적이 1000을 넘으면 더 이상 XP는 없다. 그래도 단련은 배신하지 않지!',
-      '마왕성이 코앞이다. 평일 누적 XP를 채워야 한다는 걸 잊지 마라.',
+      '주간 누적이 1000을 넘으면 더 이상 XP는 없다. 그래도 단련은 배신하지 않지!',
+      '마왕성이 코앞이다. 주간 누적 XP를 채워야 한다는 걸 잊지 마라.',
       '훌륭하다! 허수아비도 놀라서 떨고 있군.'],
     ctxP:{morning:['아침 훈련은 하루를 지배한다!'],day:['한낮의 땀방울이 가장 값지지!'],sunset:['해 지기 전에 한 세트 더!'],night:['밤늦은 훈련은 무리하지 마라. 쉬는 것도 훈련이다.']},
     ctxW:{rain:['비 오는 날엔 실내 훈련이 최고지!'],storm:['번개가 치는 날엔 밖에 나가지 마라. 여기서 단련하면 된다.'],clear:['날씨가 좋군. 달리기도 잊지 말도록!']}},
@@ -4356,8 +4361,8 @@ function npcQLines(id){
     }else if(q.dk==='sat'){
       if(q.win) o.push('마왕을 쓰러뜨렸다고요?! 여관 사람들이 모두 환호하고 있어요!','마왕 토벌 축하드려요, 용사님! 오늘은 제가 크게 한턱 낼게요.');
       else if(q.lose) o.push('마왕성에서 아쉽게 졌지만, 용사님은 분명 더 강해지고 있어요. 푹 쉬고 다시 도전해요.');
-      else if(q.wk>=q.goal) o.push('이번 주 평일 누적이 목표를 넘겼네요! 마왕을 만날 준비는 끝났어요.','오늘은 마왕과 싸우는 날이죠? 준비는 완벽해 보여요!');
-      else o.push('오늘은 마왕과 싸우는 날인데, 평일 누적이 '+q.wk+' / '+q.goal+' XP예요. 훈련장에서 더 채울 수 있다던데요?');
+      else if(q.wk>=q.goal) o.push('이번 주 누적이 목표를 넘겼네요! 마왕을 만날 준비는 끝났어요.','오늘은 마왕과 싸우는 날이죠? 준비는 완벽해 보여요!');
+      else o.push('오늘은 마왕과 싸우는 날인데, 주간 누적이 '+q.wk+' / '+q.goal+' XP예요. 훈련장에서 더 채울 수 있다던데요?');
     }else{
       if(q.done) o.push('오늘 퀘스트를 다 끝내셨네요! 정말 대단해요. 오늘은 푹 쉬어도 좋아요.','퀘스트 완료! 따뜻한 수프는 제가 쏠게요.','역시 용사님! 오늘도 해내셨군요.');
       else if(q.none) o.push('오늘의 퀘스트는 아직 시작 전이네요. 가볍게 몸부터 풀어 볼까요?','오늘 퀘스트가 기다리고 있어요. 첫 세트만 해 보면 금방 탄력이 붙어요!');
@@ -4368,7 +4373,7 @@ function npcQLines(id){
     else if(q.dk==='sat'){
       if(q.win) o.push('마왕을 쓰러뜨렸다고? 내 제자답군! 오늘은 푹 쉬어라.');
       else if(q.lose) o.push('졌다고 고개 숙이지 마라. 다음에 이기면 된다!');
-      else if(q.wk>=q.goal) o.push('평일 누적이 충분하군. 마왕성에서 당당히 싸워라!');
+      else if(q.wk>=q.goal) o.push('주간 누적이 충분하군. 마왕성에서 당당히 싸워라!');
       else o.push('마왕성 자격까지 '+(q.goal-q.wk)+' XP가 부족하다. 지금이라도 여기서 채워라!');
     }else{
       if(q.done) o.push('오늘 퀘스트를 마쳤군, 훌륭하다! 이제 추가 훈련으로 한계를 넘어 보자.');
@@ -4601,7 +4606,7 @@ function trainAfter(before,adding){
   else if(adding){ toast('기록만 남았어요 · XP는 없어요'); }
 }
 function bldDone(id){
-  var b=bld(id), msg={train:'훈련장이 열렸어요. 이제 평일 XP를 보충하고 자유롭게 운동할 수 있어요.',forge:'대장간이 복구됐어요. 이제 장비재료로 전용 무기·방어구·장식을 만들 수 있어요.',trade:'교역소가 문을 열었어요. 이제 남는 재료를 부족한 재료로 바꿀 수 있어요.',wall:'성벽이 복구됐어요. 이제 성벽 위에 올라 풍경을 바라볼 수 있어요.'}[id]||'';
+  var b=bld(id), msg={train:'훈련장이 열렸어요. 이제 주간 XP를 보충하고 자유롭게 운동할 수 있어요.',forge:'대장간이 복구됐어요. 이제 장비재료로 전용 무기·방어구·장식을 만들 수 있어요.',trade:'교역소가 문을 열었어요. 이제 남는 재료를 부족한 재료로 바꿀 수 있어요.',wall:'성벽이 복구됐어요. 이제 성벽 위에 올라 풍경을 바라볼 수 있어요.'}[id]||'';
   showOverlay({k:'RESTORED',t:b.n+' 복구 완료!',b:'<div class="kdone live">'+bSvg(id)+'</div><p class="bnote">'+msg+'</p>',mode:'win'});
 }
 function dayTick(){
@@ -5453,7 +5458,7 @@ function hud(){
     '<div class="xpt"><span>'+li.cur+' / '+li.need+' XP</span><span>다음 레벨까지 '+(li.need-li.cur)+'</span></div></div></section>';
 }
 
-/* ---------- 주간 퀘스트: 월~금 누적 XP로 이번 주 마왕성 도전 가능 여부 확인 ---------- */
+/* ---------- 주간 퀘스트: 주간 누적 XP로 이번 주 마왕성 도전 가능 여부 확인 ---------- */
 function dayMaxXP(d){ var k=fmt(d), t=0; idsFor(DK[d.getDay()],k).forEach(function(id){ t+=xpOf(id,k); }); return t+3*XP_MEAL+XP_CLEAR+MID_XP; }
 function weekQuest(d){
   var mon=addDays(d,-((d.getDay()+6)%7)), tk=fmt(TODAY), cur=0, mx=0, days=[], i, allOver=true;
@@ -5477,7 +5482,7 @@ function weeklyHtml(d){
     sub=sp?'':'마왕성에서 이기려면 토요일 퀘스트도 모두 완료해야 해요.';
   }else if(st==='go'){
     msg=need+' XP 더 필요해요';
-    sub=(tOpen&&tBuilt)?'남은 날의 퀘스트와 훈련장 운동으로 채울 수 있어요. 훈련장 XP도 월~금 누적에 더해져요.':'남은 날을 모두 채우면 최대 +'+(W.mx-W.cur)+' XP · 마왕성 도전이 가능해요.';
+    sub=(tOpen&&tBuilt)?'남은 날의 퀘스트와 훈련장 운동으로 채울 수 있어요. 훈련장 XP도 주간 누적에 더해져요.':'남은 날을 모두 채우면 최대 +'+(W.mx-W.cur)+' XP · 마왕성 도전이 가능해요.';
   }else{
     msg=W.allOver?(W.cur+' XP로 '+G+' XP에 못 미'+(sp?'친 주였어요':'쳤어요')):('이번 주는 최대 '+W.mx+' XP라 마왕성 도전이 어려워요');
     sub=W.allOver?(sp?'마왕의 저주로 마왕성에서 패배한 주였어요.':'마왕의 저주로 마왕성에서는 패배하는 주예요.'):'남은 날을 모두 채워도 '+G+' XP에 닿지 못해요.';
@@ -5490,7 +5495,7 @@ function weeklyHtml(d){
     return '<div class="wq-day'+(x.done?' done':'')+(x.isT?' cur':'')+(x.fut?' fut':'')+'"><small>'+x.lab+(x.isT?' · 오늘':'')+'</small><b>'+(x.fut?'–':x.xp)+'</b></div>';
   }).join('');
   return '<section class="weekq '+st+'" aria-label="주간 퀘스트"><div class="wq-top"><p class="wq-k">주간 퀘스트</p><span class="wq-range">'+(W.mon.getMonth()+1)+'/'+W.mon.getDate()+' ~ '+(W.fri.getMonth()+1)+'/'+W.fri.getDate()+'</span></div>'+
-    '<div class="wq-xp"><span>월~금 누적 XP</span><b>'+W.cur+' <small>/ '+G+'</small></b></div>'+
+    '<div class="wq-xp"><span>주간 누적 XP</span><b>'+W.cur+' <small>/ '+G+'</small></b></div>'+
     '<div class="wq-bar" role="progressbar" aria-label="주간 경험치" aria-valuemin="0" aria-valuemax="'+G+'" aria-valuenow="'+Math.min(W.cur,G)+'"><i class="pot" style="width:'+pot+'%"></i><i class="cur" style="width:'+pc+'%"></i></div>'+
     '<p class="wq-st">'+msg+'</p>'+(sub?'<p class="wq-sub">'+sub+'</p>':'')+'<div class="wq-days">'+dd+'</div></section>';
 }
@@ -6305,13 +6310,18 @@ function fevDom(){
   });
   return fevEl;
 }
+function fevArt(){   /* v1.46.26: 코치 그림(진행 화면 3자세·끝 화면)을 지금 고른 캐릭터로 다시 그려요. 팝업 DOM은 한 번만 만들어 재사용하므로 열 때마다 호출 */
+  var e;
+  ['stand','flex','cheer'].forEach(function(n){ e=fevEl.querySelector('#fvcoach .fv-'+n+' svg'); if(e) e.innerHTML=heroPose(n); });
+  e=fevEl.querySelector('.fv-endc .fv-cheer svg'); if(e) e.innerHTML=heroPose('cheer');
+}
 function fevOpen(){
   var k=fmt(sel), items, ph, el, names=[], seen={};
   if(fevOn || k!==fmt(TODAY) || isEnded(k) || rd(k).fin) return;
   items=fevItems(k); if(!items.length) return;
   ph=fevPhases(items,k);
   stopTimer();
-  el=fevDom();
+  el=fevDom(); fevArt();
   fv={k:k,items:items,ph:ph,i:-1,t:0,paused:false,hold:false,last:Date.now(),bk:'',done:0,tx:{},say:'',mi:0,nx:false,ci:0,cs:0,xp0:totalXP(),st:fevStage(k),circ:!!PLAN[DK[parse(k).getDay()]].circuit,fig:''};
   items.forEach(function(it){ if(!seen[it.id]){ seen[it.id]=1; names.push(X[it.id].n); } });
   document.getElementById('fvisum').innerHTML=items.length+(fv.circ?'동작':'세트')+' · '+fevMinText(ph)+'<br>라운드 사이에는 '+FEV_REST+'초 쉬어요';
@@ -6875,13 +6885,13 @@ var BANDI={
     boss:{h:function(w){ return w==='sat'?'오늘은 마왕전이에요!':'내일은 마왕전이에요!'; },
       x:function(w){
         var d=(w==='sat')?TODAY:addDays(TODAY,1);
-        return (w==='sat'?'평일 퀘스트로 모은 XP가 ':'이번 주 평일 퀘스트로 모은 XP가 ')+SAT_GOAL+' 이상이면 마왕성에 도전할 수 있어요. '+
+        return (w==='sat'?'주간 누적 XP가 ':'이번 주 누적 XP가 ')+SAT_GOAL+' 이상이면 마왕성에 도전할 수 있어요. '+
           (firstWeekFree(d)?'처음 한 번은 XP가 모자라도 연습전이라 패배로 기록되지 않아요. 편하게 도전해 봐요!':'못 미치면 마왕의 저주로 패배로 기록되지만, 괜찮아요. 다음 주에 다시 도전하면 돼요.');
       }},
     run:{h:'달린 거리는 여기에 쌓여요',x:function(){ return '거리는 퀘스트 탭에서 적어요. 걷기도 똑같이 인정돼요. 달리기와 걷기가 있는 날엔 '+runMinOn(fmt(TODAY))+'km 이상 적으면 그날 퀘스트가 완료돼요. <span style="white-space:nowrap">비·눈</span> 오는 날엔 퀘스트 탭에서 집 안 유산소로 바꿀 수도 있어요.'; }},
     kingdom:{h:'여기가 몸짱왕국이에요',x:'퀘스트와 토벌로 건축 자재가 쌓이면 무너진 건물을 하나씩 되살릴 수 있어요. 마왕과 중간보스를 이기면 장비를 만들 재료도 얻어요. 건물을 눌러 들어가 보세요!'},
     inn:{h:'여기는 여관이에요!',x:'얻은 장비를 입어 보고, 장비 도감을 볼 수 있어요. 동료가 합류하면 함께 모험할 캐릭터도 여기서 골라요. 여주인 로사에게 말을 걸어 보세요.'},
-    train:{h:'훈련장이에요!',x:'마왕전을 앞두고 XP가 모자랄 때 추가로 훈련할 수 있어요. 교관 가론에게 말을 걸면 훈련 기록이 열려요. 훈련 XP는 월~금 누적에 더해지지만 1000을 넘는 부분은 기록만 남아요.'},
+    train:{h:'훈련장이에요!',x:'마왕전을 앞두고 XP가 모자랄 때 추가로 훈련할 수 있어요. 교관 가론에게 말을 걸면 훈련 기록이 열려요. 훈련 XP는 주간 누적에 더해지지만 1000을 넘는 부분은 기록만 남아요.'},
     trade:{h:'교역소예요!',x:'남는 재료를 다른 등급의 재료로 바꿔 줘요. 내림은 후하게, 올림은 박하게 쳐 줘요. 상인 마르코에게 말을 걸면 교환이 열리고, 교환은 되돌릴 수 없어요.'},
     map:{h:'여기는 모험 지도예요!',x:'이번 주 월요일부터 일요일까지의 스테이지가 길로 이어져 있어요. 스테이지를 누르면 그날의 퀘스트가 열리고, 마친 날에는 표시가 남아요. 길 끝에는 토요일의 마왕성이 기다려요.'},
     diary:{h:'여기는 몸짱일지예요!',x:'모험을 하며 달성한 업적이 하나씩 쌓여요. 업적을 누르면 자세한 내용을 볼 수 있어요. 체중을 기록하면 변화를 그래프로 볼 수 있지만, 하고 싶을 때만 해도 괜찮아요.'},
@@ -6897,7 +6907,7 @@ var BANDI={
   /* 언제든 부르는 도움말: [제목, 답] */
   help:[
     ['오늘은 뭘 하면 돼요?','퀘스트 탭에 오늘 할 일이 모두 나와요. 운동 동작을 세트마다 체크하고, 달리기와 걷기는 거리를 적고(하는 날만 있어요), 식단 세 가지를 체크해요. 다 마치면 \'오늘의 모험 종료\'를 눌러 마무리하면 돼요. 못 마친 날이 있어도 괜찮아요. 다음 날 다시 시작하면 돼요.'],
-    ['마왕전이 뭐예요?','토요일엔 마왕과 싸워요. 월~금 퀘스트로 1000XP 이상 모으면 도전할 수 있고, 마왕성 퀘스트를 모두 하면 마왕을 토벌해요. 1000XP에 못 미치면 \'마왕의 저주\'로 패배해요. 단, 시작하고 7일 안의 마왕전은 XP가 모자라도 연습전이라 패배로 기록되지 않아요.'],
+    ['마왕전이 뭐예요?','토요일엔 마왕과 싸워요. 한 주 동안 모은 주간 누적 XP가 1000 이상이면 도전할 수 있고, 마왕성 퀘스트를 모두 하면 마왕을 토벌해요. 1000XP에 못 미치면 \'마왕의 저주\'로 패배해요. 단, 시작하고 7일 안의 마왕전은 XP가 모자라도 연습전이라 패배로 기록되지 않아요.'],
     ['비 오는 날엔 어떡해요?','<span style="white-space:nowrap">비·눈</span>이 오는 날엔 달리기와 걷기를 집 안 유산소로 바꿀 수 있어요(층간소음이 적은 동작만이에요). XP와 클리어는 똑같이 인정되지만, 달린 거리(km)는 올라가지 않아요. <span style="white-space:nowrap">폭염·한파·미세먼지·빙판길</span> 같은 날엔 이유를 골라 주 3회까지 바꿀 수 있어요.'],
     ['달리기와 걷기 거리는 어디에 적어요?',function(){ return BANDI.tips.run.x(); }],
     ['왕국에서는 뭘 해요?',function(){ return BANDI.tips.kingdom.x; }],
@@ -7147,7 +7157,7 @@ var INTRO_TXT=[
   "당신은 몸짱용사입니다. 각 모험지의 적들을 물리치며 '전신짱 마왕'을 토벌할 힘을 기르십시오.",
   "매일 모험지를 돌며 퀘스트를 수행하고 중간보스를 토벌하십시오. 퀘스트 완료 시 상응하는 경험치를 획득할 수 있습니다.",
   "하루의 퀘스트 진행은 하단의 오늘의 모험 종료 버튼을 눌러 종료할 수 있습니다. 종료하지 않아도 날짜가 지나면 자동으로 종료되며, 종료된 날의 기록은 수정할 수 없으니 신중해 주세요.",
-  "평일 5일간의 퀘스트 진행으로 누적 1000XP 이상 획득 시 마왕성에 도전할 수 있습니다. 하지만 1000XP 미만 획득 시에는 마왕의 저주에 걸려 패배하게 됩니다.",
+  "주간 누적 1000XP 이상 획득 시 마왕성에 도전할 수 있습니다. 하지만 1000XP 미만 획득 시에는 마왕의 저주에 걸려 패배하게 됩니다.",
   "1000XP 이상 획득하여 마왕성에 도전한 경우, 마왕성 퀘스트를 모두 완료하면 마왕을 토벌할 수 있습니다. 하지만 퀘스트 실패 시 마왕에게 패배하게 됩니다.",
   "매주 일요일은 회복의 신전을 방문하게 됩니다. 몸짱신의 가호를 받으며 다음 토벌을 위한 회복을 진행하세요.",
   "몸짱용사가 되어 마왕을 무찌르고 몸짱왕국을 되살려 보세요."

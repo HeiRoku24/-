@@ -42,7 +42,7 @@
   --ink:#10231F; --muted:#4D6964; --gold:#F1B90F; --gold-ink:#2B2000; --link:#8A5A00;
   --clear:#1FBF86; --clear-ink:#032117; --boss:#DC3E31; --boss-ink:#FFFFFF;
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px);}
+html{scroll-padding-top:env(safe-area-inset-top,0px); -webkit-text-size-adjust:100%; text-size-adjust:100%;}   /* 폰이 글자를 제멋대로 키우지 않게(v1.46.37) */
 *,*::before,*::after{box-sizing:inherit;}
 body{margin:0; background:var(--bg); color:var(--ink);
   font-family:'Noto Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
@@ -1446,14 +1446,16 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.46.36', APP_DATE='2026-10-09', showChg=false;
+var APP_VER='1.47.0', APP_DATE='2026-10-10', showChg=false;
 var CHANGES=[
+  ['1.47.0','왕국 건물 개방시스템: 훈련장(첫 보스 토벌)·대장간(길드 카퍼 랭크)·교역소(길드 골드 랭크)가 조건을 채우면 왕국에 나타나요. 개방 예정은 왕국 지도·랭크 화면·길드에서 미리 알려 줘요. 복구 비용을 성벽 10·훈련장 20·대장간 200으로 낮췄고, 이미 넣어 둔 자재는 넘친 만큼 돌려드려요. 건물 개방 알림과 건물별 첫 안내는 반디의 가이드로 바꿨어요. 토·일요일에 처음 시작해도 퀘스트 탭 안내가 나오고, 마왕 이름은 "몸짱 마왕"이 됐어요'],
+  ['1.46.37','폰이 앱 글자를 제멋대로 키우지 않게 막는 설정을 넣었어요(눈에 보이는 변화는 없어요)'],
   ['1.46.36','여관에 처음 들어갈 때 뜨던 예전 설명 팝업을 없앴어요. 여관 안내는 왕국 탭의 말풍선 안내가 맡아요'],
   ['1.46.35','대장간 장비 목록을 보기 좋게 바꿨어요. 직업을 고른 뒤 착용 부위(예: 검·투구·갑옷·방패) 탭으로 나눠 한 번에 한 부위의 장비만 보여 주고, 장비 칸을 작게 줄였어요. "전체" 버튼은 없애고 직업별로만 보여요. 처음엔 지금 함께하는 캐릭터의 장비가 열려요'],
   ['1.46.34','탭 안내가 처음 켜질 때 앞서 본 안내의 글과 강조 틀이 잠깐 비치던 것을 고쳤어요. 더 이상 쓰지 않는 예전 탭 안내 팝업(퀘스트·지도·일지) 문구와 코드를 지웠어요'],
   ['1.46.33','탭 안내 말풍선에서 강조하는 말을 빨간 글씨 대신 어두운 알약 모양(짙은 바탕에 노란 글씨)으로 바꿨어요'],
   ['1.46.32','각 탭(퀘스트·러닝·왕국·일지)에 처음 들어가면 팝업 대신, 화면이 살짝 어두워지고 설명하는 곳만 밝게 보이면서 그 아래에 반디가 말풍선으로 하나씩 알려 줘요. 왕국에서는 여관을 직접 눌러 들어가 여관 설명까지 이어져요. 일지에서는 업적을 맨 아래로 옮기고 "최근 기록"을 없앴어요. 체중 그래프의 점을 누르면 그날 기록한 체중이 뜨고, 거기서 삭제할 수 있어요. 왕국 전경의 건물 위치도 바꿨어요(대장간·교역소는 위쪽, 훈련장은 오른쪽 아래)'],
-  ['1.46.31','규칙 설명창 1장의 "전신짱 마왕"을 "마왕"으로 바꿨어요'],
+  ['1.46.31','규칙 설명창 1장의 "몸짱 마왕"을 "마왕"으로 바꿨어요'],
   ['1.46.30','처음 켤 때 나오는 규칙 설명창을 7장에서 3장으로 줄이고 말투를 ~요체로 바꿨어요. 하루 종료 후 기록을 수정할 수 없다는 안내는 반디의 첫 퀘스트 안내로 옮겼어요'],
   ['1.46.29','승급 시험의 운동 횟수 측정 시간을 1분에서 2분으로 바꾸고 합격선 횟수를 새로 정했어요(타이머·안내 문구·입력 칸도 2분 기준). 버티는 동작의 시간과 러닝 기준은 그대로예요'],
   ['1.46.28','앱 안에서 "월~금 누적 XP"·"평일 누적"이라고 쓰던 설명을 모두 "주간 누적 XP"로 바꿨어요(훈련장·주간 퀘스트 카드·마왕전 결과 창·반디와 NPC 대사·도움말·마왕성 규칙). 훈련장 XP는 토요일 퀘스트를 끝내기 전까지 주간 누적에 더해져요'],
@@ -1598,7 +1600,7 @@ var CHANGES=[
   ['1.11','앱 버전 표시와 업데이트 내역 추가'],
   ['1.10','여관(옷 입히기), 전리품 상자, 일요일 위로 한마디·휴식 의상, 업적 탭 분리'],
   ['1.9','운동 교체(Y-T-W 레이즈·월 싯·인치웜), 스톱워치 타이머, 쓰러진 보스 그림'],
-  ['1.8','중간보스 이름, 토벌 보너스 XP, 단계형 업적, 전신짱 마왕'],
+  ['1.8','중간보스 이름, 토벌 보너스 XP, 단계형 업적, 몸짱 마왕'],
   ['1.7','클라우드 로그인과 동기화']
 ];
 /* ---------- 용사 장비 (전리품 · 휴식 의상) ---------- */
@@ -2436,7 +2438,7 @@ function mMino(e){
   s+=mFace(e,-52,11,-25,8,{fang:null});
   return s;
 }
-/* ===== 토 전신짱 마왕 (전신이 튼실한 보디빌더 마왕) ===== */
+/* ===== 토 몸짱 마왕 (전신이 튼실한 보디빌더 마왕) ===== */
 function mDemon(e){
   var sk='#9A62C8', sd='#6C3F98', s='';
   s+=pth('M-42,-20 Q-70,22 -48,52 L48,52 Q70,22 42,-20 Z','#3B1F5C');
@@ -2655,7 +2657,7 @@ var MONS={
   golem:{sc:.82,n:'코어짱 골렘',win:'와르르!',lose:'쿵쿵!',bg:'#F5E8CE',gd:'#E6CF9F'},
   wolf:{sc:.8,n:'어깨짱 워울프',win:'깨갱!',lose:'아우~!',bg:'#F6DDC8',gd:'#E6BB98'},
   mino:{sc:.88,n:'벅지짱 미노타우르스',win:'음머어!',lose:'음머~!',bg:'#DAD6F0',gd:'#B9B2DE'},
-  demon:{sc:.86,n:'전신짱 마왕',win:'으아악!',lose:'크하하!',bg:'#E4D3F2',gd:'#C3A8DD'}
+  demon:{sc:.86,n:'몸짱 마왕',win:'으아악!',lose:'크하하!',bg:'#E4D3F2',gd:'#C3A8DD'}
 };
 function monArt(key,e){return ({ogre:mOgre,spider:mSpider,golem:mGolem,wolf:mWolf,mino:mMino,demon:mDemon})[key](e);}
 function sceneFrame(bg,gd,inner,label,tint){
@@ -2734,7 +2736,7 @@ function introScene(n){
     s+=bubble(206,10,100,44,'화이팅!',214);
     s+='<g class="a-twk">'+bStar(50,60,8,'#F6C445')+bStar(270,110,7,'#FF6A5B')+bStar(80,130,6,'#46E0A5')+'</g>';
   }else if(n===3){
-    lb='몸짱용사와 전신짱 마왕이 대치하는 그림'; bg='#C9BFE0'; gd='#A99AD0';
+    lb='몸짱용사와 몸짱 마왕이 대치하는 그림'; bg='#C9BFE0'; gd='#A99AD0';
     s+='<g fill="#5B4B7A" opacity=".8"><ellipse cx="70" cy="34" rx="56" ry="18"/><ellipse cx="240" cy="28" rx="66" ry="20"/></g>';
     s+='<polyline points="164,30 150,80 170,80 152,128" fill="none" stroke="#FFD95E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><polyline points="164,30 150,80 170,80 152,128" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
     s+='<ellipse cx="80" cy="176" rx="34" ry="6" fill="#000" opacity=".18"/><ellipse cx="244" cy="176" rx="50" ry="7" fill="#000" opacity=".18"/>';
@@ -2762,7 +2764,7 @@ function introScene(n){
 }
 
 /* ---------- 결과 판정 (중간보스 · 마왕 · 몸짱신) ---------- */
-var BOSSES={mon:{k:'ogre',n:'상체짱 오우거'},tue:{k:'spider',n:'하체짱 왕거미'},wed:{k:'golem',n:'코어짱 골렘'},thu:{k:'wolf',n:'어깨짱 워울프'},fri:{k:'mino',n:'벅지짱 미노타우르스'},sat:{k:'demon',n:'전신짱 마왕'}};
+var BOSSES={mon:{k:'ogre',n:'상체짱 오우거'},tue:{k:'spider',n:'하체짱 왕거미'},wed:{k:'golem',n:'코어짱 골렘'},thu:{k:'wolf',n:'어깨짱 워울프'},fri:{k:'mino',n:'벅지짱 미노타우르스'},sat:{k:'demon',n:'몸짱 마왕'}};
 var SAT_GOAL=1000;
 var AUTOEND=true;   /* v1.36 자동 모험 종료. false면 예전 규칙으로 계산해요(소급 적용 전후 비교용) */
 function isEnded(k){
@@ -3082,7 +3084,7 @@ function bossChain(id,key,dk,nm){
 var CHAINS=[
   {id:'streak',b:null,steps:[3,7,30,100,300,365],unit:'일',count:function(c){return c.best;},
    name:function(n){return ({3:'3일 연속 클리어',7:'일주일 개근',30:'한 달 개근',100:'100일 개근',300:'300일 개근',365:'1년 개근'})[n];}},
-  bossChain('c_demon','demon','sat','전신짱 마왕'),
+  bossChain('c_demon','demon','sat','몸짱 마왕'),
   bossChain('c_mon','ogre','mon','상체짱 오우거'),
   bossChain('c_tue','spider','tue','하체짱 왕거미'),
   bossChain('c_wed','golem','wed','코어짱 골렘'),
@@ -3176,9 +3178,9 @@ function snap(){var xp=totalXP(); return {xp:xp, lv:lvInfo(xp).L, ach:unlocked()
 /* ---------- 몸짱왕국 (v1.36): 건축 자재 · 건물 복구 · 훈련장 ---------- */
 var BLD=[
   {id:'castle',n:'성',cost:0},
-  {id:'wall',n:'성벽',cost:600},
-  {id:'train',n:'훈련장',cost:100},
-  {id:'forge',n:'대장간',cost:300},
+  {id:'wall',n:'성벽',cost:10},
+  {id:'train',n:'훈련장',cost:20},
+  {id:'forge',n:'대장간',cost:200},
   {id:'inn',n:'여관',cost:0},
   {id:'guild',n:'길드',cost:0},
   {id:'trade',n:'교역소',cost:2000}
@@ -3192,6 +3194,62 @@ function bld(id){ var i; for(i=0;i<BLD.length;i++){ if(BLD[i].id===id) return BL
 function kdSpent(id){ var k=S.kingdom; return (k && k.spent && k.spent[id]>0)?Math.floor(k.spent[id]):0; }
 function bProg(id){ var b=bld(id); if(id==='inn'||id==='guild') return 1; if(!b||!b.cost) return 0; return Math.min(1,kdSpent(id)/b.cost); }
 function bState(id){ if(id==='inn'||id==='guild') return 'done'; if(id==='castle') return 'ruin'; var p=bProg(id); return p>=1?'done':(p>=0.5?'rest':'ruin'); }
+/* ---------- 건물 개방 (v1.47 시안): 개방 여부는 저장하지 않고 기록에서 매번 계산해요 ---------- */
+var FORGE_OPEN_RANK=1;   /* 대장간 개방: 길드 카퍼 랭크 달성(RANKS 번호 1) */
+var TRADE_OPEN_RANK=5;   /* 교역소 개방: 길드 골드 랭크 달성(RANKS 번호 5, 잠정 — 테스트 뒤 확정) */
+function rkBest(){ var best=0, m=S.rk||{}; Object.keys(m).forEach(function(id){ var ix=rkIdx(id); if(ix>best) best=ix; }); return best; }   /* 올라간 가장 높은 랭크(아다만타이트 강등과 상관없이 한 번 열린 건물은 닫히지 않아요) */
+function trainOpenCond(){   /* 훈련장 개방: 보스(평일 중간보스·마왕)를 한 번이라도 토벌 확정한 기록이 있어요 */
+  var ks=Object.keys(S.log), i, k, L, d;
+  for(i=0;i<ks.length;i++){ k=ks[i]; L=S.log[k]; if(L && L.fin) return true; }
+  for(i=0;i<ks.length;i++){ k=ks[i]; d=parse(k); if(DK[d.getDay()]!=='sun' && isEnded(k) && isDone(d)) return true; }
+  return false;
+}
+function forgeOpenCond(){ return rkBest()>=FORGE_OPEN_RANK; }
+function tradeOpenCond(){ return rkBest()>=TRADE_OPEN_RANK; }
+/* 개방 예고: 어떤 조건으로 열리는지 사용자에게 미리 알려 줘요 */
+function iGa(n){ var c=n.charCodeAt(n.length-1)-0xAC00; return (c>=0 && c<11172 && c%28!==0)?'이':'가'; }
+function rkUnlockLine(ni){   /* 랭크 화면 '다음 승급' 카드: 이 랭크(또는 앞으로 만날 랭크)에서 열리는 건물을 알려 줘요 */
+  var u=unlockOfRank(ni), k, u2, nm;
+  if(u && !bOpen(u)){ nm=bld(u).n; return '<p class="note" style="margin:10px 2px 0;font-weight:700">'+RANKS[ni].n+' 랭크를 달성하면 왕국에 <b>'+nm+'</b>'+iGa(nm)+' 개방돼요!</p>'; }
+  for(k=ni+1;k<RANKS.length;k++){ u2=unlockOfRank(k); if(u2 && !bOpen(u2)){ nm=bld(u2).n; return '<p class="note" style="margin:10px 2px 0">'+RANKS[k].n+' 랭크(승리 '+RANKS[k].w+'승)를 달성하면 왕국에 <b>'+nm+'</b>'+iGa(nm)+' 개방돼요.</p>'; } }
+  return '';
+}
+function rkRowUnlock(i,ri){   /* 랭크 목록 줄 */
+  var u=unlockOfRank(i); if(!u) return '';
+  return '<span style="display:block;font-weight:700;color:#8B5A2B">'+(bOpen(u)?bld(u).n+' 개방됨':'달성하면 '+bld(u).n+' 개방')+'</span>';
+}
+function gpUnlockNote(g){   /* 길드 접수원 승급 시험 카드 */
+  var ix=g.nx?rkIdx(g.nx.id):-1, u=(ix>=0)?unlockOfRank(ix):null, nm;
+  if(u && !bOpen(u)){ nm=bld(u).n; return '<p class="note" style="margin:0 0 8px"><b>합격하면 왕국에 '+nm+iGa(nm)+' 개방돼요!</b></p>'; }
+  return '';
+}
+function unlockOfRank(ix){ return ix===FORGE_OPEN_RANK?'forge':(ix===TRADE_OPEN_RANK?'trade':null); }
+function openHintHtml(){
+  var L=[];
+  if(!bOpen('train')) L.push('첫 보스를 쓰러뜨리면 <b>훈련장</b>이');
+  if(!bOpen('forge')) L.push('길드 <b>'+RANKS[FORGE_OPEN_RANK].n+'</b> 랭크를 달성하면 <b>대장간</b>이');
+  if(!bOpen('trade')) L.push('길드 <b>'+RANKS[TRADE_OPEN_RANK].n+'</b> 랭크를 달성하면 <b>교역소</b>가');
+  if(!L.length) return '';
+  return '<div class="kopen" style="margin:10px 0 0;padding:10px 12px;border:2px dashed var(--gold);border-radius:14px;background:rgba(246,196,69,.12)"><b>개방 예정</b>'+L.map(function(x){ return '<p class="note" style="margin:4px 0 0">· '+x+' 개방돼요</p>'; }).join('')+'</div>';
+}
+function bOpen(id){   /* 자재를 한 번이라도 넣은 건물은 언제나 열린 것으로 봐요(기존 사용자 보호) */
+  if(id==='train') return kdSpent('train')>0 || trainOpenCond();
+  if(id==='forge') return kdSpent('forge')>0 || forgeOpenCond();
+  if(id==='trade') return kdSpent('trade')>0 || tradeOpenCond();
+  return true;
+}
+/* 비용이 줄어서 넣어 둔 자재가 새 비용을 넘으면 새 비용까지만 남기고 나머지는 보유 자재로 돌아와요(보유 = 획득 - 사용) */
+var kdRefund=null;
+function kdFix(){
+  var ch=false;
+  ['wall','train','forge','trade'].forEach(function(id){
+    var b=bld(id), sp=kdSpent(id);
+    if(b && sp>b.cost){ S.kingdom.spent[id]=b.cost; kdRefund=kdRefund||{}; kdRefund[id]=(kdRefund[id]||0)+(sp-b.cost); ch=true; }
+  });
+  if(ch) save();
+}
+function bdHas(key){ return !!(S.bdSeen && typeof S.bdSeen==='object' && S.bdSeen[key]); }
+function bdMark(key){ var ol='2000-01-01'; if(!S.bdSeen || typeof S.bdSeen!=='object') S.bdSeen={today:ol,boss:ol,run:ol,kingdom:ol}; S.bdSeen[key]=fmt(TODAY); save(); }
 /* 건축 자재: 종료된 날 기준으로 기록에서 계산하고, 쓴 양만 저장해요 */
 function matOfDay(k){
   var d=parse(k), dk=DK[d.getDay()], r;
@@ -3500,6 +3558,7 @@ function kingdomSvg(){
     s+='<path d="M158,'+(KCY+KRY+10)+' L158,'+(KCY+KRY+34)+' M202,'+(KCY+KRY+10)+' L202,'+(KCY+KRY+34)+'" stroke="'+OL+'" stroke-width="9" stroke-linecap="round"/><path d="M158,'+(KCY+KRY+10)+' L158,'+(KCY+KRY+34)+' M202,'+(KCY+KRY+10)+' L202,'+(KCY+KRY+34)+'" stroke="#B9783A" stroke-width="4" stroke-linecap="round"/>';
   }
   ['train','forge','trade','inn','guild','castle'].forEach(function(id){
+    if(!bOpen(id)) return;
     var q=KPOS[id];
     s+='<g transform="translate('+q[0]+','+q[1]+') scale('+q[2]+')">'+bArt(id,bState(id),bProg(id))+'</g>';
   });
@@ -3508,6 +3567,7 @@ function kingdomSvg(){
 }
 /* 왕국 전경의 터치 영역: 건물 이름만 아래에 작게 표시해요 */
 function kBuildBtn(id){
+  if(!bOpen(id)) return '';
   var b=bld(id), st=bState(id), sub, nm=(id==='castle')?'성':b.n;
   if(id==='castle') sub='알 수 없는 폐허';
   else sub=BSTN[st];
@@ -3536,6 +3596,7 @@ function mapTime(){
   h+='<div class="mapwx" aria-hidden="true"><div style="position:absolute;inset:0;background:'+bg+'"></div>';
   if(per==='night'||per==='sunset'){
     ['train','forge','trade','castle','inn','guild'].forEach(function(id){
+      if(!bOpen(id)) return;
       var q=KPOS[id], x=(q[0]*100/KW), y=(q[1]*100/KH);
       h+='<div style="position:absolute;left:'+(x-9).toFixed(1)+'%;top:'+(y-9).toFixed(1)+'%;width:18%;height:'+(18*KW/KH).toFixed(1)+'%;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,'+(per==='night'?'.55':'.28')+') 0%,rgba(255,214,120,0) 68%)"></div>';
     });
@@ -3559,7 +3620,7 @@ function kingdomMapView(){
   var h=matBarHtml()+'<div class="phrow tab" style="margin-top:14px"><h1 class="ph">몸짱왕국</h1><span class="phsub">모험으로 되살리는 곳</span></div>';
   var btn=''; ['castle','train','forge','inn','guild','trade','wall'].forEach(function(id){ btn+=kBuildBtn(id); });
   h+='<div class="gmap kmap">'+kingdomSvg()+mapTime()+mapWeather()+btn+'</div>';
-  h+='<p class="note">건물이나 성벽을 누르면 건물 화면으로 들어가요. 평일 퀘스트와 토벌로 얻은 자재는 모험이 종료된 날부터 쌓여요.</p>';
+  h+='<p class="note">건물이나 성벽을 누르면 건물 화면으로 들어가요. 평일 퀘스트와 토벌로 얻은 자재는 모험이 종료된 날부터 쌓여요.</p>'+openHintHtml();
   return h;
 }
 function buildView(id){
@@ -3615,6 +3676,8 @@ function trainPanel(){
   return h;
 }
 function viewKingdom(){
+  var kid0=(kv.indexOf('build:')===0)?kv.slice(6):kv;
+  if((kid0==='train'||kid0==='forge'||kid0==='trade') && !bOpen(kid0)) kv='map';
   if(kv==='inn') return matBarHtml()+backBtn()+viewHome();
   if(kv==='guild') return viewGuild();
   if(kv==='train' && trainBuilt()) return viewTrain();
@@ -4243,6 +4306,7 @@ function guildPanel(){
     set.items.forEach(function(it){ tt.push(it.n+' '+it.line+(it.t==='r'?'회':'초')); });
     tt.push(set.run.km+'km '+exDur(set.run.sec)+' 이내');
     h+='<p class="note" style="margin:0 0 4px"><b>오늘의 시험 · '+RANKS[rkCur()].n+' → '+g.nx.n+(g.back?' (복귀)':'')+'</b></p><p class="note" style="margin:0 0 8px">'+tt.join(' · ')+'</p>';
+    h+=gpUnlockNote(g);
     h+='<p class="note" style="margin:0 0 4px">시험은 하루에 한 번이에요. 통증이 있거나 몸이 좋지 않으면 응시하지 말고 쉬세요.</p>';
     h+='<button type="button" class="primary" data-g="open">'+(g.s==='resume'?'이어서 하기':'시험 보기')+'</button><button type="button" class="ghost big" data-g="ok" style="width:100%;margin-top:8px">다음에 올게요</button>';
   }else{
@@ -4426,6 +4490,8 @@ function npcLine(id){
 function npcTalk(id){
   var n=NPCS[id]; if(!n) return;
   var first=(id!=='inn' && id!=='guild' && !npcOpen[id]), line=(id==='guild')?guildLine():(first?npcPick(n.greet,id):npcLine(id));
+  if(id==='trade' && first && bdHas('open_trade') && !bdHas('marco')){ line='어이쿠, 용사님! 길드 상인 마르코라고 합니다. 남는 재료는 저한테 가져오세요. 값 좋게 쳐 드리지요! '+line; bdMark('marco'); }
+  if(id==='forge' && first && bdHas('open_forge') && !bdHas('brun')){ line='허허, 용사가 왔구먼! 이 폐허를 다시 일으켜 줄 모양이로군. 재료만 모아 오게. 불은 내가 피워 주지! '+line; bdMark('brun'); }
   var box=document.querySelector('.scn .scnsay');
   if(box){
     box.innerHTML='<b>'+n.n+' '+n.nick+'</b>'+line; box.hidden=false;
@@ -5184,7 +5250,7 @@ function viewRank(){
     var pct=Math.min(100,Math.round(wins*100/nx.w)), ok=(wins>=nx.w);
     h+='<div class="rk-nx"><div class="rk-mini">'+rkBadge(ri+1,lvn,true)+'</div><div class="rk-info"><b>'+nx.n+'</b><span>마왕 토벌 승리 '+nx.w+'승이 되면 길드에서 승급 시험을 볼 수 있어요</span></div></div>'+
       '<div class="xpbar" role="progressbar" aria-label="승급 조건 진행" aria-valuemin="0" aria-valuemax="'+nx.w+'" aria-valuenow="'+Math.min(wins,nx.w)+'"><i style="width:'+pct+'%"></i></div>'+
-      '<div class="xpt"><span>'+Math.min(wins,nx.w)+' / '+nx.w+'승</span><span>'+(ok?'응시 조건을 채웠어요':'남은 승리 '+(nx.w-wins)+'승')+'</span></div>'+
+      '<div class="xpt"><span>'+Math.min(wins,nx.w)+' / '+nx.w+'승</span><span>'+(ok?'응시 조건을 채웠어요':'남은 승리 '+(nx.w-wins)+'승')+'</span></div>'+rkUnlockLine(ri+1)+
       '<button type="button" class="primary" data-a="goguild" style="margin-top:12px"'+(ok?'':' disabled')+'>길드로 승급시험 보러가기</button>'+(ok?'<p class="note" style="margin:8px 2px 0">조건을 채웠어요. 왕국의 길드 접수원에게 말을 걸어 보세요.</p>':'');
   }else{
     h+='<p style="margin:0;font-family:var(--disp);font-size:20px">가장 높은 랭크예요</p><p class="note" style="margin:4px 2px 0">더 오를 곳은 없지만, 이 자리를 지키는 건 꾸준한 용사만의 특권이에요.</p><p class="note" style="margin:8px 2px 0">마왕전에서 지면 오리하르콘으로 내려가요. 다시 올라오려면 내려온 다음 주부터 연속 '+ADA_NEED+'주 마왕을 쓰러뜨리고, 길드에서 아다만타이트 시험에 다시 합격해야 해요.</p>';
@@ -5194,7 +5260,7 @@ function viewRank(){
   for(i=0;i<RANKS.length;i++){
     var r=RANKS[i], cls=(i===ri)?' now':(i<ri?'':' lock'), tag='';
     if(i===ri) tag='현재'; else if(i<ri) tag=((S.rk&&S.rk[r.id])?String(S.rk[r.id]).slice(5).replace('-','/'):'달성'); else if(i===ri+1){ if(dn) tag=(el?'재응시 자격':'강등 중'); else if(wins>=r.w) tag='응시 조건 충족'; }
-    h+='<div class="rk-row'+cls+'"><div class="rk-mini">'+rkBadge(i,lvn,true)+'</div><div class="rk-info"><b>'+r.n+'</b><span>'+(r.w?('마왕 토벌 승리 '+r.w+'승 이상'):'승급 시험을 보기 전')+'</span></div>'+(tag?'<span class="rk-tag">'+tag+'</span>':'')+'</div>';
+    h+='<div class="rk-row'+cls+'"><div class="rk-mini">'+rkBadge(i,lvn,true)+'</div><div class="rk-info"><b>'+r.n+'</b><span>'+(r.w?('마왕 토벌 승리 '+r.w+'승 이상'):'승급 시험을 보기 전')+'</span>'+rkRowUnlock(i,ri)+'</div>'+(tag?'<span class="rk-tag">'+tag+'</span>':'')+'</div>';
   }
   return h+'</div>';
 }
@@ -5507,7 +5573,7 @@ function weeklyHtml(d){
     if((!W.allOver || !sp) && firstWeekFree(addDays(W.mon,5))){ st='go'; msg='첫 주는 연습전이에요'; }   /* v1.46.4: 첫 마왕전 당일(토요일)에도 같아요 */   /* v1.46.3: 새 사용자에게 첫날부터 빨간 "어려워요"를 보이지 않아요 */
     if(firstWeekFree(addDays(W.mon,5))) sub=(W.allOver?(sp?'시작한 첫 7일 안의 마왕전이라 마왕의 저주 없이 연습전으로 끝난 주였어요.':'시작한 첫 7일 안의 마왕전이라 마왕의 저주 없이 연습전으로 치러요.'):'시작한 첫 7일 안의 마왕전이라, 못 채워도 마왕의 저주는 없어요.');
     if(W.cur===0 && fmt(addDays(W.mon,5))<fmt(parse(S.start))){ st='go'; msg='이번 주는 시작하기 전이었어요'; sub='시작한 첫 7일 안의 마왕전은 연습전이라, 못 채워도 마왕의 저주는\u00a0없어요.'; }   /* v1.46.4: 시작하기 전 주에 \"패배한 주\"라고 하지 않아요 */
-    if(tOpen && !tBuilt) sub+=' 왕국에서 훈련장을 복구하면 XP를 보충할\u00a0수\u00a0있어요.';
+    if(tOpen && !tBuilt) sub+=(bOpen('train')?' 왕국에서 훈련장을':' 첫 보스를 쓰러뜨리면 왕국에 훈련장이 열려요. 훈련장을')+' 복구하면 XP를 보충할\u00a0수\u00a0있어요.';
   }
   var dd=W.days.map(function(x){
     return '<div class="wq-day'+(x.done?' done':'')+(x.isT?' cur':'')+(x.fut?' fut':'')+'"><small>'+x.lab+(x.isT?' · 오늘':'')+'</small><b>'+(x.fut?'–':x.xp)+'</b></div>';
@@ -5703,7 +5769,7 @@ function bkParse(text){
   var trd2={}; ['a','b','c','d'].forEach(function(k6){ var v=(d.trade&&typeof d.trade==='object')?parseInt(d.trade[k6],10):0; trd2[k6]=(v>0)?Math.min(v,9999):0; });
   var crf2={}; if(d.crafted&&typeof d.crafted==='object') Object.keys(d.crafted).forEach(function(id){ if(d.crafted[id]&&known[id]&&known[id].craft) crf2[id]=true; });
   var dl2={}; if(d.dl&&typeof d.dl==='object') Object.keys(d.dl).forEach(function(k7){ if(ok.test(k7)&&DIFF[d.dl[k7]]) dl2[k7]=d.dl[k7]; });
-  var bds2=null; if(d.bdSeen&&typeof d.bdSeen==='object'){ bds2={}; Object.keys(d.bdSeen).forEach(function(k8){ if(({today:1,boss:1,run:1,kingdom:1,forge:1,inn:1,train:1,trade:1,guild:1,map:1,diary:1})[k8]&&d.bdSeen[k8]) bds2[k8]=(typeof d.bdSeen[k8]==='string'&&ok.test(d.bdSeen[k8]))?d.bdSeen[k8]:'2000-01-01'; }); }
+  var bds2=null; if(d.bdSeen&&typeof d.bdSeen==='object'){ bds2={}; Object.keys(d.bdSeen).forEach(function(k8){ if(({today:1,boss:1,run:1,kingdom:1,forge:1,inn:1,train:1,trade:1,guild:1,map:1,diary:1,open_train:1,open_forge:1,open_trade:1,open_guild:1,brun:1,marco:1})[k8]&&d.bdSeen[k8]) bds2[k8]=(typeof d.bdSeen[k8]==='string'&&ok.test(d.bdSeen[k8]))?d.bdSeen[k8]:'2000-01-01'; }); }
   var rk2={}; if(d.rk&&typeof d.rk==='object') Object.keys(d.rk).forEach(function(k9){ if(RKIDS[k9]&&k9!=='unr'&&ok.test(d.rk[k9])) rk2[k9]=d.rk[k9]; });
   var ex2={}; if(d.ex&&typeof d.ex==='object') Object.keys(d.ex).forEach(function(k10){ var e=d.ex[k10]; if(!ok.test(k10)||!e||typeof e!=='object'||!RKIDS[e.r]||e.r==='unr') return; var o={r:e.r,p:e.p?1:0,c:e.c?1:0,d:DIFF[e.d]?e.d:'body',v:[]}, j; for(j=0;j<4;j++){ var n=e.v?parseFloat(e.v[j]):0; o.v.push((n>=0&&n<=EX_VMAX)?Math.round(n):0); } ex2[k10]=o; });
   var aat={}, akn=achKnown(); if(d.achAt&&typeof d.achAt==='object') Object.keys(d.achAt).forEach(function(k5){ if(akn[k5]&&ok.test(d.achAt[k5])) aat[k5]=d.achAt[k5]; });
@@ -5959,6 +6025,7 @@ function viewSettings(){
 
 
 function render(){
+  try{ kdFix(); }catch(e){}
   try{ achStamp(); }catch(e){}
   var v=tab==='today'?viewToday():(tab==='run'?viewRun():tab==='week'?viewWeek():(tab==='ach'?viewAch():(tab==='set'?viewSettings():(tab==='rank'?viewRank():(tab==='exam'?viewExam():viewKingdom())))));
   app.innerHTML=v;
@@ -6079,7 +6146,7 @@ function confetti(){
   })(t0);
 }
 var ovAfter=null;
-function closeOv(){ov.hidden=true; stopConfetti(); var f=ovAfter, ok=ovOk; ovAfter=null; ovOk=null; ovNoAct=null; ovno.hidden=true; ovx.textContent='계속하기'; if(ok){ try{ ok(); }catch(e){} } if(f) setTimeout(f,300); bdTipSoon();}
+function closeOv(){ov.hidden=true; stopConfetti(); var f=ovAfter, ok=ovOk; ovAfter=null; ovOk=null; ovNoAct=null; ovno.hidden=true; ovx.textContent='계속하기'; if(ok){ try{ ok(); }catch(e){} } if(f) setTimeout(f,300); bdTipSoon(); if(typeof tourSoon==='function') tourSoon();}
 /* v1.43.0 처형 컷씬을 끈 사람의 토벌 완료 창: [확인]=오늘의 퀘스트 확정, [해치웠나?]=마지막 체크 취소 */
 ovno.addEventListener('click',function(){ var u=ovNoAct; ovNoAct=null; ovOk=null; ov.hidden=true; stopConfetti(); ovAfter=null; ovno.hidden=true; ovx.textContent='계속하기'; try{ if(u) u(); }catch(e){} bdTipSoon(); });
 ovx.addEventListener('click',closeOv);
@@ -7064,7 +7131,7 @@ function bdBusy(){
   if(tm && !tm.hidden) return true;
   return false;
 }
-var BLDTIP={guild:1,train:1,trade:1,forge:1};   /* 팝업으로 뜨는 건물 첫 안내(여관은 v1.46.36에서 뺐어요: 탭 말풍선 안내가 대신해요) */
+var BLDTIP={};   /* v1.47 시안: 건물 첫 안내 팝업은 없애고 반디의 가이드(TOURS b_*)가 맡아요 */   /* 팝업으로 뜨는 건물 첫 안내(여관은 v1.46.36에서 뺐어요: 탭 말풍선 안내가 대신해요) */
 function bdTipId(){
   var sn=S.bdSeen, t=fmt(TODAY), dk;
   if(!sn || typeof sn!=='object'){   /* 예전부터 쓰던 사용자도 왕국 건물에는 처음 들어갈 때 한 번씩 안내해요(다른 안내는 안 떠요) */
@@ -7930,7 +7997,7 @@ function tsBuildings(w){
   var H=150, gy=146, s='', k=.62;
   function put(id,x,kk){ kk=kk||k; return '<g transform="translate('+x+','+(gy-42*kk)+') scale('+kk+')">'+bArt(id,bState(id),bProg(id))+'</g>'; }
   s+='<g transform="translate(0,0)">'+tsWallSeg(170,gy,34)+'</g>';
-  s+=put('train',246)+pine(336,gy-26,.62)+put('forge',414)+mBush(476,gy-6,.7)+put('inn',548)+pine(624,gy-26,.7)+mBush(650,gy-6,.6)+put('castle',712,.46)+mBush(758,gy-6,.7);
+  s+=(bOpen('train')?put('train',246):'')+pine(336,gy-26,.62)+(bOpen('forge')?put('forge',414):'')+mBush(476,gy-6,.7)+put('inn',548)+pine(624,gy-26,.7)+mBush(650,gy-6,.6)+put('castle',712,.46)+mBush(758,gy-6,.7);
   s+='<g transform="translate(762,0)">'+tsWallSeg(138,gy,34)+'</g>';
   return s;
 }
@@ -9063,6 +9130,13 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   '#tkspot{position:fixed; z-index:55; border-radius:20px; pointer-events:none;'+
   ' box-shadow:0 0 0 100vmax rgba(3,10,9,.55), 0 0 0 3px var(--gold), 0 0 18px 4px rgba(246,196,69,.40);}'+
   '#tkspot.tap{animation:tkpulse 1.2s ease-in-out infinite;}'+
+  /* v1.47 시안: 건물을 눌러 들어가게 유도할 때는 더 눈에 띄게 반짝여요 */
+  '#tkspot.spark{animation:tkglow .9s ease-in-out infinite; background:radial-gradient(circle,rgba(255,244,190,.34) 0%,rgba(255,244,190,0) 72%), linear-gradient(115deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.62) 50%,rgba(255,255,255,0) 62%) 0 0/260% 100% no-repeat; overflow:visible;}'+
+  '#tkspot.spark::before,#tkspot.spark::after{position:absolute; font-size:26px; line-height:1; color:#FFF3B0; text-shadow:0 0 6px #F6C445,0 0 14px #F6C445; pointer-events:none;}'+
+  '#tkspot.spark::before{content:"✦"; top:-14px; left:-10px; animation:tktwk 1.1s ease-in-out infinite;}'+
+  '#tkspot.spark::after{content:"✧"; right:-10px; bottom:-14px; font-size:30px; animation:tktwk 1.1s ease-in-out .45s infinite;}'+
+  '@keyframes tkglow{0%,100%{box-shadow:0 0 0 100vmax rgba(3,10,9,.55), 0 0 0 3px var(--gold), 0 0 16px 4px rgba(246,196,69,.55); background-position:0 0,130% 0;} 50%{box-shadow:0 0 0 100vmax rgba(3,10,9,.55), 0 0 0 5px #FFE08A, 0 0 34px 12px rgba(255,224,138,.95); background-position:0 0,-30% 0;}}'+
+  '@keyframes tktwk{0%,100%{transform:scale(.55) rotate(0deg); opacity:.35;} 50%{transform:scale(1.25) rotate(25deg); opacity:1;}}'+
   '@keyframes tkpulse{0%,100%{box-shadow:0 0 0 100vmax rgba(3,10,9,.55), 0 0 0 3px var(--gold), 0 0 14px 2px rgba(246,196,69,.35);} 50%{box-shadow:0 0 0 100vmax rgba(3,10,9,.55), 0 0 0 5px var(--gold), 0 0 26px 8px rgba(246,196,69,.7);}}'+
   '#tkbub{position:fixed; z-index:56; left:50%; transform:translateX(-50%); width:calc(100% - 24px); max-width:536px;'+
   ' display:flex; align-items:flex-start; gap:6px; transition:opacity .18s;}'+
@@ -9083,7 +9157,7 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   '.tkp{background:transparent; color:var(--gold-ink); border:2px solid var(--gold-ink);}'+
   '.tkn{background:var(--gold-ink); color:var(--gold); border:2px solid var(--gold-ink);}'+
   '.tkp[hidden],.tks[hidden],.tkn[hidden]{display:none;}'+
-  '@media (prefers-reduced-motion: reduce){ #tkbub{transition:none;} #tkspot.tap{animation:none;} }';
+  '@media (prefers-reduced-motion: reduce){ #tkbub{transition:none;} #tkspot.tap,#tkspot.spark{animation:none;} #tkspot.spark::before,#tkspot.spark::after{animation:none; opacity:1;} }';
   var stl=document.createElement('style'); stl.textContent=css; document.head.appendChild(stl);
 
   function reduce(){ try{ return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; } }
@@ -9100,10 +9174,18 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
     today:[
       {t:"이곳은 «오늘의 퀘스트»를 진행하는 곳이에요. 하나씩 같이 둘러볼까요?", intro:true},
       {t:"여기는 용사님의 «랭크»와 «경험치»를 표시해요. 배지를 누르면 현재 랭크를 확인할 수 있어요!", els:one('.hud')},
-            {t:function(){ var W=weekQuest(TODAY), p=firstWeekFree(addDays(W.mon,5)); return '주간 목표는 «1000XP»를 모으는 거예요. 다 채우면 «토요일 마왕성»에 도전할 수 있어요.'+(p?' 첫 주는 «연습전»이니 편하게 해 봐요!':''); }, els:one('section.weekq')},
-      {t:"오늘의 «던전»과 «중간보스», 그리고 «퀘스트 진행 상황»이 여기 나와요. 다 채우면 보스를 물리쳐요!", els:one('section.quest')},
+            {t:function(){
+        var dk=DK[TODAY.getDay()], W=weekQuest(TODAY), p=firstWeekFree(addDays(W.mon,5));
+        if(dk==='sun') return '지난 한 주의 «주간 누적 XP»와 마왕성 결과가 여기 나와요. 새 주간 목표는 «월요일»부터 다시 시작해요!';
+        if(dk==='sat') return '이번 주 «주간 누적 XP»예요. «1000XP» 이상이면 «마왕성»에 도전할 수 있어요.'+(p?' 첫 주는 «연습전»이라 XP가 모자라도 패배로 기록되지 않아요!':' 못 미치면 마왕의 저주로 패배로 기록되지만, 다음 주에 다시 도전하면 돼요.');
+        return '주간 목표는 «1000XP»를 모으는 거예요. 다 채우면 «토요일 마왕성»에 도전할 수 있어요.'+(p?' 첫 주는 «연습전»이니 편하게 해 봐요!':''); }, els:one('section.weekq')},
+      {t:function(){ var dk=DK[TODAY.getDay()];
+        if(dk==='sun') return '일요일은 «회복의 신전»이에요. 스트레칭으로 몸을 풀며 쉬어 가는 «회복일»이라 부담 없이 해요!';
+        if(dk==='sat') return '오늘은 «마왕전»이에요! 마왕성의 «퀘스트»를 모두 채우면 마왕을 물리칠 수 있어요. 승리하면 «보너스 XP»도 받아요!';
+        return '오늘의 «던전»과 «중간보스», 그리고 «퀘스트 진행 상황»이 여기 나와요. 다 채우면 보스를 물리쳐요!'; }, els:one('section.quest')},
       {t:"달리는 날에는 러닝이나 걷기 퀘스트가 있어요. «최소 인정 거리» 이상을 입력하면 완료돼요. 걷기도 인정되니 무리하지 마요!", els:function(){ var h=h2of('러닝 또는 걷기'); if(!h) return null; var b=h.nextElementSibling; return b?[h,b]:[h]; }, opt:true},
-      {t:"운동은 세트마다 «직접 체크»해요. 체크하면 «쉬는 시간»이 시작되고, 동작이 헷갈리면 «'그림·자세 팁 보기'»를 눌러 봐요!", els:one('.q.ex')},
+      {t:"일요일에는 «가볍게 걷기»만 해도 돼요. 일요일 걷기는 «러닝 기록»에는 포함되지 않아요!", els:function(){ var h=h2of('일일 러닝'); if(!h) return null; var b=h.nextElementSibling; return b?[h,b]:[h]; }, when:function(){ return DK[TODAY.getDay()]==='sun'; }},
+      {t:function(){ return DK[TODAY.getDay()]==='sun' ? "스트레칭은 동작마다 «했어요»를 눌러 체크해요. 시간이 있는 동작은 «타이머»로 시작하고, 동작이 헷갈리면 «'그림·자세 팁 보기'»를 눌러 봐요!" : "운동은 세트마다 «직접 체크»해요. 체크하면 «쉬는 시간»이 시작되고, 동작이 헷갈리면 «'그림·자세 팁 보기'»를 눌러 봐요!"; }, els:one('.q.ex')},
       {t:"오늘 모험을 종료하려면 이 버튼을 눌러요. 종료한 기록은 «수정할 수 없으니», 다 했는지 확인하고 눌러요!", els:one('.endbtn')}
     ],
     run:[
@@ -9116,7 +9198,8 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
     home:[
       {t:"이곳은 모험으로 되살리는 «몸짱왕국»이에요. 하나씩 같이 둘러볼까요?", intro:true, map:true},
       {t:"«건축 자재 보유량»이에요. «퀘스트»를 통해 자재를 얻으면 무너진 건물을 복구하는 데 써요!", els:one('.matbar'), map:true},
-      {t:"자, 여관부터 들어가 볼까요? 여관을 눌러 보세요!", els:one('.kb[data-b="inn"]'), tap:function(){ return q1('.kb[data-b="inn"]'); }, map:true},
+      {t:function(){ var p=['아직 보이지 않는 건물은 조건을 채우면 «개방»돼요!']; if(!bOpen('train')) p.push('«훈련장»: 첫 보스 토벌.'); if(!bOpen('forge')) p.push('«대장간»: 길드 «'+RANKS[FORGE_OPEN_RANK].n+'» 랭크.'); if(!bOpen('trade')) p.push('«교역소»: 길드 «'+RANKS[TRADE_OPEN_RANK].n+'» 랭크.'); return p.join(' '); }, els:one('.kopen'), map:true, when:function(){ return !!openHintHtml(); }},
+      {t:"자, 여관부터 들어가 볼까요? 여관을 눌러 보세요!", els:one('.kb[data-b="inn"]'), tap:function(){ return q1('.kb[data-b="inn"]'); }, map:true, spark:true},
       {t:"여기는 여관이에요. «여주인 로사»를 눌러 대화를 할 수 있어요!", els:one('.card.scn'), late:true, noPrev:true},
       {t:"여기는 현재 용사님의 «캐릭터»와 «장비 상태»를 표시해요!", els:one('section.stage'), late:true},
       {t:"모험 중에 만난 «동료»들은 여기 모여요. 동료를 눌러서 함께 모험할 캐릭터를 고를 수 있어요!", els:h2plus('동료',1), late:true},
@@ -9130,6 +9213,55 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
       {t:"모험을 이어가며 달성한 «업적»이 여기 쌓여요. 눌러서 달성한 날짜와 설명을 볼 수 있어요!", els:h2plus('업적',1)}
     ]
   };
+
+  /* ===== v1.47 시안: 반디의 가이드 — 건물 개방 ===== */
+  function iga(n){ var c=n.charCodeAt(n.length-1)-0xAC00; return (c>=0 && c<11172 && c%28!==0)?'이':'가'; }
+  function bRem(id){ var b=bld(id); return Math.max(0,b.cost-kdSpent(id)); }
+  function bNeedT(id){
+    var b=bld(id), rem=bRem(id), bal=matStats().bal;
+    if(bal>=rem) return '필요한 자재는 «'+b.cost+'»이에요. 자재가 충분하니 바로 되살릴 수 있어요!';
+    if(bal<1) return '되살리려면 건축 자재 «'+rem+'»이 필요해요. 지금은 자재가 없지만, «오늘의 모험을 종료»하면 자재가 쌓여요!';
+    return '필요한 자재는 «'+b.cost+'»인데, 아직 «'+(rem-bal)+'»이 모자라요. 퀘스트를 하고 모험을 종료하면 쌓이니 조금만 더 모아 봐요!';
+  }
+  function buildSteps(id){
+    var nm=bld(id).n;
+    return [
+      {t:function(){ return bNeedT(id); }, els:function(){ var r=[], a=q1('.bprog'), b=q1('.bnum'); if(a) r.push(a); if(b) r.push(b); return r.length?r:null; }, late:true, noPrev:true},
+      {t:'«가능한 만큼 모두 투입»을 눌러 보세요!', els:one('.bkbtns .primary'), tap:function(){ return q1('.bkbtns .primary'); }, late:true, when:function(){ return matStats().bal>=bRem(id) && bRem(id)>0; }},
+      {t:'자재가 쌓이면 여기서 «투입»해요. «'+bld(id).cost+'»을 채우면 '+nm+iga(nm)+' 완성돼요!', els:one('.bkbtns'), late:true, when:function(){ return matStats().bal<1; }},
+      {t:'지금 있는 자재도 «먼저 투입»해 둘 수 있어요. 가득 차면 완성돼요!', els:one('.bkbtns'), late:true, when:function(){ var b=matStats().bal; return b>=1 && b<bRem(id); }}
+    ];
+  }
+  function firstTwo(sel){ return function(){ var q=app.querySelectorAll(sel); return q.length?[q[0],q[Math.min(1,q.length-1)]]:null; }; }
+  function npcTap(){ return q1('.npcbtn'); }
+  TOURS.o_train=[{t:'«훈련장»이 나타났어요! 눌러서 들어가 볼까요?', els:one('.kb[data-b="train"]'), tap:function(){ return q1('.kb[data-b="train"]'); }, spark:true}].concat(buildSteps('train'));
+  TOURS.o_trade=[{t:'«교역소»가 나타났어요! 눌러서 들어가 볼까요?', els:one('.kb[data-b="trade"]'), tap:function(){ return q1('.kb[data-b="trade"]'); }, spark:true}].concat(buildSteps('trade'));
+  TOURS.o_forge=[{t:'«대장간»이 나타났어요! 눌러서 들어가 볼까요?', els:one('.kb[data-b="forge"]'), tap:function(){ return q1('.kb[data-b="forge"]'); }, spark:true}].concat(buildSteps('forge'));
+  TOURS.b_train=[
+    {t:'여기는 훈련장이에요. «교관 가론»을 눌러 훈련 기록을 열 수 있어요!', els:one('.card.scn'), tap:npcTap},
+    {t:'훈련 XP는 «주간 누적 XP»에 더해져요. 마왕전 전에 XP가 모자랄 때 채워 봐요!', els:one('#npcpanel section.weekq'), late:true, noPrev:true},
+    {t:'«자유 러닝»과 «종목별 훈련»은 한 번 할 때마다 눌러요. 합계가 «1000XP»를 넘는 부분은 기록만 남아요!', els:firstTwo('#npcpanel .q'), late:true},
+    {t:'훈련장 운동은 «건축 자재»를 주지 않아요.', els:one('#npcpanel p.note'), late:true}
+  ];
+  TOURS.b_forge=[
+    {t:'여기는 대장간이에요. «대장장이 브룬»에게 말을 걸 수 있어요!', els:one('.card.scn'), tap:npcTap},
+    {t:'함께한 «직업»을 골라요. 만난 동료의 장비도 여기서 만들어요!', els:one('#npcpanel .fgf'), late:true, noPrev:true},
+    {t:'그다음 «착용 부위»를 골라요. 부위마다 장비가 6개씩 있어요!', els:one('#npcpanel .fgs'), late:true},
+    {t:'보스에게서 얻은 «재료»로 만들어요. 같은 등급의 재료로 같은 등급 장비를 만들 수 있어요!', els:firstTwo('#npcpanel .fgitem'), late:true}
+  ];
+  TOURS.b_trade=[
+    {t:'여기는 교역소예요. «상인 마르코»를 눌러 재료를 바꿀 수 있어요!', els:one('.card.scn'), tap:npcTap},
+    {t:'남는 재료를 다른 등급으로 바꿔 줘요. 내림은 후하게, 올림은 박하게 쳐 줘요. «교환은 되돌릴 수 없으니» 확인하고 눌러요!', els:firstTwo('#npcpanel .xch'), late:true, noPrev:true}
+  ];
+  TOURS.b_guild=[
+    {t:'여기는 길드예요. «접수원 세라»를 눌러 말을 걸어 보세요!', els:one('.card.scn'), tap:npcTap},
+    {t:'마왕을 쓰러뜨려 «승리»를 쌓으면 «승급 시험»을 볼 수 있어요. 시험은 몸 상태가 좋은 날에 무리하지 말고 봐요!', els:one('#npcpanel .card'), late:true, noPrev:true}
+  ];
+  TOURS.o_guild=[
+    {t:'첫 승리를 축하해요! «랭크 배지»를 눌러서 용사님의 «랭크»를 확인해 봐요.', els:one('.hud .rkb'), tap:function(){ return q1('.hud .rkb'); }},
+    {t:'여기가 용사님의 «랭크»예요. 승리를 쌓을수록 한 단계씩 올라가요!', els:one('.card.rk-hero'), late:true, noPrev:true},
+    {t:'응시 조건을 채웠어요! «길드로 승급시험 보러가기»를 눌러 보세요.', els:one('[data-a="goguild"]'), tap:function(){ return q1('[data-a="goguild"]'); }, late:true}
+  ].concat(TOURS.b_guild.map(function(s,i){ var c={}, k; for(k in s) c[k]=s[k]; c.late=true; c.when=function(){ return !bdHas('guild'); }; if(i===0) c.noPrev=true; return c; }));
 
   var on=false, idx=0, list=[], cur=null, raf=0, PAD=6, tourTab=null, tkTry=0, tkTimer=null;
   var TK_KEY={today:'today',run:'run',home:'kingdom',ach:'diary'};   /* 탭 첫 방문 기록은 예전 반디 안내가 쓰던 S.bdSeen 칸을 그대로 써요(저장·백업·클라우드 합치기가 이미 되어 있어요) */
@@ -9195,7 +9327,7 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
       elT.innerHTML=fmtT(typeof st.t==='function'?st.t():st.t); elD.innerHTML=d;
       bP.hidden=(idx===0)||!!st.noPrev; bS.hidden=isLast; bN.hidden=!!st.tap;
       bN.textContent=isLast?'알겠어요!':'다음';
-      sp.className=st.tap?'tap':'';
+      sp.className=(st.tap?'tap':'')+(st.spark?' spark':'');
       sp.hidden=!!st.intro; ov.style.background=st.intro?'rgba(3,10,9,.55)':'transparent';
       if(!st.intro && lastIntro){ cur=null; }   /* 전체 설명 다음 첫 섹션은 바로 그 자리에서 시작해요 */
       lastIntro=!!st.intro;
@@ -9208,7 +9340,7 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   function hasTour(k){ return !!TOURS[k]; }
   function mapOk(k){ return k!=='home' || (typeof kv==='undefined') || kv==='map'; }
   /* 오늘 화면에 맞지 않는 날(주말: 마왕성·신전 화면)과 지난 날 보기에서는 퀘스트 탭 안내를 미뤄요 */
-  function todayOk(){ var dk=DK[TODAY.getDay()]; return dk!=='sat' && dk!=='sun' && fmt(sel)===fmt(TODAY); }
+  function todayOk(){ return fmt(sel)===fmt(TODAY); }   /* v1.47 시안: 토요일(마왕전)·일요일(회복의 신전)에 처음 시작한 사람도 퀘스트 탭 안내를 받아요 */
   function eligible(k){
     if(!TOURS[k]) return false;
     if(k==='today' && !todayOk()) return false;
@@ -9225,7 +9357,7 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   function start(k,force){
     if(on || !TOURS[k]) return;
     tourTab=k;
-    list=TOURS[k].filter(function(s){ return s.late || present(s); });   /* 오늘 없는 섹션(예: 러닝 없는 날)은 처음부터 빼요 */
+    list=TOURS[k].filter(function(s){ return (!s.when||s.when()) && (s.late || present(s)); });   /* 오늘 없는 섹션(예: 러닝 없는 날)은 처음부터 빼요 */
     if(!list.length) return;
     if(!force) markSeen(k);
     window.scrollTo(0,0);
@@ -9236,6 +9368,7 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   function end(keepScroll){
     setOn(false); cancelAnimationFrame(raf); ov.hidden=true; sp.hidden=true; bub.hidden=true; ov.style.background='transparent'; app.style.marginBottom='';
     elT.innerHTML=''; elD.innerHTML=''; sp.className=''; sp.style.cssText=''; cur=null;   /* 다음 안내에 앞 안내의 흔적이 남지 않게 비워요 */
+    if(typeof tourSoon==='function') tourSoon();   /* 안내가 끝난 뒤 기다리던 개방 알림이 있으면 이어서 보여 줘요 */
     if(keepScroll===true) return;
     try{ window.scrollTo({top:0,behavior:reduce()?'auto':'smooth'}); }catch(e){ window.scrollTo(0,0); }
   }
@@ -9272,10 +9405,53 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   window.addEventListener('resize',function(){ if(on) paint(); });
 
   /* 탭에 처음 들어가면 그 탭 안내를 시작해요. 다른 창이 떠 있으면 닫힐 때까지 잠깐씩 기다려요 */
+  /* 건물 개방 알림 · 환급 알림 · 길드 승급 알림(한 번씩) */
+  function openPending(){
+    if(kdRefund) return 'refund';
+    if(bOpen('train') && kdSpent('train')===0 && !bdHas('open_train')) return 'train';
+    if(bOpen('forge') && kdSpent('forge')===0 && !bdHas('open_forge')) return 'forge';
+    if(bOpen('trade') && kdSpent('trade')===0 && !bdHas('open_trade')) return 'trade';
+    if(rkCur()===0 && rkWins()>=1 && !bdHas('open_guild')) return 'guild';
+    return null;
+  }
+  function showOpen(kd){
+    if(kd==='refund'){
+      var r=kdRefund, parts=[]; kdRefund=null;
+      ['wall','train','forge','trade'].forEach(function(id){ if(r[id]>0) parts.push(bld(id).n+' +'+r[id]); });
+      showOverlay({k:'ADJUSTED',t:'자재를 돌려드렸어요',b:'<p class="bnote">건물 복구 비용이 바뀌어서<br>넣어 둔 자재를 돌려드렸어요.</p><p class="bnote"><b>'+parts.join(' · ')+'</b></p>',mode:'info'});
+      return;
+    }
+    bdMark('open_'+kd);
+    if(kd==='guild'){
+      showOverlay({k:'FIRST VICTORY',t:'첫 승리를 거뒀어요!',b:'<p class="bnote">마왕을 쓰러뜨려 <b>카퍼</b> 랭크의<br>승급 시험을 볼 수 있게 됐어요.</p>'+(bOpen('forge')?'':'<p class="bnote">카퍼 랭크가 되면 왕국에<br><b>대장간</b>도 개방돼요!</p>'),mode:'win',confirm:function(){ startOpenFlow('guild'); }});
+      return;
+    }
+    var nm=bld(kd).n;
+    showOverlay({k:'OPENED',t:nm+iga(nm)+' 개방됐어요!',b:'<div class="kdone live">'+bSvg(kd)+'</div><p class="bnote">'+(kd==='train'?'첫 보스를 쓰러뜨린 덕분에 왕국에 <b>훈련장</b>이 나타났어요.<br>아직 폐허지만 자재를 넣으면 되살릴 수 있어요.':(kd==='trade'?'길드 <b>골드</b> 랭크를 달성한 덕분에 왕국에 <b>교역소</b>가 나타났어요.<br>되살리면 남는 재료를 다른 등급으로 바꿀 수 있어요.':'길드 <b>카퍼</b> 랭크를 달성한 덕분에 왕국에 <b>대장간</b>이 나타났어요.<br>되살리면 전용 장비를 만들 수 있어요.'))+'</p>',mode:'win',confirm:function(){ startOpenFlow(kd); }});
+  }
+  function startOpenFlow(kd){
+    armed=false;
+    if(kd==='guild'){
+      if(!q1('.hud .rkb')){ tab='today'; sel=TODAY; npcOpen={}; render(); }   /* 랭크 배지가 보이는 화면에서 시작해요(퀘스트 탭) */
+      window.scrollTo(0,0);
+      var needG=!bdHas('guild'); start('o_guild',true); if(needG) bdMark('guild');
+      return;
+    }
+    tab='home'; kv='map'; npcOpen={}; render(); window.scrollTo(0,0);
+    start('o_'+kd,true);
+  }
+  function buildGuideKey(){
+    if(tab!=='home') return null;
+    if((kv==='guild'||kv==='train'||kv==='forge'||kv==='trade') && !bdHas(kv)) return 'b_'+kv;
+    return null;
+  }
   function check(){
     if(on) return;
-    var k=tab; if(!eligible(k)) return;
+    var op=openPending(), bk=null, k=tab;
+    if(!op){ bk=buildGuideKey(); if(!bk && !eligible(k)) return; }
     if(bdBusy()){ if(++tkTry<30) tkTimer=setTimeout(check,600); return; }
+    if(op){ showOpen(op); return; }
+    if(bk){ start(bk,true); bdMark(bk.slice(2)); return; }
     start(k);
   }
   tourSoon=function(){ clearTimeout(tkTimer); tkTry=0; tkTimer=setTimeout(check,500); };

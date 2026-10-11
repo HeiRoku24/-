@@ -459,6 +459,8 @@ body{text-wrap:pretty;}
 .exm-cn{display:block; font-family:var(--disp); font-size:18px; line-height:1.25; word-break:keep-all;}
 .exm-cs{display:block; margin-top:2px; font-size:13px; color:var(--xm); line-height:1.4; word-break:keep-all;}
 .exm-card.ok .exm-cs{color:var(--xg); font-weight:700;}
+.exm-card.no{border-color:#9A4A3E;}
+.exm-card.no .exm-cs{color:#F0A090; font-weight:700;}
 .exm-go{flex:none; color:var(--xg); font-size:22px; line-height:1;}
 .exm-hd{display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 0 6px;}
 .exm-nn{font-family:var(--disp); font-size:14px; letter-spacing:.12em; color:var(--xm);}
@@ -1516,8 +1518,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.48.0', APP_DATE='2026-10-11', showChg=false;
+var APP_VER='1.48.2', APP_DATE='2026-10-11', showChg=false;
 var CHANGES=[
+  ['1.48.2','피버모드·퀘스트 타이머·휴식 타이머·승급 시험의 박자와 3·2·1·GO!, 끝 소리를 더 크게 키웠어요(소리 크기 2.2배 → 3배)'],
+  ['1.48.1','세트 사이 휴식 타이머에도 1초 메트로놈이 나오고, 끝나기 3초 전부터 3·2·1·GO!로 알려 줘요. 그동안 배경음악은 서서히 줄었다가 돌아오고 화면은 꺼지지 않아요. 설정의 소리 설정에 \"승급 시험 메트로놈\" 켜기·끄기를 넣었어요(꺼도 3·2·1·GO!와 끝 소리는 나요). 승급 시험 종목 카드에 기록과 함께 합격·미달이 바로 보여요'],
   ['1.48.0','그림·자세 팁 보기와 실내 유산소 대체하기 글자를 눌러 열고 닫는 버튼 모양(테두리·화살표)으로 바꿨어요. 레벨이 오를 때 별가루와 고리가 번쩍이고 새 레벨이 튀어 오르는 연출과 효과음을 넣었어요. 퀘스트 탭에서 시간 재는 동작의 타이머도 3·2·1·GO! 뒤 1초 메트로놈으로 시간을 세 주고, 그동안 배경음악이 서서히 줄었다가 끝나면 서서히 돌아와요. 승급 시험은 답안지 대신 종목을 골라 들어가 타이머로 재는 방식으로 바꿨어요(횟수는 2분 카운트다운, 버티기는 스톱워치, 러닝은 소리 없는 스톱워치). 시험 화면은 어둡고 묵직한 분위기예요. 타이머와 시험의 횟수·버티기 측정 중에는 화면이 꺼지지 않아요(러닝 스톱워치는 제외)'],
   ['1.47.0','왕국 건물 개방시스템: 훈련장(첫 보스 토벌)·대장간(길드 카퍼 랭크)·교역소(길드 골드 랭크)가 조건을 채우면 왕국에 나타나요. 개방 예정은 왕국 지도·랭크 화면·길드에서 미리 알려 줘요. 복구 비용을 성벽 10·훈련장 20·대장간 200으로 낮췄고, 이미 넣어 둔 자재는 넘친 만큼 돌려드려요. 건물 개방 알림과 건물별 첫 안내는 반디의 가이드로 바꿨어요. 토·일요일에 처음 시작해도 퀘스트 탭 안내가 나오고, 마왕 이름은 "몸짱 마왕"이 됐어요'],
   ['1.46.37','폰이 앱 글자를 제멋대로 키우지 않게 막는 설정을 넣었어요(눈에 보이는 변화는 없어요)'],
@@ -5523,25 +5527,26 @@ function exPassOf(set,i){
   if(i===3) return exDur(set.run.sec)+' 이내';
   it=set.items[i]; return (it.t==='r')?(it.line+'회 이상'+(it.lr?' (좌우 합계)':'')):(it.t==='h'?(it.line+'초 이상'):('양쪽 모두 '+it.line+'초 이상'));
 }
-/* 종목 카드의 상태 문구: 기록은 보여 주되 합격 여부는 제출 뒤에야 알 수 있어요 */
+/* 종목 카드의 상태 문구: 기록과 함께 그 종목의 합격 여부(pass)도 보여 줘요(v1.48.1). 제출 전에는 몇 번이든 다시 잴 수 있어요 */
 function exRecText(st,set,A,i){
-  var c=A.r[i], v=st.v[i]||[], it;
+  var c=A.r[i], v=st.v[i]||[], it, pass;
   if(c.bad) return {t:'기록을 확인해 주세요',ok:false};
   if(c.x!==undefined){
-    if(i===3) return {t:exDur(c.x),ok:true};
+    pass=(i===3)?(c.x<=set.run.sec):(c.x>=set.items[i].line);
+    if(i===3) return {t:exDur(c.x),ok:true,pass:pass};
     it=set.items[i];
-    if(it.t==='r') return {t:c.x+'회',ok:true};
-    if(it.t==='h') return {t:c.x+'초',ok:true};
-    return {t:'왼쪽 '+(+v[0])+'초 · 오른쪽 '+(+v[1])+'초',ok:true};
+    if(it.t==='r') return {t:c.x+'회',ok:true,pass:pass};
+    if(it.t==='h') return {t:c.x+'초',ok:true,pass:pass};
+    return {t:'왼쪽 '+(+v[0])+'초 · 오른쪽 '+(+v[1])+'초',ok:true,pass:pass};
   }
   if(i<3 && set.items[i].t==='s' && ((v[0]!==undefined&&v[0]!=='')||(v[1]!==undefined&&v[1]!==''))) return {t:'한쪽만 기록했어요',ok:false};
   return {t:'도전 전',ok:false};
 }
 function exHubHtml(st,set,A){
-  var h='<div class="exm"><p class="exm-lead">도전할 종목을 골라 들어가요. 순서는 마음대로예요. 4개 종목을 모두 마치면 기록을 확인하고 제출해요.</p>', i, r;
+  var h='<div class="exm"><p class="exm-lead">도전할 종목을 골라 들어가요. 순서는 마음대로예요. 종목마다 기록과 합격 여부가 바로 보여요. 4개 종목을 모두 마치면 기록을 확인하고 제출해요.</p>', i, r;
   for(i=0;i<4;i++){
     r=exRecText(st,set,A,i);
-    h+='<button type="button" class="exm-card'+(r.ok?' ok':'')+'" data-x="pick" data-i="'+i+'"><span class="exm-no">'+(i+1)+'</span><span class="exm-ci"><span class="exm-cn">'+exNameOf(set,i)+'</span><span class="exm-cs">'+(r.ok?('기록 '+r.t+' ✔'):(r.t+' · 합격선 '+exPassOf(set,i)))+'</span></span><span class="exm-go" aria-hidden="true">›</span></button>';
+    h+='<button type="button" class="exm-card'+(r.ok?(r.pass?' ok':' no'):'')+'" data-x="pick" data-i="'+i+'"><span class="exm-no">'+(i+1)+'</span><span class="exm-ci"><span class="exm-cn">'+exNameOf(set,i)+'</span><span class="exm-cs">'+(r.ok?('기록 '+r.t+' · '+(r.pass?'합격 ✔':'미달 ✖')+(r.pass?'':' (합격선 '+exPassOf(set,i)+')')):(r.t+' · 합격선 '+exPassOf(set,i)))+'</span></span><span class="exm-go" aria-hidden="true">›</span></button>';
   }
   return h+'<button type="button" class="exm-btn" id="exgo" data-x="review" style="width:100%;margin-top:6px"'+(A.ok?'':' disabled')+'>기록 확인하기</button></div>';
 }
@@ -5620,9 +5625,9 @@ function exMStart(i,j){
     if(!st.rs){ st.rs=now; exKeep(); }
     exM={i:3,j:0,mode:'run',phase:'run',t0:st.rs,conf:false,ls:-1};
   }else if(it.t==='r'){
-    exM={i:i,j:0,mode:'cd',phase:'prep',t0:now,prepEnd:pe,endAt:pe+120000,ls:-1,nm:it.n,c:{t0:now,prepEnd:pe,endAt:pe+120000,heavy:true,i:0}};
+    exM={i:i,j:0,mode:'cd',phase:'prep',t0:now,prepEnd:pe,endAt:pe+120000,ls:-1,nm:it.n,c:{t0:now,prepEnd:pe,endAt:pe+120000,heavy:true,noTick:!exTickOn(),i:0}};
   }else{
-    exM={i:i,j:j||0,mode:'up',phase:'prep',t0:now,prepEnd:pe,endAt:0,ls:-1,line:it.line,nm:it.n+(it.t==='s'?(j?' · 오른쪽':' · 왼쪽'):''),c:{t0:now,prepEnd:pe,endAt:0,heavy:true,i:0}};
+    exM={i:i,j:j||0,mode:'up',phase:'prep',t0:now,prepEnd:pe,endAt:0,ls:-1,line:it.line,nm:it.n+(it.t==='s'?(j?' · 오른쪽':' · 왼쪽'):''),c:{t0:now,prepEnd:pe,endAt:0,heavy:true,noTick:!exTickOn(),i:0}};
   }
   bgmQuiet('exm',true);   /* 러닝 스톱워치도 조용히: 배경음악을 줄여요 */
   if(i!==3) wakeKeep('exm',true);   /* 횟수·버티기 측정 중에만 화면을 켜 둬요(러닝은 배터리 때문에 제외) */
@@ -6211,6 +6216,8 @@ function soundCardHtml(){
     volRow('volsfx','효과음',sndSfx(),false)+
     '<div class="bk-btns" style="margin:6px 0 8px"><button type="button" class="ghost" data-a="bgm-toggle" aria-pressed="'+(on?'true':'false')+'">배경음악 '+(on?'켜짐':'꺼짐')+'</button></div>'+
     '<p class="note" id="bgmnow" style="margin:0 2px 6px">'+bgmNowText()+'</p>'+
+    '<div class="bk-btns" style="margin:8px 0 4px"><button type="button" class="ghost nw" data-a="extick-toggle" aria-pressed="'+(exTickOn()?'true':'false')+'">승급 시험 메트로놈 '+(exTickOn()?'켜짐':'꺼짐')+'</button></div>'+
+    '<p class="note" style="margin:0 2px 6px">끄면 승급 시험을 재는 동안 1초마다 나는 박자 소리가 사라져요. 3·2·1·GO!와 끝 소리는 그대로 나요.</p>'+
     '<p class="note" style="margin:0 2px">아이폰은 무음 스위치가 켜져 있으면 소리가 나지 않아요.</p></div>';
 }
 function pickDiff(did,fromBandi){
@@ -6321,11 +6328,19 @@ function holdSndAt(kind,w,heavy){
     else if(kind==='go'){ tone(784,w,0.55,0.1*V); tone(1047,w,0.55,0.1*V); tone(1568,w+0.04,0.45,0.08*V); vibAt(w,120); }
     else if(kind==='acc'){ fevClick(true,w); }
     else if(kind==='tick'){ fevClick(false,w); }
-    else if(kind==='end'){ [523,659,784,1047].forEach(function(f,i){ tone(f,w+i*0.12,0.3,0.09); }); }
+    else if(kind==='end'){ [523,659,784,1047].forEach(function(f,i){ tone(f,w+i*0.12,0.3,0.09*V); }); }
   }
+}
+function restEv(c,i){   /* v1.48.1 세트 사이 휴식: 1초 메트로놈(5초마다 강조) → 마지막 3초 3·2·1 → 끝에 GO! */
+  var N=c.sec, n=i+1;
+  if(n>N) return null;
+  if(n===N) return {k:'go',t:c.t0+N*1000};
+  if(n>=N-3) return {k:'cd',t:c.t0+n*1000};
+  return {k:(n%5===0?'acc':'tick'),t:c.t0+n*1000};
 }
 function holdEv(c,i){
   var n, t, N;
+  if(c.rest) return restEv(c,i);
   if(i<3) return {k:'cd',t:c.t0+i*1000};
   if(i===3) return {k:'go',t:c.prepEnd};
   n=i-3; t=c.prepEnd+n*1000;
@@ -6337,7 +6352,8 @@ function holdPump(c){
   while(true){
     e=holdEv(c,c.i); if(!e) break;
     if(e.t-now>400) break;
-    if(e.t-now>-250) holdSndAt(e.k,Math.max(0,(e.t-now)/1000),c.heavy);
+    if(c.noTick && (e.k==='tick'||e.k==='acc')){ c.i++; continue; }   /* v1.48.1 승급 시험 메트로놈을 끈 설정 */
+    if(e.t-now>-250){ holdSndAt(e.k,Math.max(0,(e.t-now)/1000),c.heavy); if(e.k==='go') c.went=1; }
     c.i++;
   }
 }
@@ -6549,15 +6565,20 @@ function stopTimer(){
 }
 function startTimer(sec){
   stopTimer(); tLab.textContent='휴식';
-  tTotal=sec; tEnd=Date.now()+sec*1000; tEl.hidden=false;
+  var t0=Date.now(), c={rest:1,t0:t0,sec:sec,heavy:false,i:0};
+  tTotal=sec; tEnd=t0+sec*1000; tEl.hidden=false;
+  /* v1.48.1 세트 사이 휴식에도 1초 메트로놈 + 마지막 3·2·1·GO!, 그동안 배경음악은 줄었다가 끝나면 돌아와요(화면이 꺼지면 소리가 끊겨서 화면도 켜 둬요) */
+  bgmQuiet('tm',true); wakeKeep('tm',true);
   var tick=function(){
+    holdPump(c);
     var left=Math.max(0,Math.ceil((tEnd-Date.now())/1000));
     tNum.textContent=left>0?left:'GO';
     tFill.style.width=(100-(left*100/tTotal))+'%';
     if(left<=0){
       clearInterval(tInt); tInt=null;
       try{ if(navigator.vibrate) navigator.vibrate([200,100,200]); }catch(e){}
-      beep();
+      if(!c.went) beep();   /* 기기가 바빠서 GO! 소리를 놓쳤을 때는 예전 삑 소리로 알려요 */
+      bgmQuiet('tm',false,1.2); wakeKeep('tm',false);
       tHide=setTimeout(stopTimer,3000);
     }
   };
@@ -6604,7 +6625,7 @@ var FEVB={
   inchworm:{b:6}
 };
 var FEV_VB='24 4 146 117';   /* v1.46.23 운동 그림 칸을 실제 그려지는 영역(전 동작 합집합 가로 136×세로 112)에 맞춘 보임 창 */
-var FEV_VOL=2.2;   /* v1.46.21 메트로놈·카운트다운 소리 크기 배율(소리가 작으면 올리고, 크면 내려요) */
+var FEV_VOL=3;   /* v1.46.21 메트로놈·카운트다운 소리 크기 배율(소리가 작으면 올리고, 크면 내려요) */
 var FEV_PREP=4, FEV_TRANS=15, FEV_REST=60, FEV_SWITCH=6;   /* 시작 전 준비 · 동작 사이 전환 · 라운드 사이 휴식 · 좌우 바꾸는 시간(초) */
 var fv=null, fevOn=false, fevEl=null, fevTm=null, fevLock=null, fevSpd=1;
 function fevStage(k){ var dfc=diffOn(k); return (dfc==='sprout')?Math.min(stageIdx(),1):stageIdx(); }
@@ -7043,6 +7064,8 @@ app.addEventListener('click',function(e){
     execSet(!execOn()); render(); toast(execOn()?'보스를 쓰러뜨리면 처형 컷씬이 나와요':'처형 컷씬 없이 토벌 완료 창만 떠요');
   }else if(a==='cheer-toggle'){
     cheerSet(!cheerOn()); render(); toast(cheerOn()?'반디가 옆에서 응원해요':'반디 응원을 껐어요');
+  }else if(a==='extick-toggle'){
+    exTickSet(!exTickOn()); render(); toast(exTickOn()?'시험 메트로놈을 켰어요':'시험 메트로놈을 껐어요');
   }else if(a==='bgm-toggle'){
     bgmSetOn(!bgmOn()); render();
     if(bgmOn()){ BGM.unlock().then(function(){ bgmSync(); }); }
@@ -7317,6 +7340,10 @@ var BANDI={
 };
 /* ---------- 반디 응원 (v1.45.2): 세트·러닝·식단을 체크할 때마다 반디가 옆에서 한마디씩 응원해요. 문구는 BANDI.cheer 한곳 ---------- */
 var CHKEY='home-training-cheer';
+/* 승급 시험 메트로놈(v1.48.1): 시험 측정 중 1초 박자 소리를 낼지. 이 기기에만 저장돼요. 3·2·1·GO!와 끝 소리는 그대로 나요 */
+var EXTK='home-training-extick';
+function exTickOn(){ try{ return localStorage.getItem(EXTK)!=='off'; }catch(e){ return true; } }
+function exTickSet(on){ try{ localStorage.setItem(EXTK,on?'on':'off'); }catch(e){} }
 function cheerOn(){ try{ return localStorage.getItem(CHKEY)!=='off'; }catch(e){ return true; } }
 function cheerSet(on){ try{ localStorage.setItem(CHKEY,on?'on':'off'); }catch(e){} }
 /* ---------- 화면 모드 (v1.46.9): 기기 설정 따라가기(auto, 기본) / 밝게(light) / 어둡게(dark). 이 기기에만 저장돼요 ---------- */

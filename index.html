@@ -145,7 +145,10 @@ h3{margin:0;}
 .set[aria-pressed="true"]{background:var(--clear); border-color:var(--clear); color:var(--clear-ink);}
 .pop{animation:pop .3s ease-out;}
 @keyframes pop{0%{transform:scale(.82);}60%{transform:scale(1.14);}100%{transform:scale(1);}}
-.tipbtn{background:none; border:0; padding:8px 0 4px; color:var(--link); font-weight:700; font-size:14px; min-height:44px;}
+.tipbtn{display:inline-flex; align-items:center; justify-content:center; gap:8px; max-width:100%; margin:8px 0 6px; padding:8px 16px; min-height:44px; border-radius:14px; border:2px solid var(--gold); background:var(--soft); color:var(--link); font-weight:700; font-size:14px; line-height:1.35; text-align:left; box-shadow:0 3px 0 var(--edge);}
+.tipbtn::after{content:'▾'; flex:none; font-size:13px; line-height:1;}
+.tipbtn[aria-expanded="true"]::after{content:'▴';}
+.tipbtn:active{transform:translateY(2px); box-shadow:0 1px 0 var(--edge);}
 .tips{margin:0 0 6px; padding:12px 16px 12px 32px; background:var(--soft); border-radius:14px; font-size:14px;}
 .tips li{margin:2px 0;}
 .var{margin:8px 0 0; font-size:13px; color:var(--muted); padding-left:0; list-style:none;}
@@ -422,6 +425,73 @@ body{text-wrap:pretty;}
 
 /* 스톱워치 */
 .swbtn{min-height:50px; border-radius:14px; border:2px solid var(--gold); background:var(--soft); color:var(--link); font-family:var(--disp); font-size:18px; padding:0 20px; margin-top:12px; box-shadow:0 3px 0 var(--edge);}
+
+
+/* v1.48.0 레벨업 연출 (가벼운 별도 연출: 번쩍이는 고리 + 별가루 + 숫자가 튀어 오름) */
+.lvfx{position:relative; margin:10px 0 6px; padding:6px 0 4px; text-align:center; overflow:visible;}
+.lvfx-ring{position:absolute; left:50%; top:46%; width:40px; height:40px; margin:-20px 0 0 -20px; border-radius:50%; border:3px solid var(--gold); opacity:0; animation:lvring .9s ease-out .12s both; pointer-events:none;}
+@keyframes lvring{0%{transform:scale(.3); opacity:.95;} 100%{transform:scale(5.2); opacity:0;}}
+.lvfx-sp{position:absolute; left:50%; top:46%; width:0; height:0; pointer-events:none;}
+.lvfx-sp i{position:absolute; left:-6px; top:-6px; width:12px; height:12px; background:var(--gold); clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%); opacity:0; animation:lvsp 1.05s ease-out .2s both;}
+@keyframes lvsp{0%{opacity:0; transform:rotate(var(--a)) translateY(0) scale(.4);} 18%{opacity:1;} 100%{opacity:0; transform:rotate(var(--a)) translateY(-84px) scale(1.15);}}
+.lvfx-k{margin:0; font-family:var(--disp); font-size:15px; letter-spacing:.22em; color:var(--link); animation:lvk .5s ease-out both;}
+@keyframes lvk{0%{opacity:0; transform:translateY(8px) scale(.85);} 100%{opacity:1; transform:none;}}
+.lvfx-n{margin:2px 0 0; display:flex; justify-content:center; align-items:baseline; gap:10px; white-space:nowrap; font-family:var(--disp);}
+.lvfx-o{font-size:22px; opacity:.5; animation:lvold .6s ease-in .25s both;}
+@keyframes lvold{0%{opacity:.9; transform:none;} 100%{opacity:.5; transform:scale(.8);}}
+.lvfx-ar{font-size:24px; color:var(--link); animation:lvk .4s ease-out .3s both;}
+.lvfx-new{font-size:48px; font-weight:400; line-height:1.1; color:var(--link); text-shadow:0 0 16px var(--gold); animation:lvnew .75s cubic-bezier(.2,1.5,.4,1) .42s both;}
+@keyframes lvnew{0%{opacity:0; transform:scale(.3);} 60%{opacity:1; transform:scale(1.25);} 100%{opacity:1; transform:scale(1);}}
+.lvfx-t{margin:2px 0 0; font-size:14px; font-weight:700; animation:lvk .5s ease-out .95s both;}
+
+/* v1.48.0 승급 시험: 종목 선택·종목별 측정 화면 (어둡고 묵직한 분위기, 앱 밝기 설정과 상관없이 같은 색) */
+.exm{--xb:#14101C; --xp:#201A2C; --xl:#5E4F2C; --xg:#E0B54A; --xt:#F1E8D4; --xm:#A89C86;
+  background:radial-gradient(120% 90% at 50% 0%,#2A2238 0%,var(--xb) 62%); color:var(--xt); border:2px solid var(--xl); border-radius:22px;
+  padding:16px 14px 18px; margin:10px 0 0; box-shadow:0 6px 0 rgba(0,0,0,.35), inset 0 0 0 1px rgba(224,181,74,.12);}
+.exm [hidden]{display:none !important;}
+.exm-lead{margin:0 0 12px; font-size:14px; color:var(--xm); line-height:1.55; word-break:keep-all;}
+.exm-card{display:flex; align-items:center; gap:12px; width:100%; min-height:68px; margin:0 0 10px; padding:10px 12px; text-align:left; background:var(--xp); color:var(--xt); border:2px solid var(--xl); border-radius:16px; box-shadow:0 3px 0 rgba(0,0,0,.4);}
+.exm-card:active{transform:translateY(2px); box-shadow:0 1px 0 rgba(0,0,0,.4);}
+.exm-card.ok{border-color:var(--xg);}
+.exm-no{flex:none; width:34px; height:34px; border-radius:10px; background:#0E0B14; color:var(--xg); border:2px solid var(--xl); font-family:var(--disp); font-size:19px; display:grid; place-items:center; line-height:1;}
+.exm-card.ok .exm-no{background:var(--xg); color:#1B1400; border-color:var(--xg);}
+.exm-ci{flex:1; min-width:0;}
+.exm-cn{display:block; font-family:var(--disp); font-size:18px; line-height:1.25; word-break:keep-all;}
+.exm-cs{display:block; margin-top:2px; font-size:13px; color:var(--xm); line-height:1.4; word-break:keep-all;}
+.exm-card.ok .exm-cs{color:var(--xg); font-weight:700;}
+.exm-go{flex:none; color:var(--xg); font-size:22px; line-height:1;}
+.exm-hd{display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 0 6px;}
+.exm-nn{font-family:var(--disp); font-size:14px; letter-spacing:.12em; color:var(--xm);}
+.exm-pass{font-size:12.5px; color:var(--xg); border:2px solid var(--xl); border-radius:999px; padding:1px 10px; font-weight:700; white-space:nowrap;}
+.exm-title{margin:0; font-family:var(--disp); font-weight:400; font-size:26px; line-height:1.25; word-break:keep-all;}
+.exm-desc{margin:6px 0 0; font-size:14px; color:var(--xm); line-height:1.55; word-break:keep-all;}
+.exm-disp{position:relative; margin:16px 0 4px; padding:18px 8px 16px; text-align:center; background:#0E0B14; border:2px solid var(--xl); border-radius:18px;}
+.exm-lab{display:block; min-height:20px; font-size:14px; font-weight:700; color:var(--xm); letter-spacing:.04em; word-break:keep-all;}
+.exm-big{display:block; margin-top:4px; font-family:var(--disp); font-size:84px; line-height:1.05; color:var(--xg); font-variant-numeric:tabular-nums; text-shadow:0 0 18px rgba(224,181,74,.28);}
+.exm-big.sm{font-size:56px;}
+.exm-big.bt{animation:exbt .26s ease-out;}
+@keyframes exbt{0%{transform:scale(1.06); color:#FFE3A0;} 100%{transform:scale(1);}}
+.exm-bar{display:block; height:8px; margin:12px 10px 0; border-radius:4px; background:#2A2236; overflow:hidden;}
+.exm-bar i{display:block; height:100%; width:0; background:var(--xg); border-radius:4px; transition:width .12s linear;}
+.exm-btns{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 0;}
+.exm-btn{flex:1 1 140px; min-height:54px; border-radius:16px; border:2px solid var(--xg); background:var(--xg); color:#1B1400; font-family:var(--disp); font-size:19px; box-shadow:0 4px 0 rgba(0,0,0,.45); padding:0 14px;}
+.exm-btn.gh{background:transparent; color:var(--xt); border-color:var(--xl); box-shadow:none; font-size:16px;}
+.exm-btn:active{transform:translateY(2px);}
+.exm-btn[disabled]{opacity:.45; cursor:default;}
+.exm-conf{margin:12px 0 0; padding:12px; border:2px solid var(--xg); border-radius:16px; background:var(--xp);}
+.exm-conf p{margin:0 0 8px; font-size:15px; font-weight:700; word-break:keep-all;}
+.exm-conf .exm-btns{margin-top:0;}
+.exm .ex-line{margin:14px 0 4px;}
+.exm .ex-f{color:var(--xm);}
+.exm .ex-f input{background:#0E0B14; color:var(--xt); border-color:var(--xl);}
+.exm .ex-f input:focus{border-color:var(--xg); outline:none;}
+.exm .ex-err{color:#FF8A7C !important; margin:0 0 4px !important;}
+.exm-hl .ex-f input{animation:exhl 1s ease-in-out 3;}
+@keyframes exhl{50%{border-color:#FFF3B0; box-shadow:0 0 0 3px rgba(224,181,74,.35);}}
+@media (prefers-reduced-motion: reduce){
+  .lvfx-ring,.lvfx-sp{display:none;}
+  .lvfx *,.exm-big.bt,.exm-hl .ex-f input,.exm-bar i{animation:none !important; transition:none;}
+}
 
 /* 여관 · 전리품 */
 .stage{display:flex; gap:14px; align-items:center; background:var(--surface); border:2px solid var(--gold); border-radius:24px; padding:14px; box-shadow:0 5px 0 var(--edge); margin:0 0 6px;}
@@ -1446,8 +1516,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.47.0', APP_DATE='2026-10-10', showChg=false;
+var APP_VER='1.48.0', APP_DATE='2026-10-11', showChg=false;
 var CHANGES=[
+  ['1.48.0','그림·자세 팁 보기와 실내 유산소 대체하기 글자를 눌러 열고 닫는 버튼 모양(테두리·화살표)으로 바꿨어요. 레벨이 오를 때 별가루와 고리가 번쩍이고 새 레벨이 튀어 오르는 연출과 효과음을 넣었어요. 퀘스트 탭에서 시간 재는 동작의 타이머도 3·2·1·GO! 뒤 1초 메트로놈으로 시간을 세 주고, 그동안 배경음악이 서서히 줄었다가 끝나면 서서히 돌아와요. 승급 시험은 답안지 대신 종목을 골라 들어가 타이머로 재는 방식으로 바꿨어요(횟수는 2분 카운트다운, 버티기는 스톱워치, 러닝은 소리 없는 스톱워치). 시험 화면은 어둡고 묵직한 분위기예요. 타이머와 시험의 횟수·버티기 측정 중에는 화면이 꺼지지 않아요(러닝 스톱워치는 제외)'],
   ['1.47.0','왕국 건물 개방시스템: 훈련장(첫 보스 토벌)·대장간(길드 카퍼 랭크)·교역소(길드 골드 랭크)가 조건을 채우면 왕국에 나타나요. 개방 예정은 왕국 지도·랭크 화면·길드에서 미리 알려 줘요. 복구 비용을 성벽 10·훈련장 20·대장간 200으로 낮췄고, 이미 넣어 둔 자재는 넘친 만큼 돌려드려요. 건물 개방 알림과 건물별 첫 안내는 반디의 가이드로 바꿨어요. 토·일요일에 처음 시작해도 퀘스트 탭 안내가 나오고, 마왕 이름은 "몸짱 마왕"이 됐어요'],
   ['1.46.37','폰이 앱 글자를 제멋대로 키우지 않게 막는 설정을 넣었어요(눈에 보이는 변화는 없어요)'],
   ['1.46.36','여관에 처음 들어갈 때 뜨던 예전 설명 팝업을 없앴어요. 여관 안내는 왕국 탭의 말풍선 안내가 맡아요'],
@@ -5329,9 +5400,9 @@ function exCan(){
   if(isEnded(k)) return {ok:false,why:'오늘의 모험을 이미 마쳐서 오늘은 응시할 수 없어요. 내일 응시해 주세요.'};
   return {ok:true,t:ri+1};
 }
-var exSt=null, exRes=null, exW=null, examNoExec=false;
+var exSt=null, exRes=null, examNoExec=false, exM=null;
 function exLoad(){ try{ var o=JSON.parse(localStorage.getItem(EXKEY2)||'null'); return (o&&typeof o==='object')?o:null; }catch(e){ return null; } }
-function exKeep(){ try{ if(exSt) localStorage.setItem(EXKEY2,JSON.stringify({k:exSt.k,t:exSt.t,d:exSt.d,go:exSt.go?1:0,v:exSt.v})); }catch(e){} }
+function exKeep(){ try{ if(exSt) localStorage.setItem(EXKEY2,JSON.stringify({k:exSt.k,t:exSt.t,d:exSt.d,go:exSt.go?1:0,v:exSt.v,rs:exSt.rs||0})); }catch(e){} }
 function exDrop(){ try{ localStorage.removeItem(EXKEY2); }catch(e){} }
 function exSaved(t){ var o=exLoad(), k=fmt(TODAY); return (o&&o.k===k&&o.t===t&&o.d===diffOn(k)&&o.v&&o.v.length===4)?o:null; }
 function toGuild(){ tab='home'; kv='guild'; npcOpen={}; }
@@ -5339,10 +5410,13 @@ function exOpen(){
   var c=exCan(); if(!c.ok){ toast(c.why); return; }
   var k=fmt(TODAY), sv=exSaved(c.t);
   sel=TODAY; stopTimer();
-  exSt=sv?{k:k,t:c.t,d:sv.d,go:!!sv.go,v:sv.v,stage:(sv.go?'do':'intro')}:{k:k,t:c.t,d:diffOn(k),go:false,v:[[],[],[],[]],stage:'intro'};
+  exMStop(); stopTimer();
+  exSt=sv?{k:k,t:c.t,d:sv.d,go:!!sv.go,v:sv.v,rs:(+sv.rs>0?+sv.rs:0),cur:null,stage:(sv.go?'do':'intro')}:{k:k,t:c.t,d:diffOn(k),go:false,v:[[],[],[],[]],rs:0,cur:null,stage:'intro'};
+  if(exSt.stage==='do' && exSt.rs) exSt.cur=3;   /* 러닝 스톱워치가 돌고 있었으면 그 종목 화면으로 바로 돌아와요 */
   exRes=null; tab='exam'; armed=false; render(); window.scrollTo(0,0);
+  if(exSt.stage==='do' && exSt.cur===3 && exSt.rs) exMStart(3);
 }
-function exBack(){ stopTimer(); exKeep(); toGuild(); render(); window.scrollTo(0,0); }
+function exBack(){ exMStop(); stopTimer(); exKeep(); toGuild(); render(); window.scrollTo(0,0); }
 /* 입력칸 검사: 값이 비어 있으면 null(아직), 잘못된 값이면 {bad:문구}, 괜찮으면 숫자 */
 function exNum(raw){ if(raw===undefined||raw===null||raw==='') return null; var n=+raw; return (isNaN(n)||n<0||Math.floor(n)!==n)?NaN:n; }
 function exCheckItem(set,i,v){
@@ -5390,7 +5464,8 @@ function viewExam(){
   var st=exSt, h, i;
   if(!st){ return '<div class="card"><p style="margin:12px 0">시험 화면을 열 수 없어요.</p><button type="button" class="ghost" data-x="back">‹ 돌아가기</button></div>'; }
   var set=exSetOf(st.d,st.t), cur=RANKS[st.t-1], nx=RANKS[st.t], dn=DIFF[st.d].n;
-  var top='<div style="display:flex;align-items:center;min-height:36px;margin:0 0 4px"><button type="button" class="kback" data-x="back" style="margin:0">‹ 길드로 돌아가기</button></div>'+
+  var inItem=(st.stage==='do' && st.cur!=null && st.cur>=0 && st.cur<4);
+  var top='<div style="display:flex;align-items:center;min-height:36px;margin:0 0 4px">'+(inItem?'<button type="button" class="kback" id="exbk" data-x="mback" style="margin:0">‹ 종목 선택</button>':'<button type="button" class="kback" data-x="back" style="margin:0">‹ 길드로 돌아가기</button>')+'</div>'+
     '<div class="phrow tab"><h1 class="ph">승급 시험</h1><span class="phsub">'+cur.n+' → '+nx.n+' · '+dn+'</span></div>';
   if(st.stage==='result' && exRes){
     var R=exRes, ev=R.ev, tx;
@@ -5412,9 +5487,9 @@ function viewExam(){
     h+='<h2>오늘의 종목</h2><div class="card" style="padding:4px 16px">';
     set.items.forEach(function(it,ix){ h+='<div class="rk-row"><div class="rk-info"><b>'+(ix+1)+'. '+it.n+'</b><span>'+(it.t==='r'?'2분 안에 '+it.line+'회 이상'+(it.lr?' (좌우 합계)':''):(it.t==='h'?it.line+'초 이상 버티기':'양쪽 모두 '+it.line+'초 이상 버티기'))+'</span></div></div>'; });
     h+='<div class="rk-row"><div class="rk-info"><b>4. '+set.run.km+'km '+(set.run.walk?'달리기 또는 걷기':'달리기')+'</b><span>'+exDur(set.run.sec)+' 이내'+(set.run.walk?' · 이 시험은 걷기도 인정돼요':' · 러닝 전용이에요(걷기는 인정되지 않아요)')+'</span></div></div></div>';
-    h+='<h2>시험 방법</h2><div class="card" style="padding:12px 16px 14px"><p class="note" style="margin:0 0 6px">횟수는 2분 안의 최대 횟수예요. 앱의 2분 타이머를 쓰고, 한쪽씩 하는 동작은 좌우를 합쳐서 세요. 버티는 동작은 버틴 시간(초)이고, 사이드 플랭크는 양쪽 모두 합격선 이상이어야 해요.</p>'+
-      '<p class="note" style="margin:0 0 6px">러닝은 밖에서 달리고, 끝난 뒤 달린 시간을 입력해요. 러닝 거리는 누적 거리·여정에는 올라가지 않아요.</p>'+
-      '<p class="note" style="margin:0">입력한 기록은 제출하기 전까지 이 기기에 남아서, 밖에 나갔다 와도 이어서 할 수 있어요.</p></div>';
+    h+='<h2>시험 방법</h2><div class="card" style="padding:12px 16px 14px"><p class="note" style="margin:0 0 6px">시험을 시작하면 4개 종목 중 도전할 종목을 직접 골라 들어가요. 순서는 마음대로예요. 종목마다 앱이 3·2·1·GO!로 시작하고 시간을 재 줘요. 횟수는 2분 안의 최대 횟수이고, 한쪽씩 하는 동작은 좌우를 합쳐서 세요. 버티는 동작은 버틴 시간(초)이고, 사이드 플랭크는 양쪽 모두 합격선 이상이어야 해요.</p>'+
+      '<p class="note" style="margin:0 0 6px">러닝은 밖에서 달리면서 앱의 스톱워치로 재요. [출발]을 누르고 달린 뒤 도착하면 [도착]을 눌러요. 러닝 스톱워치는 소리 없이 조용히 흘러가요. 도중에 앱을 닫아도 출발한 시각이 이 기기에 남아서, 다시 열면 이어서 잴 수 있어요. 러닝 거리는 누적 거리·여정에는 올라가지 않아요.</p>'+
+      '<p class="note" style="margin:0">측정한 기록은 제출하기 전까지 이 기기에 남아요.</p></div>';
     h+='<h2>응시 규칙</h2><div class="card" style="padding:12px 16px 14px"><p class="note" style="margin:0 0 6px">시험은 하루에 한 번이고, 기록을 <b>제출</b>하면 그날의 응시로 쳐요. 떨어져도 괜찮아요. 다음 응시는 내일부터예요.</p>'+
       '<p class="note" style="margin:0 0 6px"><b>월~토</b>에 응시하면 4개 항목이 모두 합격선의 절반 이상일 때 합격·불합격과 관계없이 오늘의 메인 퀘스트와 러닝이 완료로 인정돼요. 이때 오늘의 메인 퀘스트와 러닝은 확정돼서 더 이상 바꿀 수 없어요. 식단은 평소처럼 직접 체크해요.'+(DK[TODAY.getDay()]==='sun'?' 오늘은 일요일이라 퀘스트 인정은 없어요.':'')+'</p>'+
       '<p class="note" style="margin:0">비·눈이 와도 실내 대체는 없어요. 그런 날은 응시하지 않으면 돼요.</p></div>';
@@ -5439,42 +5514,191 @@ function viewExam(){
     h+='<p class="note" style="margin:10px 2px 0">제출하면 오늘의 응시로 기록되고 고칠 수 없어요.</p>';
     return h+'<button type="button" class="primary" data-x="submit" style="margin-top:12px">제출하기</button><button type="button" class="ghost big" data-x="edit" style="width:100%;margin-top:8px">기록 고치기</button>';
   }
-  h=top+'<div class="card" style="padding:12px 16px"><p class="note" style="margin:0">'+'타이머를 쓰거나 직접 입력해도 돼요. 입력한 기록은 이 기기에 저장돼요.</p></div>';
-  set.items.forEach(function(it,ix){
-    var v=st.v[ix]||[], c=A.r[ix], btn='', inp='';
-    if(it.t==='r'){ btn='<button type="button" class="swbtn" data-x="t120" data-i="'+ix+'">▶ 2분 타이머</button>'; inp='<div class="ex-line">'+exInput(ix,0,'2분 안의 횟수'+(it.lr?' (좌우 합계)':''),v[0],EX_REPMAX)+'</div>'; }
-    else if(it.t==='h'){ btn='<button type="button" class="swbtn" data-x="watch" data-i="'+ix+'" data-j="0">▶ 스톱워치</button>'; inp='<div class="ex-line">'+exInput(ix,0,'버틴 시간(초)',v[0],EX_HOLDMAX)+'</div>'; }
-    else{ btn='<button type="button" class="swbtn" data-x="watch" data-i="'+ix+'" data-j="0">▶ 왼쪽 스톱워치</button><button type="button" class="swbtn" data-x="watch" data-i="'+ix+'" data-j="1" style="margin-left:6px">▶ 오른쪽 스톱워치</button>'; inp='<div class="ex-line">'+exInput(ix,0,'왼쪽(초)',v[0],EX_HOLDMAX)+exInput(ix,1,'오른쪽(초)',v[1],EX_HOLDMAX)+'</div>'; }
-    h+='<div class="q ex"><div class="ex-head"><span class="idx" aria-hidden="true">'+(ix+1)+'</span><h3 class="ex-name">'+it.n+'</h3><span class="bonustag">합격선 '+(it.t==='r'?it.line+'회':it.line+'초')+'</span></div>'+
-      '<p class="desc">'+(it.t==='r'?'2분 안에 최대한 많이'+(it.lr?' · 좌우를 합쳐서 세요':''):(it.t==='h'?'자세를 유지하며 최대한 오래 버티기':'왼쪽과 오른쪽을 각각 버티기 · 둘 다 합격선 이상이어야 해요'))+'</p>'+btn+inp+
-      '<p class="note ex-err" id="exe-'+ix+'" style="margin:0 0 10px;color:var(--boss)">'+(c.bad||'')+'</p></div>';
-  });
-  var v3=st.v[3]||[];
-  h+='<div class="q ex"><div class="ex-head"><span class="idx" aria-hidden="true">4</span><h3 class="ex-name">'+set.run.km+'km '+(set.run.walk?'달리기 또는 걷기':'달리기')+'</h3><span class="bonustag">합격선 '+exDur(set.run.sec)+'</span></div>'+
-    '<p class="desc">밖에서 '+set.run.km+'km를 '+(set.run.walk?'달리거나 걷고':'달리고')+', 끝난 뒤 걸린 시간을 입력해요.'+(set.run.walk?' 이 시험은 걷기도 인정돼요.':' 러닝 전용이에요(걷기는 인정되지 않아요).')+'</p>'+
-    '<div class="ex-line">'+exInput(3,0,'분',v3[0],180)+exInput(3,1,'초',v3[1],59)+'</div><p class="note ex-err" id="exe-3" style="margin:0 0 10px;color:var(--boss)">'+(A.r[3].bad||'')+'</p></div>';
-  h+='<button type="button" class="primary" id="exgo" data-x="review"'+(A.ok?'':' disabled')+'>기록 확인하기</button>';
+  if(st.cur!=null && st.cur>=0 && st.cur<4) return top+exItemHtml(st,set,A);
+  return top+exHubHtml(st,set,A);
+}
+function exNameOf(set,i){ return (i<3)?set.items[i].n:(set.run.km+'km '+(set.run.walk?'달리기 또는 걷기':'달리기')); }
+function exPassOf(set,i){
+  var it;
+  if(i===3) return exDur(set.run.sec)+' 이내';
+  it=set.items[i]; return (it.t==='r')?(it.line+'회 이상'+(it.lr?' (좌우 합계)':'')):(it.t==='h'?(it.line+'초 이상'):('양쪽 모두 '+it.line+'초 이상'));
+}
+/* 종목 카드의 상태 문구: 기록은 보여 주되 합격 여부는 제출 뒤에야 알 수 있어요 */
+function exRecText(st,set,A,i){
+  var c=A.r[i], v=st.v[i]||[], it;
+  if(c.bad) return {t:'기록을 확인해 주세요',ok:false};
+  if(c.x!==undefined){
+    if(i===3) return {t:exDur(c.x),ok:true};
+    it=set.items[i];
+    if(it.t==='r') return {t:c.x+'회',ok:true};
+    if(it.t==='h') return {t:c.x+'초',ok:true};
+    return {t:'왼쪽 '+(+v[0])+'초 · 오른쪽 '+(+v[1])+'초',ok:true};
+  }
+  if(i<3 && set.items[i].t==='s' && ((v[0]!==undefined&&v[0]!=='')||(v[1]!==undefined&&v[1]!==''))) return {t:'한쪽만 기록했어요',ok:false};
+  return {t:'도전 전',ok:false};
+}
+function exHubHtml(st,set,A){
+  var h='<div class="exm"><p class="exm-lead">도전할 종목을 골라 들어가요. 순서는 마음대로예요. 4개 종목을 모두 마치면 기록을 확인하고 제출해요.</p>', i, r;
+  for(i=0;i<4;i++){
+    r=exRecText(st,set,A,i);
+    h+='<button type="button" class="exm-card'+(r.ok?' ok':'')+'" data-x="pick" data-i="'+i+'"><span class="exm-no">'+(i+1)+'</span><span class="exm-ci"><span class="exm-cn">'+exNameOf(set,i)+'</span><span class="exm-cs">'+(r.ok?('기록 '+r.t+' ✔'):(r.t+' · 합격선 '+exPassOf(set,i)))+'</span></span><span class="exm-go" aria-hidden="true">›</span></button>';
+  }
+  return h+'<button type="button" class="exm-btn" id="exgo" data-x="review" style="width:100%;margin-top:6px"'+(A.ok?'':' disabled')+'>기록 확인하기</button></div>';
+}
+function exItemHtml(st,set,A){
+  var i=st.cur, run=(i===3), it=run?null:set.items[i], v=st.v[i]||[], c=A.r[i], h, desc, init, btns, inp, lab;
+  if(run){
+    desc='밖에서 '+set.run.km+'km를 '+(set.run.walk?'달리거나 걷는':'달리는')+' 시간을 재요. 출발을 누르고 달린 뒤, 도착하면 도착을 눌러요. 소리 없이 조용히 재요.'+(set.run.walk?' 이 시험은 걷기도 인정돼요.':' 러닝 전용이에요(걷기는 인정되지 않아요).');
+    init='0:00:00'; lab='준비되면 출발을 눌러요';
+    btns='<button type="button" class="exm-btn" id="exb-s0" data-x="mstart" data-j="0">▶ 출발</button>'+
+      '<button type="button" class="exm-btn" id="exb-arr" data-x="rarrive" hidden>■ 도착</button>';
+    inp='<div class="ex-line">'+exInput(3,0,'분',v[0],180)+exInput(3,1,'초',v[1],59)+'</div>';
+  }else if(it.t==='r'){
+    desc='2분 안에 최대한 많이'+(it.lr?' · 좌우를 합쳐서 세요':'')+'. 시작을 누르면 3·2·1·GO!에 이어 2분이 흘러요.';
+    init='2:00'; lab='준비되면 시작을 눌러요';
+    btns='<button type="button" class="exm-btn" id="exb-s0" data-x="mstart" data-j="0">▶ 2분 시작</button>'+
+      '<button type="button" class="exm-btn gh" id="exb-can" data-x="mcancel" hidden>중단</button>';
+    inp='<div class="ex-line">'+exInput(i,0,'2분 안의 횟수'+(it.lr?' (좌우 합계)':''),v[0],EX_REPMAX)+'</div>';
+  }else if(it.t==='h'){
+    desc='자세를 유지하며 최대한 오래 버티기. 시작을 누르면 3·2·1·GO!에 이어 시간이 올라가요. 더 버틸 수 없을 때 멈춤을 눌러요.';
+    init='0:00'; lab='준비되면 시작을 눌러요';
+    btns='<button type="button" class="exm-btn" id="exb-s0" data-x="mstart" data-j="0">▶ 시작</button>'+
+      '<button type="button" class="exm-btn" id="exb-stop" data-x="mstop" hidden>■ 멈춤</button>';
+    inp='<div class="ex-line">'+exInput(i,0,'버틴 시간(초)',v[0],EX_HOLDMAX)+'</div>';
+  }else{
+    desc='왼쪽과 오른쪽을 각각 버티기 · 둘 다 합격선 이상이어야 해요. 쪽을 골라 시작을 누르면 3·2·1·GO!에 이어 시간이 올라가요. 더 버틸 수 없을 때 멈춤을 눌러요.';
+    init='0:00'; lab='왼쪽부터든 오른쪽부터든 편한 쪽을 시작해요';
+    btns='<button type="button" class="exm-btn" id="exb-s0" data-x="mstart" data-j="0">▶ 왼쪽 시작</button>'+
+      '<button type="button" class="exm-btn" id="exb-s1" data-x="mstart" data-j="1">▶ 오른쪽 시작</button>'+
+      '<button type="button" class="exm-btn" id="exb-stop" data-x="mstop" hidden>■ 멈춤</button>';
+    inp='<div class="ex-line">'+exInput(i,0,'왼쪽(초)',v[0],EX_HOLDMAX)+exInput(i,1,'오른쪽(초)',v[1],EX_HOLDMAX)+'</div>';
+  }
+  h='<div class="exm exm-item"><div class="exm-hd"><span class="exm-nn">'+(i+1)+' / 4</span><span class="exm-pass">합격선 '+exPassOf(set,i)+'</span></div>'+
+    '<h2 class="exm-title">'+exNameOf(set,i)+'</h2><p class="exm-desc">'+desc+'</p>'+
+    '<div class="exm-disp" id="exdisp"><span class="exm-lab" id="exlab">'+lab+'</span><span class="exm-big'+(run?' sm':'')+'" id="exbig">'+init+'</span><span class="exm-bar"><i id="exfill"></i></span></div>'+
+    '<div class="exm-btns">'+btns+'</div>';
+  if(run) h+='<div class="exm-conf" id="exb-conf" hidden><p>여기서 기록할까요?</p><div class="exm-btns"><button type="button" class="exm-btn" data-x="rsave">기록 저장</button><button type="button" class="exm-btn gh" data-x="rgo">계속 달리기</button></div><button type="button" class="exm-btn gh" data-x="rcancel" style="width:100%;margin-top:8px">측정 취소(처음부터)</button></div>';
+  h+='<div id="exin">'+inp+'<p class="note ex-err" id="exe-'+i+'">'+(c.bad||'')+'</p></div>';
+  h+='<button type="button" class="exm-btn gh" id="exb-back2" data-x="mback" style="width:100%;margin-top:10px">종목 선택으로 돌아가기</button></div>';
   return h;
 }
-/* 스톱워치: 3초 준비 뒤 올라가는 초시계. [멈춤]을 누르면 입력칸에 넣어 줘요(기존 휴식 타이머 칸을 같이 써요) */
-function exWatchStart(i,j,name,line){
-  stopTimer();
-  var prep=Date.now()+3000, started=false, sk=document.getElementById('tskip');
-  tEl.hidden=false; tNum.textContent='3'; tLab.textContent='준비'; tFill.style.width='0%'; sk.textContent='멈춤';
-  exW={i:i,j:j,t0:prep};
-  tInt=setInterval(function(){
-    var now=Date.now();
-    if(now<prep){ tNum.textContent=Math.ceil((prep-now)/1000); return; }
-    if(!started){ started=true; tLab.textContent=name; tone(660,0,0.18,0.08); try{ if(navigator.vibrate) navigator.vibrate(80); }catch(e){} }
-    var s=Math.floor((now-prep)/1000); tNum.textContent=s; tFill.style.width=Math.min(100,s*100/Math.max(1,line))+'%';
-  },250);
+function exClock(sec,hr){
+  sec=Math.max(0,Math.floor(sec)); var h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), r=sec%60;
+  return (hr?h+':'+(m<10?'0':'')+m:m)+':'+(r<10?'0':'')+r;
 }
-function exWatchStop(){
-  var w=exW; if(!w) return; exW=null;
-  var s=Math.floor((Date.now()-w.t0)/1000); if(s<0) return;
-  s=Math.min(s,EX_HOLDMAX);
-  var el=document.getElementById('exv-'+w.i+'-'+w.j); if(el){ el.value=s; exInputSet(w.i,w.j,String(s)); }
-  try{ tone(880,0,0.2,0.08); if(navigator.vibrate) navigator.vibrate([120,60,120]); }catch(e){}
+/* ---- 종목 측정기(v1.48.0): 횟수 종목은 2분 카운트다운, 버티기는 올라가는 스톱워치, 러닝은 조용한 스톱워치 ---- */
+function exMStop(delay){
+  if(exM){ if(exM.int) clearInterval(exM.int); exM=null; }
+  bgmQuiet('exm',false,delay||0); wakeKeep('exm',false);
+}
+function exMReset(){
+  var st=exSt, set, run, it, big=document.getElementById('exbig'), lab=document.getElementById('exlab'), fl=document.getElementById('exfill');
+  if(!st||st.cur==null||!big) { exMUi(); return; }
+  set=exSetOf(st.d,st.t); run=(st.cur===3); it=run?null:set.items[st.cur];
+  big.textContent=run?'0:00:00':((it.t==='r')?'2:00':'0:00');
+  lab.textContent=run?'준비되면 출발을 눌러요':((it.t==='s')?'왼쪽부터든 오른쪽부터든 편한 쪽을 시작해요':'준비되면 시작을 눌러요');
+  if(fl) fl.style.width='0%';
+  exMUi();
+}
+function exMUi(){
+  var m=exM, st=exSt; if(!st||st.stage!=='do'||st.cur==null) return;
+  function q(id){ return document.getElementById(id); }
+  var busy=!!m, run=(st.cur===3), s0=q('exb-s0'), s1=q('exb-s1'), stp=q('exb-stop'), can=q('exb-can'), arr=q('exb-arr'), cf=q('exb-conf'), bk=q('exbk'), bk2=q('exb-back2'), lock=busy&&!run;
+  if(s0) s0.hidden=busy; if(s1) s1.hidden=busy;
+  if(stp) stp.hidden=!(busy&&m.mode==='up');
+  if(can) can.hidden=!(busy&&m.mode==='cd');
+  if(arr) arr.hidden=!(busy&&m.mode==='run'&&!m.conf);
+  if(cf) cf.hidden=!(busy&&m.mode==='run'&&m.conf);
+  if(bk) bk.hidden=lock; if(bk2) bk2.hidden=lock;   /* 시간을 재는 도중에는 실수로 나가지 않게 숨겨요(러닝은 밖에 나가 있는 동안 앱을 닫아도 돼서 그대로 둬요) */
+}
+function exMPulse(el){ if(reduceMotion()) return; el.classList.remove('bt'); void el.offsetWidth; el.classList.add('bt'); }
+function exMStart(i,j){
+  var st=exSt; if(!st||st.stage!=='do') return;
+  var set=exSetOf(st.d,st.t), it=(i<3)?set.items[i]:null, now=Date.now(), pe=now+3000;
+  exMStop(); stopTimer();
+  if(i===3){
+    if(!st.rs){ st.rs=now; exKeep(); }
+    exM={i:3,j:0,mode:'run',phase:'run',t0:st.rs,conf:false,ls:-1};
+  }else if(it.t==='r'){
+    exM={i:i,j:0,mode:'cd',phase:'prep',t0:now,prepEnd:pe,endAt:pe+120000,ls:-1,nm:it.n,c:{t0:now,prepEnd:pe,endAt:pe+120000,heavy:true,i:0}};
+  }else{
+    exM={i:i,j:j||0,mode:'up',phase:'prep',t0:now,prepEnd:pe,endAt:0,ls:-1,line:it.line,nm:it.n+(it.t==='s'?(j?' · 오른쪽':' · 왼쪽'):''),c:{t0:now,prepEnd:pe,endAt:0,heavy:true,i:0}};
+  }
+  bgmQuiet('exm',true);   /* 러닝 스톱워치도 조용히: 배경음악을 줄여요 */
+  if(i!==3) wakeKeep('exm',true);   /* 횟수·버티기 측정 중에만 화면을 켜 둬요(러닝은 배터리 때문에 제외) */
+  exM.int=setInterval(exMTick,100);
+  exMUi(); exMTick();
+}
+function exMTick(){
+  var m=exM, big=document.getElementById('exbig'), lab=document.getElementById('exlab'), fl=document.getElementById('exfill'), now=Date.now(), n, left, s, txt;
+  if(!m) return;
+  if(!big||!lab){ exMStop(); return; }   /* 다른 화면으로 나갔어요(러닝 출발 시각은 그대로 남아요) */
+  if(m.mode==='run'){
+    s=Math.floor((now-m.t0)/1000);
+    big.textContent=exClock(s,true); lab.textContent='달리는 중'; if(fl) fl.style.width='0%';
+    return;
+  }
+  holdPump(m.c);
+  if(m.phase==='prep'){
+    if(now<m.prepEnd){
+      n=Math.ceil((m.prepEnd-now)/1000); big.textContent=n; lab.textContent='준비'; if(fl) fl.style.width='0%';
+      if(m.ls!==n){ m.ls=n; exMPulse(big); }
+      return;
+    }
+    m.phase='run'; m.ls=-1; try{ if(navigator.vibrate) navigator.vibrate(120); }catch(e){}
+  }
+  if(m.mode==='cd'){
+    left=Math.max(0,Math.ceil((m.endAt-now)/1000));
+    if(left<=0){ exCdDone(); return; }
+    big.textContent=(now<m.prepEnd+700)?'GO!':exClock(left); lab.textContent=m.nm+' · 2분';
+    if(fl) fl.style.width=(100-left*100/120)+'%';
+    if(m.ls!==left){ m.ls=left; exMPulse(big); }
+  }else{
+    s=Math.floor((now-m.prepEnd)/1000);
+    big.textContent=(now<m.prepEnd+700)?'GO!':exClock(s); lab.textContent=m.nm;
+    if(fl) fl.style.width=Math.min(100,s*100/Math.max(1,m.line))+'%';
+    if(m.ls!==s){ m.ls=s; exMPulse(big); }
+  }
+}
+function exCdDone(){
+  var m=exM, big=document.getElementById('exbig'), lab=document.getElementById('exlab'), fl=document.getElementById('exfill'), box=document.getElementById('exin');
+  exMStop(1.8);
+  if(big){ big.textContent='그만!'; exMPulse(big); }
+  if(lab) lab.textContent='2분 끝 · 한 횟수를 입력해요';
+  if(fl) fl.style.width='100%';
+  if(box){ box.classList.add('exm-hl'); setTimeout(function(){ box.classList.remove('exm-hl'); },3500); }
+  try{ if(navigator.vibrate) navigator.vibrate([200,100,200,100,300]); }catch(e){}
+  exMUi();
+}
+function exHoldStop(){
+  var m=exM, big=document.getElementById('exbig'), lab=document.getElementById('exlab'), el, s;
+  if(!m||m.mode!=='up') return;
+  if(m.phase==='prep'){ exMStop(); exMReset(); return; }   /* 준비 중에 멈추면 취소예요 */
+  s=Math.min(EX_HOLDMAX,Math.max(0,Math.floor((Date.now()-m.prepEnd)/1000)));
+  el=document.getElementById('exv-'+m.i+'-'+m.j); if(el) el.value=s;
+  exInputSet(m.i,m.j,String(s));
+  holdSndAt('end',0,true);
+  exMStop(1.8);
+  if(big) big.textContent=exClock(s);
+  if(lab) lab.textContent='기록 '+s+'초';
+  exMUi();
+}
+function exRunSave(){
+  var m=exM, st=exSt, big=document.getElementById('exbig'), lab=document.getElementById('exlab'), tot, mm, ss, e0, e1;
+  if(!m||m.mode!=='run'||!st) return;
+  tot=Math.max(0,Math.floor((Date.now()-m.t0)/1000)); mm=Math.floor(tot/60); ss=tot%60;
+  e0=document.getElementById('exv-3-0'); e1=document.getElementById('exv-3-1'); if(e0) e0.value=mm; if(e1) e1.value=ss;
+  exInputSet(3,0,String(mm)); exInputSet(3,1,String(ss));
+  st.rs=0; exKeep();
+  exMStop(1.2);
+  if(big) big.textContent=exClock(tot,true);
+  if(lab) lab.textContent='기록 '+exDur(tot);
+  try{ if(navigator.vibrate) navigator.vibrate([120,60,120]); }catch(e){}
+  exMUi();
+}
+function exGo(i){
+  exMStop(); exSt.cur=i; render(); window.scrollTo(0,0);
+  if(i===3 && exSt.rs) exMStart(3);
 }
 function exInputSet(i,j,val){
   if(!exSt||exSt.stage!=='do') return;
@@ -5494,7 +5718,7 @@ function exSubmit(){
   S.ex[k]={r:RANKS[st.t].id,p:ev.pass?1:0,c:credit?1:0,d:st.d,v:[A.r[0].x,A.r[1].x,A.r[2].x,A.r[3].x]};
   if(ev.pass){ if(!S.rk||typeof S.rk!=='object') S.rk={}; if(!S.rk[RANKS[st.t].id]) S.rk[RANKS[st.t].id]=k; }
   if(credit){ var L=wr(k); idsFor(dk,k).forEach(function(id){ L.done[id]=true; }); L.fin=true; }
-  save(); exDrop(); stopTimer();
+  save(); exDrop(); exMStop(); stopTimer();
   exRes={ev:ev,pass:ev.pass,credit:credit,wasDone:wasDone,sun:sun,before:before,t:st.t,from:from};
   st.stage='result'; render(); window.scrollTo(0,0);
   try{ if(navigator.vibrate) navigator.vibrate(ev.pass?[80,50,80]:[60]); }catch(e){}
@@ -5515,11 +5739,18 @@ app.addEventListener('click',function(e){
   var x=t.getAttribute('data-x'), i, j, set, it;
   if(x==='open'){ exOpen(); }
   else if(x==='back'){ exBack(); }
-  else if(x==='start'&&exSt){ exSt.go=true; exSt.stage='do'; exKeep(); render(); window.scrollTo(0,0); }
-  else if(x==='t120'){ i=parseInt(t.getAttribute('data-i'),10); it=exSetOf(exSt.d,exSt.t).items[i]; startHold(120,'2분 측정'); }
-  else if(x==='watch'&&exSt){ i=parseInt(t.getAttribute('data-i'),10); j=parseInt(t.getAttribute('data-j'),10); it=exSetOf(exSt.d,exSt.t).items[i]; exWatchStart(i,j,it.n+(it.t==='s'?(j?' · 오른쪽':' · 왼쪽'):''),it.line); }
-  else if(x==='review'&&exSt){ var A=exAll(exSt); if(!A.ok) return; stopTimer(); exSt.stage='confirm'; render(); window.scrollTo(0,0); }
-  else if(x==='edit'&&exSt){ exSt.stage='do'; render(); window.scrollTo(0,0); }
+  else if(x==='start'&&exSt){ exSt.go=true; exSt.stage='do'; exSt.cur=null; exKeep(); render(); window.scrollTo(0,0); }
+  else if(x==='pick'&&exSt){ exGo(parseInt(t.getAttribute('data-i'),10)); }
+  else if(x==='mback'&&exSt){ exMStop(); exSt.cur=null; exKeep(); render(); window.scrollTo(0,0); }
+  else if(x==='mstart'&&exSt){ exMStart(exSt.cur,parseInt(t.getAttribute('data-j')||'0',10)); }
+  else if(x==='mcancel'){ exMStop(); exMReset(); }
+  else if(x==='mstop'){ exHoldStop(); }
+  else if(x==='rarrive'&&exM&&exM.mode==='run'){ exM.conf=true; exMUi(); }
+  else if(x==='rgo'&&exM&&exM.mode==='run'){ exM.conf=false; exMUi(); }
+  else if(x==='rsave'){ exRunSave(); }
+  else if(x==='rcancel'&&exSt){ exSt.rs=0; exKeep(); exMStop(); exMReset(); }
+  else if(x==='review'&&exSt){ var A=exAll(exSt); if(!A.ok) return; exMStop(); stopTimer(); exSt.stage='confirm'; render(); window.scrollTo(0,0); }
+  else if(x==='edit'&&exSt){ exSt.stage='do'; exSt.cur=null; render(); window.scrollTo(0,0); }
   else if(x==='submit'){ exSubmit(); }
   else if(x==='cont'){ exContinue(); }
 });
@@ -6062,6 +6293,54 @@ function tone(freq,start,len,vol){
 }
 function beep(){tone(880,0,0.25,0.08);}
 function fanfare(){[523,659,784,1047].forEach(function(f,i){tone(f,i*0.12,0.3,0.09);});}
+/* v1.48.0 파형을 고를 수 있는 tone (묵직한 시험 소리용) */
+function tone2(freq,start,len,vol,type){
+  try{
+    vol=vol*sndScale(); if(vol<0.0002) return;
+    var C=window.AudioContext||window.webkitAudioContext; if(!C) return;
+    if(!AC) AC=new C();
+    var o=AC.createOscillator(), g=AC.createGain();
+    o.type=type||'triangle'; o.frequency.value=freq; o.connect(g); g.connect(AC.destination);
+    var t=AC.currentTime+start; g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(0.0001,t+len);
+    o.start(t); o.stop(t+len+0.02);
+  }catch(e){}
+}
+function vibAt(w,p){ setTimeout(function(){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} },Math.max(0,w*1000)); }
+/* 타이머 소리 예약(v1.48.0): 3·2·1·GO! → 1초마다 메트로놈(5초마다 강조) → 끝 소리. heavy=true는 승급 시험의 낮고 묵직한 소리예요.
+   소리는 오디오 시계에 0.4초 앞서 미리 예약해서 박이 흔들리지 않게 해요(피버모드와 같은 방식). */
+function holdSndAt(kind,w,heavy){
+  var V=FEV_VOL;
+  if(heavy){
+    if(kind==='cd'){ tone2(196,w,0.3,0.15*V,'triangle'); tone2(98,w,0.3,0.12*V,'sine'); }
+    else if(kind==='go'){ [196,233,294].forEach(function(f){ tone2(f,w,1.0,0.1*V,'triangle'); }); tone2(98,w,1.1,0.16*V,'sine'); tone2(587,w,0.12,0.04*V,'triangle'); vibAt(w,160); }
+    else if(kind==='acc'){ tone2(196,w,0.2,0.16*V,'triangle'); tone2(98,w,0.2,0.12*V,'sine'); }
+    else if(kind==='tick'){ tone2(147,w,0.13,0.14*V,'triangle'); }
+    else if(kind==='end'){ [98,196,233].forEach(function(f){ tone2(f,w,1.6,0.12*V,'triangle'); }); tone2(49,w,1.6,0.16*V,'sine'); vibAt(w,[200,80,320]); }
+  }else{
+    if(kind==='cd'){ tone(587,w,0.16,0.09*V); }
+    else if(kind==='go'){ tone(784,w,0.55,0.1*V); tone(1047,w,0.55,0.1*V); tone(1568,w+0.04,0.45,0.08*V); vibAt(w,120); }
+    else if(kind==='acc'){ fevClick(true,w); }
+    else if(kind==='tick'){ fevClick(false,w); }
+    else if(kind==='end'){ [523,659,784,1047].forEach(function(f,i){ tone(f,w+i*0.12,0.3,0.09); }); }
+  }
+}
+function holdEv(c,i){
+  var n, t, N;
+  if(i<3) return {k:'cd',t:c.t0+i*1000};
+  if(i===3) return {k:'go',t:c.prepEnd};
+  n=i-3; t=c.prepEnd+n*1000;
+  if(c.endAt){ N=Math.round((c.endAt-c.prepEnd)/1000); if(n<N) return {k:(n%5===0?'acc':'tick'),t:t}; if(n===N) return {k:'end',t:c.endAt}; return null; }
+  return {k:(n%5===0?'acc':'tick'),t:t};
+}
+function holdPump(c){
+  var now=Date.now(), e;
+  while(true){
+    e=holdEv(c,c.i); if(!e) break;
+    if(e.t-now>400) break;
+    if(e.t-now>-250) holdSndAt(e.k,Math.max(0,(e.t-now)/1000),c.heavy);
+    c.i++;
+  }
+}
 
 var toastEl=document.getElementById('toast'), toastT=null;
 /* ---------- 업데이트 확인 · 자동 업데이트 (기록은 localStorage라 그대로 남아요) ---------- */
@@ -6163,7 +6442,11 @@ function showOverlay(o){
   var bossK=(o.k==='BOSS DEFEATED')?'win':(o.k==='DEFEAT'?'lose':'');
   try{
     if(mode==='win'){
-      if(!(bossK==='win' && BGM.sfx('win',1.8))) fanfare();
+      var lvAt=0, played=false;
+      if(bossK==='win' && BGM.sfx('win',1.8)){ played=true; lvAt=1.2; }
+      else if(o.lv && o.k==='LEVEL UP'){ played=true; }   /* 레벨업만 있는 창은 팡파르 대신 레벨업 소리만 나요 */
+      if(!played){ fanfare(); lvAt=0.55; }
+      if(o.lv) setTimeout(lvSound,lvAt*1000);
       if(navigator.vibrate) navigator.vibrate([120,60,120,60,240]);
       if(!reduceMotion()) confetti();
     }else if(mode==='calm'){
@@ -6177,6 +6460,16 @@ function showOverlay(o){
       else{ [392,330,262].forEach(function(f,i){tone(f,i*0.2,0.3,0.08);}); if(navigator.vibrate) navigator.vibrate([300]); }
     }
   }catch(e){}
+}
+/* v1.48.0 레벨업 연출(가벼운 별도 연출): 번쩍이는 고리·별가루·튀어 오르는 새 레벨 숫자 */
+function lvFxHtml(from,to,solo){
+  var sp='', i;
+  for(i=0;i<8;i++) sp+='<i style="--a:'+(i*45)+'deg"></i>';
+  return '<div class="lvfx" role="img" aria-label="레벨 '+from+'에서 레벨 '+to+'로 올랐어요"><span class="lvfx-ring" aria-hidden="true"></span><span class="lvfx-sp" aria-hidden="true">'+sp+'</span>'+
+    (solo?'':'<p class="lvfx-k">LEVEL UP!</p>')+'<p class="lvfx-n"><span class="lvfx-o">Lv.'+from+'</span><span class="lvfx-ar" aria-hidden="true">›</span><b class="lvfx-new">Lv.'+to+'</b></p><p class="lvfx-t">'+titleOf(to)+'</p></div>';
+}
+function lvSound(){
+  try{ if(!BGM.sfx('lvup',1.6,0.35)){ [659,784,988,1319,1568].forEach(function(f,i){ tone(f,i*0.08,0.18,0.08); }); } }catch(e){}
 }
 function xpBarHtml(){
   var li=lvInfo(totalXP());
@@ -6202,10 +6495,10 @@ function afterAction(before,k){
     }else if(justClear){ kk='TEMPLE CLEAR'; tt=QN[dk]+' 클리어!'; }
     else{ kk='LEVEL UP'; tt='Lv.'+a.lv+' 달성!'; }
     if(justClear) b+='<p class="lab">오늘 획득</p><p class="bigxp">+'+dayXP(k)+' XP</p>';
-    if(lvUp) b+='<p class="lvup">Lv.'+before.lv+' → <b>Lv.'+a.lv+'</b> · '+titleOf(a.lv)+'</p>';
+    if(lvUp) b+=lvFxHtml(before.lv,a.lv,!justClear);
     newAch.forEach(function(x){b+='<p class="achl">업적 해금 · '+x.n+'</p>';});
     b+=xpBarHtml();
-    var showRes=function(){ showOverlay({k:kk,t:tt,b:b,mode:mode}); }, goRes=showRes;
+    var showRes=function(){ showOverlay({k:kk,t:tt,b:b,mode:mode,lv:lvUp}); }, goRes=showRes;
     if(exWin){
       execPend=true;
       execPendSet(k,act);
@@ -6215,7 +6508,7 @@ function afterAction(before,k){
       if(execOn()){
         goRes=function(){ EXEC.flow(curChar(),BKEY[ORDER.indexOf(dk)],function(){ showRes(); exFlush(); },exUndo,exCommit); };
       }else{
-        goRes=function(){ showOverlay({k:kk,t:tt,b:b+'<p class="bnote" style="margin-top:8px">확인 버튼을 누르면 오늘의 퀘스트가 확정돼요.</p>',mode:mode,confirm:function(){ exCommit(); exFlush(); },undo:exUndo}); };
+        goRes=function(){ showOverlay({k:kk,t:tt,b:b+'<p class="bnote" style="margin-top:8px">확인 버튼을 누르면 오늘의 퀘스트가 확정돼요.</p>',mode:mode,lv:lvUp,confirm:function(){ exCommit(); exFlush(); },undo:exUndo}); };
       }
     }
     if(dl>0){ setTimeout(goRes,dl); }
@@ -6251,7 +6544,7 @@ var tInt=null, tEnd=0, tTotal=60, tHide=null;
 function stopTimer(){
   if(tInt){clearInterval(tInt); tInt=null;}
   if(tHide){clearTimeout(tHide); tHide=null;}
-  tEl.hidden=true; exW=null;
+  tEl.hidden=true; bgmQuiet('tm',false); wakeKeep('tm',false);
   var sk=document.getElementById('tskip'); if(sk) sk.textContent='건너뛰기';   /* v1.44.3 시험 스톱워치는 [멈춤]으로 바뀌어요 */
 }
 function startTimer(sec){
@@ -6272,25 +6565,28 @@ function startTimer(sec){
 }
 function startHold(sec,name){
   stopTimer();
-  var t0=Date.now(), prepEnd=t0+3000, end=prepEnd+sec*1000, started=false;
+  var t0=Date.now(), prepEnd=t0+3000, end=prepEnd+sec*1000, started=false, c={t0:t0,prepEnd:prepEnd,endAt:end,heavy:false,i:0};
+  /* v1.48.0 3·2·1·GO! + 1초 메트로놈 + 끝 소리, 그동안 배경음악은 서서히 줄었다가 끝나면 서서히 돌아와요 */
+  bgmQuiet('tm',true); wakeKeep('tm',true);
   tEl.hidden=false; tNum.textContent='3'; tLab.textContent='준비'; tFill.style.width='0%';
   var tick=function(){
     var now=Date.now();
+    holdPump(c);
     if(now<prepEnd){ tNum.textContent=Math.ceil((prepEnd-now)/1000); return; }
-    if(!started){ started=true; tLab.textContent=name; tone(660,0,0.18,0.08); try{ if(navigator.vibrate) navigator.vibrate(80); }catch(e){} }
+    if(!started){ started=true; tLab.textContent=name; try{ if(navigator.vibrate) navigator.vibrate(80); }catch(e){} }
     var left=Math.max(0,Math.ceil((end-now)/1000));
-    tNum.textContent=left>0?left:'끝!';
+    tNum.textContent=(now<prepEnd+700)?'GO!':(left>0?left:'끝!');
     tFill.style.width=(100-(left*100/sec))+'%';
     if(left<=0){
       clearInterval(tInt); tInt=null;
       try{ if(navigator.vibrate) navigator.vibrate([200,100,200,100,300]); }catch(e){}
-      fanfare();
+      bgmQuiet('tm',false,1.2); wakeKeep('tm',false);
       tHide=setTimeout(stopTimer,4000);
     }
   };
   tick(); tInt=setInterval(tick,250);
 }
-document.getElementById('tskip').addEventListener('click',function(){ exWatchStop(); stopTimer(); });
+document.getElementById('tskip').addEventListener('click',function(){ stopTimer(); });
 
 /* ---------- 피버모드 (v1.46.11) ----------
    퀘스트 화면의 [피버모드] → 팝업에서 오늘의 메인 퀘스트를 "돌려 하기" 순서로 박자음 + 숫자 카운트에 맞춰 같이 해요.
@@ -7638,12 +7934,19 @@ var SFX=(function(){
     scream(C,out,t+0.02);
     thump(C,out,t+1.34,0.38); burst(C,out,t+1.34,0.22,0.1,'bandpass',500,0.8);
   }
-  return {win:win,lose:lose,start:start,blip:blip,hit:hit,final:finalHit};
+  /* v1.48.0 레벨업: 오르는 아르페지오 5음 뒤 밝은 화음이 반짝이며 사라져요(약 1초) */
+  function lvup(C,out,t){
+    [523.25,659.25,783.99,1046.5,1318.5].forEach(function(f,k){ chip(C,out,t+k*0.075,f,0.09,0.13,0.25); });
+    [1046.5,1318.5,1568,2093].forEach(function(f){ chip(C,out,t+0.4,f,0.6,0.09,0.5,0,0.25,0.15); });
+    chip(C,out,t+0.4,523.25,0.6,0.1,0.5,0,0.25,0.15);
+    burst(C,out,t+0.4,0.14,0.05,'highpass',6000);
+  }
+  return {win:win,lose:lose,start:start,blip:blip,hit:hit,final:finalHit,lvup:lvup};
 })();
 
 /* ---------- 배경음악 (Web Audio로 직접 연주하는 레트로 칩튠) ---------- */
 var BGM=(function(){
-  var ctx=null, master=null, duckG=null, outG=null, sfxG=null, sfxVolG=null, mvol=1, svol=1, bus=null, timer=null, cur=null, trk=null, step=0, nextT=0, vol=0.6, on=true, waves={}, noiseBuf=null;
+  var ctx=null, master=null, duckG=null, fadeG=null, fadeLv=1, outG=null, sfxG=null, sfxVolG=null, mvol=1, svol=1, bus=null, timer=null, cur=null, trk=null, step=0, nextT=0, vol=0.6, on=true, waves={}, noiseBuf=null;
   var NI={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
   function hz(n){ var m=/^([A-G])(#|b)?(\d)$/.exec(n); if(!m) return 0; var s=NI[m[1]]+(m[2]==='#'?1:(m[2]==='b'?-1:0)); var midi=(+m[3]+1)*12+s; return 440*Math.pow(2,(midi-69)/12); }
   var CH={ // 코드 구성음 (반음)
@@ -7659,7 +7962,7 @@ var BGM=(function(){
     if(ctx) return true;
     var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false;
     ctx=new AC(); outG=ctx.createGain(); outG.gain.value=mvol; outG.connect(ctx.destination);
-    master=ctx.createGain(); master.gain.value=on?vol:0; duckG=ctx.createGain(); master.connect(duckG); duckG.connect(outG);
+    master=ctx.createGain(); master.gain.value=on?vol:0; fadeG=ctx.createGain(); fadeG.gain.value=Math.max(0.0001,fadeLv); duckG=ctx.createGain(); master.connect(fadeG); fadeG.connect(duckG); duckG.connect(outG);
     sfxG=ctx.createGain(); sfxG.gain.value=0.9; var cmp=ctx.createDynamicsCompressor(); cmp.threshold.value=-16; cmp.knee.value=12; cmp.ratio.value=6; cmp.attack.value=0.003; cmp.release.value=0.2;
     sfxVolG=ctx.createGain(); sfxVolG.gain.value=svol; sfxG.connect(cmp); cmp.connect(sfxVolG); sfxVolG.connect(outG);
     waves.p50=pulse(.5); waves.p25=pulse(.25); waves.p12=pulse(.125);
@@ -7768,11 +8071,20 @@ var BGM=(function(){
     if(ctx.state==='running') go(); else ctx.resume().then(go).catch(function(){});
     return true;
   }
+  /* v1.48.0 타이머·시험 스톱워치용 배경음악 페이드: to=1이면 원래 크기로, 0이면 무음으로 sec초 동안 서서히(delay초 뒤에 시작) */
+  function fade(to,sec,delay){
+    fadeLv=to; if(!fadeG||!ctx) return;
+    try{
+      var now=ctx.currentTime, g=fadeG.gain, cur=g.value, t=now+(delay||0);
+      g.cancelScheduledValues(now); g.setValueAtTime(cur,now); if(delay) g.setValueAtTime(cur,t);
+      g.linearRampToValueAtTime(Math.max(0.0001,to),t+Math.max(0.05,sec));
+    }catch(e){}
+  }
   function setMaster(v){ mvol=v; if(outG) outG.gain.setTargetAtTime(v,ctx.currentTime,0.03); }
   function setSfx(v){ svol=v; if(sfxVolG) sfxVolG.gain.setTargetAtTime(v,ctx.currentTime,0.03); }
   function suspend(){ if(ctx&&ctx.state==='running') ctx.suspend(); }
   function resume(){ if(ctx&&ctx.state!=='running') ctx.resume().then(function(){ nextT=Math.max(nextT,ctx.currentTime+0.05); }); }
-  return {play:play,stop:stop,sfx:sfx,duck:duck,setMaster:setMaster,setSfx:setSfx,unlock:unlock,running:running,setVol:setVol,setOn:setOn,suspend:suspend,resume:resume,current:function(){return cur;}};
+  return {play:play,stop:stop,sfx:sfx,duck:duck,fade:fade,setMaster:setMaster,setSfx:setSfx,unlock:unlock,running:running,setVol:setVol,setOn:setOn,suspend:suspend,resume:resume,current:function(){return cur;}};
 })();
 
 var TEMPLE_LEAD=['E5 - - - G5 - - - C6 - - - B5 - A5 -','A5 - - - G5 - - - E5 - - - C5 - D5 -','F5 - - - A5 - - - C6 - - - A5 - - -','G5 - - - E5 - - - D5 - - - C5 - - -',
@@ -7861,6 +8173,36 @@ function bgmWant(){
   return TABTRK[tab];
 }
 function bgmNowUpdate(){ var el=document.getElementById('bgmnow'); if(el) el.textContent=bgmNowText(); }
+/* v1.48.0 타이머·시험(횟수·버티기) 측정 중에는 화면이 꺼지지 않게 해요(되는 폰에서만. 앱이 화면에 떠 있을 때만 유지돼요) */
+var wkLock=wkLock||null, wkWant=wkWant||{};
+function wkAny(){ var k; wkWant=wkWant||{}; for(k in wkWant){ return true; } return false; }
+function wkReq(){
+  try{
+    if(!navigator.wakeLock || wkLock) return;
+    navigator.wakeLock.request('screen').then(function(l){
+      if(!wkAny()){ try{ l.release(); }catch(e){} return; }
+      wkLock=l; l.addEventListener('release',function(){ if(wkLock===l) wkLock=null; });
+    }).catch(function(){});
+  }catch(e){}
+}
+function wakeKeep(why,on){
+  wkWant=wkWant||{};
+  if(on) wkWant[why]=1; else delete wkWant[why];
+  try{
+    if(wkAny()) wkReq();
+    else if(wkLock){ var l=wkLock; wkLock=null; l.release(); }
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',function(){ if(!document.hidden && wkAny()) wkReq(); });   /* 다른 앱에 갔다 오면 풀려서 다시 걸어요 */
+/* v1.48.0 타이머·시험 측정 중에는 배경음악을 서서히 줄이고, 끝나면 서서히 되돌려요(이유별로 기억해서 겹쳐도 안 꼬여요) */
+var bgmHold=bgmHold||{};
+function bgmQuiet(why,on,delay){
+  var k, any=false;
+  bgmHold=bgmHold||{};
+  if(on) bgmHold[why]=1; else delete bgmHold[why];
+  for(k in bgmHold){ any=true; }
+  try{ if(BGM&&BGM.fade) BGM.fade(any?0:1,any?0.8:1.4,any?0:(delay||0)); }catch(e){}
+}
 function bgmSync(){
   if(!bgmReady) return;
   if(!bgmOn() || fevOn){ BGM.stop(); bgmNowUpdate(); return; }   /* v1.46.19 피버모드 중에는 음악을 꺼요 */

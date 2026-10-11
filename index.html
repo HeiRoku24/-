@@ -334,6 +334,12 @@ body{text-wrap:pretty;}
 .bdopts .dcard{padding:12px 14px;}
 .bdopts .dcard b{font-size:15px; font-weight:600;}
 .bdopts .dcard.go{background:var(--soft);}
+.bdopts.g2{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+.bdopts.g2 .dcard{margin:0; text-align:center; padding:12px 6px;}
+.bdopts.g2 .dcard.wide{grid-column:1 / -1;}
+.fseg{display:flex; gap:8px; margin:6px 0 4px;}
+.fseg button{flex:1; min-height:44px; padding:6px 4px; border:2px solid var(--line); border-radius:14px; background:var(--surface); color:var(--ink); font-size:14px; font-weight:600;}
+.fseg button.on{border-color:var(--gold); box-shadow:0 0 0 2px rgba(246,196,69,.35);}
 .bdrow{display:flex; gap:10px; margin-top:10px;}
 .bdrow>button{flex:1; margin-top:0;}
 .bdrow .primary{width:auto;}
@@ -1518,8 +1524,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.48.5', APP_DATE='2026-10-11', showChg=false;
+var APP_VER='1.49.0', APP_DATE='2026-10-12', showChg=false;
 var CHANGES=[
+  ['1.49.0','연령과 성별에 맞춰 운동 횟수와 승급 시험 기준을 조절할 수 있어요. 처음 켜면 반디가 연령과 성별을 물어요. 승급 시험 합격선 계산 방식도 바뀌어 일부 숫자가 1~2 달라졌어요. 기록과 랭크는 그대로예요'],
+  ['1.48.6','승급 시험의 운동 합격선을 지금의 약 80% 수준으로 낮췄어요. 러닝 시간은 그대로이고, 이미 오른 랭크와 기록은 그대로 유지돼요'],
   ['1.48.5','토요일 마왕전 가이드와 퀘스트 탭 첫 안내(토요일)의 문구를 고쳤어요. 1000 XP를 못 채운 채로 도전하면 패배하니, 모자라면 먼저 훈련장에서 1000 XP를 채우고 도전하라고 알려 줘요'],
   ['1.48.4','마왕전 가이드를 토요일(마왕전 당일)에만 나오게 하고, 훈련장에서 모자란 XP를 채울 수 있다는 안내를 더했어요'],
   ['1.48.3','마왕전 전날·당일 안내 팝업을 없애고 반디의 가이드로 바꿨어요(화면을 어둡게 하고 설명하는 곳을 짚어 줘요). 반디 도움말 맨 아래에서 탭 안내를 다시 볼 수 있고, 퀘스트 탭 안내 마지막에 반디 도움말을 알려 줘요. 일지 맨 위 부제를 \"체중 기록과 업적\"으로 바꿨어요'],
@@ -3742,7 +3750,7 @@ function trainPanel(){
     h+='<div class="q trg"><button type="button" class="trhead" data-a="trtog" data-g="'+gi+'" aria-expanded="'+(on?'true':'false')+'"><span>'+g.n+'</span><small>'+(cnt?cnt+'세트 · ':'')+g.ids.length+'종목 '+(on?'▴':'▾')+'</small></button>';
     if(on){
       g.ids.forEach(function(id){
-        var e=X[id], n=te.sets[id]||0, dose=e.r[st], swb='', sm;
+        var e=X[id], n=te.sets[id]||0, dose=doseOf(id,st), swb='', sm;
         if(e.t){ sm=String(dose).match(/(\d+)\s*초/); if(sm){ var side=String(dose).indexOf('한쪽')>=0; swb='<button type="button" class="swbtn sm" data-a="sw" data-sec="'+sm[1]+'" data-name="'+e.n+'">▶ '+(side?'한쪽 ':'')+sm[1]+'초 타이머</button>'; } }
         h+='<div class="trrow"><div class="trn"><b>'+e.n+'</b><small>'+dose+(e.one?'':' · 세트당')+(n?' · 오늘 '+n+'세트':'')+'</small>'+swb+'</div>'+
            '<button type="button" class="trgo" data-a="trset" data-id="'+id+'" aria-label="'+e.n+' 한 세트 훈련 기록">훈련</button></div>';
@@ -5349,7 +5357,9 @@ function viewRank(){
    작성 중인 기록(제출 전)은 이 기기의 localStorage에만 남겨요(밖에서 달리는 동안 앱을 닫아도 이어서 할 수 있게). */
 var EXKEY2='home-training-exm';
 var EX_REPMAX=400, EX_HOLDMAX=900, EX_RUNMAX=10800, EX_VMAX=99999, EX_RUNPACE=150;
-/* 운동 시험표: [이름, 종류(r 2분 안의 횟수 · h 유지 시간 · s 좌우 각각 유지), 합격선, 좌우 합계(1)] — 승급 시험 9번 순서(카퍼→아다만타이트) */
+/* 운동 시험표: [이름, 종류(r 2분 안의 횟수 · h 유지 시간 · s 좌우 각각 유지), 합격선, 좌우 합계(1)] — 승급 시험 9번 순서(카퍼→아다만타이트)
+   v1.49.0: 표의 숫자는 v1.48.5의 원본이고, 실제 합격선은 exSetOf가 "원본 × 0.8(EX_BASEK) × 연령 계수 × 성별 계수 × 직접 조절"을 마지막에 한 번만 정수로 반올림해서 만들어요(5배수 반올림 없음) */
+var EX_BASEK=0.8;
 var EXI={
   body:[
     [['스쿼트','r',45],['푸시업','r',25],['크런치','r',45]],
@@ -5393,7 +5403,7 @@ var EXR={
 };
 function exSetOf(df,t){   /* t = 목표 랭크 번호(1~9) */
   var it=(EXI[df]||EXI.body)[t-1], r=EXR[df]||EXR.body;
-  return {items:it.map(function(x){ return {n:x[0],t:x[1],line:x[2],lr:!!x[3]}; }), run:{km:r.km,sec:r.t[t-1],walk:(t<=r.walk)}};
+  return {items:it.map(function(x){ var o=fitLine(x[0],x[1],x[2]); return {n:o.n,t:x[1],line:o.line,lr:!!x[3]}; }), run:{km:r.km,sec:fitRunSec(r.t[t-1]),walk:(t<=r.walk)}};
 }
 function exDur(sec){ var m=Math.floor(sec/60), s=sec%60; return (m?m+'분':'')+(s?(m?' ':'')+s+'초':(m?'':'0초')); }
 function exRec(k){ return (S.ex&&S.ex[k])||null; }
@@ -5863,12 +5873,12 @@ function viewToday(){
   var EXL=exFor(dk,k), BON=bonusFor(dk,k);
   EXL.concat(BON).forEach(function(id,ix){
     var isB=(ix>=EXL.length), lk=(isB&&k>=fmt(TODAY))?false:lockM;
-    var e=X[id], dose=e.r[st], n=e.one?1:SETS, doneN=0, i;
+    var e=X[id], dz=doseCalc(id,st), dose=dz.s, n=e.one?1:SETS, doneN=0, i;
     for(i=1;i<=n;i++){ if(L.done[id+'-'+i]) doneN++; }
     var exDone=(doneN===n), swBtn='';
     if(e.t){ var sm=String(dose).match(/(\d+)\s*초/); if(sm){ var side=String(dose).indexOf('한쪽')>=0; swBtn='<button type="button" class="swbtn" data-a="sw" data-sec="'+sm[1]+'" data-name="'+e.n+'">▶ '+(side?'한쪽 ':'')+sm[1]+'초 타이머</button>'; } }
     h+='<div class="q ex'+(exDone?' ok':'')+'"><div class="ex-head"><span class="idx" aria-hidden="true">'+(ix+1)+'</span><h3 class="ex-name">'+e.n+'</h3>'+(isB?'<span class="bonustag">보너스</span>':'')+rewChip(n*setXpOn(k),exDone)+'</div>'+
-       '<p class="desc">'+(D[id]||'')+'</p>'+((dfc==='sprout'&&e.e)?'<p class="easy">'+easyHtml(id,e)+'</p>':'')+
+       '<p class="desc">'+(D[id]||'')+'</p>'+(((dfc==='sprout'||dz.easy)&&e.e)?'<p class="easy">'+easyHtml(id,e)+'</p>':'')+
        '<p class="dose">목표 <b>'+(e.one?dose:(SETS+(p.circuit?'라운드':'세트')+' × '+dose))+'</b></p>'+swBtn+(isB?'<p class="note" style="margin:6px 0 0">오늘은 이미 확정된 날이라 보너스로 해요. 클리어 여부는 그대로이고 XP만 더해져요.</p>':'');
     if(e.one){
       h+='<div class="sets"><button type="button" class="set wide" aria-pressed="'+(L.done[id+'-1']?'true':'false')+'" data-a="set" data-id="'+id+'-1" data-one="1"'+(lk?' disabled':'')+'>'+(L.done[id+'-1']?'완료':'했어요')+'</button></div>';
@@ -6021,7 +6031,7 @@ function bkParse(text){
     o.h=[]; if(Array.isArray(e.h)) e.h.slice(-80).forEach(function(x){ var m=/^(\w+):([01])$/.exec(String(x)); if(m && (m[1]==='run' || X[m[1]])) o.h.push(m[1]+':'+m[2]); });
     tlog[k4]=o;
   });
-  var outd={start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,crafted:crf2,trade:trd2,dl:dl2,bdSeen:bds2,rk:rk2,ex:ex2,vis:visClean(d.vis),char:(CHARN[d.char]?d.char:'hero')};
+  var outd={start:start,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(0,parseInt(d.chestOpened,10)||0),bonusXp:Math.max(0,parseInt(d.bonusXp,10)||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn2},achAt:aat,crafted:crf2,trade:trd2,dl:dl2,bdSeen:bds2,rk:rk2,ex:ex2,vis:visClean(d.vis),fit:fitClean(d.fit),char:(CHARN[d.char]?d.char:'hero')};
   migrateRest(outd);
   return {data:outd};
 }
@@ -6255,6 +6265,7 @@ function viewSettings(){
     '<div class="bk-btns" style="margin:0"><button type="button" class="ghost nw" data-a="intro">시작 안내 다시 보기</button>'+
     '<button type="button" class="ghost danger nw" data-a="reset">모든 기록 초기화</button></div></div>';
   h+=diffCardHtml();
+  h+=fitCardHtml();
   h+=soundCardHtml();
   h+=cloudHtml();
   h+=bkHtml();
@@ -6638,7 +6649,7 @@ function fevItems(k){
   return items;
 }
 function fevSpec(id,st){
-  var e=X[id], B=FEVB[id]||{b:3}, ds=String(e.r[st]), m=ds.match(/\d+/g)||['10'], a=parseInt(m[0],10), c=(m.length>1)?parseInt(m[1],10):a, n=Math.ceil((a+c)/2);
+  var e=X[id], B=FEVB[id]||{b:3}, ds=String(doseOf(id,st)), m=ds.match(/\d+/g)||['10'], a=parseInt(m[0],10), c=(m.length>1)?parseInt(m[1],10):a, n=Math.ceil((a+c)/2);
   var mode=B.m||(ds.indexOf('한쪽')>=0?'seq':'rep');
   var sw=B.sw||FEV_SWITCH, len=(mode==='alt')?2*n*B.b:((mode==='seq')?2*n*B.b+sw:n*B.b);
   return {id:id,name:e.n,n:n,b:B.b,sw:sw,h:!!B.h,mode:mode,len:len,unit:B.h?'초':'회',dur:(B.h&&!B.fl)?null:B.b*(B.fl||1)};
@@ -7045,6 +7056,10 @@ app.addEventListener('click',function(e){
     themeSet(t.getAttribute('data-m')); render(); toast(themeMode()==='light'?'밝은 화면으로 바꿨어요':themeMode()==='dark'?'어두운 화면으로 바꿨어요':'폰의 다크 모드 설정을 따라가요');
   }else if(a==='diffpick'){
     pickDiff(t.getAttribute('data-id'),false);
+  }else if(a==='fit-redo'){
+    fitSetOpen();
+  }else if(a==='fit-adj'){
+    fitSetAdj(parseInt(t.getAttribute('data-v'),10)); render(); toast('운동량 조절을 바꿨어요');
   }else if(a==='run'){
     if(DK[sel.getDay()]!=='sun') return;
     before=snap(); L=wr(k); var hpr=bossHp(sel); L.done.run=!L.done.run; save(); render(); pop('[data-a="run"]'); btDelay=battleHit(sel,hpr,bossHp(sel),XP_RUN); afterAction(before,k); if(L.done.run) cheerSay('sun',k,before,sel);
@@ -7446,6 +7461,135 @@ function bdBusy(){
   if(tm && !tm.hidden) return true;
   return false;
 }
+/* ---------- 연령·성별 운동량 보정 (S.fit) · 시안 ----------
+   S.fit={age:연령 코드(''=안 고름), sex:'m'|'f'|'n'(''=안 고름), adj:-1|0|1(직접 조절), ts:'날짜'}. 새 저장 항목이라 4곳(coreOf·mergeData·bkParse·applyData)에 넣어요.
+   고르지 않거나 "나중에"를 누르면 age·sex가 빈 값인 기록으로 남겨서(ts만) 다시 묻지 않아요. 보정 계수는 이 시안 단계에서는 아직 운동 횟수·합격선에 적용하지 않아요. */
+var FIT_AGES=[['t','10대'],['20','20~24'],['25','25~29'],['30','30~34'],['35','35~39'],['40','40~44'],['45','45~49'],['50','50~54'],['55','55~59'],['60','60~64'],['65','65세 이상']];
+var FIT_SEX=[['m','남성'],['f','여성']];
+var FIT_ADJ=[[-1,'더 쉽게'],[0,'기본'],[1,'더 어렵게']];
+/* ---------- 보정 계수 (v1.49.0) ----------
+   기준 = 25~29세 남성 = 1.00. 연령·성별 계수는 1.00을 넘지 않고(min), 직접 조절(더 쉽게 0.9·더 어렵게 1.1)만 곱해서 1.00을 넘을 수 있어요.
+   성별 "말하지 않을래요"는 성별 계수를 건너뛰고 연령 계수만 써요. 계수는 직접 해 보고 맞추는 초안이에요. */
+var FIT_AGEK={t:1,'20':1,'25':1,'30':0.94,'35':0.88,'40':0.80,'45':0.72,'50':0.64,'55':0.57,'60':0.50,'65':0.44};
+var FIT_RUNK={t:1,'20':1,'25':1,'30':0.98,'35':0.95,'40':0.91,'45':0.87,'50':0.83,'55':0.79,'60':0.75,'65':0.71};
+var FIT_SEXK={up:0.55,core:0.80,low:0.85,full:0.75}, FIT_SEXRUN=0.90, FIT_ADJK={'-1':0.9,'0':1,'1':1.1};
+var FIT_GRP={pushup:'up',pike:'up',dips:'up',plank:'core',crunch:'core',legraise:'core',bicycle:'core',deadbug:'core',sideplank:'core',squat:'low',lunge:'low',bridge:'low',calf:'low',bulg:'low',wallsit:'low',sidelift:'low',superman:'full',snow:'full',ytw:'full',mtn:'full',inchworm:'full'};
+function fitGrpName(n){
+  n=String(n);
+  if(/푸시업|딥스/.test(n)) return 'up';
+  if(/사이드 라잉|레그 리프트/.test(n)) return 'low';
+  if(/크런치|레그 레이즈|바이시클|데드버그|플랭크/.test(n)) return 'core';
+  if(/슈퍼맨|스노우|Y-T-W|마운틴|인치웜/.test(n)) return 'full';
+  if(/스쿼트|런지|브릿지|월 싯|불가리안/.test(n)) return 'low';
+  return null;
+}
+function fitK(grp){
+  var f=fitGet(), a, s=1, j;
+  if(!f) return 1;
+  a=FIT_AGEK[f.age]; if(a===undefined) a=1;
+  if(f.sex==='f' && grp && FIT_SEXK[grp]!==undefined) s=FIT_SEXK[grp];
+  j=FIT_ADJK[String(f.adj)]; if(j===undefined) j=1;
+  return Math.min(1,a*s)*j;
+}
+function fitRunK(){
+  var f=fitGet(), a, s=1, j;
+  if(!f) return 1;
+  a=FIT_RUNK[f.age]; if(a===undefined) a=1;
+  if(f.sex==='f') s=FIT_SEXRUN;
+  j=FIT_ADJK[String(f.adj)]; if(j===undefined) j=1;
+  return Math.min(1,a*s)*j;
+}
+/* 승급 시험 합격선: 원본 × 0.8 × 계수를 마지막에 한 번만 정수로 반올림. 계산값이 5회(유지 시간은 10초) 미만이면 그 값을 5회(10초)로 올리고, 표준 동작이면 이름 뒤에 "(쉬운 변형)"을 붙여요 */
+var FIT_ALIAS={'Y-T-W':'ytw','3초 스쿼트':'squat','깊게 월 싯':'wallsit','마운틴 클라이머(빠르게)':'mtn','사이드 라잉 레그 리프트':'sidelift','불가리안 스플릿 스쿼트':'bulg'};
+function fitExId(n){ var key; if(FIT_ALIAS[n]) return FIT_ALIAS[n]; for(key in X){ if(X[key].n===n) return key; } return null; }
+function fitLine(name,type,v){
+  var x=Math.round(v*EX_BASEK*fitK(fitGrpName(name))), n=name, lo=(type==='r')?5:10, id;
+  if(x<lo){
+    x=lo;
+    id=fitExId(name); if(id && X[id] && X[id].e && !/^(쉬운|무릎|벽 잡고|의자|높은|천천히)/.test(name)) n=name+' (쉬운 변형)';
+  }
+  return {n:n,line:x};
+}
+function fitRunSec(sec){ return Math.round(sec/fitRunK()); }
+/* 일일 퀘스트 목표 횟수: 숫자를 모두 계수로 줄여서 정수로 반올림해요(스트레칭은 그대로). 계산값이 5회(유지 시간은 10초) 미만이면 3~5회(10초)로 올리고 쉬운 변형을 같이 알려 줘요 */
+function doseCalc(id,st){
+  var e=X[id], s=String(e.r[st]), k, nums, vals, i, hold, hi, out, easy=false;
+  if(!fitGet() || e.one || /^s\d$/.test(id)) return {s:s,easy:false};
+  k=fitK(FIT_GRP[id]);
+  if(k===1) return {s:s,easy:false};
+  nums=s.match(/\d+/g)||[]; if(!nums.length) return {s:s,easy:false};
+  vals=nums.map(function(m){ return Math.max(1,Math.round(parseInt(m,10)*k)); });
+  hold=!!e.t; hi=Math.max.apply(null,vals);
+  if(hold){ if(hi<10){ easy=true; vals=vals.map(function(v){ return Math.max(v,10); }); } }
+  else if(hi<5){
+    easy=true;
+    vals=(vals.length>1)?[Math.max(vals[0],3),Math.max(vals[1],5)]:[Math.max(vals[0],5)];
+  }
+  i=0; out=s.replace(/\d+/g,function(){ return String(vals[i++]); });
+  return {s:out,easy:easy};
+}
+function doseOf(id,st){ return doseCalc(id,st).s; }
+var FITSAY={
+  intro:'용사님, 몸에 맞춰서 운동량을 조절해 드릴 수 있어요. 연령과 성별에 따라 같은 길이어도 힘든 정도가 다르거든요.',
+  ageQ:'연령을 골라 주세요.',
+  sexQ:'성별도 골라 주세요.',
+  done:'좋아요! 용사님 몸에 맞춰 운동 횟수와 승급 시험 기준을 조절했어요. 설정에서 언제든 바꿀 수 있어요.',
+  why:'운동량을 맞추는 계산에만 써요.',
+  card:'연령과 성별에 맞춰 운동 횟수와 승급 시험 기준을 조절해요. 고른 내용은 운동량 조절에만 써요.',
+  adj:'맞춰 준 운동량이 너무 쉽거나 어려우면 한 단계씩 조절할 수 있어요.'
+};
+function fitIdx(arr,id){ var i; for(i=0;i<arr.length;i++){ if(arr[i][0]===id) return i; } return -1; }
+function fitClean(f){
+  var o, a, s, j, t;
+  if(!f || typeof f!=='object') return null;
+  a=(fitIdx(FIT_AGES,f.age)>=0)?f.age:''; s=(fitIdx(FIT_SEX,f.sex)>=0)?f.sex:''; j=(f.adj===-1||f.adj===1)?f.adj:0;
+  t=(typeof f.ts==='string' && /^\d{4}-\d{2}-\d{2}$/.test(f.ts))?f.ts:'2000-01-01';
+  o={age:a,sex:s,adj:j,ts:t}; return o;
+}
+function fitPick(a,b){
+  var x=fitClean(a), y=fitClean(b);
+  if(!x) return y; if(!y) return x;
+  return (y.ts>x.ts)?y:x;
+}
+/* 연령과 성별을 모두 골라야 응답으로 봐요(필수). 하나라도 비어 있으면 null이라서 다시 물어요 */
+function fitGet(){ var f=fitClean(S&&S.fit); return (f && f.age && f.sex)?f:null; }
+function fitSet(age,sex){
+  var f=fitClean(S&&S.fit), adj=f?f.adj:0;
+  S.fit={age:age,sex:sex,adj:adj,ts:fmt(TODAY)}; save();
+}
+function fitSetAdj(v){
+  var f=fitGet(); if(!f) return;
+  if(v!==-1 && v!==1) v=0;
+  S.fit={age:f.age,sex:f.sex,adj:v,ts:fmt(TODAY)}; save();
+}
+function fitText(){
+  var f=fitGet();
+  if(!f) return '아직 고르지 않았어요';
+  return '연령\u00a0'+FIT_AGES[fitIdx(FIT_AGES,f.age)][1].replace(' ','\u00a0')+'\u00a0·\u00a0성별\u00a0'+FIT_SEX[fitIdx(FIT_SEX,f.sex)][1];   /* 점(·)이 줄 처음에 오지 않게 줄바꿈 안 되는 공백으로 이어요 */
+}
+function fitCardHtml(){
+  var f=fitGet(), adj=f?f.adj:0, h='<h2>내 몸에 맞춘 운동량</h2><div class="card" style="padding:12px 16px 14px">';
+  h+='<p class="note" style="margin:0 2px 10px">'+FITSAY.card+'</p>';
+  h+='<p class="note" style="margin:0 2px 10px">지금은 <b>'+fitText()+'</b>이에요.</p>';
+  h+='<div class="bk-btns" style="margin:4px 0 12px"><button type="button" class="ghost nw" data-a="fit-redo">연령·성별 다시 고르기</button></div>';
+  h+='<p class="note" style="margin:0 2px 4px"><b>직접 조절</b> · '+FITSAY.adj+'</p><div class="fseg">';
+  FIT_ADJ.forEach(function(x){ h+='<button type="button" class="'+(adj===x[0]?'on':'')+'" data-a="fit-adj" data-v="'+x[0]+'" aria-pressed="'+(adj===x[0]?'true':'false')+'">'+x[1]+'</button>'; });
+  h+='</div></div>';
+  return h;
+}
+var fitAsked=false;   /* 이번에 앱을 연 동안 한 번만 물어봐요 */
+function fitNeed(){ return !fitGet() && !needBandi(); }
+function fitAsk(){ fitAsked=true; bandiOpen('fit'); bd.must=true; }
+function fitSetOpen(){ bandiOpen('fit'); bd.fset=true; bd.step='fitage'; bdRender(); }
+function bdFinishFirst(){
+  var id=bd.final;
+  bandiClose();
+  if(DIFF[id]){ setDiff(id); if(!S.bdSeen){ S.bdSeen={}; save(); } render(); toast(DIFF[id].n+'로 시작해요'); }
+}
+function bdFitFin(){
+  if(bd.mode==='first'){ bdFinishFirst(); }
+  else{ bandiClose(); render(); }
+}
 function needBandi(){ return isEmptyData(S) && !(S.dl && Object.keys(S.dl).length); }
 var introThenBandi=false;   /* 새 사용자: 규칙 설명창을 먼저 보여 주고, 닫으면 반디 인사로 이어가요 */
 function firstRun(){
@@ -7458,7 +7602,7 @@ function bdRec(){
 }
 function bandiOpen(mode){
   if(tourOn) tourEnd(true);
-  bd={mode:mode,step:(mode==='first'?'hello':(mode==='ask'?0:'help')),ans:[null,null,null],pick:null,topic:null};
+  bd={mode:mode,step:(mode==='first'?'hello':(mode==='ask'?0:(mode==='fit'?'fit0':'help'))),ans:[null,null,null],pick:null,topic:null,fa:null,fs:null,final:null,fset:false,must:(mode==='first')};
   bdRender(); bdEl.hidden=false;
 }
 function bandiClose(){
@@ -7493,10 +7637,24 @@ function bdRender(){
     DIFFS.forEach(function(id){ h+=bdDcard(id,id===rec); });
     h+='</div><p class="bdsm">'+BANDI.say.pickNote+'</p><div class="bdrow col"><button type="button" class="primary" data-b="confirm"'+(bd.pick?'':' disabled')+'>'+(bd.mode==='first'?'이 길로 시작해요':'이 길로 갈래요')+'</button><button type="button" class="ghost" data-b="pickback">이전</button></div>'+
       '<p class="bdsm">'+BANDI.say.health+'</p>';
+  }else if(st==='fit0'){
+    h=BANDI.scene('안내자 반디가 말하는 그림')+'<p class="bdq">'+glue(FITSAY.intro)+'</p>'+
+      '<div class="bdrow col"><button type="button" class="primary" data-b="fitstart">좋아요</button></div>';
+  }else if(st==='fitage'){
+    h=BANDI.scene('질문하는 반디의 그림')+'<p class="bdq">'+FITSAY.ageQ+'</p><div class="bdopts g2">';
+    for(i=0;i<FIT_AGES.length;i++) h+='<button type="button" class="dcard'+(bd.fa===FIT_AGES[i][0]?' on':'')+(i===FIT_AGES.length-1?' wide':'')+'" data-b="fitage" data-i="'+i+'"><b>'+FIT_AGES[i][1]+'</b></button>';
+    h+='</div><p class="bdsm">'+FITSAY.why+'</p>'+bdDots(2,0)+'<div class="bdrow"><button type="button" class="ghost" data-b="fitback">'+(bd.fset?'닫기':'이전')+'</button></div>';
+  }else if(st==='fitsex'){
+    h=BANDI.scene('질문하는 반디의 그림')+'<p class="bdq">'+FITSAY.sexQ+'</p><div class="bdopts">';
+    for(i=0;i<FIT_SEX.length;i++) h+='<button type="button" class="dcard'+(bd.fs===FIT_SEX[i][0]?' on':'')+'" data-b="fitsex" data-i="'+i+'"><b>'+FIT_SEX[i][1]+'</b></button>';
+    h+='</div><p class="bdsm">'+FITSAY.why+'</p>'+bdDots(2,1)+'<div class="bdrow"><button type="button" class="ghost" data-b="fitback">이전</button></div>';
+  }else if(st==='fitdone'){
+    h=BANDI.scene('기뻐하는 반디의 그림')+'<p class="bdq">'+glue(FITSAY.done)+'</p>'+
+      '<div class="bdrow col"><button type="button" class="primary" data-b="fitfin">'+(bd.mode==='first'?'시작해요':'알았어요')+'</button></div>';
   }else if(st==='help'){
     h=BANDI.scene('도와주는 반디의 그림')+'<p class="bdq">'+BANDI.say.helpHead+'</p><div class="bdopts">';
     for(i=0;i<BANDI.help.length;i++) h+='<button type="button" class="dcard" data-b="topic" data-i="'+i+'"><b>'+BANDI.help[i][0]+'</b></button>';
-    h+='<button type="button" class="dcard go" data-b="redo"><b>난이도를 다시 골라 보고 싶어요</b></button><button type="button" class="dcard go" data-b="rules"><b>게임 규칙을 다시 보고 싶어요</b></button><button type="button" class="dcard go" data-b="tours"><b>탭 안내를 다시 보고 싶어요</b></button></div>'+
+    h+='<button type="button" class="dcard go" data-b="redo"><b>난이도를 다시 골라 보고 싶어요</b></button><button type="button" class="dcard go" data-b="fitgo"><b>운동량을 내 몸에 맞추고 싶어요</b></button><button type="button" class="dcard go" data-b="rules"><b>게임 규칙을 다시 보고 싶어요</b></button><button type="button" class="dcard go" data-b="tours"><b>탭 안내를 다시 보고 싶어요</b></button></div>'+
       '<p class="bdsm">'+BANDI.say.health+'</p><button type="button" class="skip" data-b="close">닫기</button>';
   }else if(st==='tours'){
     h=BANDI.scene('도와주는 반디의 그림')+'<p class="bdq">어느 탭의 안내를 다시 볼까요?</p><div class="bdopts">'+
@@ -7512,9 +7670,9 @@ function bdRender(){
 function bdConfirm(){
   var id=bd.pick, mode=bd.mode;
   if(!DIFF[id]) return;
+  if(mode==='first'){ bd.final=id; bd.step='fit0'; bdRender(); return; }   /* 첫 실행: 난이도를 정한 뒤 연령·성별 질문으로 이어가요 */
   bandiClose();
-  if(mode==='first'){ setDiff(id); if(!S.bdSeen){ S.bdSeen={}; save(); } render(); toast(DIFF[id].n+'로 시작해요'); }
-  else pickDiff(id,true);
+  pickDiff(id,true);
 }
 bdEl.addEventListener('click',function(e){
   var t=e.target, b, i;
@@ -7534,13 +7692,19 @@ bdEl.addEventListener('click',function(e){
   else if(b==='topic'){ bd.topic=i; bd.step='ans'; bdRender(); }
   else if(b==='helpback'){ bd.step='help'; bdRender(); }
   else if(b==='redo'){ bd.mode='ask'; bd.step=0; bd.ans=[null,null,null]; bd.pick=null; bdRender(); }
+  else if(b==='fitstart'){ bd.step='fitage'; bdRender(); }
+  else if(b==='fitage'){ bd.fa=FIT_AGES[i][0]; bd.step='fitsex'; bdRender(); }
+  else if(b==='fitsex'){ bd.fs=FIT_SEX[i][0]; fitSet(bd.fa,bd.fs); bd.step='fitdone'; bdRender(); }
+  else if(b==='fitback'){ if(bd.step==='fitsex'){ bd.step='fitage'; bdRender(); } else if(bd.fset){ bandiClose(); } else{ bd.step='fit0'; bdRender(); } }
+  else if(b==='fitfin'){ bdFitFin(); }
+  else if(b==='fitgo'){ bd.mode='fit'; bd.fset=true; bd.fa=null; bd.fs=null; bd.step='fitage'; bdRender(); }
   else if(b==='rules'){ bandiClose(); introOpen(); }
   else if(b==='tours'){ bd.step='tours'; bdRender(); }
   else if(b==='tourgo'){ var tk=t.getAttribute('data-k'); bandiClose(); tourReplay(tk); }
   else if(b==='close'){ bandiClose(); }
 });
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape' && !bdEl.hidden && bd.mode!=='first') bandiClose();
+  if(e.key==='Escape' && !bdEl.hidden && bd.mode!=='first' && !bd.must) bandiClose();
 });
 
 var INTRO_TXT=[
@@ -7610,7 +7774,7 @@ function visitMark(){
   v.days[t]=1; if(t<v.first) v.first=t;
   S.vis=v; save();
 }
-function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{},vis:x.vis||{}}; }
+function coreOf(x){ return {start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{},vis:x.vis||{},fit:x.fit||null}; }
 function dayScore(L){ return Object.keys(L.done||{}).length+Object.keys(L.diet||{}).length+(L.km>0?1:0)+(L.out?1:0); }
 function mergeData(a,b){
   var log={}, keys={};
@@ -7645,13 +7809,13 @@ function mergeData(a,b){
   Object.keys(a.trainLog||{}).forEach(function(k){tks[k]=1;}); Object.keys(b.trainLog||{}).forEach(function(k){tks[k]=1;});
   function trScore(e){ return e?trSetCount(e)+(e.run||0):-1; }
   Object.keys(tks).forEach(function(k){ var x=(a.trainLog||{})[k], y=(b.trainLog||{})[k]; tlog[k]=JSON.parse(JSON.stringify(trScore(x)>=trScore(y)?x:y)); });
-  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,crafted:crf,trade:trd,dl:dlm,bdSeen:bds,rk:rkm,ex:exm,vis:visUnion(a.vis,b.vis),char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
+  return {start:st,log:log,body:body,inv:inv,eq:eqm,restLog:rl,chestOpened:Math.max(a.chestOpened||0,b.chestOpened||0),bonusXp:Math.max(a.bonusXp||0,b.bonusXp||0),kingdom:{spent:ksp},trainLog:tlog,jny:{seen:jsn},achAt:aam,crafted:crf,trade:trd,dl:dlm,bdSeen:bds,rk:rkm,ex:exm,vis:visUnion(a.vis,b.vis),fit:fitPick(a.fit,b.fit),char:((a.char&&a.char!=='hero')?a.char:(b.char||'hero'))};
 }
 function applyData(x,dirty){
   if(migrateLog(x.log)) dirty=true;
   if(migrateRest(x)) dirty=true;
   noDirty=true;
-  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{},vis:visUnion(S.vis,x.vis),lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
+  S={start:x.start,log:x.log,body:x.body,inv:x.inv||{},eq:x.eq||{},chestOpened:x.chestOpened||0,restLog:x.restLog||{},bonusXp:x.bonusXp||0,kingdom:x.kingdom||{spent:{}},trainLog:x.trainLog||{},jny:x.jny||{seen:{}},char:x.char||'hero',achAt:x.achAt||{},crafted:x.crafted||{},trade:x.trade||{},dl:x.dl||{},bdSeen:x.bdSeen||null,rk:x.rk||{},ex:x.ex||{},vis:visUnion(S.vis,x.vis),fit:fitPick(S.fit,x.fit),lastBackup:S.lastBackup,uid:S.uid,cloudTs:S.cloudTs,dirty:!!dirty};
   save(); noDirty=false;
 }
 function hm(){var d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes());}
@@ -9812,11 +9976,12 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   }
   function check(){
     if(on) return;
-    var op=openPending(), bk=null, k=tab;
-    if(!op){ bk=buildGuideKey(); if(!bk && k==='today' && bossOk()) k='boss'; if(!bk && !eligible(k)) return; }
+    var op=openPending(), bk=null, k=tab, fq=false;
+    if(!op){ bk=buildGuideKey(); if(!bk && k==='today' && bossOk()) k='boss'; if(!bk && !eligible(k)){ if(fitNeed()) fq=true; else return; } }
     if(bdBusy()){ if(++tkTry<30) tkTimer=setTimeout(check,600); return; }
     if(op){ showOpen(op); return; }
     if(bk){ start(bk,true); bdMark(bk.slice(2)); return; }
+    if(fq){ fitAsk(); return; }
     start(k);
   }
   tourSoon=function(){ clearTimeout(tkTimer); tkTry=0; tkTimer=setTimeout(check,500); };

@@ -1547,8 +1547,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.49.3', APP_DATE='2026-10-12', showChg=false;
+var APP_VER='1.49.4', APP_DATE='2026-10-12', showChg=false;
 var CHANGES=[
+['1.49.4','뒤로가기로 설정·랭크·건물 안에서 나온 뒤 한 번 더 누르면 안내 없이 앱이 닫히던 것을 고쳤어요'],
 ['1.49.3','폰의 뒤로가기 버튼으로 이전 화면으로 돌아갈 수 있어요. 설정·랭크 화면, 왕국의 건물 안, 열려 있는 창에서 뒤로가기를 누르면 한 단계씩 닫혀요. 맨 앞 화면에서는 한 번 더 누르면 앱이 닫혀요. 기록과 랭크는 그대로예요'],
 ['1.49.2','설정의 난이도에서 반디에게 추천받기 버튼과 건강 안내 문구를 없앴어요. 강조 글자는 다시 굵게 보여요. 백업 만들기와 백업에서 복원 버튼이 한 줄에 나란히 놓여요. 기록과 랭크는 그대로예요'],
 ['1.49.1','설정 화면을 개인·화면·소리·계정 설정으로 나눠 정리했어요. 난이도 버튼은 한 줄로 줄었고, 날씨 반영은 화면 설정으로 옮겼어요. 시작 안내 다시 보기 버튼과 시작화면 켜기·끄기를 없앴어요(시작화면은 항상 나와요). 기록과 랭크는 그대로예요'],
@@ -10044,13 +10045,14 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
 
 /* ---------- v1.49.3 폰 뒤로가기 버튼 ----------
    화면을 옮길 때마다 기록을 쌓지 않고, 앱을 열 때 "한 칸짜리 기록"(보초)을 하나만 둬요. 뒤로가기를 누르면 보초가 지워지는데(popstate),
-   그때 지금 화면에서 한 단계 뒤로 갈 곳이 있으면 그 일을 하고 보초를 다시 세워요. 갈 곳이 없는 맨 앞 화면이면 "한 번 더 누르면 앱이 닫혀요"를 알리고,
-   2초 안에 한 번 더 누르면 보초를 세우지 않고 history.back()으로 앱을 나가요. 다른 페이지 안(액자)에서는 켜지 않아요. 한 단계 뒤로 가는 일은 화면의 돌아가기 버튼을 그대로 눌러서 해요(같은 동작).
+   그때 지금 화면에서 한 단계 뒤로 갈 곳이 있으면 그 일을 하고 history.forward()로 보초 칸에 돌아와요(새로 쌓지 않아요). 갈 곳이 없는 맨 앞 화면이면 "한 번 더 누르면 앱이 닫혀요"를 알리고,
+   2초 안에 한 번 더 누르면 history.back()으로 앱을 나가요. 다른 페이지 안(액자)에서는 켜지 않아요. 한 단계 뒤로 가는 일은 화면의 돌아가기 버튼을 그대로 눌러서 해요(같은 동작).
    닫히면 안 되는 것(첫 실행 질문·랭크업·처형 컷씬·확정 대기 창·시험 측정 중·클라우드 선택창)은 아무 일도 안 하고 보초만 다시 세워요. */
 (function(){
 var bkOn=false, bkAt=0;
 function bkVis(el){ return !!el && !el.hidden; }
-function bkArm(){ try{ history.pushState({mj:1},'',location.href); }catch(e){} }
+function bkArm(){ try{ history.pushState({mj:1},'',location.href); }catch(e){} }   /* 처음 한 번만 써요 */
+function bkFwd(){ try{ history.forward(); }catch(e){} }   /* 보초는 새로 쌓지 않고, 지워진 보초 칸으로 앞으로 돌아가요(Chrome이 사용자가 안 만진 새 기록을 뒤로가기에서 건너뛰어서) */
 function bkHi(msg){ toast(msg); try{ toastEl.style.zIndex='1000'; setTimeout(function(){ toastEl.style.zIndex=''; },1900); }catch(e){} }
 function bkClick(sel){ var b=app.querySelector(sel); if(b){ b.click(); return true; } return false; }
 function bkAct(){
@@ -10068,12 +10070,13 @@ if(tab==='rank') return bkClick('[data-a="rankback"]');
 if(tab==='home' && kv!=='map'){ if(!bkClick('[data-a="kback"]')){ kv='map'; render(); window.scrollTo(0,0); } return true; }
 return false;
 }
-window.addEventListener('popstate',function(){
+window.addEventListener('popstate',function(e){
 if(!bkOn) return;
-try{ if(bkAct()){ bkArm(); return; } }catch(e){ bkArm(); return; }
+if(e && e.state && e.state.mj===1) return;   /* 보초 칸으로 돌아온 것(앞으로 가기)은 무시 */
+try{ if(bkAct()){ bkFwd(); return; } }catch(er){ bkFwd(); return; }
 var now=Date.now();
 if(now-bkAt<2000){ bkOn=false; try{ history.back(); }catch(e){} return; }
-bkAt=now; bkHi('한 번 더 누르면 앱이 닫혀요'); bkArm();
+bkAt=now; bkHi('한 번 더 누르면 앱이 닫혀요'); bkFwd();
 });
 try{ if(window.top===window && window.history && history.pushState){ history.replaceState({mj:0},'',location.href); bkArm(); bkOn=true; } }catch(e){}   /* 다른 페이지 안(미리보기 같은 액자)에서는 켜지 않아요 */
 })();

@@ -122,6 +122,15 @@ h3{margin:0;}
 /* quest cards */
 .q{background:var(--surface); border:2px solid var(--line); border-radius:18px; padding:4px 16px; box-shadow:0 4px 0 var(--edge); margin:0 0 14px;}
 .q.ok{border-color:var(--clear);}
+/* v1.50.0 대체 동작: 카드를 좌우로 밀어 바꾸는 칸 */
+.xsw{position:relative; overflow:hidden; touch-action:pan-y;}
+.xtr{display:flex; align-items:flex-start; transition:transform .24s cubic-bezier(.3,.7,.3,1);}
+.xtr.dr{transition:none; -webkit-user-select:none; user-select:none;}
+.xsl{flex:0 0 100%; min-width:0; box-sizing:border-box;}
+.xdots{display:flex; justify-content:center; gap:7px; margin:10px 0 0;}
+.xdots i{display:block; width:7px; height:7px; border-radius:5px; background:var(--line); transition:width .2s, background .2s;}
+.xdots i.on{width:18px; background:var(--gold);}
+@media (prefers-reduced-motion: reduce){ .xtr, .xdots i{transition:none;} }
 .row{display:flex; align-items:center; gap:14px; width:100%; min-height:62px; padding:10px 0; background:none; border:0; text-align:left;}
 .row + .row{border-top:1px solid var(--line);}
 .box{flex:none; width:30px; height:30px; border-radius:10px; border:2px solid var(--line); display:grid; place-items:center; color:transparent; font-weight:900; font-size:16px;}
@@ -133,6 +142,27 @@ h3{margin:0;}
 .rew{flex:none; margin-left:auto; font-family:var(--disp); font-size:14px; padding:1px 10px; border-radius:999px; background:var(--gold); color:var(--gold-ink); line-height:22px; white-space:nowrap;}
 .rew.ok{background:var(--clear); color:var(--clear-ink);}
 .ex{padding:16px;}
+/* v1.51.0 컴팩트 카드: 모든 운동 카드는 같은 높이(--exh, 자바스크립트가 가장 큰 카드에 맞춰 정해요) */
+.q.ex{display:flex; flex-direction:column; padding:12px 14px 10px; min-height:var(--exh,0px);}
+.q.ex .desc{margin:6px 0 0; flex:1 0 auto; font-size:13px; line-height:1.45;}
+.q.ex .easy{margin:3px 0 0;}
+.q.ex .ex-name.xs1{font-size:19px;}
+.q.ex .ex-name.xs2{font-size:16px;}
+.doserow{display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; margin:6px 0 0; min-height:32px;}
+.doserow .dose{margin:0; font-size:13px;}
+.doserow .dose b{font-size:17px;}
+.doserow .swbtn{flex:none; min-height:32px; margin:0; padding:0 10px; font-size:14px; box-shadow:0 2px 0 var(--edge);}
+.q.ex .sets{flex-wrap:nowrap; gap:8px; margin:10px 0 0; align-items:stretch;}
+.q.ex .set{flex:none; min-width:0; width:clamp(44px,14.5vw,60px); height:48px; font-size:22px;}
+.q.ex .set.wide{flex:1; width:auto;}
+.q.ex .sets .tipbtn{flex:1; min-width:0; margin:0; min-height:48px; height:48px; padding:2px 6px; font-size:15px; line-height:1.2; gap:0; text-align:center; justify-content:center;}
+@media (max-width:380px){ .q.ex .sets .tipbtn{font-size:14px;} }
+@media (max-width:340px){ .q.ex .sets .tipbtn{font-size:13px;} }
+.q.ex .sets .tipbtn::after{display:none;}
+.q.ex .xdots{margin:10px 0 0;}
+@media (max-width:380px){ .doserow .dose b{font-size:15px;} .doserow .swbtn{padding:0 8px; font-size:13px;} .doserow{gap:6px 8px;} }
+@media (max-width:340px){ .doserow .dose{font-size:12px;} .doserow .dose b{font-size:13.5px;} .doserow .swbtn{padding:0 6px; font-size:12px;} .doserow{gap:6px 6px;} }
+.q.ex .figs{margin:10px 0 4px;}
 .ex-head{display:flex; align-items:center; gap:12px;}
 .idx{flex:none; width:30px; height:30px; border-radius:10px; background:var(--soft); color:var(--link); font-family:var(--disp); font-size:18px; display:grid; place-items:center; line-height:1;}
 .ex-name{font-family:var(--disp); font-weight:400; font-size:21px; flex:1; min-width:0; word-break:keep-all; line-height:1.25;}
@@ -1337,7 +1367,7 @@ var X = {
 var RUN = {label:'5km 러닝', sub:'3km 이상 입력하면 완료 · km당 6분 30초'};
 var RUN_REST = {label:'가볍게 걷기 30분', sub:'무리하지 않고 편하게'};
 var PLAN = {
-  mon:{k:'월',theme:'상체 + 코어',ex:['pushup','pike','dips','plank']},
+  mon:{k:'월',theme:'상체 + 코어',ex:['pushup','dips','pike','plank']},
   tue:{k:'화',theme:'하체',ex:['squat','lunge','bridge','calf']},
   wed:{k:'수',theme:'코어 집중',ex:['crunch','legraise','bicycle','deadbug']},
   thu:{k:'목',theme:'등·어깨 + 코어',ex:['superman','snow','ytw','mtn']},
@@ -1362,7 +1392,7 @@ var DIFF={
 /* 요일별 근력 동작 (몸짱의 길 = 예전 구성 그대로. PLAN을 그대로 가져와요) */
 var DPLAN={
   body:{mon:PLAN.mon.ex,tue:PLAN.tue.ex,wed:PLAN.wed.ex,thu:PLAN.thu.ex,fri:PLAN.fri.ex,sat:PLAN.sat.ex},
-  adv:{mon:['pushup','pike','plank'],tue:['squat','lunge','bridge','calf'],wed:['legraise','bicycle','deadbug'],thu:['bulg','wallsit','sideplank','sidelift'],fri:['superman','ytw','mtn'],sat:['inchworm','pushup','squat','plank']},
+  adv:{mon:['pushup','plank','pike'],tue:['squat','lunge','bridge','calf'],wed:['legraise','bicycle','deadbug'],thu:['bulg','wallsit','sideplank','sidelift'],fri:['superman','ytw','mtn'],sat:['inchworm','pushup','squat','plank']},
   sprout:{mon:['squat','pushup','plank'],tue:[],wed:['bridge','superman','deadbug'],thu:[],fri:['lunge','dips','crunch'],sat:['squat','pushup','plank']}
 };
 /* 러닝·걷기가 있는 요일 (일요일 걷기는 모든 난이도 공통이라 따로 처리) */
@@ -1504,6 +1534,7 @@ var FIG={
   inchworm:{poses:[STAND,Q([100,62],-60,[[128,108],[131,108]],[[96,108],[99,108]],{ah:[-1,0],lh:[[1,0],[1,0]]}),PL_A,Q([100,62],-60,[[128,108],[131,108]],[[96,108],[99,108]],{ah:[-1,0],lh:[[1,0],[1,0]]})],dur:4.8}
 };
 
+var XALT=null, XA_DAYS={mon:1,tue:1,wed:1,thu:1,fri:1,sat:1};   /* 대체 동작 목록(아래 v1.50.0 블록에서 채워요) · 대체 동작이 켜진 요일 */
 var D = {
   pushup:'엎드려서 팔을 굽혔다 펴며 몸을 밀어 올리는 동작이에요. 팔굽혀펴기예요.',
   pike:'엉덩이를 높이 들어 몸을 산 모양으로 만들고, 머리를 바닥 쪽으로 내렸다 미는 동작이에요.',
@@ -1542,8 +1573,11 @@ function figHtml(id,name){
   }
   return '<div class="figs">'+figSvg(def,true,name)+'</div>';
 }
-function vidLink(name){
-  return '<a class="vid" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/results?search_query='+encodeURIComponent(name+' 운동 방법')+'">영상으로 보기</a>';
+/* v1.55.1 앱 표시 이름은 그대로 두고 유튜브 검색어만 따로 쓰는 동작(vidIQ 이름 검토에서 영상이 잘 안 걸린 이름, 2026-10-13). 키는 대체 동작 id, 값은 검색어 전체예요 */
+var VID_Q={heeltouch:'힐터치 복근 운동',traise:'티레이즈 운동 방법',squathold:'스쿼트 버티기 운동',sumohold:'와이드 스쿼트 버티기 운동'};
+function vidLink(name,cid){
+  var q=VID_Q[String(cid||'').split('~').pop()]||(name+' 운동 방법');
+  return '<a class="vid" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'">영상으로 보기</a>';
 }
 
 /* ---------- 게임 규칙 ---------- */
@@ -1572,8 +1606,19 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.49.7', APP_DATE='2026-10-12', showChg=false;
+var APP_VER='1.55.1', APP_DATE='2026-10-13', showChg=false;
 var CHANGES=[
+['1.55.1','영상으로 보기 링크가 영상이 잘 걸리는 검색어로 열려요(힐 터치, T 레이즈, 스쿼트 홀드, 스모 스쿼트 홀드). 운동 이름 표시는 그대로예요. 기록과 랭크는 그대로예요'],
+['1.55.0','대체 운동을 요일별로 다시 정했어요. 하루 안에서 같은 운동이 두 번 나오지 않아요(몸짱의 길은 하루 4동작과 그 대체 8개, 모두 12종류가 서로 달라요). 금요일과 토요일 운동 카드도 밀면 대체 운동으로 바뀌고, 새 운동 플랭크 숄더 탭이 생겼어요. 지난 기록과 랭크는 그대로예요'],
+['1.54.0','목요일 운동 카드도 좌우로 밀면 대체 운동으로 바꿀 수 있어요. 슈퍼맨·리버스 스노우 엔젤·엎드려 Y-T-W·마운틴 클라이머(모험의 길은 불가리안 스플릿 스쿼트·월 싯·사이드 플랭크·사이드 라잉 레그 리프트)마다 대체 운동이 2개씩 있어요(T 레이즈·하이니 크런치·스쿼트 홀드·스모 스쿼트 홀드·파이어 하이드런트·클램쉘 등). 세트를 하나라도 체크하면 그 동작은 그날 바꿀 수 없고 세트당 XP는 같아요. 기록과 랭크는 그대로예요'],
+['1.53.0','수요일 운동 카드도 좌우로 밀면 대체 운동으로 바꿀 수 있어요. 크런치·레그 레이즈·바이시클 크런치·데드버그·슈퍼맨(새싹의 길은 글루트 브릿지)마다 대체 운동이 2개씩 있어요(힐 터치·리버스 크런치·할로우 홀드·러시안 트위스트·사이드 크런치·버드독·백 익스텐션 등). 세트를 하나라도 체크하면 그 동작은 그날 바꿀 수 없고 세트당 XP는 같아요. 기록과 랭크는 그대로예요'],
+['1.52.0','화요일 운동 카드도 좌우로 밀면 대체 운동으로 바꿀 수 있어요. 스쿼트·리버스 런지·글루트 브릿지·카프 레이즈마다 대체 운동이 2개씩 있어요(스모 스쿼트·스플릿 스쿼트·사이드 런지·덩키킥·굿모닝·시티드 카프 레이즈·한 발 카프 레이즈). 세트를 하나라도 체크하면 그 동작은 그날 바꿀 수 없고 세트당 XP는 같아요. 기록과 랭크는 그대로예요'],
+['1.51.2','그림·자세 팁 버튼 글꼴을 원래대로 되돌렸어요(글씨 크기는 키운 그대로예요). 기록과 랭크는 그대로예요'],
+['1.51.1','그림·자세 팁 버튼 안의 글씨를 키우고 글꼴을 목표 세트 글씨와 같게 바꿨어요. 버튼 크기는 그대로예요. 기록과 랭크는 그대로예요'],
+['1.51.0','운동 카드를 컴팩트하게 고쳤어요. 시간 타이머 버튼은 목표 줄 옆으로, 그림·자세 팁 버튼은 세트 버튼 오른쪽으로 옮겼고, 모든 운동 카드(세 난이도 모두)가 같은 높이라서 밀어서 대체 운동으로 바꿔도 화면이 움직이지 않아요. 기록과 랭크는 그대로예요'],
+['1.50.1','대체 운동 점 표시(●○○)를 카드 위가 아니라 카드 안쪽 아래로 옮겼어요. 기록과 랭크는 그대로예요'],
+['1.50.0','월요일 운동 카드를 좌우로 밀면 대체 운동으로 바꿀 수 있어요. 푸시업·파이크 푸시업·의자 딥스·플랭크·스쿼트마다 대체 운동이 2개씩 있고, 세트를 하나라도 체크하면 그 동작은 그날 바꿀 수 없어요. 세트당 XP는 같고 기록과 랭크는 그대로예요'],
+['1.49.8','월요일 운동 순서를 바꿔서 푸시업과 파이크 푸시업이 연달아 나오지 않아요. 몸짱의 길은 푸시업, 의자 딥스, 파이크 푸시업, 플랭크 순서이고 모험의 길은 푸시업, 플랭크, 파이크 푸시업 순서예요. 기록과 랭크는 그대로예요'],
 ['1.49.7','피버모드 진행 화면에서 세트 칸과 보스 체력 막대도 운동 그림과 함께 화면 가운데로 모았어요. 기록과 랭크는 그대로예요'],
 ['1.49.6','피버모드 진행 화면에서 운동 그림과 설명, 조작 버튼을 화면 가운데로 모아서 위아래 빈 공간이 고르게 보이게 했어요. 기록과 랭크는 그대로예요'],
 ['1.49.5','피버모드 화면 아래에 재생·일시정지 버튼과 속도 버튼이 생겼어요. 가운데 버튼으로 멈췄다가 이어서 하고, 양옆의 아래·위 화살표로 동작 박자를 0.5배에서 1.5배까지 0.1씩 바꿀 수 있어요. 위쪽의 일시정지 버튼은 없앴어요. 기록과 랭크는 그대로예요'],
@@ -3081,7 +3126,13 @@ function fri4Legacy(dk,k){
   var n=0, i; for(i=1;i<=SETS;i++){ if(L.done && L.done[FRI4_ID+'-'+i]) n++; }
   return n<SETS;
 }
+/* v1.50.0 대체 동작: 고른 대체 동작을 "원래동작~대체id" 형태로 바꿔서 돌려줘요(고르지 않았으면 예전과 똑같아요) */
 function exFor(dk,k){
+  var l=exForBase(dk,k);
+  if(!k || !XALT || !XA_DAYS[dk]) return l;
+  return l.map(function(id){ var a=xsSel(id,k); return a?(id+'~'+a):id; });
+}
+function exForBase(dk,k){
   var df=k?diffOn(k):'body', l=(dk==='sun')?PLAN.sun.ex:DPLAN[df][dk];
   if(df!=='body' || dk!=='fri' || !k) return l;
   return (k<FRI4_FROM || fri4Legacy(dk,k)) ? l.filter(function(id){ return id!==FRI4_ID; }) : l;
@@ -5790,7 +5841,7 @@ function exSubmit(){
   if(!S.ex||typeof S.ex!=='object') S.ex={};
   S.ex[k]={r:RANKS[st.t].id,p:ev.pass?1:0,c:credit?1:0,d:st.d,v:[A.r[0].x,A.r[1].x,A.r[2].x,A.r[3].x]};
   if(ev.pass){ if(!S.rk||typeof S.rk!=='object') S.rk={}; if(!S.rk[RANKS[st.t].id]) S.rk[RANKS[st.t].id]=k; }
-  if(credit){ var L=wr(k); idsFor(dk,k).forEach(function(id){ L.done[id]=true; }); L.fin=true; }
+  if(credit){ var L=wr(k); xsFreeze(k); idsFor(dk,k).forEach(function(id){ L.done[id]=true; }); L.fin=true; }
   save(); exDrop(); exMStop(); stopTimer();
   exRes={ev:ev,pass:ev.pass,credit:credit,wasDone:wasDone,sun:sun,before:before,t:st.t,from:from};
   st.stage='result'; render(); window.scrollTo(0,0);
@@ -5892,9 +5943,67 @@ function weeklyHtml(d){
 var EASYS={pushup:['무릎 푸시업','부터 해 봐요'],pike:['엉덩이를 낮춘 파이크','부터 해 봐요'],dips:['무릎을 굽혀서',' 해 봐요'],squat:['의자에 앉았다 일어나기','부터 해 봐요'],lunge:['벽을 잡고 런지','부터 해 봐요'],bridge:['발 간격을 넓혀서',' 해 봐요'],calf:['양발 동시에',' 해 봐요'],crunch:['팔을 무릎 쪽으로 뻗는 동작','부터 해 봐요'],legraise:['무릎을 굽힌 레그 레이즈','부터 해 봐요'],bicycle:['천천히',' 해 봐요'],deadbug:['팔만 움직이는 동작','부터 해 봐요'],superman:['팔과 다리를 번갈아',' 들어 봐요'],snow:['팔을 낮게',' 들고 해 봐요'],ytw:['가슴을 바닥에 둔 채 팔만 드는 동작','부터 해 봐요'],bulg:['뒤 발을 바닥에 두고',' 해 봐요'],sidelift:['무릎을 굽힌 채 올리는 동작','부터 해 봐요'],inchworm:['무릎을 굽힌 채로',' 해 봐요'],plank:['무릎 플랭크','부터 해 봐요'],mtn:['천천히 걷듯이',' 해 봐요'],wallsit:['조금 높게 앉아서',' 해 봐요'],sideplank:['무릎을 굽혀서',' 해 봐요']};
 function easyHtml(id,e){ var a=EASYS[id]||[e.e,' 해 봐요']; return '처음엔 <b>'+a[0]+'</b>'+a[1]; }
 function roP(t){ t=String(t); var c=t.charCodeAt(t.length-1), f; if(c>=0xAC00 && c<=0xD7A3){ f=(c-0xAC00)%28; return (f===0||f===8)?'로':'으로'; } return '으로'; }
+/* v1.51.0 운동 카드 한 장(대체 카드도 같은 틀). c = {k,L,st,dfc,p,lk,isB,ix,dots}
+   목표 줄 옆에 시간 타이머, 세트 버튼 오른쪽에 그림·자세 팁 버튼을 두어 카드를 컴팩트하게 했어요 */
+/* v1.54.0 이름의 마지막 낱말이 2글자 이하이면 앞 낱말과 붙여서(줄바꿈 안 되는 공백) 마지막 줄에 짧은 말만 남지 않게 해요(표시만, 이름 자체와 영상 검색어는 그대로) */
+function nmGlue(n){ return String(n).replace(/ (\S{1,2})$/,'\u00a0$1'); }
+function exCardHtml(cid,c){
+  var k=c.k, L=c.L, st=c.st, dfc=c.dfc, p=c.p, lk=c.lk, isB=c.isB, ix=c.ix;
+  var e=X[cid], dz=doseCalc(cid,st), dose=dz.s, n=e.one?1:SETS, doneN=0, i, ch='';
+  for(i=1;i<=n;i++){ if(L.done[cid+'-'+i]) doneN++; }
+  var exDone=(doneN===n), swBtn='';
+  if(e.t){ var sm=String(dose).match(/(\d+)\s*초/); if(sm){ swBtn='<button type="button" class="swbtn" data-a="sw" data-sec="'+sm[1]+'" data-name="'+e.n+'">▶ '+sm[1]+'초 타이머</button>'; } }
+  ch+='<div class="q ex'+(exDone?' ok':'')+'"><div class="ex-head"><span class="idx" aria-hidden="true">'+(ix+1)+'</span><h3 class="ex-name'+(e.n.length>=11?' xs2':(e.n.length>=8?' xs1':''))+'">'+nmGlue(e.n)+'</h3>'+(isB?'<span class="bonustag">보너스</span>':'')+rewChip(n*setXpOn(k),exDone)+'</div>'+
+     '<p class="desc">'+(D[cid]||'')+'</p>'+(((dfc==='sprout'||dz.easy)&&e.e)?'<p class="easy">'+easyHtml(cid,e)+'</p>':'')+
+     '<div class="doserow"><p class="dose">목표 <b>'+(e.one?dose:(SETS+(p.circuit?'라운드':'세트')+' × '+dose))+'</b></p>'+swBtn+'</div>'+(isB?'<p class="note" style="margin:6px 0 0">오늘은 이미 확정된 날이라 보너스로 해요. 클리어 여부는 그대로이고 XP만 더해져요.</p>':'');
+  var tipB='<button type="button" class="tipbtn" data-a="tip" data-id="'+cid+'" aria-expanded="'+(openEx[cid]?'true':'false')+'">'+(openEx[cid]?'그림·자세 팁\u00a0접기':'그림·자세 팁\u00a0보기')+'</button>';
+  if(e.one){
+    ch+='<div class="sets"><button type="button" class="set wide" aria-pressed="'+(L.done[cid+'-1']?'true':'false')+'" data-a="set" data-id="'+cid+'-1" data-one="1"'+(lk?' disabled':'')+'>'+(L.done[cid+'-1']?'완료':'했어요')+'</button>'+tipB+'</div>';
+  }else{
+    ch+='<div class="sets">';
+    for(i=1;i<=SETS;i++){
+      ch+='<button type="button" class="set" aria-pressed="'+(L.done[cid+'-'+i]?'true':'false')+'" data-a="set" data-id="'+cid+'-'+i+'" aria-label="'+e.n+' '+i+(p.circuit?'라운드':'세트')+'"'+(lk?' disabled':'')+'>'+i+'</button>';
+    }
+    ch+=tipB+'</div>';
+  }
+  if(openEx[cid]){
+    ch+=figHtml(cid,e.n);
+    ch+='<ul class="tips">'+e.tips.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ul>';
+    if(e.e){
+      ch+=(dfc==='sprout'?'<ul class="var"><li>'+easyHtml(cid,e)+'</li><li>익숙해지면 표준 동작 "'+e.n+'"'+roP(e.n)+' 올려요</li></ul>':'<ul class="var"><li>어려우면: '+e.e+'</li><li'+(st===2?' class="push"':'')+'>'+(st===2?'이번 주부터 도전: ':'익숙해지면: ')+e.h+'</li></ul>');
+    }
+    ch+=vidLink(e.n,cid);
+  }
+  ch+=(c.dots||'')+'</div>';
+  return ch;
+}
+/* 모든 운동 카드를 같은 높이로: 지금 폭·난이도·주차 단계에서 접힌 카드(모든 동작·대체 동작)를 숨겨서 그려 보고 가장 큰 높이를 --exh로 써요.
+   같은 칸에서 밀어 바꿀 때도, 다른 동작으로 넘어갈 때도 화면이 움직이지 않아요(그림·팁을 펼친 카드는 내용만큼 커져요) */
+var xsCtx=null, xmCache={};
+function xsUniform(){
+  var c=xsCtx, w, key, box, cards, i, mx=0, ids, dots3;
+  if(!c || tab!=='today') return;
+  w=app.clientWidth; key=w+'|'+c.dfc+'|'+c.st;
+  if(xmCache[key]==null){
+    ids=Object.keys(X).filter(function(id){ return id.indexOf('~')<0; });
+    dots3='<div class="xdots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>';
+    app.style.setProperty('--exh','0px');
+    box=document.createElement('div'); box.setAttribute('aria-hidden','true'); box.style.cssText='height:0;overflow:hidden;visibility:hidden;pointer-events:none;';
+    box.innerHTML=ids.map(function(id){
+      return [false,true].map(function(circ){ return '<div class="xsl">'+exCardHtml(id,{k:c.k,L:{done:{},diet:{},out:false},st:c.st,dfc:c.dfc,p:{circuit:circ},lk:false,isB:false,ix:0,dots:dots3})+'</div>'; }).join('');
+    }).join('');
+    app.appendChild(box);
+    cards=box.querySelectorAll('.q.ex');
+    for(i=0;i<cards.length;i++){ mx=Math.max(mx,cards[i].offsetHeight); }
+    app.removeChild(box);
+    xmCache[key]=mx;
+  }
+  app.style.setProperty('--exh',xmCache[key]+'px');
+}
 function viewToday(){
   var d=sel, k=fmt(d), dk=DK[d.getDay()], p=PLAN[dk], L=rd(k), dfc=diffOn(k), st=(dfc==='sprout')?Math.min(stageIdx(),1):stageIdx(), c=count(d);
   var isToday=(k===fmt(TODAY)), ids=idsFor(dk,k), lock=isEnded(k), lockM=lock||!!L.fin, rs=dayResult(d), bossHtml='';
+  xsCtx={k:k,st:st,dfc:dfc};
   if(p.circuit){
     bossHtml='<div class="bossrule">'+
       '<p>'+SAT_GOAL+' XP 이상이면 마왕성에서 승리할 수 있어요 (+150 XP 보너스). 못 미치거나 오늘 메인 퀘스트와 러닝과 걷기를 못 채우고 모험을 마치면 패배해요.'+(firstWeekFree(d)?' 시작한 첫 7일 안의 마왕전이라 XP가 모자라도 마왕의 저주는 없어요.':'')+'</p></div>';
@@ -5928,32 +6037,13 @@ function viewToday(){
   var EXL=exFor(dk,k), BON=bonusFor(dk,k);
   EXL.concat(BON).forEach(function(id,ix){
     var isB=(ix>=EXL.length), lk=(isB&&k>=fmt(TODAY))?false:lockM;
-    var e=X[id], dz=doseCalc(id,st), dose=dz.s, n=e.one?1:SETS, doneN=0, i;
-    for(i=1;i<=n;i++){ if(L.done[id+'-'+i]) doneN++; }
-    var exDone=(doneN===n), swBtn='';
-    if(e.t){ var sm=String(dose).match(/(\d+)\s*초/); if(sm){ var side=String(dose).indexOf('한쪽')>=0; swBtn='<button type="button" class="swbtn" data-a="sw" data-sec="'+sm[1]+'" data-name="'+e.n+'">▶ '+(side?'한쪽 ':'')+sm[1]+'초 타이머</button>'; } }
-    h+='<div class="q ex'+(exDone?' ok':'')+'"><div class="ex-head"><span class="idx" aria-hidden="true">'+(ix+1)+'</span><h3 class="ex-name">'+e.n+'</h3>'+(isB?'<span class="bonustag">보너스</span>':'')+rewChip(n*setXpOn(k),exDone)+'</div>'+
-       '<p class="desc">'+(D[id]||'')+'</p>'+(((dfc==='sprout'||dz.easy)&&e.e)?'<p class="easy">'+easyHtml(id,e)+'</p>':'')+
-       '<p class="dose">목표 <b>'+(e.one?dose:(SETS+(p.circuit?'라운드':'세트')+' × '+dose))+'</b></p>'+swBtn+(isB?'<p class="note" style="margin:6px 0 0">오늘은 이미 확정된 날이라 보너스로 해요. 클리어 여부는 그대로이고 XP만 더해져요.</p>':'');
-    if(e.one){
-      h+='<div class="sets"><button type="button" class="set wide" aria-pressed="'+(L.done[id+'-1']?'true':'false')+'" data-a="set" data-id="'+id+'-1" data-one="1"'+(lk?' disabled':'')+'>'+(L.done[id+'-1']?'완료':'했어요')+'</button></div>';
-    }else{
-      h+='<div class="sets">';
-      for(i=1;i<=SETS;i++){
-        h+='<button type="button" class="set" aria-pressed="'+(L.done[id+'-'+i]?'true':'false')+'" data-a="set" data-id="'+id+'-'+i+'" aria-label="'+e.n+' '+i+(p.circuit?'라운드':'세트')+'"'+(lk?' disabled':'')+'>'+i+'</button>';
-      }
-      h+='</div>';
-    }
-    h+='<button type="button" class="tipbtn" data-a="tip" data-id="'+id+'" aria-expanded="'+(openEx[id]?'true':'false')+'">'+(openEx[id]?'그림·자세 팁 접기':'그림·자세 팁 보기')+'</button>';
-    if(openEx[id]){
-      h+=figHtml(id,e.n);
-      h+='<ul class="tips">'+e.tips.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ul>';
-      if(e.e){
-        h+=(dfc==='sprout'?'<ul class="var"><li>'+easyHtml(id,e)+'</li><li>익숙해지면 표준 동작 "'+e.n+'"'+roP(e.n)+' 올려요</li></ul>':'<ul class="var"><li>어려우면: '+e.e+'</li><li'+(st===2?' class="push"':'')+'>'+(st===2?'이번 주부터 도전: ':'익숙해지면: ')+e.h+'</li></ul>');
-      }
-      h+=vidLink(e.n);
-    }
-    h+='</div>';
+    function card(cid,dots){ return exCardHtml(cid,{k:k,L:L,st:st,dfc:dfc,p:p,lk:lk,isB:isB,ix:ix,dots:dots}); }
+    var xslot=String(id).split('~')[0], xalts=(!isB)?xaltOf(xslot,k):null;
+    if(!xalts || lk || xsLocked(id,k)){ h+=card(id); return; }   /* 대체 동작이 없거나, 잠긴 날이거나, 세트를 이미 체크했으면 한 장만 */
+    var xv=[xslot].concat(xalts.map(function(a2){ return xslot+'~'+a2; })), xc=Math.max(0,xv.indexOf(id));
+    function xdots(vi){ return '<div class="xdots" aria-hidden="true">'+xv.map(function(v2,vj){ return '<i'+(vj===vi?' class="on"':'')+'></i>'; }).join('')+'</div>'; }
+    h+='<div class="xsw" data-slot="'+xslot+'" data-i="'+xc+'" data-n="'+xv.length+'" data-v=",'+xalts.join(',')+'"><div class="xtr" style="transform:translateX(-'+(xc*100)+'%)">'+
+       xv.map(function(v2,vi){ return '<div class="xsl"'+(vi===xc?'':' inert aria-hidden="true"')+'>'+card(v2,xdots(vi))+'</div>'; }).join('')+'</div></div>';
   });
   if(!p.rest && exFor(dk,k).length) h+='<p class="note">통증이 있으면 바로 멈추고 쉬운 변형으로 바꾸세요. 세트를 완료하면 60초 휴식 타임이 시작돼요.</p>';
 
@@ -6058,6 +6148,7 @@ function bkParse(text){
       if(L.ended) log[k].ended=true;
       if(L.cleared) log[k].cleared=true;
       if(L.fin) log[k].fin=true;
+      if(L.xs&&typeof L.xs==='object'){ var xs2={}; Object.keys(L.xs).forEach(function(sl){ if(XALT&&XALT[sl]&&(L.xs[sl]===''||XALT[sl].indexOf(L.xs[sl])>=0)) xs2[sl]=L.xs[sl]; }); if(Object.keys(xs2).length) log[k].xs=xs2; }
     }
   });
   migrateLog(log);
@@ -6366,6 +6457,8 @@ function render(){
   }
   bgmSync();
   tourSoon();
+  xsUniform(); xsFit();
+  try{ requestAnimationFrame(function(){ xsUniform(); xsFit(); }); }catch(e){}
 }
 
 /* ---------- 효과: 소리·진동·토스트·오버레이 ---------- */
@@ -6903,6 +6996,7 @@ function fevClose(silent){
 function fevMark(sid){
   var k=fv.k, L=wr(k), before, hp0, fin, clear;
   if(isEnded(k) || L.fin) return 'stop';
+  xsFreeze(k);
   if(L.done[sid]) return 'ok';
   before=snap(); hp0=bossHp(sel); actMark('set',k,{id:sid});
   L.done[sid]=true; save();
@@ -7132,17 +7226,18 @@ document.getElementById('nav').addEventListener('click',function(e){
   tab=b.getAttribute('data-tab'); if(tab==='home') kv='map'; if(tab==='week') wxRefresh(false,wxAfter); armed=false; bkMode=null; bkPending=null; bkErr=''; render(); window.scrollTo(0,0);
 });
 app.addEventListener('click',function(e){
+  if(Date.now()-xsBlock<350) return;   /* 카드를 밀고 난 직후에 따라오는 클릭은 무시 */
   var t=e.target.closest('[data-a]'); if(!t || t.disabled) return;
   var a=t.getAttribute('data-a'), k=fmt(sel), L, id, before;
   var Lc=rd(k);
-  if(isEnded(k) && ['set','run','diet','out','end','alt','altwhy'].indexOf(a)>=0 && !(a==='set' && k>=fmt(TODAY) && isBonusSet(t.getAttribute('data-id'),k))) return;
-  if(Lc.fin && ['set','alt','altwhy'].indexOf(a)>=0 && !(a==='set' && k>=fmt(TODAY) && isBonusSet(t.getAttribute('data-id'),k))) return;   /* v1.43.0 보스를 쓰러뜨리면 메인 퀘스트·러닝은 잠겨요 */
+  if(isEnded(k) && ['set','run','diet','out','end','alt','altwhy','xswap'].indexOf(a)>=0 && !(a==='set' && k>=fmt(TODAY) && isBonusSet(t.getAttribute('data-id'),k))) return;
+  if(Lc.fin && ['set','alt','altwhy','xswap'].indexOf(a)>=0 && !(a==='set' && k>=fmt(TODAY) && isBonusSet(t.getAttribute('data-id'),k))) return;   /* v1.43.0 보스를 쓰러뜨리면 메인 퀘스트·러닝은 잠겨요 */
   if(a==='diet' && t.getAttribute('data-k')!=='water' && Lc.out) return;
   if(a==='out' && !Lc.out && Lc.diet.lunch && Lc.diet.post) return;
   if(a==='fever'){ fevOpen(); return; }
   if(a==='sw'){ startHold(parseInt(t.getAttribute('data-sec'),10),t.getAttribute('data-name')); return; }
   if(a==='set'){
-    id=t.getAttribute('data-id'); before=snap(); L=wr(k); actMark('set',k,{id:id});
+    id=t.getAttribute('data-id'); before=snap(); L=wr(k); xsFreeze(k); actMark('set',k,{id:id});
     var hp0=bossHp(sel);
     L.done[id]=!L.done[id]; save();
     var on=!!L.done[id], fin=isDone(sel);
@@ -7592,7 +7687,245 @@ var FIT_ADJ=[[-1,'더 쉽게'],[0,'기본'],[1,'더 어렵게']];
 var FIT_AGEK={t:1,'20':1,'25':1,'30':0.94,'35':0.88,'40':0.80,'45':0.72,'50':0.64,'55':0.57,'60':0.50,'65':0.44};
 var FIT_RUNK={t:1,'20':1,'25':1,'30':0.98,'35':0.95,'40':0.91,'45':0.87,'50':0.83,'55':0.79,'60':0.75,'65':0.71};
 var FIT_SEXK={up:0.55,core:0.80,low:0.85,full:0.75}, FIT_SEXRUN=0.90, FIT_ADJK={'-1':0.9,'0':1,'1':1.1};
-var FIT_GRP={pushup:'up',pike:'up',dips:'up',plank:'core',crunch:'core',legraise:'core',bicycle:'core',deadbug:'core',sideplank:'core',squat:'low',lunge:'low',bridge:'low',calf:'low',bulg:'low',wallsit:'low',sidelift:'low',superman:'full',snow:'full',ytw:'full',mtn:'full',inchworm:'full'};
+var FIT_GRP={wpush:'up',incl:'up',dog:'up',yraise:'full',sphinx:'up',wallpush:'up',revplank:'core',hollow:'core',sumo:'low',split:'low',pushup:'up',pike:'up',dips:'up',plank:'core',crunch:'core',legraise:'core',bicycle:'core',deadbug:'core',sideplank:'core',squat:'low',lunge:'low',bridge:'low',calf:'low',bulg:'low',wallsit:'low',sidelift:'low',superman:'full',snow:'full',ytw:'full',mtn:'full',inchworm:'full'};
+/* ---------- 대체 동작 (v1.50.0) ----------
+   일일 퀘스트 운동 카드를 좌우로 밀면 같은 자리에서 대체 동작으로 바뀌어요. 지금은 월~토요일이 켜져 있어요(XA_DAYS).
+   선택은 그날 기록(S.log[날짜].xs = {원래동작: 대체id, ''은 원래 동작})에 저장되고, 새 날에는 직전에 고른 동작을 이어받아요.
+   대체 동작은 칸마다 따로 기록해요(id가 "원래동작~대체id"라서 같은 대체 동작이 두 칸에 있어도 겹치지 않아요).
+   그 동작의 세트를 하나라도 체크하면 그날은 바꿀 수 없어요. 세트당 XP는 원래 동작과 같아요. */
+XALT={pushup:['wpush','incl'],pike:['dog','yraise'],dips:['sphinx','wallpush'],plank:['revplank','hollow'],squat:['sumo','split'],
+  lunge:['split','sidelunge','bulg'],bridge:['donkey','goodmorning'],calf:['seatedcalf','singlecalf'],
+  crunch:['heeltouch','revcrunch','sidecrunch'],legraise:['revcrunch','hollow'],bicycle:['russian','sidecrunch','highknee'],deadbug:['birddog','hollow','shouldertap'],
+  superman:['backext','birddog','traise'],snow:['yraise','traise','revplank'],ytw:['traise','backext','dog'],mtn:['highknee','birddog','shouldertap'],
+  bulg:['split','goodmorning'],wallsit:['squathold','sumohold'],sideplank:['sidecrunch','russian'],sidelift:['firehydrant','clamshell'],inchworm:['dog','shouldertap']};
+/* v1.55.0 XALT는 "지금까지 나온 모든 대체"의 합집합이에요(저장된 기록을 읽을 때 쓰고, 대체 동작 데이터를 만드는 데 써요). 실제로 카드에 보여 주는 목록은 요일별로 아래 XALT_DAY예요.
+   같은 날 같은 운동이 두 번 나오지 않게(몸짱의 길 하루 4동작 × (원래+대체 2) = 12종류가 모두 다르게) 요일마다 목록을 따로 정했어요. 모험·새싹의 길은 같은 목록에서 해당 동작만 써요.
+   XALT_FROM(2026-10-13) 이전 날짜는 옛 목록(XALT_OLD, 월요일만)을 써요. 기록은 그날 저장된 값을 XALT 합집합으로 읽어서 옛 기록이 그대로 인정돼요. */
+var XALT_FROM='2026-10-13';
+var XALT_OLD={pushup:['wpush','incl'],pike:['dog','yraise'],dips:['sphinx','wallpush'],plank:['revplank','hollow'],squat:['sumo','split']};
+var XALT_DAY={
+  mon:{pushup:['wpush','incl'],dips:['sphinx','wallpush'],pike:['dog','yraise'],plank:['revplank','hollow'],squat:['sumo','split']},
+  tue:{squat:['sumo','split'],lunge:['sidelunge','bulg'],bridge:['donkey','goodmorning'],calf:['seatedcalf','singlecalf']},
+  wed:{crunch:['heeltouch','sidecrunch'],legraise:['revcrunch','hollow'],bicycle:['russian','highknee'],deadbug:['birddog','shouldertap'],bridge:['donkey','goodmorning'],superman:['backext','traise']},
+  thu:{superman:['backext','birddog'],snow:['yraise','revplank'],ytw:['traise','dog'],mtn:['highknee','shouldertap'],bulg:['split','goodmorning'],wallsit:['squathold','sumohold'],sideplank:['sidecrunch','russian'],sidelift:['firehydrant','clamshell']},
+  fri:{bulg:['split','goodmorning'],wallsit:['squathold','sumohold'],sideplank:['sidecrunch','russian'],sidelift:['firehydrant','clamshell'],superman:['backext','birddog'],ytw:['traise','dog'],mtn:['highknee','shouldertap'],lunge:['sidelunge','bulg'],dips:['sphinx','wallpush'],crunch:['heeltouch','sidecrunch']},
+  sat:{inchworm:['dog','shouldertap'],pushup:['wpush','incl'],squat:['sumo','split'],plank:['revplank','hollow']}
+};
+X.wpush={n:'와이드 푸시업',r:['8~10회','10~12회','10~12회'],tips:['손은 어깨보다 한 뼘쯤 넓게','몸은 머리부터 발끝까지 일자로','가슴이 바닥 가까이 닿을 때까지 내려가기'],e:'무릎 와이드 푸시업',h:'3초 내려가는 와이드 푸시업'};
+X.incl={n:'인클라인 푸시업',r:['10~15회','15~20회','15~20회'],tips:['의자가 밀리지 않게 벽에 붙이거나 미끄러지지 않는 곳에서 하기','몸은 머리부터 발끝까지 일자로','가슴이 의자 가까이 닿을 때까지 내려가기'],e:'손을 더 높은 곳에 짚기',h:'손을 더 낮은 곳에 짚기'};
+X.dog={n:'다운독',t:1,r:['20초','30초','40초'],tips:['손은 어깨너비로, 엉덩이를 천장 쪽으로 밀어 올리기','무릎은 살짝 굽혀도 괜찮아요','목은 편하게 두고 귀가 팔 사이에 오게'],e:'무릎을 굽혀서',h:'한 발 들고 버티기'};
+X.yraise={n:'Y 레이즈',r:['8~10회','10~12회','12회'],tips:['이마를 바닥 가까이 두고 목은 편하게','엄지를 천장 쪽으로','허리를 꺾지 않고 팔만 들기'],e:'팔을 낮게 들기',h:'팔을 올린 채 2초 버티기'};
+X.sphinx={n:'스핑크스 푸시업',r:['6~8회','8~10회','10~12회'],tips:['손바닥은 팔꿈치 바로 앞에 짚기','엉덩이가 들리거나 처지지 않게','팔꿈치가 몸 옆에서 벌어지지 않게'],e:'무릎을 대고',h:'내려올 때 3초 버티기'};
+X.wallpush={n:'벽 푸시업',r:['12~15회','15~20회','20회'],tips:['손은 어깨 높이, 어깨너비로 벽에 짚기','발을 벽에서 한 걸음쯤 떼고 몸은 일자로','가슴이 벽 가까이 닿을 때까지 굽히기'],e:'벽에 더 가까이 서서',h:'벽에서 더 멀리 서서'};
+X.revplank={n:'리버스 플랭크',t:1,r:['20초','30초','40초'],tips:['손은 어깨 바로 아래, 손가락은 발 쪽으로','엉덩이를 높이 들어 몸이 일자가 되게','목은 편하게, 시선은 정면'],e:'무릎을 굽혀서',h:'한 발 들고 버티기'};
+X.hollow={n:'할로우 홀드',t:1,r:['15초','20초','30초'],tips:['허리가 바닥에서 뜨지 않게','턱은 살짝 당기고 어깨를 바닥에서 띄우기','숨을 멈추지 말고 천천히 쉬기'],e:'무릎을 굽혀서',h:'팔을 머리 위로 뻗고'};
+X.sumo={n:'스모 스쿼트',r:['10~15회','15~20회','15~20회'],tips:['발은 어깨보다 넓게, 발끝은 바깥쪽으로','무릎이 발끝과 같은 방향을 보게','상체를 곧게 세우고 엉덩이를 아래로'],e:'조금 얕게 앉기',h:'3초 내려가는 스모 스쿼트'};
+X.split={n:'스플릿 스쿼트',r:['8~12회(한쪽)','12~15회(한쪽)','12~15회(한쪽)'],tips:['앞발과 뒷발을 한 걸음 반쯤 벌려 서기','상체는 곧게, 뒤 무릎을 바닥 쪽으로 내리기','앞 무릎이 발끝을 넘지 않게'],e:'벽을 잡고 하기',h:'3초 내려가기'};
+D.wpush='손을 어깨보다 넓게 짚고 팔을 굽혔다 펴며 몸을 밀어 올리는 동작이에요. 가슴 바깥쪽을 더 써요.';
+D.incl='손을 튼튼한 의자나 소파 위에 짚고 비스듬히 선 채 팔을 굽혔다 펴는 동작이에요. 바닥 푸시업보다 쉬워요.';
+D.dog='엉덩이를 높이 들어 몸을 거꾸로 된 V자로 만들고 그대로 버티는 동작이에요. 어깨와 등, 종아리가 늘어나요.';
+D.yraise='엎드려서 두 팔을 Y자로 쭉 뻗어 들어 올렸다 내리는 동작이에요. 어깨 뒤쪽과 등 위쪽을 써요.';
+D.sphinx='팔꿈치를 바닥에 대고 엎드린 자세에서 손바닥으로 바닥을 밀어 팔을 폈다 내려오는 동작이에요. 팔 뒤쪽을 써요.';
+D.wallpush='벽을 짚고 서서 팔을 굽혔다 펴며 몸을 벽 쪽으로 밀었다 떼는 동작이에요. 가장 쉬운 푸시업이에요.';
+D.revplank='앉은 자세에서 손을 뒤로 짚고 엉덩이를 들어 몸을 일자로 만든 뒤 그대로 버티는 동작이에요. 엉덩이와 몸 뒷면을 써요.';
+D.hollow='누워서 팔과 다리를 쭉 뻗어 들고, 허리를 바닥에 붙인 채 버티는 동작이에요. 배 전체를 써요.';
+D.sumo='발을 어깨보다 넓게 벌리고 발끝을 바깥으로 향한 채 앉았다 일어나는 동작이에요. 허벅지 안쪽과 엉덩이를 써요.';
+D.split='한 발은 앞, 한 발은 뒤에 두고 선 채 제자리에서 무릎을 굽혀 내려갔다 올라오는 동작이에요. 허벅지와 엉덩이를 써요.';
+EASYS.wpush=['무릎 와이드 푸시업','부터 해 봐요'];
+EASYS.incl=['손을 더 높은 곳에 짚고',' 해 봐요'];
+EASYS.dog=['무릎을 굽혀서',' 해 봐요'];
+EASYS.yraise=['팔을 낮게 들고',' 해 봐요'];
+EASYS.sphinx=['무릎을 대고',' 해 봐요'];
+EASYS.wallpush=['벽에 더 가까이 서서',' 해 봐요'];
+EASYS.revplank=['무릎을 굽혀서',' 해 봐요'];
+EASYS.hollow=['무릎을 굽혀서',' 해 봐요'];
+EASYS.sumo=['조금 얕게 앉아서',' 해 봐요'];
+EASYS.split=['벽을 잡고',' 해 봐요'];
+FEVB.wpush={b:3}; FEVB.incl={b:3}; FEVB.dog={b:1,h:1}; FEVB.yraise={b:3}; FEVB.sphinx={b:3};
+FEVB.wallpush={b:3}; FEVB.revplank={b:1,h:1}; FEVB.hollow={b:1,h:1}; FEVB.sumo={b:3}; FEVB.split={b:3,m:'seq',sw:8};
+FIG.wpush={poses:[Q([96,90],20,[[128,108],[131,108]],[[52,106],[55,106]],{ah:[-1,0],fd:[[-3,5],[-3,5]]}),Q([98,101],6,[[128,108],[131,108]],[[52,106],[55,106]],{ah:[-1,0],fd:[[-3,5],[-3,5]]})]};
+FIG.incl={props:'<g stroke="var(--muted)" stroke-width="3" stroke-linecap="round" fill="none"><line x1="120" y1="86" x2="158" y2="86"/><line x1="124" y1="86" x2="124" y2="110"/><line x1="154" y1="86" x2="154" y2="110"/></g>',
+  poses:[Q([105.5,77.5],40.5,[[132,84],[135,84]],[[72,106],[75,106]],{ah:[-1,0],fd:[[-3,5],[-3,5]]}),Q([110,84],30,[[132,84],[135,84]],[[72,106],[75,106]],{ah:[-1,0],fd:[[-3,5],[-3,5]]})]};
+FIG.dog={poses:[Q([88,68],-34,[[130,108],[133,108]],[[66,108],[69,108]],{ah:[-1,0],fd:[[-4,3],[-4,3]]}),Q([89,70],-32,[[130,108],[133,108]],[[66,108],[69,108]],{ah:[-1,0],fd:[[-4,3],[-4,3]]})]};
+FIG.yraise={poses:[Q([90,104],0,[[149,104],[151,104]],[[38,105],[40,105]],{ah:[0,1],fd:[[-7,0],[-7,0]]}),Q([90,104],6,[[146,90],[148,90]],[[38,105],[40,105]],{ah:[0,1],fd:[[-7,0],[-7,0]]})]};
+FIG.sphinx={poses:[Q([90,98],11,[[128,107],[131,107]],[[50,106],[53,106]],{ah:[-0.2,1],fd:[[-3,5],[-3,5]]}),Q([93,91],21,[[128,107],[131,107]],[[50,106],[53,106]],{ah:[-1,0],fd:[[-3,5],[-3,5]]})]};
+FIG.wallpush={props:'<line x1="140" y1="10" x2="140" y2="110" stroke="var(--muted)" stroke-width="4"/>',
+  poses:[Q([105.6,66.2],72,[[138,42],[138,42]],[[92,107],[95,107]],{ah:[0,1]}),Q([112.7,69.1],62,[[138,42],[138,42]],[[92,107],[95,107]],{ah:[0,1]})]};
+FIG.revplank={poses:[Q([108.8,90.5],159.5,[[80.7,108],[82.7,108]],[[150,106],[153,106]],{ah:[0,1],lh:[[0,-1],[0,-1]]}),Q([108.5,93],161,[[80.7,108],[82.7,108]],[[150,106],[153,106]],{ah:[0,1],lh:[[0,-1],[0,-1]]})]};
+FIG.hollow={poses:[Q(LIEP,172,[[40,98],[42,98]],[[138,88],[141,88]],{ah:[0,-1],lh:[[0,-1],[0,-1]],h:[57,100]}),Q(LIEP,176,[[40,102],[42,102]],[[140,92],[143,92]],{ah:[0,-1],lh:[[0,-1],[0,-1]],h:[57,102]})]};
+FIG.sumo={poses:[Q([110,62],90,[[124,52],[126,52]],[[110,108],[112,108]],{ah:[0,1]}),Q([100,84],76,[[122,56],[124,56]],[[110,108],[112,108]],{ah:[0,1]})]};
+FIG.split={poses:[Q([96,68],90,[[102,54],[98,54]],[[116,108],[72,106]],{ah:[-1,0.6],lh:[[1,0],[0.2,1]],fd:[[7,0],[-3,4]]}),Q([96,84],90,[[102,70],[98,70]],[[116,108],[72,106]],{ah:[-1,0.6],lh:[[1,0],[0.2,1]],fd:[[7,0],[-3,4]]})]};
+
+/* ---------- 대체 동작 화요일 (v1.52.0): 리버스 런지·글루트 브릿지·카프 레이즈 (스쿼트와 런지의 스플릿 스쿼트는 월요일 것을 그대로 써요) ---------- */
+X.sidelunge={n:'사이드 런지',r:['8~10회(한쪽)','10~12회(한쪽)','10~12회(한쪽)'],tips:['한 발을 옆으로 넓게 내딛고 발끝은 정면으로','앉는 쪽 무릎은 발끝과 같은 방향, 엉덩이는 뒤로 빼기','발을 쿵 내딛지 않고 사뿐히 디디기'],e:'옆으로 조금만 내딛고',h:'앉은 채 3초 버티기'};
+X.donkey={n:'덩키킥',r:['10~12회(한쪽)','12~15회(한쪽)','15회(한쪽)'],tips:['손은 어깨 아래, 무릎은 엉덩이 아래에 두기','허리가 꺾이지 않게 배에 힘 주기','올릴 때 엉덩이를 조이고 1초 멈춤'],e:'다리를 낮게 올려서',h:'올린 채 3초 버티기'};
+X.goodmorning={n:'굿모닝',r:['10~12회','12~15회','15회'],tips:['무릎은 살짝만 굽히고 엉덩이를 뒤로 밀기','등은 곧게 펴고 시선은 바닥 앞쪽','허리가 둥글어지기 전까지만 숙이기'],e:'조금 얕게 숙여서',h:'3초 내려가기'};
+X.seatedcalf={n:'시티드 카프 레이즈',r:['15~20회','20~25회','25회'],tips:['무릎을 직각으로 굽히고 발바닥 전체를 바닥에 두기','발뒤꿈치를 최대한 높이 들기','내려올 때 천천히'],e:'낮게 들어서',h:'올린 채 2초 버티기'};
+X.singlecalf={n:'한 발 카프 레이즈',r:['8~12회(한쪽)','10~15회(한쪽)','12~15회(한쪽)'],tips:['벽이나 난간을 가볍게 잡아 균형 잡기','발뒤꿈치를 최대한 높이 들기','내려올 때 3초 동안 천천히'],e:'반대 발끝을 바닥에 살짝 대고',h:'정점에서 2초 버티기'};
+D.sidelunge='한 발을 옆으로 크게 내딛고 그쪽 무릎을 굽혀 앉았다가 돌아오는 동작이에요. 허벅지 안쪽과 엉덩이를 써요.';
+D.donkey='네발로 엎드려 한 다리를 무릎을 굽힌 채 발바닥이 천장을 향하게 차올렸다 내리는 동작이에요. 엉덩이를 써요.';
+D.goodmorning='서서 손을 머리 뒤에 두고 엉덩이를 뒤로 밀며 상체를 숙였다 일어나는 동작이에요. 허벅지 뒤쪽과 엉덩이를 써요.';
+D.seatedcalf='의자에 앉아 발뒤꿈치를 들어 올렸다 내리는 동작이에요. 앉아서 하니 종아리 아래쪽을 더 써요.';
+D.singlecalf='한 발로 서서 발뒤꿈치를 들어 올렸다 내리는 동작이에요. 양발로 할 때보다 종아리에 힘이 더 실려요.';
+EASYS.sidelunge=['옆으로 조금만 내딛고',' 해 봐요'];
+EASYS.donkey=['다리를 낮게 올려서',' 해 봐요'];
+EASYS.goodmorning=['조금 얕게 숙여서',' 해 봐요'];
+EASYS.seatedcalf=['낮게 들어서',' 해 봐요'];
+EASYS.singlecalf=['반대 발끝을 바닥에 살짝 대고',' 해 봐요'];
+FEVB.sidelunge={b:3.5,m:'alt',fl:2}; FEVB.donkey={b:3,m:'seq'}; FEVB.goodmorning={b:4}; FEVB.seatedcalf={b:2}; FEVB.singlecalf={b:2};
+FIT_GRP.sidelunge='low'; FIT_GRP.donkey='low'; FIT_GRP.goodmorning='low'; FIT_GRP.seatedcalf='low'; FIT_GRP.singlecalf='low';
+FIG.sidelunge={poses:[Q([110,62],90,[[108,38],[112,38]],[[106,108],[114,108]],{ah:[0,1],fd:[[-3,0],[3,0]]}),Q([100,86],90,[[104,60],[108,60]],[[84,108],[140,108]],{ah:[0,1],lh:[[-1,0.2],[1,0]],fd:[[-3,0],[7,0]]}),Q([110,62],90,[[108,38],[112,38]],[[106,108],[114,108]],{ah:[0,1],fd:[[-3,0],[3,0]]}),Q([120,86],90,[[116,60],[120,60]],[[80,108],[136,108]],{ah:[0,1],lh:[[-1,0],[1,0.2]],fd:[[-7,0],[3,0]]})]};
+FIG.donkey={poses:[Q([84,80],3,[[118,108],[121,108]],[[60,108],[62,108]],{ah:[0.3,1],lh:[[1,0.5],[1,0.5]],fd:[[-3,3],[-3,3]],h:[124,84]}),Q([84,80],3,[[118,108],[121,108]],[[60,108],[61,60]],{ah:[0.3,1],lh:[[1,0.5],[-1,1]],fd:[[-3,3],[-6,-2]],h:[124,84]})]};
+FIG.goodmorning={poses:[Q([110,62],90,[[108,24],[111,24]],[[110,108],[112,108]],{ah:[-1,-0.6]}),Q([95,64],42,[[118,38],[121,38]],[[108,108],[110,108]],{ah:[-1,-0.6]})]};
+FIG.seatedcalf={props:'<g stroke="var(--muted)" stroke-width="3" stroke-linecap="round" fill="none"><line x1="50" y1="92" x2="94" y2="92"/><line x1="54" y1="92" x2="54" y2="110"/><line x1="90" y1="92" x2="90" y2="110"/><line x1="52" y1="92" x2="52" y2="60"/></g>',
+  poses:[Q([72,86],90,[[93,84],[95,84]],[[96,108],[100,108]],{ah:[0,1],lh:[[1,-0.5],[1,-0.5]],fd:[[7,0],[7,0]]}),Q([72,86],90,[[93,84],[95,84]],[[97,104],[101,104]],{ah:[0,1],lh:[[1,-0.5],[1,-0.5]],fd:[[6,4],[6,4]]})]};
+FIG.singlecalf={props:'<line x1="140" y1="10" x2="140" y2="110" stroke="var(--muted)" stroke-width="3"/>',
+  poses:[Q([110,62],90,[[136,36],[136,36]],[[110,108],[94,84]],{ah:[0,1],lh:[[1,0],[0.3,1]],fd:[[7,0],[-5,3]]}),Q([110,54],90,[[136,36],[136,36]],[[110,100],[94,76]],{ah:[0,1],lh:[[1,0],[0.3,1]],fd:[[6,8],[-5,3]]})]};
+
+/* ---------- 대체 동작 수요일 (v1.53.0): 크런치·레그 레이즈·바이시클 크런치·데드버그·슈퍼맨 (할로우 홀드·덩키킥·굿모닝은 앞서 만든 것을 그대로 써요) ---------- */
+X.heeltouch={n:'힐 터치',r:['10~12회(한쪽)','12~15회(한쪽)','15회(한쪽)'],tips:['어깨를 바닥에서 살짝 띄운 채 시작하기','몸을 옆으로 굽혀 손끝이 발뒤꿈치에 닿게','목에 힘을 빼고 시선은 천장'],e:'어깨를 조금만 들고',h:'터치할 때 1초 멈춤'};
+X.revcrunch={n:'리버스 크런치',r:['10~12회','12~15회','15회'],tips:['손바닥은 바닥을 짚어 몸을 받치기','반동 없이 아랫배 힘으로 말아 올리기','내릴 때 발을 쿵 놓지 않고 천천히'],e:'엉덩이를 조금만 들어서',h:'내릴 때 3초 버티며'};
+X.russian={n:'러시안 트위스트',r:['10~12회(한쪽)','12~15회(한쪽)','15~20회(한쪽)'],tips:['등은 둥글지 않게 펴고 상체를 뒤로 살짝 기울이기','팔만 흔들지 말고 가슴과 어깨까지 함께 돌리기','발은 바닥에 두고 시작해도 괜찮아요'],e:'발을 바닥에 둔 채로',h:'발을 든 채로'};
+X.sidecrunch={n:'사이드 크런치',r:['10~12회(한쪽)','12~15회(한쪽)','15회(한쪽)'],tips:['발은 어깨너비, 몸이 앞뒤로 숙여지지 않게 옆으로만 접기','옆구리를 조이며 팔꿈치와 무릎을 서로 가까이','발을 쿵 내딛지 않고 사뿐히'],e:'무릎은 조금만 올리고',h:'당긴 채 2초 버티기'};
+X.birddog={n:'버드독',r:['8~10회(한쪽)','10~12회(한쪽)','12회(한쪽)'],tips:['손은 어깨 아래, 무릎은 엉덩이 아래에 두기','허리가 처지거나 돌아가지 않게 배에 힘 주기','팔과 다리가 몸과 일자가 될 때까지만 뻗기'],e:'다리만 뻗어서',h:'뻗은 채 3초 버티기'};
+X.backext={n:'백 익스텐션',r:['10~12회','12~15회','15회'],tips:['이마를 바닥 가까이 두고 시선은 바닥 쪽으로','턱을 들지 않고 가슴만 살짝 들기','너무 젖히지 말고 정점에서 1초 멈춤'],e:'팔을 몸 옆에 두고',h:'정점에서 3초 버티기'};
+D.heeltouch='누워서 무릎을 세우고 어깨를 살짝 든 채, 손끝으로 좌우 발뒤꿈치를 번갈아 터치하는 동작이에요. 옆구리 복근을 써요.';
+D.revcrunch='누워서 무릎을 굽힌 채 엉덩이를 살짝 들어 무릎을 가슴 쪽으로 말아 올렸다 내리는 동작이에요. 아랫배를 써요.';
+D.russian='앉아서 상체를 뒤로 살짝 기울이고, 두 손을 모은 채 몸통을 좌우로 비트는 동작이에요. 옆구리와 배를 써요.';
+D.sidecrunch='서서 한 손을 머리 뒤에 두고, 같은 쪽 팔꿈치와 무릎을 옆으로 당겨 옆구리를 접었다 펴는 동작이에요. 옆구리를 써요.';
+D.birddog='네발로 엎드려 한쪽 팔과 반대쪽 다리를 동시에 쭉 뻗었다 돌아오는 동작이에요. 등과 엉덩이, 배를 써요.';
+D.backext='엎드려 두 손을 머리 뒤에 두고 상체를 들어 올렸다 내리는 동작이에요. 허리와 등 아래쪽을 써요.';
+EASYS.heeltouch=['어깨를 조금만 들고',' 해 봐요'];
+EASYS.revcrunch=['엉덩이를 조금만 들어서',' 해 봐요'];
+EASYS.russian=['발을 바닥에 둔 채로',' 해 봐요'];
+EASYS.sidecrunch=['무릎은 조금만 올리고',' 해 봐요'];
+EASYS.birddog=['다리만 뻗어서',' 해 봐요'];
+EASYS.backext=['팔을 몸 옆에 두고',' 해 봐요'];
+FEVB.heeltouch={b:2.5,m:'alt'}; FEVB.revcrunch={b:3}; FEVB.russian={b:2,m:'alt'}; FEVB.sidecrunch={b:3,m:'seq'}; FEVB.birddog={b:4,m:'seq'}; FEVB.backext={b:3};
+FIT_GRP.heeltouch='core'; FIT_GRP.revcrunch='core'; FIT_GRP.russian='core'; FIT_GRP.sidecrunch='core'; FIT_GRP.birddog='full'; FIT_GRP.backext='full';
+FIG.heeltouch={poses:[Q(LIEP,180,[[94,107],[96,107]],[[122,108],[125,108]],{ah:[0,1],lh:[[0.2,-1],[0.2,-1]],h:[57,105]}),Q(LIEP,162,[[98,104],[101,104]],[[122,108],[125,108]],{ah:[0,1],lh:[[0.2,-1],[0.2,-1]]})]};
+FIG.revcrunch={poses:[Q(LIEP,180,[[94,107],[96,107]],[[116,84],[118,84]],{ah:[0,1],lh:[[0.4,-1],[0.4,-1]],fd:[[6,0],[6,0]],h:[57,105]}),Q([100,98],180,[[94,107],[96,107]],[[86,80],[88,80]],{ah:[0,1],lh:[[1,-0.4],[1,-0.4]],fd:[[5,-3],[5,-3]],h:[57,105]})]};
+FIG.russian={poses:[Q([96,104],115,[[108,88],[110,88]],[[122,108],[125,108]],{ah:[0.5,1],lh:[[0.2,-1],[0.2,-1]]}),Q([96,104],115,[[100,100],[102,100]],[[122,108],[125,108]],{ah:[0.5,1],lh:[[0.2,-1],[0.2,-1]]})]};
+FIG.sidecrunch={poses:[Q([110,62],90,[[104,26],[116,26]],[[106,108],[114,108]],{ah:[-1,-0.6],fd:[[-3,0],[3,0]]}),Q([112,62],98,[[103,32],[111,32]],[[92,88],[116,108]],{ah:[-1,-0.6],lh:[[-1,0.2],[1,0]],fd:[[-3,0],[3,0]]})]};
+FIG.birddog={poses:[Q([84,80],3,[[118,108],[121,108]],[[60,108],[62,108]],{ah:[0.3,1],lh:[[1,0.5],[1,0.5]],fd:[[-3,3],[-3,3]],h:[124,84]}),Q([84,80],3,[[142,80],[121,108]],[[60,108],[40,82]],{ah:[0.3,1],lh:[[1,0.5],[1,0.5]],fd:[[-3,3],[-6,0]],h:[124,82]})]};
+FIG.backext={poses:[Q([90,104],0,[[124,99],[126,99]],[[38,105],[40,105]],{ah:[-1,-0.5],fd:[[-7,0],[-7,0]]}),Q([90,104],18,[[123,88],[125,88]],[[38,105],[40,105]],{ah:[-1,-0.5],fd:[[-7,0],[-7,0]]})]};
+
+/* ---------- 대체 동작 목요일 (v1.54.0): 리버스 스노우 엔젤·Y-T-W·마운틴 클라이머·불가리안 스플릿 스쿼트·월 싯·사이드 플랭크·사이드 라잉 레그 리프트 (슈퍼맨 등은 앞서 만든 것을 그대로 써요) ---------- */
+X.traise={n:'T 레이즈',r:['8~10회','10~12회','12회'],tips:['이마를 바닥 가까이 두고 목은 편하게','팔은 어깨 높이로 벌리고 엄지는 천장 쪽으로','허리를 꺾지 않고 날개뼈를 모으듯이'],e:'팔을 낮게 들고',h:'팔을 올린 채 2초 버티기'};
+X.highknee={n:'하이니 크런치',t:1,r:['20초','30초','40초'],tips:['상체를 곧게 세우고 무릎을 배꼽 높이까지','반대쪽 팔꿈치와 무릎을 몸 앞에서 맞대기','발을 쿵 구르지 않고 사뿐히'],e:'천천히 걷듯이',h:'속도 올리기'};
+X.squathold={n:'스쿼트 홀드',t:1,r:['20초','30초','40초'],tips:['발은 어깨너비, 무릎은 발끝과 같은 방향','엉덩이를 뒤로 빼고 가슴은 펴기','숨을 멈추지 말고 편하게 쉬기'],e:'조금 높게 앉아서',h:'더 깊게 앉아서'};
+X.sumohold={n:'스모 스쿼트 홀드',t:1,r:['20초','30초','40초'],tips:['발은 어깨보다 넓게, 발끝은 바깥쪽으로','무릎이 발끝과 같은 방향을 보게','상체를 곧게 세우고 엉덩이를 아래로'],e:'조금 높게 앉아서',h:'더 깊게 앉아서'};
+X.firehydrant={n:'파이어 하이드런트',r:['10~12회(한쪽)','12~15회(한쪽)','15회(한쪽)'],tips:['손은 어깨 아래, 무릎은 엉덩이 아래에 두기','몸통이 같이 기울지 않게 다리만 옆으로 들기','올릴 때 1초 멈추고 천천히 내리기'],e:'낮게 올려서',h:'올린 채 3초 버티기'};
+X.clamshell={n:'클램쉘',r:['10~12회(한쪽)','12~15회(한쪽)','15~20회(한쪽)'],tips:['무릎을 굽혀 두 발을 붙이고 골반은 정면으로','몸통이 뒤로 젖혀지지 않게 무릎만 벌리기','벌릴 때 1초 멈추고 천천히 닫기'],e:'조금만 벌려서',h:'벌린 채 3초 버티기'};
+D.traise='엎드려서 두 팔을 T자로 옆으로 벌려 들어 올렸다 내리는 동작이에요. 어깨 뒤쪽과 날개뼈 사이를 써요.';
+D.highknee='서서 무릎을 배꼽 높이까지 번갈아 끌어올리며 반대쪽 팔꿈치를 맞대는 동작이에요. 배와 허벅지 앞쪽을 써요.';
+D.squathold='벽 없이 의자에 앉듯이 무릎을 굽힌 채 그대로 버티는 동작이에요. 허벅지와 엉덩이를 써요.';
+D.sumohold='발을 어깨보다 넓게 벌리고 발끝을 바깥으로 향한 채 앉아서 그대로 버티는 동작이에요. 허벅지 안쪽과 엉덩이를 써요.';
+D.firehydrant='네발로 엎드려 한쪽 무릎을 굽힌 채 옆으로 들어 올렸다 내리는 동작이에요. 엉덩이 옆 근육을 써요.';
+D.clamshell='옆으로 누워 무릎을 굽히고 발은 붙인 채, 위쪽 무릎을 조개가 열리듯 벌렸다 닫는 동작이에요. 엉덩이 옆 근육을 써요.';
+EASYS.traise=['팔을 낮게 들고',' 해 봐요'];
+EASYS.highknee=['천천히 걷듯이',' 해 봐요'];
+EASYS.squathold=['조금 높게 앉아서',' 해 봐요'];
+EASYS.sumohold=['조금 높게 앉아서',' 해 봐요'];
+EASYS.firehydrant=['낮게 올려서',' 해 봐요'];
+EASYS.clamshell=['조금만 벌려서',' 해 봐요'];
+FEVB.traise={b:3}; FEVB.highknee={b:1,h:1,fl:2}; FEVB.squathold={b:1,h:1}; FEVB.sumohold={b:1,h:1}; FEVB.firehydrant={b:3,m:'seq'}; FEVB.clamshell={b:3,m:'seq'};
+FIT_GRP.traise='full'; FIT_GRP.highknee='full'; FIT_GRP.squathold='low'; FIT_GRP.sumohold='low'; FIT_GRP.firehydrant='low'; FIT_GRP.clamshell='low';
+FIG.traise={poses:[Q([90,104],0,[[122,106],[124,106]],[[38,105],[40,105]],{ah:[0,1],fd:[[-7,0],[-7,0]]}),Q([90,104],8,[[126,90],[128,90]],[[38,105],[40,105]],{ah:[0,-1],fd:[[-7,0],[-7,0]]})]};
+FIG.highknee={poses:[Q([110,62],90,[[112,52],[124,60]],[[128,88],[112,108]],{ah:[0.4,1],lh:[[1,-0.5],[1,0]],fd:[[5,2],[6,0]]}),Q([110,62],90,[[124,60],[112,52]],[[110,108],[128,88]],{ah:[0.4,1],lh:[[1,0],[1,-0.5]],fd:[[6,0],[5,2]]})]};
+FIG.squathold={poses:[Q([88,82],60,[[128,58],[130,58]],[[110,108],[112,108]],{ah:[0,1]}),Q([88,85],60,[[128,60],[130,60]],[[110,108],[112,108]],{ah:[0,1]})],dur:2.6};
+FIG.sumohold={poses:[Q([100,84],76,[[122,56],[124,56]],[[110,108],[112,108]],{ah:[0,1]}),Q([100,87],76,[[122,58],[124,58]],[[110,108],[112,108]],{ah:[0,1]})],dur:2.6};
+FIG.firehydrant={poses:[Q([84,80],3,[[118,108],[121,108]],[[60,108],[62,108]],{ah:[0.3,1],lh:[[1,0.5],[1,0.5]],fd:[[-3,3],[-3,3]],h:[124,84]}),Q([84,80],3,[[118,108],[121,108]],[[60,108],[70,70]],{ah:[0.3,1],lh:[[1,0.5],[0,-1]],fd:[[-3,3],[-4,-2]],h:[124,84]})]};
+FIG.clamshell={poses:[Q([108,103],180,[[80,100],[82,100]],[[136,106],[138,104]],{ah:[0.3,1],lh:[[1,-0.4],[1,-0.4]],fd:[[4,0],[4,0]]}),Q([108,103],180,[[80,100],[82,100]],[[136,106],[132,92]],{ah:[0.3,1],lh:[[1,-0.4],[0.2,-1]],fd:[[4,0],[4,0]]})]};
+
+/* ---------- 플랭크 숄더 탭 (v1.55.0): 데드버그(수)·마운틴 클라이머(목·금)·인치웜(토)의 대체 ---------- */
+X.shouldertap={n:'플랭크 숄더 탭',r:['8~10회(한쪽)','10~12회(한쪽)','12~15회(한쪽)'],tips:['발을 어깨너비보다 넓게 벌리면 덜 흔들려요','엉덩이가 좌우로 흔들리지 않게 배에 힘 주기','손을 뗄 때 반대쪽 팔로 몸을 단단히 받치기'],e:'무릎을 대고',h:'발을 모으고'};
+D.shouldertap='팔굽혀펴기 자세에서 한 손으로 반대쪽 어깨를 번갈아 터치하는 동작이에요. 몸을 흔들지 않고 버티며 배와 어깨를 써요.';
+EASYS.shouldertap=['무릎을 대고',' 해 봐요'];
+FEVB.shouldertap={b:2,m:'alt',fl:2};
+FIT_GRP.shouldertap='core';
+FIG.shouldertap={poses:[Q([96,90],20,[[128,108],[131,108]],[[52,106],[55,106]],{ah:[-1,0],fd:[[-3,5],[-3,5]]}),Q([96,90],20,[[121,84],[131,108]],[[52,106],[55,106]],{ah:[0,-1],fd:[[-3,5],[-3,5]]}),Q([96,90],20,[[128,108],[131,108]],[[52,106],[55,106]],{ah:[-1,0],fd:[[-3,5],[-3,5]]}),Q([96,90],20,[[128,108],[123,84]],[[52,106],[55,106]],{ah:[-1,0],fd:[[-3,5],[-3,5]]})]};
+
+(function(){
+  Object.keys(XALT).forEach(function(o){ XALT[o].forEach(function(a){ var c=o+'~'+a; X[c]=X[a]; D[c]=D[a]; FIG[c]=FIG[a]; FEVB[c]=FEVB[a]; EASYS[c]=EASYS[a]; FIT_GRP[c]=FIT_GRP[a]; }); });
+})();
+/* 그날(k) 칸(slot)에 보여 줄 대체 목록(요일별). 적용일(XALT_FROM) 전 날짜는 옛 목록(월요일만) */
+function xaltOf(slot,k){
+  var dk=DK[parse(k).getDay()], m;
+  if(!XALT || !XA_DAYS[dk] || !XALT[slot]) return null;
+  if(k<XALT_FROM) return (dk==='mon' && XALT_OLD[slot])?XALT_OLD[slot]:null;
+  m=XALT_DAY[dk]; return (m && m[slot])?m[slot]:null;
+}
+function hasXs(L,slot){ return !!(L && L.xs && Object.prototype.hasOwnProperty.call(L.xs,slot)); }
+/* 그날(k) 칸(slot)에서 고른 대체 id. ''이면 원래 동작. 지난 날은 그날 기록에 남은 값만 믿고, 오늘 이후는 기록이 없으면 직전에 고른 값을 이어받아요 */
+function xsSel(slot,k){
+  var L=S.log[k], ks, i, a, off=xaltOf(slot,k), v;
+  if(!XALT || !XALT[slot]) return '';
+  if(hasXs(L,slot)){
+    v=L.xs[slot];
+    if(!v || XALT[slot].indexOf(v)<0) return '';
+    /* 지난 날은 그날 기록 그대로. 오늘 이후는 그날 목록에 있거나 세트를 이미 체크했을 때만 인정(새 목록에 없는 옛 선택은 원래 동작으로) */
+    if(k<fmt(TODAY) || (off && off.indexOf(v)>=0) || xsLocked(slot+'~'+v,k)) return v;
+    return '';
+  }
+  if(k<fmt(TODAY) || !off) return '';
+  ks=Object.keys(S.log).filter(function(x){ return x<k; }).sort();
+  for(i=ks.length-1;i>=0;i--){ a=S.log[ks[i]]; if(hasXs(a,slot)) return (off.indexOf(a.xs[slot])>=0)?a.xs[slot]:''; }
+  return '';
+}
+/* 세트를 체크하기 전에 그날 고른 값을 그날 기록에 굳혀요(나중에 지난 날 기록이 같은 동작으로 계산되게) */
+function xsFreeze(k){
+  var dk=DK[parse(k).getDay()], L=wr(k);
+  if(dk==='sun' || !XA_DAYS[dk]) return;
+  exForBase(dk,k).forEach(function(sl){ if(XALT[sl]){ if(!L.xs) L.xs={}; if(!hasXs(L,sl)) L.xs[sl]=xsSel(sl,k); } });
+}
+function xsLocked(cid,k){ var L=rd(k), i; for(i=1;i<=SETS;i++){ if(L.done[cid+'-'+i]) return true; } return false; }
+function xsPick(k,slot,to){
+  var L, cur;
+  if(!xaltOf(slot,k) || !(to==='' || xaltOf(slot,k).indexOf(to)>=0) || isEnded(k) || rd(k).fin){ render(); return; }
+  cur=slot+(xsSel(slot,k)?'~'+xsSel(slot,k):'');
+  if(xsLocked(cur,k)){ render(); return; }
+  L=wr(k); if(!L.xs) L.xs={}; L.xs[slot]=to; save(); render();
+}
+function xsFit(){
+  var ws=app.querySelectorAll('.xsw'), i, w, sl;
+  for(i=0;i<ws.length;i++){ w=ws[i]; sl=w.querySelectorAll('.xsl')[parseInt(w.getAttribute('data-i'),10)||0]; if(sl) w.style.height=sl.offsetHeight+'px'; }
+}
+window.addEventListener('resize',function(){ xsUniform(); xsFit(); });
+try{ if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ xmCache={}; xsUniform(); xsFit(); }); }catch(e){}
+/* 밀기(스와이프): 가로로 9px 넘게, 세로보다 크게 움직이면 카드를 따라 움직이고, 28% 넘게 밀거나 빠르게 밀면 옆 동작으로 바꿔요 */
+var xsBlock=0, xsD=null;
+app.addEventListener('pointerdown',function(e){
+  var w=e.target.closest?e.target.closest('.xsw'):null; if(!w || (e.pointerType==='mouse' && e.button!==0)) return;
+  xsD={w:w,x:e.clientX,y:e.clientY,dx:0,m:0,i:parseInt(w.getAttribute('data-i'),10)||0,n:parseInt(w.getAttribute('data-n'),10)||1,t:Date.now(),tr:null};
+});
+app.addEventListener('pointermove',function(e){
+  var d=xsD, dx, dy, W, off; if(!d) return;
+  dx=e.clientX-d.x; dy=e.clientY-d.y;
+  if(!d.m){
+    if(Math.abs(dx)>9 && Math.abs(dx)>Math.abs(dy)*1.3){ d.m=1; d.tr=d.w.querySelector('.xtr'); d.tr.classList.add('dr'); try{ d.w.setPointerCapture(e.pointerId); }catch(x){} }
+    else if(Math.abs(dy)>9){ xsD=null; return; }
+    else return;
+  }
+  d.dx=dx; W=d.w.clientWidth; off=dx;
+  if((d.i===0 && dx>0) || (d.i===d.n-1 && dx<0)) off=dx*0.3;
+  d.tr.style.transform='translateX('+(-d.i*W+off)+'px)';
+});
+function xsEnd(cancel){
+  var d=xsD, W, dx, v, ni, vs, slot, to; xsD=null; if(!d || !d.m) return;
+  xsBlock=Date.now();
+  W=d.w.clientWidth; dx=d.dx; v=Math.abs(dx)/Math.max(1,Date.now()-d.t); ni=d.i;
+  if(!cancel && (Math.abs(dx)>W*0.28 || (Math.abs(dx)>30 && v>0.5))) ni=d.i+(dx<0?1:-1);
+  ni=Math.max(0,Math.min(d.n-1,ni));
+  d.tr.classList.remove('dr'); d.tr.style.transform='translateX(-'+(ni*100)+'%)';
+  if(ni!==d.i){
+    vs=d.w.getAttribute('data-v').split(','); slot=d.w.getAttribute('data-slot'); to=vs[ni]||'';
+    setTimeout(function(){ xsPick(fmt(sel),slot,to); },reduceMotion()?0:230);
+  }
+}
+app.addEventListener('pointerup',function(){ xsEnd(false); });
+app.addEventListener('pointercancel',function(){ xsEnd(true); });
+
 function fitGrpName(n){
   n=String(n);
   if(/푸시업|딥스/.test(n)) return 'up';

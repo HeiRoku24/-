@@ -1628,8 +1628,12 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.57.2', APP_DATE='2026-10-13', showChg=false;
+var APP_VER='1.58.1', APP_DATE='2026-10-13', showChg=false;
 var CHANGES=[
+['1.58.1','퀘스트 카드를 옆으로 밀어 대체 동작을 보는 방법을 반디가 처음 한 번 안내해요(3단계). 오늘 탭 첫 안내가 끝난 뒤 평일 운동 카드가 처음 보일 때 나오고, 이미 대체 동작을 써 본 분께는 나오지 않아요'],
+['1.58.0','훈련장에서 가론에게 새 동작을 배울 때(교본이 펼쳐지고 동작 그림이 한 장씩 넘어가요)와 대장간에서 브룬에게 장비를 만들 때(망치로 두드리면 불꽃이 튀고 달궈진 장비가 식으며 드러나요, 만들 때마다 나와요) 짧은 연출이 나와요. 건너뛰기를 누르거나 폰 뒤로가기를 누르면 바로 결과 창으로 가요. 기록과 재료는 그대로예요'],
+['1.57.4','토요일 인치웜의 대체 동작이 아이언에서 하나, 브론즈에서 하나씩 열리도록 바꿨어요(다운독은 아이언, 버드독은 브론즈). 예전에 쓰던 «플랭크 숄더 탭»은 토요일 인치웜에서 빠졌고 수·목요일 대체로는 그대로예요'],
+['1.57.3','아이언 랭크가 돼서 가론의 첫 수업이 열리면, 알림을 확인한 뒤 훈련장에서 반디가 «가론의 수업»과 «배운 동작»을 한 번 안내해요. 예전에 보던 훈련장 안내는 그대로이고, 거기서 «자유 러닝» 설명이 수업 카드를 같이 짚던 것도 바로잡았어요'],
 ['1.57.2','시작화면의 둥근 나무(화요일·일요일)·감시탑·가로등·깃발·꽃·통나무·성벽 조각 등 일부 소품이 위쪽이나 옆이 잘려 보이던 것을 고치고, 비 오는 날 우산의 왼쪽 끝이 잘리던 것도 고쳤어요(우산 갓을 살짝 줄였어요)'],
 ['1.57.1','비 오는 날 시작화면에서 우산을 든 용사가 방패도 들고 있을 때, 손이 방패를 뚫고 나온 것처럼 보이던 그림을 고쳤어요. 이제 방패는 팔뚝(팔꿈치 쪽)에 차고 손은 우산 막대를 쥐어요'],
 ['1.57.0','대체 운동이 랭크 보상이 됐어요. 아이언 랭크가 되면 훈련장의 교관 가론에게 첫 번째 수업을, 브론즈 랭크가 되면 두 번째 수업을 들을 수 있어요. 배운 동작은 퀘스트 카드를 밀어서 쓰거나 훈련장 자유 훈련의 «배운 동작»에서 할 수 있어요. 아직 못 배운 대체 운동은 카드를 밀면 흐리게 미리 볼 수 있어요. 예전에 대체 운동으로 한 기록은 같은 계열의 기본 운동으로 한 것으로 바뀌어요(XP와 기록은 그대로예요)'],
@@ -4072,10 +4076,12 @@ function askCraft(id){
 function doCraft(id){
   var it=itemById(id); if(!it || !it.craft || !craftable(it)) return;
   var achB=unlocked();
-  S.inv=S.inv||{}; S.inv[id]=true; S.crafted=S.crafted||{}; S.crafted[id]=true; save(); kRefresh();
-  achDiffToast(achB);
-  var eq=curEq(); if(eq.pj && !isWeaponSlot(it.slot)) eq={}; eq[it.slot]=it;
+  S.inv=S.inv||{}; S.inv[id]=true; S.crafted=S.crafted||{}; S.crafted[id]=true; save(); kRefresh();   /* 저장을 먼저 끝내고 → 브룬 제작 연출(만들 때마다 매번) → 기존 결과 창 (v1.58.0) */
+  LFX.forge(it,function(){
+    achDiffToast(achB);
+    var eq=curEq(); if(eq.pj && !isWeaponSlot(it.slot)) eq={}; eq[it.slot]=it;
   showOverlay({k:it.rar==='l'?'LEGENDARY FORGED':'FORGED',t:'제작 완료!',b:'<div class="lootcard r-'+it.rar+'"><div class="lootimg">'+itemIcon(it,true)+'</div><p class="lootn">'+it.name+'</p><p class="lootr">'+RARN[it.rar]+' · '+SLOTN[it.slot]+'</p></div><div class="lootpv">'+heroPreview(eq,it.job)+'</div><button type="button" class="primary" data-a="loot-equip" data-id="'+it.id+'" style="margin-bottom:8px">바로 입기</button>',mode:'win'});
+  });
 }
 /* ----- 제작 장비 그림 (머리·가슴·왼손 방패) ----- */
 function helmArt(it){
@@ -6702,6 +6708,175 @@ function showOverlay(o){
     }
   }catch(e){}
 }
+/* ---------- v1.58.0 가론 수업·브룬 제작 연출 (HeiRoku 확정 2026-10-13, 인수인계서 1-A74) ----------
+   [배우기]·[만들기]를 누르면 상태 저장(lsLearn·doCraft)을 먼저 끝낸 뒤 이 연출을 보여 주고(건너뛰기 가능), 끝나거나 건너뛰면 기존 결과 창(done)이 이어서 떠요.
+   연출은 화면 장식이라 기록·XP·랭크·재료 계산은 건드리지 않아요. 연출 중 폰 뒤로가기·Esc는 건너뛰기와 같아요(bkAct). 반디·가이드·응원은 busy 점검(bdBusy·cheerBusy·fevHeld)이 기다려요.
+   화면 움직임 줄이기를 켠 기기에서는 움직임 없이 정지 그림·불꽃·소리만 순서대로 보여 줘요. CSS 클래스·키프레임은 전부 lfx 접두어예요(앱 CSS와 겹치지 않게, 7장). */
+var LFX=(function(){
+  var el=null, tm=[], doneFn=null, OLC='#2B2138';
+  var css=document.createElement('style'); css.id='lfxcss';
+  css.textContent=
+  '#lfx{position:fixed;left:0;top:0;right:0;bottom:0;z-index:950;overflow:hidden;display:grid;place-items:center;word-break:keep-all;color:#fff;font-family:inherit;user-select:none;-webkit-user-select:none;touch-action:none}'+
+  '#lfx .lfx-skip{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;z-index:5;border:2px solid rgba(255,255,255,.6);background:rgba(10,14,28,.55);color:#fff;border-radius:999px;padding:8px 16px;margin:0;width:auto;min-height:0;font:inherit;font-size:14px;font-weight:700;box-shadow:none;touch-action:manipulation}'+
+  /* 가론 수업 */
+  '#lfx.lfx-ls{background:radial-gradient(ellipse at 50% 38%,#2c4272 0%,#141c36 62%,#0a0f1f 100%)}'+
+  '#lfx .lfx-hd{position:absolute;top:calc(22px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;color:#FFE9A8}'+
+  '#lfx .lfx-hd b{display:block;font-size:22px}#lfx .lfx-hd small{display:block;margin-top:2px;font-size:13px;color:#C9D4E8}'+
+  '#lfx .lfx-book{position:relative;width:min(88vw,340px);height:min(56vh,360px);margin-top:8px}'+
+  '#lfx .lfx-par{position:absolute;left:0;top:0;right:0;bottom:0;background:linear-gradient(#EFDDB0,#E3CC93);border:4px solid #2B2138;border-radius:10px;transform:scaleY(.04);animation:lfxOpen .6s .15s ease-out forwards;box-shadow:0 10px 0 rgba(0,0,0,.28),0 0 40px rgba(255,214,120,.35)}'+
+  '#lfx .lfx-par:before,#lfx .lfx-par:after{content:"";position:absolute;left:-10px;right:-10px;height:20px;background:#8B5A2B;border:3px solid #2B2138;border-radius:10px}'+
+  '#lfx .lfx-par:before{top:-16px}#lfx .lfx-par:after{bottom:-16px}'+
+  '@keyframes lfxOpen{to{transform:scaleY(1)}}'+
+  '#lfx .lfx-cards{position:absolute;left:0;top:0;right:0;bottom:0}'+
+  '#lfx .lfx-card{position:absolute;left:50%;top:50%;width:min(62vw,236px);background:#FFF6DC;border:3px solid #2B2138;border-radius:14px;padding:8px 10px 12px;text-align:center;color:#2B2138;box-shadow:0 8px 0 rgba(0,0,0,.25);opacity:0;animation:lfxFly .72s ease-out forwards}'+
+  '#lfx .lfx-card b{display:block;margin-top:2px;font-size:19px}'+
+  '#lfx .lfx-fig svg{width:100%;height:auto;display:block;max-height:150px}'+
+  '@keyframes lfxFly{0%{opacity:0;transform:translate(-50%,-32%) rotate(9deg) scale(.7)}22%{opacity:1;transform:translate(-50%,-50%) rotate(-2deg) scale(1.03)}60%{opacity:1;transform:translate(-50%,-50%) rotate(-2deg) scale(1)}100%{opacity:0;transform:translate(-125%,-60%) rotate(-14deg) scale(.86)}}'+
+  '#lfx .lfx-cnt{position:absolute;left:0;right:0;bottom:-50px;text-align:center;color:#FFE9A8;font-size:20px;font-weight:800}'+
+  '#lfx .lfx-cnt b{font-size:28px}'+
+  '#lfx .lfx-stamp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-8deg) scale(2.6);opacity:0;border:5px solid #E5484D;color:#E5484D;background:rgba(255,248,230,.95);padding:12px 24px;border-radius:12px;text-align:center;font-weight:900;font-size:26px;line-height:1.25;white-space:nowrap;pointer-events:none}'+
+  '#lfx .lfx-stamp small{display:block;margin-top:2px;font-size:15px;color:#8A2E2E}'+
+  '#lfx.lfx-stamped .lfx-stamp{animation:lfxStamp .55s cubic-bezier(.2,1.4,.4,1) forwards}'+
+  '@keyframes lfxStamp{0%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scale(2.6)}55%{opacity:1;transform:translate(-50%,-50%) rotate(-8deg) scale(.94)}100%{opacity:1;transform:translate(-50%,-50%) rotate(-8deg) scale(1)}}'+
+  '#lfx.lfx-stamped .lfx-book{animation:lfxShake .38s .32s}#lfx.lfx-stamped .lfx-par{filter:brightness(.7)}'+
+  '@keyframes lfxShake{0%,100%{transform:translate(0,0)}20%{transform:translate(-6px,3px)}40%{transform:translate(5px,-3px)}60%{transform:translate(-4px,2px)}80%{transform:translate(3px,-1px)}}'+
+  /* 브룬 제작 */
+  '#lfx.lfx-fg{background:radial-gradient(ellipse at 50% 88%,#9A3A14 0%,#3A170B 52%,#140806 100%)}'+
+  '#lfx .lfx-stage{position:relative;width:min(88vw,320px);aspect-ratio:320/360}'+
+  '#lfx .lfx-stage>svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;max-width:none}'+
+  '#lfx.lfx-shake .lfx-stage{animation:lfxShake .42s}'+
+  '#lfx .lfx-hm{transform-origin:255px 120px;transform:rotate(72deg)}'+
+  '@keyframes lfxHit{0%{transform:rotate(72deg)}55%{transform:rotate(0deg)}70%{transform:rotate(12deg)}100%{transform:rotate(72deg)}}'+
+  '#lfx .lfx-item{position:absolute;left:31.25%;top:35%;width:37.5%;height:33.3%;opacity:0;transition:opacity .35s}'+
+  '#lfx .lfx-item.lfx-on{opacity:1}'+
+  '#lfx .lfx-item svg{width:100%;height:100%;overflow:visible;display:block;max-width:none}'+
+  '#lfx .lfx-item.lfx-hot{filter:sepia(1) saturate(6) hue-rotate(-18deg) brightness(1.2) drop-shadow(0 0 14px rgba(255,140,40,.9))}'+
+  '#lfx .lfx-item.lfx-cool{filter:none;transition:filter 1.2s ease-out,opacity .35s}'+
+  '#lfx .lfx-item.lfx-pulse{animation:lfxPulse .2s}'+
+  '@keyframes lfxPulse{0%{transform:scale(1.09)}100%{transform:scale(1)}}'+
+  '#lfx .lfx-sp{position:absolute;left:50%;top:57%;width:0;height:0}'+
+  '#lfx .lfx-sp i{position:absolute;left:0;top:0;width:var(--s,7px);height:var(--s,7px);margin:-3px 0 0 -3px;border-radius:50%;background:var(--c,#FFC24A);box-shadow:0 0 8px var(--c,#FFC24A);animation:lfxSp .6s ease-out forwards}'+
+  '@keyframes lfxSp{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}'+
+  '#lfx .lfx-flash{position:absolute;left:0;top:0;right:0;bottom:0;background:var(--fc,#FFD9A0);opacity:0;pointer-events:none}'+
+  '#lfx .lfx-flash.lfx-go{animation:lfxFlash var(--fd,.4s) ease-out}'+
+  '@keyframes lfxFlash{0%{opacity:.8}100%{opacity:0}}'+
+  '#lfx .lfx-ring{position:absolute;left:50%;top:57%;width:60px;height:60px;margin:-30px 0 0 -30px;border:4px solid #C8EBFF;border-radius:50%;opacity:0}'+
+  '#lfx .lfx-ring.lfx-go{animation:lfxRing .7s ease-out}'+
+  '@keyframes lfxRing{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(5)}}'+
+  '#lfx .lfx-rays{position:absolute;left:50%;top:48%;width:560px;height:560px;margin:-280px 0 0 -280px;background:repeating-conic-gradient(from 0deg,rgba(255,226,130,.55) 0 8deg,rgba(255,226,130,0) 8deg 20deg);-webkit-mask:radial-gradient(circle,#000 0,#000 18%,transparent 62%);mask:radial-gradient(circle,#000 0,#000 18%,transparent 62%);opacity:0;pointer-events:none}'+
+  '#lfx .lfx-rays.lfx-go{opacity:1;animation:lfxSpin 6s linear infinite,lfxFade 1.1s ease-out}'+
+  '@keyframes lfxSpin{to{transform:rotate(360deg)}}@keyframes lfxFade{0%{opacity:0}100%{opacity:1}}@keyframes lfxBlink{0%{opacity:.95}100%{opacity:0}}'+
+  '#lfx.lfx-fg.lfx-done .lfx-hm{opacity:0;transition:opacity .5s}'+
+  /* 좁은 화면(폭 360 이하): 건너뛰기 버튼을 조금 작게 해서 가운데 제목("가론의 수업")과 겹치지 않게 해요 */
+  '@media (max-width:360px){#lfx .lfx-skip{right:10px;padding:7px 12px;font-size:13px}}'+
+  /* 화면 움직임 줄이기: 교본·카드·망치·불꽃 이동·고리 확대·회전 광선·흔들림 없이 제자리에서 나타났다 사라져요 */
+  '@media (prefers-reduced-motion: reduce){#lfx .lfx-par{animation:none;transform:none}#lfx .lfx-card{animation:none;opacity:1;transform:translate(-50%,-50%)}#lfx.lfx-stamped .lfx-stamp{animation:none;opacity:1;transform:translate(-50%,-50%) rotate(-8deg)}#lfx.lfx-stamped .lfx-book,#lfx.lfx-shake .lfx-stage{animation:none}#lfx .lfx-hm{animation:none !important}#lfx .lfx-item.lfx-pulse{animation:none}#lfx .lfx-sp i{animation:lfxBlink .6s ease-out forwards;transform:translate(var(--dx),var(--dy)) scale(.6)}#lfx .lfx-ring.lfx-go{animation:lfxBlink .7s ease-out forwards;opacity:.95;transform:scale(2.4)}#lfx .lfx-rays.lfx-go{animation:lfxFade 1.1s ease-out}}';
+  document.head.appendChild(css);
+
+  function T(fn,ms){ tm.push(setTimeout(function(){ try{ fn(); }catch(e){} },ms)); }
+  function snd(name,duck,lvl,fb){ try{ if(!BGM.sfx(name,duck,lvl) && fb) fb(); }catch(e){} }
+  function vib(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+  function open(cls,label,done){
+    el=document.createElement('div'); el.id='lfx'; el.className=cls; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true'); el.setAttribute('aria-label',label);
+    doneFn=done||null; document.body.appendChild(el); return el;
+  }
+  /* 끝나거나 건너뛰면 연출 층을 지우고 기존 결과 창(done)을 한 번만 이어서 띄워요 */
+  function finish(){
+    if(!el) return;
+    var d=doneFn, e=el; doneFn=null; el=null;
+    tm.forEach(clearTimeout); tm=[];
+    if(e.parentNode) e.parentNode.removeChild(e);
+    vib(0);
+    if(d){ try{ d(); }catch(x){} }
+  }
+  document.addEventListener('keydown',function(e){ if(el && e.key==='Escape') finish(); });
+
+  /* ---------- ① 가론의 수업 [배우기] ---------- */
+  function lesson(t,done){
+    var ids=LS_LIST[t], n, rn, red=reduceMotion(), cards, cnt, STEP, t0, endAt;
+    if(el || !ids){ if(done) done(); return; }
+    try{
+      n=ids.length; rn=RANKS[LESSON_RANK[t]].n;
+      open('lfx-ls','가론의 수업 연출',done);
+      el.innerHTML='<button type="button" class="lfx-skip">건너뛰기</button>'+
+        '<div class="lfx-hd"><b>가론의 수업</b><small>기사단 교관 가론</small></div>'+
+        '<div class="lfx-book"><div class="lfx-par"></div><div class="lfx-cards"></div><div class="lfx-cnt"><b class="lfx-c">0</b> / '+n+'</div></div>'+
+        '<div class="lfx-stamp"><span>'+rn+' 수업 완료</span><small>새 동작 '+n+'가지</small></div>';
+      el.querySelector('.lfx-skip').onclick=finish;
+      cards=el.querySelector('.lfx-cards'); cnt=el.querySelector('.lfx-c'); STEP=red?450:260; t0=red?200:750;
+      snd('blip',0.3,0.5,function(){ tone(523,0,0.1,0.06); });
+      ids.forEach(function(id,i){
+        T(function(){
+          if(!el) return;
+          cnt.textContent=i+1;
+          var c=document.createElement('div'); c.className='lfx-card';
+          c.innerHTML='<div class="lfx-fig">'+figSvg(FIG[id],!red,X[id].n)+'</div><b>'+X[id].n+'</b>';
+          cards.appendChild(c);
+          snd('blip',0.12,0.45,function(){ tone(600+i*28,0,0.07,0.05); });
+          T(function(){ if(c.parentNode) c.parentNode.removeChild(c); },red?STEP:760);
+        },t0+i*STEP);
+      });
+      endAt=t0+n*STEP+300;
+      T(function(){ if(!el) return; el.classList.add('lfx-stamped'); snd('win',1.4,0.4,function(){ fanfare(); }); vib([60,40,90]); },endAt);
+      T(finish,endAt+2000);
+    }catch(e){ finish(); }
+  }
+
+  /* ---------- ② 브룬의 제작 [만들기] (일반 3번·희귀 4번·전설 5번 두드려요) ---------- */
+  function forge(it,done){
+    var n, rar, red=reduceMotion(), anvil, hammer, item, hm, sp, fl, ring, rays, cols, S0, GAP, k, tEnd;
+    if(el || !it){ if(done) done(); return; }
+    try{
+      rar=it.rar; n=({n:3,r:4,l:5})[rar]||3;
+      open('lfx-fg','장비 제작 연출',done);
+      anvil='<ellipse cx="160" cy="330" rx="118" ry="14" fill="rgba(0,0,0,.35)"/>'+
+        '<path d="M66,248 L112,248 L112,272 L92,272 Q74,268 66,248 Z" fill="#8791A5" stroke="'+OLC+'" stroke-width="3" stroke-linejoin="round"/>'+
+        '<path d="M130,272 L190,272 L184,306 L136,306 Z" fill="#6B7487" stroke="'+OLC+'" stroke-width="3" stroke-linejoin="round"/>'+
+        '<rect x="112" y="306" width="96" height="18" rx="4" fill="#5C6577" stroke="'+OLC+'" stroke-width="3"/>'+
+        '<rect x="104" y="246" width="112" height="28" rx="5" fill="#99A3B7" stroke="'+OLC+'" stroke-width="3"/>'+
+        '<rect x="110" y="249" width="100" height="6" rx="3" fill="rgba(255,255,255,.45)"/>';
+      hammer='<g class="lfx-hm"><line x1="255" y1="120" x2="172" y2="203" stroke="'+OLC+'" stroke-width="13" stroke-linecap="round"/><line x1="255" y1="120" x2="172" y2="203" stroke="#A8743A" stroke-width="7" stroke-linecap="round"/>'+
+        '<circle cx="255" cy="120" r="8" fill="#F6C445" stroke="'+OLC+'" stroke-width="3"/>'+
+        '<g transform="translate(160,215) rotate(45)"><rect x="-27" y="-15" width="54" height="30" rx="5" fill="#8E98AC" stroke="'+OLC+'" stroke-width="3.2"/><rect x="-22" y="-10" width="44" height="7" rx="3" fill="rgba(255,255,255,.45)"/></g></g>';
+      el.innerHTML='<button type="button" class="lfx-skip">건너뛰기</button><div class="lfx-stage"><div class="lfx-rays"></div><svg viewBox="0 0 320 360" aria-hidden="true">'+anvil+'</svg><div class="lfx-item lfx-hot">'+itemIcon(it,true)+'</div><svg viewBox="0 0 320 360" aria-hidden="true">'+hammer+'</svg><div class="lfx-sp"></div><div class="lfx-ring"></div></div><div class="lfx-flash"></div>';
+      el.querySelector('.lfx-skip').onclick=finish;
+      item=el.querySelector('.lfx-item'); hm=el.querySelector('.lfx-hm'); sp=el.querySelector('.lfx-sp'); fl=el.querySelector('.lfx-flash'); ring=el.querySelector('.lfx-ring'); rays=el.querySelector('.lfx-rays');
+      cols=({n:['#FFC24A','#FF8A2A','#FFE9A8'],r:['#C8EBFF','#7FC8FF','#FFE9A8','#FFC24A'],l:['#FFE27A','#FFFFFF','#FFB347','#FFD94A']})[rar]||['#FFC24A','#FF8A2A','#FFE9A8'];
+      S0=red?300:800; GAP=red?600:560;
+      var sparks=function(cnt,big){
+        var i, e, a, d;
+        for(i=0;i<cnt;i++){
+          a=(-Math.PI*(0.08+0.84*Math.random())); d=(big?110:70)+Math.random()*(big?150:90);
+          e=document.createElement('i');
+          e.style.cssText='--dx:'+Math.round(Math.cos(a)*d*(Math.random()<.5?-1:1))+'px;--dy:'+Math.round(Math.sin(a)*d+30*Math.random())+'px;--c:'+cols[i%cols.length]+';--s:'+(4+Math.round(Math.random()*(big?7:4)))+'px';
+          sp.appendChild(e);
+        }
+        T(function(){ while(sp.firstChild) sp.removeChild(sp.firstChild); },800);
+      };
+      var flash=function(c,d){ fl.style.setProperty('--fc',c); fl.style.setProperty('--fd',d+'s'); fl.classList.remove('lfx-go'); void fl.offsetWidth; fl.classList.add('lfx-go'); };
+      T(function(){ item.classList.add('lfx-on'); },red?0:200);
+      for(k=0;k<n;k++){ (function(k){
+        var at=S0+k*GAP, last=(k===n-1);
+        if(!red) T(function(){ hm.style.animation='none'; void hm.getBoundingClientRect(); hm.style.animation='lfxHit .46s cubic-bezier(.5,0,.8,.4) forwards'; },at);
+        T(function(){
+          snd(last&&rar==='l'?'final':'hit',last?1.4:0.5,0.4,function(){ tone(last?180:240,0,0.12,0.12); });
+          vib(last?[40,30,70]:25);
+          item.classList.remove('lfx-pulse'); void item.offsetWidth; item.classList.add('lfx-pulse');
+          sparks(last?(rar==='l'?26:(rar==='r'?20:14)):(rar==='n'?8:10),last&&rar!=='n');
+          if(last){
+            if(rar==='n') flash('#FFD9A0',.4);
+            else if(rar==='r'){ flash('#DDF3FF',.5); ring.classList.add('lfx-go'); }
+            else{ flash('#FFF3C4',.7); ring.classList.add('lfx-go'); rays.classList.add('lfx-go'); el.classList.add('lfx-shake'); }
+            T(function(){ item.classList.remove('lfx-hot'); item.classList.add('lfx-cool'); el.classList.add('lfx-done'); snd(rar==='n'?'blip':'lvup',1.6,0.35,function(){ fanfare(); }); },180);
+          }
+        },at+(red?0:250));
+      })(k); }
+      tEnd=S0+(n-1)*GAP+250+1900;
+      T(finish,tEnd);
+    }catch(e){ finish(); }
+  }
+  return {lesson:lesson, forge:forge, skip:finish, on:function(){ return !!el; }};
+})();
 /* v1.48.0 레벨업 연출(가벼운 별도 연출): 번쩍이는 고리·별가루·튀어 오르는 새 레벨 숫자 */
 function lvFxHtml(from,to,solo){
   var sp='', i;
@@ -6899,6 +7074,7 @@ function fevHeld(){   /* 레벨업·확인창 같은 큰 창이 떠 있으면 �
   for(i=0;i<o.length;i++){ if(!o[i].hidden) return true; }
   e=document.getElementById('excut'); if(e && !e.hidden) return true;
   r=document.getElementById('rkup'); if(r && !r.hidden) return true;
+  if(LFX.on()) return true;   /* 가론 수업·브룬 제작 연출 중(v1.58.0) */
   return false;
 }
 function fevWake(on){   /* 운동 중에 화면이 꺼지지 않게(되는 폰에서만) */
@@ -7421,7 +7597,7 @@ app.addEventListener('click',function(e){
     if(trAdd(tid,1)){ kRefresh(); pop('.trgo[data-id="'+tid+'"]'); try{ if(navigator.vibrate) navigator.vibrate(18); }catch(e){} trainAfter(tb1,true); }
   }else if(a==='lslearn'){
     var lt=parseInt(t.getAttribute('data-t'),10)||0;
-    if(lsLearn(lt)){ kRefresh(); showOverlay({k:'LESSON',t:'새 동작을 배웠어요',b:'<p class="bnote"><b>'+RANKS[LESSON_RANK[lt]].n+'</b> 수업을 마쳤어요.<br>퀘스트 카드를 밀거나 자유 훈련의<br>«배운 동작»에서 써 보세요.</p>',mode:'win'}); }
+    if(lsLearn(lt)){ kRefresh(); LFX.lesson(lt,function(){ showOverlay({k:'LESSON',t:'새 동작을 배웠어요',b:'<p class="bnote"><b>'+RANKS[LESSON_RANK[lt]].n+'</b> 수업을 마쳤어요.<br>퀘스트 카드를 밀거나 자유 훈련의<br>«배운 동작»에서 써 보세요.</p>',mode:'win'}); }); }   /* 저장(lsLearn)을 먼저 끝내고 → 가론 수업 연출 → 기존 결과 창(v1.58.0) */
   }else if(a==='trundo'){
     var tb3=snap();
     if(trUndo()){ kRefresh(); var g3=snap().xp-tb3.xp; toast('마지막 훈련을 취소했어요'+(g3?' · '+g3+' XP':'')); }
@@ -7668,6 +7844,7 @@ function cheerBusy(){   /* 큰 창이 떠 있을 때는 쉬어요(전투 연출�
   if(titleEl && !titleEl.hidden) return true;
   var exc=document.getElementById('excut'); if(exc && !exc.hidden) return true;
   var ruc=document.getElementById('rkup'); if(ruc && !ruc.hidden) return true;
+  if(LFX.on()) return true;   /* 가론 수업·브룬 제작 연출 중(v1.58.0) */
   return false;
 }
 function cheerShow(text){
@@ -7721,6 +7898,7 @@ function bdBusy(){
   if(btEl && !btEl.hidden) return true;
   var exc=document.getElementById('excut'); if(exc && !exc.hidden) return true;
   var ruc=document.getElementById('rkup'); if(ruc && !ruc.hidden) return true;
+  if(LFX.on()) return true;   /* 가론 수업·브룬 제작 연출 중(v1.58.0) */
   if(tm && !tm.hidden) return true;
   return false;
 }
@@ -7746,7 +7924,7 @@ XALT={pushup:['wpush','incl'],pike:['dog','yraise'],dips:['sphinx','wallpush'],p
   lunge:['split','sidelunge','bulg'],bridge:['donkey','goodmorning'],calf:['seatedcalf','singlecalf'],
   crunch:['heeltouch','revcrunch','sidecrunch'],legraise:['revcrunch','hollow'],bicycle:['russian','sidecrunch','highknee'],deadbug:['birddog','hollow','shouldertap'],
   superman:['backext','birddog','traise'],snow:['yraise','traise','revplank'],ytw:['traise','backext','dog'],mtn:['highknee','birddog','shouldertap'],
-  bulg:['split','goodmorning'],wallsit:['squathold','sumohold'],sideplank:['sidecrunch','russian'],sidelift:['firehydrant','clamshell'],inchworm:['dog','shouldertap']};
+  bulg:['split','goodmorning'],wallsit:['squathold','sumohold'],sideplank:['sidecrunch','russian'],sidelift:['firehydrant','clamshell'],inchworm:['dog','shouldertap','birddog']};
 /* v1.55.0 XALT는 "지금까지 나온 모든 대체"의 합집합이에요(저장된 기록을 읽을 때 쓰고, 대체 동작 데이터를 만드는 데 써요). 실제로 카드에 보여 주는 목록은 요일별로 아래 XALT_DAY예요.
    같은 날 같은 운동이 두 번 나오지 않게(몸짱의 길 하루 4동작 × (원래+대체 2) = 12종류가 모두 다르게) 요일마다 목록을 따로 정했어요. 모험·새싹의 길은 같은 목록에서 해당 동작만 써요.
    XALT_FROM(2026-10-13) 이전 날짜는 옛 목록(XALT_OLD, 월요일만)을 써요. 기록은 그날 저장된 값을 XALT 합집합으로 읽어서 옛 기록이 그대로 인정돼요. */
@@ -7758,7 +7936,7 @@ var XALT_DAY={
   wed:{crunch:['heeltouch','sidecrunch'],legraise:['revcrunch','hollow'],bicycle:['russian','highknee'],deadbug:['birddog','shouldertap'],bridge:['donkey','goodmorning'],superman:['backext','traise']},
   thu:{superman:['backext','birddog'],snow:['yraise','revplank'],ytw:['traise','dog'],mtn:['highknee','shouldertap'],bulg:['split','goodmorning'],wallsit:['squathold','sumohold'],sideplank:['sidecrunch','russian'],sidelift:['firehydrant','clamshell']},
   fri:{bulg:['split','goodmorning'],wallsit:['squathold','sumohold'],sideplank:['sidecrunch','russian'],sidelift:['firehydrant','clamshell'],superman:['backext','birddog'],ytw:['traise','dog'],mtn:['highknee','shouldertap'],lunge:['sidelunge','bulg'],dips:['sphinx','wallpush'],crunch:['heeltouch','sidecrunch']},
-  sat:{inchworm:['dog','shouldertap'],pushup:['wpush','incl'],squat:['sumo','split'],plank:['revplank','hollow']}
+  sat:{inchworm:['dog','birddog'],pushup:['wpush','incl'],squat:['sumo','split'],plank:['revplank','hollow']}
 };
 X.wpush={n:'와이드 푸시업',r:['8~10회','10~12회','10~12회'],tips:['손은 어깨보다 한 뼘쯤 넓게','몸은 머리부터 발끝까지 일자로','가슴이 바닥 가까이 닿을 때까지 내려가기'],e:'무릎 와이드 푸시업',h:'3초 내려가는 와이드 푸시업'};
 X.incl={n:'인클라인 푸시업',r:['10~15회','15~20회','15~20회'],tips:['의자가 밀리지 않게 벽에 붙이거나 미끄러지지 않는 곳에서 하기','몸은 머리부터 발끝까지 일자로','가슴이 의자 가까이 닿을 때까지 내려가기'],e:'손을 더 높은 곳에 짚기',h:'손을 더 낮은 곳에 짚기'};
@@ -7901,7 +8079,7 @@ FIG.shouldertap={poses:[Q([96,90],20,[[128,108],[131,108]],[[52,106],[55,106]],{
 /* ---------- v1.57.0 가론의 수업: 대체 동작은 랭크 보상 ----------
    아이언 랭크 → 첫 번째 수업(15개), 브론즈 랭크 → 두 번째 수업(13개 + 불가리안 스플릿 스쿼트(기본 동작이라 퀘스트 대체로만)).
    배우려면 훈련장의 가론에게 말을 걸어 [배우기]를 눌러요(S.lesson = {iro:날짜, bro:날짜}). 배우기 전 대체 동작은 카드를 밀면 흐린 미리보기만 보여요.
-   슬롯(원래 동작 하나의 두 대체)마다 아이언 하나·브론즈 하나로 나눴어요(토요일 인치웜만 둘 다 아이언). 분배표: 인수인계서 1-B0. */
+   슬롯(원래 동작 하나의 두 대체)마다 아이언 하나·브론즈 하나로 나눴어요(v1.57.4부터 토요일 인치웜도 다운독=아이언·버드독=브론즈라 예외 없음). 분배표: 인수인계서 1-B0. */
 var LS_ID={1:'iro',2:'bro'}, LESSON_RANK={1:2,2:3};
 var LS_LIST={
   1:['backext','dog','heeltouch','revcrunch','revplank','russian','shouldertap','incl','wallpush','seatedcalf','squathold','clamshell','sidelunge','donkey','split'],
@@ -10311,10 +10489,36 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   TOURS.o_train=[{t:'«훈련장»이 나타났어요! 눌러서 들어가 볼까요?', els:one('.kb[data-b="train"]'), tap:function(){ return q1('.kb[data-b="train"]'); }, spark:true}].concat(buildSteps('train'));
   TOURS.o_trade=[{t:'«교역소»가 나타났어요! 눌러서 들어가 볼까요?', els:one('.kb[data-b="trade"]'), tap:function(){ return q1('.kb[data-b="trade"]'); }, spark:true}].concat(buildSteps('trade'));
   TOURS.o_forge=[{t:'«대장간»이 나타났어요! 눌러서 들어가 볼까요?', els:one('.kb[data-b="forge"]'), tap:function(){ return q1('.kb[data-b="forge"]'); }, spark:true}].concat(buildSteps('forge'));
+  /* 가론의 수업 안내(v1.57.3): 아이언 랭크가 돼서 첫 수업이 열렸다는 알림을 확인하면 훈련장에서 한 번 나와요. 훈련장 첫 방문 가이드(b_train)와는 따로예요 */
+  function lsEls(){
+    var st=q1('#npcpanel .trhead.static'), labs, i, r, e;
+    if(st) return [st.parentNode];
+    labs=app.querySelectorAll('#npcpanel .trlab');
+    for(i=0;i<labs.length;i++){
+      if(labs[i].textContent.indexOf('배운 동작')===0){
+        r=[labs[i]]; e=labs[i].nextElementSibling;
+        while(e && !(e.matches && e.matches('p.note'))){ r.push(e); e=e.nextElementSibling; }
+        return r;
+      }
+    }
+    return null;
+  }
+  TOURS.o_ls=[
+    {t:'«가론의 수업»이에요. 길드에서 «아이언»과 «브론즈» 랭크가 되면 가론에게 «새 동작»을 배울 수 있어요!', els:one('#npcpanel .gcard')},
+    {t:'가론에게 배운 동작은 «배운 동작»에\u00A0모여요. 퀘스트 카드를 옆으로 밀어서도 쓸 수 있어요!', els:lsEls, when:function(){ return !!lsEls(); }}
+  ];
+  /* 스와이프 첫 안내(v1.58.1, HeiRoku 문구·시점 확정 2026-10-13): 오늘 탭 첫 방문 가이드 뒤, 평일 운동 카드(.xsw)가 처음 보일 때 한 번만. 이미 대체 동작을 써 본 기록이 있으면 안 나와요 */
+  TOURS.swipe=[
+    {t:'운동 카드를 «옆으로 밀어» 보세요! 같은 부위를 쓰는 «대체 동작»을 볼 수 있어요. 카드 아래 «점»은 동작의 수예요.', els:one('.xsw')},
+    {t:'대체 동작은 «가론»에게 배워야 쓸 수 있어요. 길드에서 «아이언»과 «브론즈» 랭크가 되면 훈련장에서 배울 수 있고, 못 배운 동작은 «흐리게»만 보여요!', els:one('.xsw')},
+    {t:'대체 동작을 써도 «XP»는 그대로예요. 다만 «세트를 하나라도 체크»하면 그날은 바꿀 수 없으니, 체크하기 전에 골라 봐요!', els:one('.xsw')}
+  ];
+  function swapUsed(){ var k, L, j; for(k in S.log){ L=S.log[k]; if(L && L.xs){ for(j in L.xs){ if(L.xs[j]) return true; } } } return false; }
+  function swipeOk(){ return tab==='today' && todayOk() && !!(S.bdSeen && typeof S.bdSeen==='object' && S.bdSeen.today) && !bdHas('swipe') && !!q1('.xsw') && !swapUsed(); }
   TOURS.b_train=[
     {t:'여기는 훈련장이에요. «교관 가론»을 눌러 훈련 기록을 열 수 있어요!', els:one('.card.scn'), tap:npcTap},
     {t:'훈련 XP는 «주간 누적 XP»에 더해져요. 마왕전 전에 XP가 모자랄 때 채워 봐요!', els:one('#npcpanel section.weekq'), late:true, noPrev:true},
-    {t:'«자유 러닝»과 «종목별 훈련»은 한 번 할 때마다 눌러요. 합계가 «1000XP»를 넘는 부분은 기록만 남아요!', els:firstTwo('#npcpanel .q'), late:true},
+    {t:'«자유 러닝»과 «종목별 훈련»은 한 번 할 때마다 눌러요. 합계가 «1000XP»를 넘는 부분은 기록만 남아요!', els:firstTwo('#npcpanel .q:not(.gcard)'), late:true},
     {t:'훈련장 운동은 «건축 자재»를 주지 않아요.', els:one('#npcpanel p.note'), late:true}
   ];
   TOURS.b_forge=[
@@ -10528,7 +10732,7 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
     }
     if(kd==='ls1' || kd==='ls2'){
       var lt2=(kd==='ls1')?1:2;
-      showOverlay({k:'NEW LESSON',t:'가론의 새 수업이 열렸어요',b:'<p class="bnote"><b>'+RANKS[LESSON_RANK[lt2]].n+'</b> 랭크가 된 덕분에<br>'+(lt2===1?'훈련장에서 새 동작을 배울 수 있어요.':'훈련장에서 두 번째 수업을 들을 수 있어요.')+'</p>',mode:'win',confirm:function(){ armed=false; tab='home'; kv='train'; npcOpen={train:true}; render(); window.scrollTo(0,0); }});
+      showOverlay({k:'NEW LESSON',t:'가론의 새 수업이 열렸어요',b:'<p class="bnote"><b>'+RANKS[LESSON_RANK[lt2]].n+'</b> 랭크가 된 덕분에<br>'+(lt2===1?'훈련장에서 새 동작을 배울 수 있어요.':'훈련장에서 두 번째 수업을 들을 수 있어요.')+'</p>',mode:'win',confirm:function(){ armed=false; tab='home'; kv='train'; npcOpen={train:true}; render(); window.scrollTo(0,0); if(lt2===1) start('o_ls',true); }});
       return;
     }
     var nm=bld(kd).n;
@@ -10552,12 +10756,13 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   }
   function check(){
     if(on) return;
-    var op=openPending(), bk=null, k=tab, fq=false;
-    if(!op){ bk=buildGuideKey(); if(!bk && k==='today' && bossOk()) k='boss'; if(!bk && !eligible(k)){ if(fitNeed()) fq=true; else return; } }
+    var op=openPending(), bk=null, k=tab, fq=false, sw=false;
+    if(!op){ bk=buildGuideKey(); if(!bk && k==='today' && bossOk()) k='boss'; if(!bk && !eligible(k)){ if(fitNeed()) fq=true; else if(swipeOk()) sw=true; else return; } }
     if(bdBusy()){ if(++tkTry<30) tkTimer=setTimeout(check,600); return; }
     if(op){ showOpen(op); return; }
     if(bk){ start(bk,true); bdMark(bk.slice(2)); return; }
     if(fq){ fitAsk(); return; }
+    if(sw){ start('swipe',true); bdMark('swipe'); return; }
     start(k);
   }
   tourSoon=function(){ clearTimeout(tkTimer); tkTry=0; tkTimer=setTimeout(check,500); };
@@ -10587,6 +10792,7 @@ function bkFwd(){ try{ history.forward(); }catch(e){} }   /* 보초는 새로 �
 function bkHi(msg){ toast(msg); try{ toastEl.style.zIndex='1000'; setTimeout(function(){ toastEl.style.zIndex=''; },1900); }catch(e){} }
 function bkClick(sel){ var b=app.querySelector(sel); if(b){ b.click(); return true; } return false; }
 function bkAct(){
+if(LFX.on()){ LFX.skip(); return true; }   /* v1.58.0 가론 수업·브룬 제작 연출: 뒤로가기는 건너뛰기와 같아요(저장은 이미 끝난 뒤라 기록은 안 바뀌어요) */
 if(bkVis(askEl)){ askClose(); return true; }
 if(bkVis(ov)){ if(ovNoAct||ovOk) return true; closeOv(); return true; }
 if(bkVis(document.getElementById('rkup'))||bkVis(document.getElementById('excut'))||bkVis(cqEl)) return true;

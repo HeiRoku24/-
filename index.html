@@ -1628,8 +1628,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.57.0', APP_DATE='2026-10-13', showChg=false;
+var APP_VER='1.57.2', APP_DATE='2026-10-13', showChg=false;
 var CHANGES=[
+['1.57.2','시작화면의 둥근 나무(화요일·일요일)·감시탑·가로등·깃발·꽃·통나무·성벽 조각 등 일부 소품이 위쪽이나 옆이 잘려 보이던 것을 고치고, 비 오는 날 우산의 왼쪽 끝이 잘리던 것도 고쳤어요(우산 갓을 살짝 줄였어요)'],
+['1.57.1','비 오는 날 시작화면에서 우산을 든 용사가 방패도 들고 있을 때, 손이 방패를 뚫고 나온 것처럼 보이던 그림을 고쳤어요. 이제 방패는 팔뚝(팔꿈치 쪽)에 차고 손은 우산 막대를 쥐어요'],
 ['1.57.0','대체 운동이 랭크 보상이 됐어요. 아이언 랭크가 되면 훈련장의 교관 가론에게 첫 번째 수업을, 브론즈 랭크가 되면 두 번째 수업을 들을 수 있어요. 배운 동작은 퀘스트 카드를 밀어서 쓰거나 훈련장 자유 훈련의 «배운 동작»에서 할 수 있어요. 아직 못 배운 대체 운동은 카드를 밀면 흐리게 미리 볼 수 있어요. 예전에 대체 운동으로 한 기록은 같은 계열의 기본 운동으로 한 것으로 바뀌어요(XP와 기록은 그대로예요)'],
 ['1.56.1','운동 카드에서 설명이 짧을 때 생기던 빈 공간을 줄이려고, 설명을 이름 줄과 목표 줄 사이의 가운데에 놓았어요. 카드 크기와 기록은 그대로예요'],
 ['1.56.0','운동 이름을 영상으로 검색되는 이름에 맞췄어요(힐터치, 티레이즈, 스쿼트 버티기, 와이드 스쿼트 버티기, 와이드 스쿼트). 그림·자세 팁 버튼의 글씨는 어느 폰에서든 한 줄에 들어가게 버튼 폭에 맞춰 줄어들어요. 기록과 랭크는 그대로예요'],
@@ -2194,7 +2196,7 @@ function heroArtBase(o){
       var px=(i===0?-32:32);
       s+=circ(px,-15,9,eq.armor?eq.armor.fill:'#8FB3EA',2.6)+circ(px,-15,2.6,eq.armor&&eq.armor.trim?eq.armor.trim:'#F6C445',1.8);
     }
-    if(eq.shield) s+=shieldArt(eq.shield,ar[0][0],ar[0][1]);
+    if(eq.shield){ var sp=o.shl||[ar[0][0],ar[0][1]]; s+=shieldArt(eq.shield,sp[0],sp[1]); }
   }
   if(o.sword) s+=swordArt(o.sword[0],o.sword[1],o.sword[2],eq.sword);
   s+='<g transform="translate(0,-11) scale(.93)">';
@@ -9131,10 +9133,10 @@ function tsWeatherFront(w){
   return h;
 }
 function umbrellaArt(){
-  var s='<line x1="-40" y1="-24" x2="-26" y2="-108" stroke="'+OL+'" stroke-width="6" stroke-linecap="round"/><line x1="-40" y1="-24" x2="-26" y2="-108" stroke="#8B5A2B" stroke-width="2.6" stroke-linecap="round"/><g transform="translate(-12,0)">';
+  var s='<line x1="-40" y1="-24" x2="-26" y2="-108" stroke="'+OL+'" stroke-width="6" stroke-linecap="round"/><line x1="-40" y1="-24" x2="-26" y2="-108" stroke="#8B5A2B" stroke-width="2.6" stroke-linecap="round"/><g transform="translate(-2.08,-12.32) scale(.92)"><g transform="translate(-12,0)">';
   s+=pth('M-70,-104 Q-66,-152 -14,-154 Q38,-152 42,-104 Q31,-113 20,-104 Q9,-113 -3,-104 Q-14,-113 -25,-104 Q-36,-113 -47,-104 Q-59,-113 -70,-104 Z','#FF6A5B',3);
   s+=pth('M-25,-104 Q-26,-140 -14,-154 Q-2,-140 -3,-104 Q-14,-113 -25,-104 Z','#F6C445',2.4);
-  s+='<line x1="-14" y1="-154" x2="-14" y2="-164" stroke="'+OL+'" stroke-width="4" stroke-linecap="round"/></g>';
+  s+='<line x1="-14" y1="-154" x2="-14" y2="-164" stroke="'+OL+'" stroke-width="4" stroke-linecap="round"/></g></g>';
   return s+circ(-40,-24,9,SKIN,2.5);
 }
 function tsWalkFrame(i,n,eq,um){
@@ -9142,7 +9144,7 @@ function tsWalkFrame(i,n,eq,um){
   var legs=[[-14-sn*1.5,44-lL],[14-sn*1.5,44-rL]];
   var arms=[um?[-40,-24,-48,-6]:[-37,18-sn*5,-35,3-sn*2],[42,6+bob*.3,47,-5]];
   return '<g class="wf f'+i+'" style="animation-delay:'+(-(n-i)*0.09).toFixed(2)+'s"><g transform="translate(0,'+bob.toFixed(1)+')">'+
-    heroArt({expr:'cheer',arms:arms,legs:legs,sword:[42,6,18+sn*3],eq:eq})+(um?umbrellaArt():'')+'</g></g>';
+    heroArt({expr:'cheer',arms:arms,legs:legs,sword:[42,6,18+sn*3],eq:eq,shl:um?[-58,0]:null})+(um?umbrellaArt():'')+'</g></g>';
 }
 function tsHero(eq,um){
   var n=8, i, s='<svg viewBox="-80 -170 170 226" aria-hidden="true">';
@@ -9316,23 +9318,23 @@ var titleBuildD=null;
     pine2:function(){ return ['-26 -36 52 62',pine(0,0,1),4.4]; },
     bush:function(){ return ['-20 -20 40 36',mBush(0,6,1),2.8]; },
     rock:function(){ return ['-14 -10 28 18','<ellipse cx="0" cy="0" rx="10" ry="6" fill="#B6BED0" '+OLs()+'/><ellipse cx="-4" cy="-2" rx="3.4" ry="1.8" fill="#D6DCE8"/>',2.6]; },
-    flower:function(){ return ['-18 -14 36 22','<g stroke="'+OL+'" stroke-width="2"><line x1="-8" y1="2" x2="-8" y2="-6"/><line x1="2" y1="3" x2="2" y2="-9"/><line x1="10" y1="2" x2="10" y2="-5"/></g><circle cx="-8" cy="-8" r="3.6" fill="#FF8FA3" stroke="'+OL+'" stroke-width="1.6"/><circle cx="2" cy="-11" r="4" fill="#FFE08A" stroke="'+OL+'" stroke-width="1.6"/><circle cx="10" cy="-7" r="3.4" fill="#fff" stroke="'+OL+'" stroke-width="1.6"/>',2.8]; },
+    flower:function(){ return ['-18 -16.5 36 24.5','<g stroke="'+OL+'" stroke-width="2"><line x1="-8" y1="2" x2="-8" y2="-6"/><line x1="2" y1="3" x2="2" y2="-9"/><line x1="10" y1="2" x2="10" y2="-5"/></g><circle cx="-8" cy="-8" r="3.6" fill="#FF8FA3" stroke="'+OL+'" stroke-width="1.6"/><circle cx="2" cy="-11" r="4" fill="#FFE08A" stroke="'+OL+'" stroke-width="1.6"/><circle cx="10" cy="-7" r="3.4" fill="#fff" stroke="'+OL+'" stroke-width="1.6"/>',2.8]; },
     /* 요새 */
     stake:function(){ var s=sR(-26,-22,52,6,'#8B5A2B',1,2.2); [-18,0,18].forEach(function(x){ s+=sP('M'+(x-7)+',0 L'+(x-7)+',-34 L'+x+',-50 L'+(x+7)+',-34 L'+(x+7)+',0 Z','#B9783A',2.4); }); return ['-30 -54 60 58',s,2.8]; },
-    banner:function(){ return ['-22 -86 44 90',ell(0,0,11,4,'#8E97AC',2)+sL(0,0,0,-78,OL,5.4)+sL(0,0,0,-78,'#8B5A2B',2.6)+sP('M1,-78 L28,-70 L1,-58 Z','#E5484D',2.2)+circ(0,-80,3.4,'#F6C445',1.6),2.4]; },
-    barricade:function(){ return ['-28 -40 56 44',sL(-20,0,18,-28,OL,10)+sL(-20,0,18,-28,'#A9743A',6)+sL(20,0,-18,-28,OL,10)+sL(20,0,-18,-28,'#B9844A',6)+sL(-24,-14,24,-14,OL,9)+sL(-24,-14,24,-14,'#8B5A2B',5),2.6]; },
-    watch:function(){ return ['-36 -118 72 122',sL(-20,0,-13,-58,OL,7)+sL(-20,0,-13,-58,'#8B5A2B',3.4)+sL(20,0,13,-58,OL,7)+sL(20,0,13,-58,'#8B5A2B',3.4)+sL(-18,-26,18,-26,'#8B5A2B',3)+sR(-26,-66,52,9,'#8B5A2B',1,2.4)+sR(-19,-96,38,30,'#B9783A',2,2.4)+sR(-6,-86,12,12,'#FFE08A',1,2)+sP('M-26,-96 L0,-118 L26,-96 Z','#C94A4A',2.6)+sL(0,-118,0,-128,OL,2.4),1.9]; },
+    banner:function(){ return ['-30 -86 60 90',ell(0,0,11,4,'#8E97AC',2)+sL(0,0,0,-78,OL,5.4)+sL(0,0,0,-78,'#8B5A2B',2.6)+sP('M1,-78 L28,-70 L1,-58 Z','#E5484D',2.2)+circ(0,-80,3.4,'#F6C445',1.6),2.4]; },
+    barricade:function(){ return ['-29 -40 58 44',sL(-20,0,18,-28,OL,10)+sL(-20,0,18,-28,'#A9743A',6)+sL(20,0,-18,-28,OL,10)+sL(20,0,-18,-28,'#B9844A',6)+sL(-24,-14,24,-14,OL,9)+sL(-24,-14,24,-14,'#8B5A2B',5),2.6]; },
+    watch:function(){ return ['-36 -130 72 134',sL(-20,0,-13,-58,OL,7)+sL(-20,0,-13,-58,'#8B5A2B',3.4)+sL(20,0,13,-58,OL,7)+sL(20,0,13,-58,'#8B5A2B',3.4)+sL(-18,-26,18,-26,'#8B5A2B',3)+sR(-26,-66,52,9,'#8B5A2B',1,2.4)+sR(-19,-96,38,30,'#B9783A',2,2.4)+sR(-6,-86,12,12,'#FFE08A',1,2)+sP('M-26,-96 L0,-118 L26,-96 Z','#C94A4A',2.6)+sL(0,-118,0,-128,OL,2.4),1.9]; },
     /* 숲 */
-    bigtree:function(){ return ['-46 -100 92 104',sR(-8,-36,16,36,'#7A4E28',3,2.6)+circ(-20,-58,25,'#2F8F5B',2.6)+circ(20,-58,25,'#2F8F5B',2.6)+circ(0,-80,29,'#37A268',2.6)+circ(-8,-86,8,'#52BC84',0)+circ(18,-68,6,'#52BC84',0),2.5]; },
+    bigtree:function(){ return ['-47 -111 94 115',sR(-8,-36,16,36,'#7A4E28',3,2.6)+circ(-20,-58,25,'#2F8F5B',2.6)+circ(20,-58,25,'#2F8F5B',2.6)+circ(0,-80,29,'#37A268',2.6)+circ(-8,-86,8,'#52BC84',0)+circ(18,-68,6,'#52BC84',0),2.5]; },
     mushroom:function(){ return ['-18 -32 36 36',sR(-4.5,-13,9,13,'#F6EAD3',3,2.2)+sP('M-15,-11 Q-15,-31 0,-31 Q15,-31 15,-11 Z','#E5484D',2.4)+circ(-6,-22,2.6,'#fff',0)+circ(5,-19,2.2,'#fff',0)+circ(1,-27,1.8,'#fff',0),2.6]; },
-    log:function(){ return ['-36 -26 72 30',sR(-32,-18,64,18,'#8B5A2B',8,2.5)+ell(32,-9,5,9,'#D6A66B',2)+sL(-24,-12,22,-12,'rgba(43,33,56,.35)',1.6)+sL(-18,-6,26,-6,'rgba(43,33,56,.3)',1.6)+sP('M-16,-18 Q-12,-26 -6,-18 Z','#6FC17B',1.6),2.6]; },
+    log:function(){ return ['-38.5 -26 77 30',sR(-32,-18,64,18,'#8B5A2B',8,2.5)+ell(32,-9,5,9,'#D6A66B',2)+sL(-24,-12,22,-12,'rgba(43,33,56,.35)',1.6)+sL(-18,-6,26,-6,'rgba(43,33,56,.3)',1.6)+sP('M-16,-18 Q-12,-26 -6,-18 Z','#6FC17B',1.6),2.6]; },
     fern:function(){ var s=''; [[-14,-26,-8],[0,-34,0],[14,-26,8],[-8,-20,-4],[8,-20,4]].forEach(function(p){ s+=sP('M0,0 Q'+(p[0]*.5)+','+(p[1]*.7)+' '+p[0]+','+p[1]+' Q'+(p[0]*.4+p[2])+','+(p[1]*.4)+' 0,0 Z','#4FB070',2); }); return ['-22 -38 44 42',s,2.8]; },
     /* 성채 */
     pillar:function(){ return ['-18 -82 36 86',sR(-13,-6,26,8,'#E9E1CF',1,2.4)+sR(-9,-68,18,62,'#F3ECDD',1,2.4)+sL(-3,-66,-3,-8,'rgba(43,33,56,.18)',2)+sL(3,-66,3,-8,'rgba(43,33,56,.18)',2)+sR(-14,-76,28,9,'#E9E1CF',1,2.4),2.2]; },
     hedge:function(){ var s=sR(-28,-28,56,28,'#3FA76A',9,2.6); [[-16,-18],[-2,-10],[12,-20],[20,-8],[-8,-24]].forEach(function(p){ s+=circ(p[0],p[1],2.6,'#FF8FA3',0); }); return ['-32 -34 64 38',s,2.5]; },
-    lamp:function(){ return ['-16 -92 32 96',sL(0,0,0,-64,OL,6.4)+sL(0,0,0,-64,'#5A6B88',3.2)+sR(-9,-84,18,22,'#FFE9A8',3,2.4)+sP('M-12,-84 L0,-96 L12,-84 Z','#4A6FB0',2.2)+circ(0,-73,13,'rgba(255,233,168,.35)',0),2.2]; },
-    pennant:function(){ return ['-22 -90 44 94',ell(0,0,11,4,'#B5BDD0',2)+sL(0,0,0,-82,OL,5.4)+sL(0,0,0,-82,'#5A6B88',2.6)+sP('M1,-82 L28,-72 L1,-60 Z','#4A86E0',2.2)+circ(0,-84,3.4,'#F6C445',1.6),2.4]; },
-    wallc:function(){ var s=sR(-40,-26,80,26,'#C9D0DE',0,2.5); for(var x=-38;x<38;x+=18) s+=sR(x,-34,11,9,'#D9DFEA',1,2); s+=sL(-40,-13,40,-13,'rgba(43,33,56,.26)',1.4); return ['-44 -38 88 42',s,2.4]; },
+    lamp:function(){ return ['-16 -98 32 102',sL(0,0,0,-64,OL,6.4)+sL(0,0,0,-64,'#5A6B88',3.2)+sR(-9,-84,18,22,'#FFE9A8',3,2.4)+sP('M-12,-84 L0,-96 L12,-84 Z','#4A6FB0',2.2)+circ(0,-73,13,'rgba(255,233,168,.35)',0),2.2]; },
+    pennant:function(){ return ['-30 -90 60 94',ell(0,0,11,4,'#B5BDD0',2)+sL(0,0,0,-82,OL,5.4)+sL(0,0,0,-82,'#5A6B88',2.6)+sP('M1,-82 L28,-72 L1,-60 Z','#4A86E0',2.2)+circ(0,-84,3.4,'#F6C445',1.6),2.4]; },
+    wallc:function(){ var s=sR(-40,-26,80,26,'#C9D0DE',0,2.5); for(var x=-38;x<38;x+=18) s+=sR(x,-34,11,9,'#D9DFEA',1,2); s+=sL(-40,-13,40,-13,'rgba(43,33,56,.26)',1.4); return ['-46.5 -38 93 42',s,2.4]; },
     statue:function(){ return ['-18 -60 36 64',sR(-13,-14,26,14,'#E9E1CF',1,2.4)+sR(-7,-38,14,26,'#C9D0DE',3,2.4)+circ(0,-46,8,'#D9DFEA',2.4)+sL(8,-34,16,-52,OL,3)+sL(8,-34,16,-52,'#B5BDD0',1.6),2.4]; },
     /* 협곡 */
     cactus:function(){ return ['-28 -70 56 74',sR(-7,-64,14,64,'#5FA85A',7,2.6)+sR(-24,-40,17,8,'#5FA85A',4,2.4)+sR(-24,-54,9,22,'#5FA85A',4,2.4)+sR(7,-30,17,8,'#5FA85A',4,2.4)+sR(15,-48,9,26,'#5FA85A',4,2.4)+sL(0,-60,0,-8,'rgba(43,33,56,.22)',1.6),2.6]; },
@@ -9353,10 +9355,10 @@ var titleBuildD=null;
     skullpole:function(){ return ['-18 -84 36 88',sR(-3,-62,6,62,'#4B3A3A',1,2.2)+circ(0,-68,10,'#EDE6D6',2.4)+circ(-3.6,-69,2.6,OL,0)+circ(3.6,-69,2.6,OL,0)+sR(-4,-60,8,6,'#EDE6D6',2,2),2.3]; },
     /* 신전 */
     marble:function(){ return ['-20 -68 40 72',sR(-12,-6,24,8,'#E9E1CF',1,2.4)+sR(-10,-50,20,46,'#F3ECDD',1,2.4)+sP('M-10,-50 L-6,-60 L-1,-52 L5,-64 L10,-54 L10,-50 Z','#F3ECDD',2.4)+sL(-3,-48,-3,-8,'rgba(43,33,56,.18)',2),2.3]; },
-    sakura:function(){ return ['-44 -96 88 100',sR(-6,-34,12,34,'#8B5A2B',3,2.4)+circ(-18,-58,23,'#FFB9D2',2.6)+circ(18,-56,23,'#FFC6DA',2.6)+circ(0,-76,26,'#FFC9DC',2.6)+circ(-6,-82,7,'#FFE0EC',0)+circ(16,-66,5,'#FFE0EC',0),2.5]; },
+    sakura:function(){ return ['-44 -104 88 108',sR(-6,-34,12,34,'#8B5A2B',3,2.4)+circ(-18,-58,23,'#FFB9D2',2.6)+circ(18,-56,23,'#FFC6DA',2.6)+circ(0,-76,26,'#FFC9DC',2.6)+circ(-6,-82,7,'#FFE0EC',0)+circ(16,-66,5,'#FFE0EC',0),2.5]; },
     lantern:function(){ return ['-18 -54 36 58',sR(-4,-16,8,16,'#D8D2C4',1,2.2)+sR(-10,-36,20,21,'#E8E2D4',2,2.4)+sR(-5,-31,10,11,'#FFE9A8',1,0)+sP('M-14,-36 L0,-50 L14,-36 Z','#B8B0A0',2.4)+circ(0,-26,15,'rgba(255,233,168,.3)',0),2.4]; },
     fountain:function(){ return ['-34 -56 68 60',ell(0,-6,28,10,'#EAF4FF',2.6)+ell(0,-10,22,6,'#8ED8F6',1.6)+sR(-4,-34,8,26,'#E9E1CF',2,2.2)+'<path d="M0,-34 Q-14,-44 -20,-18 M0,-34 Q14,-44 20,-18" stroke="#8ED8F6" stroke-width="2.6" fill="none" stroke-linecap="round"/>'+circ(0,-36,3.4,'#EAF4FF',1.6),2.2]; },
-    flowerp:function(){ return ['-18 -14 36 22','<g stroke="'+OL+'" stroke-width="2"><line x1="-8" y1="2" x2="-8" y2="-6"/><line x1="2" y1="3" x2="2" y2="-9"/><line x1="10" y1="2" x2="10" y2="-5"/></g><circle cx="-8" cy="-8" r="3.8" fill="#FFB9D2" stroke="'+OL+'" stroke-width="1.6"/><circle cx="2" cy="-11" r="4.2" fill="#FFF3B0" stroke="'+OL+'" stroke-width="1.6"/><circle cx="10" cy="-7" r="3.6" fill="#D6C8FF" stroke="'+OL+'" stroke-width="1.6"/>',3.2]; }
+    flowerp:function(){ return ['-18 -16.5 36 24.5','<g stroke="'+OL+'" stroke-width="2"><line x1="-8" y1="2" x2="-8" y2="-6"/><line x1="2" y1="3" x2="2" y2="-9"/><line x1="10" y1="2" x2="10" y2="-5"/></g><circle cx="-8" cy="-8" r="3.8" fill="#FFB9D2" stroke="'+OL+'" stroke-width="1.6"/><circle cx="2" cy="-11" r="4.2" fill="#FFF3B0" stroke="'+OL+'" stroke-width="1.6"/><circle cx="10" cy="-7" r="3.6" fill="#D6C8FF" stroke="'+OL+'" stroke-width="1.6"/>',3.2]; }
   };
   function sprite(kind){
     var d=SP[kind](), p=d[0].split(' ').map(Number), w=Math.round(p[2]*d[2]), h=Math.round(p[3]*d[2]);

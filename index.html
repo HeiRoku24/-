@@ -1780,8 +1780,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.61.4', APP_DATE='2026-10-16', showChg=false;
+var APP_VER='1.62.0', APP_DATE='2026-10-16', showChg=false;
 var CHANGES=[
+['1.62.0','랭크 세트 추가: 승급하면 카퍼부터 아다만타이트까지 랭크마다 공용장비 세트(망토·깃털·장화·허리띠)를 받고 획득 연출이 나와요. 이미 오른 랭크의 세트는 앱을 열면 한꺼번에 받아요. 도감의 특별장비에서 입고 벗고(한 칸만 바꿀 수 없어요), 정면·옆·뒷모습과 러닝 모습에 모두 나와요'],
 ['1.61.4','시작 로고 화면 전체 속도를 조금 빠르게 해서 약 5초로 맞췄어요(내용은 그대로 다 나와요)'],
 ['1.61.3','폰 뒤로가기를 누를 때 화면이 맨 위로 잠깐 튀던 것을 고쳤어요'],
 ['1.61.2','시작 로고 화면의 길이를 약 5.5초로 줄였어요(끝의 여운 부분을 줄였어요)'],
@@ -2048,13 +2049,23 @@ var ITEMS=[
  {id:'shield1',slot:'shield',job:'hero',rar:'n',name:'나무 방패',craft:1,fill:'#B9783A'},
  {id:'shield2',slot:'shield',job:'hero',rar:'r',name:'청강 방패',craft:1,fill:'#C9D4E3',trim:'#5CC8FF'},
  {id:'shield3',slot:'shield',job:'hero',rar:'l',name:'황금 방패',craft:1,fill:'#F6C445',trim:'#E5484D'},
- {id:'pajama',slot:'pj',rar:'n',name:'몸짱파자마',special:1}
+ {id:'pajama',slot:'pj',rar:'n',name:'몸짱파자마',special:1},
+ {id:'rkset0',slot:'set',rar:'n',name:'카퍼 세트',special:1,rkset:0},
+ {id:'rkset1',slot:'set',rar:'n',name:'아이언 세트',special:1,rkset:1},
+ {id:'rkset2',slot:'set',rar:'n',name:'브론즈 세트',special:1,rkset:2},
+ {id:'rkset3',slot:'set',rar:'n',name:'실버 세트',special:1,rkset:3},
+ {id:'rkset4',slot:'set',rar:'n',name:'골드 세트',special:1,rkset:4},
+ {id:'rkset5',slot:'set',rar:'n',name:'플래티넘 세트',special:1,rkset:5},
+ {id:'rkset6',slot:'set',rar:'n',name:'미스릴 세트',special:1,rkset:6},
+ {id:'rkset7',slot:'set',rar:'n',name:'오리하르콘 세트',special:1,rkset:7},
+ {id:'rkset8',slot:'set',rar:'n',name:'아다만타이트 세트',special:1,rkset:8}
 ];
-var SLOTN={cape:'망토',plume:'깃털',shoes:'신발',belt:'허리띠',sword:'검',axe:'양손 도끼',bow:'활',staff:'지팡이',dhelm:'뿔 투구',dmail:'판금 갑옷',dbeard:'수염 장식',ehead:'머리띠',etunic:'튜닉',equiver:'화살통',mhat:'뾰족 모자',mrobe:'로브',mbook:'마법책·구슬',helm:'투구',armor:'갑옷',shield:'방패',pj:'파자마'};
+var SLOTN={cape:'망토',plume:'깃털',shoes:'신발',belt:'허리띠',sword:'검',axe:'양손 도끼',bow:'활',staff:'지팡이',dhelm:'뿔 투구',dmail:'판금 갑옷',dbeard:'수염 장식',ehead:'머리띠',etunic:'튜닉',equiver:'화살통',mhat:'뾰족 모자',mrobe:'로브',mbook:'마법책·구슬',helm:'투구',armor:'갑옷',shield:'방패',pj:'파자마',set:'세트'};
 var WEAPON_SLOTS=['sword','axe','bow','staff'];                                  /* 전용 '무기' 칸: 파자마를 입어도 함께 입어요 (동료 무기가 생기면 칸 이름을 여기에 더해요) */
 function isWeaponSlot(sl){ return WEAPON_SLOTS.indexOf(sl)>=0; }
 /* 보이게 입고 있는지: 파자마를 입으면 무기 말고는 가려져서 입은 것으로 보지 않아요 */
-function isWorn(it){ var e=(typeof S!=='undefined'&&S)?S.eq:null; if(!e||e[it.slot]!==it.id) return false; if(e.pj && it.slot!=='pj' && !isWeaponSlot(it.slot)) return false; return true; }
+function isWorn(it){ var e=(typeof S!=='undefined'&&S)?S.eq:null; if(!e||e[it.slot]!==it.id) return false; if(e.pj && it.slot!=='pj' && !isWeaponSlot(it.slot)) return false; if(e.set && it.slot!=='set' && SETCOV.indexOf(it.slot)>=0) return false; return true; }
+var SETCOV=['cape','plume','shoes','belt'];   /* 랭크 세트가 대신 입는 칸 (v1.62.0, 1-A99) */
 var COMMON_SLOTS=['cape','plume','shoes','belt'];                         /* 공용장비 칸 (네 캐릭터 모두 입어요) */
 var JOB_SLOTS={hero:['sword','helm','armor','shield'],dwarf:['axe','dhelm','dmail','dbeard'],elf:['bow','ehead','etunic','equiver'],mage:['staff','mhat','mrobe','mbook']};
 var JOBW={hero:'sword',dwarf:'axe',elf:'bow',mage:'staff'};   /* 직업별 무기 칸 */
@@ -2138,10 +2149,15 @@ function curEq(){
     it=itemById(e.pj);
     if(it){ r.pj=it; for(k in e){ if(isWeaponSlot(k) && e[k] && S.inv[e[k]]){ var w=itemById(e[k]); if(w) r[k]=w; } } return r; }
   }
-  for(k in e){ if(k!=='pj' && e[k] && S.inv && S.inv[e[k]]){ it=itemById(e[k]); if(it) r[k]=it; } }
+  for(k in e){ if(k!=='pj' && k!=='set' && e[k] && S.inv && S.inv[e[k]]){ it=itemById(e[k]); if(it) r[k]=it; } }
+  if(e.set && S.inv && S.inv[e.set]){   /* 랭크 세트는 망토·깃털·장화·허리띠 네 칸을 한 번에 입은 것으로 쳐요(투구·갑옷·방패·전용 무기는 그대로) */
+    var sit=itemById(e.set);
+    if(sit && sit.rkset!=null){ var sp=rkSetParts(sit.rkset); r.cape=sp.cape; r.plume=sp.plume; r.shoes=sp.shoes; r.belt=sp.belt; r.set=sit; }
+  }
   return r;
 }
 function capeArt(it){
+  if(it&&it.rk!=null) return rkFrontCape(it);
   var s=pth('M-24,-16 Q-48,10 -36,42 L16,34 Z',it?it.fill:'#F6C445');
   if(it&&it.pat==='stars') s+=bStar(-38,6,4.4,'#FFF3B0')+bStar(-30,24,3.6,'#FFF3B0')+bStar(-42,-6,3.2,'#FFFFFF');
   else if(it&&it.pat==='stripes') s+='<path d="M-32,-4 L-45,12 M-27,6 L-41,22 M-21,16 L-36,32" stroke="#E5484D" stroke-width="3.4" stroke-linecap="round" fill="none"/>';
@@ -2149,6 +2165,7 @@ function capeArt(it){
   return s;
 }
 function plumeArt(it){
+  if(it&&it.rk!=null) return rkPlume(it);
   var f=it&&it.fill?it.fill:'#46E0A5', s;
   if(it&&it.pat==='rainbow'){
     s=pth('M2,-67 Q10,-86 32,-78 Q18,-76 10,-64 Z','#FF6A5B',2.5)+pth('M3,-67 Q10,-82 27,-76 Q16,-75 9,-65 Z','#F6C445',0)+pth('M4,-67 Q10,-78 21,-74 Q14,-73 9,-66 Z','#46E0A5',0);
@@ -2194,6 +2211,7 @@ function itemIcon(it,on){
   else if(it.slot==='staff'){ vb='-26 -68 52 140'; inner=compWeaponInner('mage',it); }
   else if(it.slot==='shoes'){ vb='-24 -34 48 48'; inner=bootItemArt(0,0,it,15); }
   else if(it.slot==='belt'){ vb='-30 -12 60 36'; inner=beltItemArt(it,{w:52,y:2,h:9},false); }
+  else if(it.slot==='set'){ vb='-76 -108 152 170'; inner=rkSetIconInner(it.rkset); }
   else { vb='-42 -66 84 100'; inner=pjIconArt(); }
   return '<svg viewBox="'+vb+'" aria-hidden="true">'+inner+'</svg>';
 }
@@ -2283,6 +2301,7 @@ function faceArt(ex){
 }
 /* ===== 공용 신발·허리띠 ===== */
 function bootItemArt(x,y,it,lw){
+  if(it&&it.rk!=null) return rkBoot(x,y,it,lw);
   var w=(lw||15)+4, f=it.fill, s='';
   s+=ell(x,y,11.5,7,f,2.5)+'<rect x="'+(x-w/2)+'" y="'+(y-14)+'" width="'+w+'" height="9" rx="3" fill="'+f+'" stroke="'+OL+'" stroke-width="2.5"/>';
   s+='<path d="M'+(x-w/2+3)+','+(y-10.5)+' H'+(x+w/2-3)+'" stroke="rgba(255,255,255,.4)" stroke-width="1.8" stroke-linecap="round"/>';
@@ -2298,6 +2317,7 @@ function footArt(x,y,lw,defFill,eq,pj){
 }
 var BELTX={hero:{w:44,y:10.5,h:7.5},dwarf:{w:48,y:10.5,h:8},elf:{w:44,y:10.5,h:7.5},mage:{w:50,y:10.5,h:7.5}};
 function beltItemArt(it,B,noPouch){
+  if(it&&it.rk!=null) return rkBelt(it,B,noPouch);
   var w=B.w, x=-w/2, y=B.y, h=B.h, s='', cx=0, cy=y+h/2;
   s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3.4" fill="'+it.fill+'" stroke="'+OL+'" stroke-width="2.5"/>';
   if(it.pat==='stars') s+=bStar(-w/4-2,cy,3,'#FFF3B0')+bStar(w/4+2,cy,3,'#FFF3B0');
@@ -2335,6 +2355,7 @@ var CAPEBX={dwarf:'translate(0,2) scale(1.04)',elf:'translate(0,-1)',mage:'trans
 var PLUMEX={dwarf:'translate(0,0)',elf:'translate(2,-2)',mage:'translate(5,-1)'};                                   /* 정면·뒷모습: 머리 장비 위 */
 var SDPLX={dwarf:'translate(0,0)',elf:'translate(0,-2)',mage:'translate(-4,8)'};                                    /* 옆모습 */
 function backCapeArt(eq){
+  if(eq.cape&&eq.cape.rk!=null) return rkBackCape(eq);
   var cf=eq.cape?eq.cape.fill:'#F6C445', pat=eq.cape&&eq.cape.pat, s;
   s='<g class="in-cape">'+pth('M-30,-20 Q-42,12 -35,48 L35,48 Q42,12 30,-20 Q0,-30 -30,-20 Z',cf,3);
   if(pat==='stars') s+=bStar(-18,2,5,'#FFF3B0')+bStar(14,18,4.4,'#FFF3B0')+bStar(-4,34,4,'#FFFFFF')+bStar(22,-4,3.4,'#FFFFFF');
@@ -3607,6 +3628,25 @@ function trainOpenCond(){   /* 훈련장 개방: 보스(평일 중간보스·마
 }
 function forgeOpenCond(){ return rkBest()>=FORGE_OPEN_RANK; }
 function tradeOpenCond(){ return rkBest()>=TRADE_OPEN_RANK; }
+/* ---------- v1.62.0 랭크 공용장비 세트 받기 (인수인계서 1-A99) ----------
+   세트 i(0=카퍼 … 8=아다만타이트)는 랭크 i+1에 오르면 받아요. 받은 것은 S.inv['rkset'+i]에 남고(기존 저장 항목), 한 번 오르면 아다만타이트가 강등돼도 그대로예요.
+   받을 세트가 있으면 개방 알림과 같은 장치(openPending → showOpen)로 획득 연출을 한 번 보여 줘요. 시험 결과 화면이 열려 있는 동안은 승급 연출이 먼저 나오도록 기다려요. */
+function rkSetMissing(){
+  var r=[], b=rkBest(), i;
+  if(!S) return r;
+  for(i=0;i<9;i++){ if(b>=i+1 && !(S.inv&&S.inv['rkset'+i])) r.push(i); }
+  return r;
+}
+function rkSetPending(){ if(exSt||exRes) return false; return rkSetMissing().length>0; }
+function rkSetShow(){
+  var miss=rkSetMissing(), top, low, d, late;
+  if(!miss.length) return;
+  S.inv=S.inv||{}; miss.forEach(function(m){ S.inv['rkset'+m]=true; });
+  low=miss[0]; top=miss[miss.length-1];
+  d=S.rk&&S.rk[RANKS[top+1].id]; late=(miss.length>1)||(d!==fmt(TODAY));
+  save();
+  LFX.setGet({top:top,low:low,n:miss.length,late:late},function(){ if(typeof tourSoon==='function') tourSoon(); });
+}
 /* 개방 예고: 어떤 조건으로 열리는지 사용자에게 미리 알려 줘요 */
 function iGa(n){ var c=n.charCodeAt(n.length-1)-0xAC00; return (c>=0 && c<11172 && c%28!==0)?'이':'가'; }
 function rkUnlockLine(ni){   /* 랭크 화면 '다음 승급' 카드: 이 랭크(또는 앞으로 만날 랭크)에서 열리는 건물을 알려 줘요 */
@@ -5084,6 +5124,295 @@ function heroBackBase(eq){
      (pj?pjCap():(eq.helm?helmArt(eq.helm):pth('M-28,-36 A28,28 0 0 1 28,-36 Q26,-24 0,-20 Q-26,-24 -28,-36 Z','#6E9BD8',3)+'<path d="M0,-64 V-22" stroke="rgba(43,33,56,.3)" stroke-width="2.2" fill="none"/>')+plumeArt(eq.plume))+'</g></g>';
   return s;
 }
+/* ===== v1.62.0 랭크 공용장비 세트 그림 (인수인계서 1-A99): 카퍼~아다만타이트 9벌, 망토·깃털·장화·허리띠.
+   it.rk(랭크 번호 0~8)가 있는 장비만 이 그림을 쓰고, 나머지 장비는 원래 그림 그대로예요. 금속 광택 세기는 RK_SHEEN(확정값). ===== */
+/* ===== 랭크 공용장비 세트 시안: 망토·깃털·장화·허리띠 (앱 그림 함수에 끼워 넣는 방식) =====
+   it.rk(랭크 번호 0~8)가 있는 장비만 새 그림을 쓰고, 나머지는 앱의 원래 그림 그대로예요. */
+var RKS=[
+ {id:'cop',n:'카퍼',w:1,  main:'#C8733A',dark:'#8E4A1E',hi:'#EBA672',trim:'#E59555',acc:'#4FB39A',glow:'#4FB39A',cloth:'#A85D2B'},
+ {id:'iro',n:'아이언',w:3, main:'#868E96',dark:'#454C54',hi:'#B9C0C7',trim:'#5D656D',acc:'#9A5A34',glow:'#B9C0C7',cloth:'#5F676F'},
+ {id:'bro',n:'브론즈',w:6, main:'#B5832F',dark:'#7A5416',hi:'#DCB466',trim:'#E6C97E',acc:'#5E8C4A',glow:'#DCB466',cloth:'#9A6D22'},
+ {id:'sil',n:'실버',w:9,  main:'#CDD4DC',dark:'#8E9AA7',hi:'#FFFFFF',trim:'#B4BEC8',acc:'#8FB8FF',glow:'#DDE9FF',cloth:'#B7C0CA'},
+ {id:'gol',n:'골드',w:13, main:'#F6C445',dark:'#B8830C',hi:'#FFE88F',trim:'#D9A21B',acc:'#FF8A3D',glow:'#FFE88F',cloth:'#EDB52E'},
+ {id:'pla',n:'플래티넘',w:18,main:'#EEF2F8',dark:'#9DB0C8',hi:'#FFFFFF',trim:'#8DB5E6',acc:'#5E9BEA',glow:'#BFD9FF',cloth:'#DCE5F1'},
+ {id:'mit',n:'미스릴',w:24,main:'#8ED2F5',dark:'#3F8DBF',hi:'#DDF4FF',trim:'#F2FCFF',acc:'#25659F',glow:'#BDEBFF',cloth:'#6FBFEA'},
+ {id:'ori',n:'오리하르콘',w:31,main:'#C9391C',dark:'#5E150A',hi:'#FF8A4D',trim:'#F7C948',acc:'#FFC45E',glow:'#FF9A3C',cloth:'#A62C14'},
+ {id:'ada',n:'아다만타이트',w:40,main:'#25357A',dark:'#111A44',hi:'#5C7BF0',trim:'#F6C445',acc:'#8EA2FF',glow:'#6F86FF',cloth:'#1E2B66'}
+];
+var RKU=0;
+/* 금속 광택: 대각선으로 밝은 띠 → 어두운 띠 → 가장자리 빛이 지나가는 아주 옅은 덮개 (랭크마다 세기를 달리해요) */
+var RK_SHEEN=[.48,.46,.50,.58,.55,.52,.48,.40,.50], RK_SH=0, RK_I=0;
+function rkGrad(i,k){
+  var uid=++RKU, S=RK_SHEEN[i]*(k||1), id='rkg'+uid;
+  return {ref:'url(#'+id+')', def:'<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".2" stop-color="#fff" stop-opacity="'+S.toFixed(2)+'"/><stop offset=".34" stop-color="#fff" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset=".76" stop-color="#000" stop-opacity="'+(S*.42).toFixed(2)+'"/><stop offset=".9" stop-color="#fff" stop-opacity="'+(S*.45).toFixed(2)+'"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>'};
+}
+function rkShP(d,i,k){ var g=rkGrad(i,k); return g.def+'<path d="'+d+'" fill="'+g.ref+'" stroke="none"/>'; }
+function rkShEl(tag,attrs,i,k){ var g=rkGrad(i,k); return g.def+'<'+tag+' '+attrs+' fill="'+g.ref+'" stroke="none"/>'; }
+function rpts(a){ return a.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' '); }
+function rpoly(a,f,sw){ return '<polygon points="'+rpts(a)+'" fill="'+f+'" stroke="'+(sw===0?'none':OL)+'" stroke-width="'+(sw==null?2:sw)+'" stroke-linejoin="round"/>'; }
+function rlin(d,c,w,o){ return '<path d="'+d+'" fill="none" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round"'+(o?' opacity="'+o+'"':'')+'/>'; }
+function rgear(cx,cy,r,f){
+  var p=[],k,a,i,seq=[[-14,.8],[-9,1],[9,1],[14,.8]];
+  for(k=0;k<8;k++){ for(i=0;i<4;i++){ a=(k*45+seq[i][0]-90)*Math.PI/180; p.push([cx+r*seq[i][1]*Math.cos(a),cy+r*seq[i][1]*Math.sin(a)]); } }
+  return rpoly(p,f,1.8)+circ(cx,cy,r*.42,'#2A2F34',1.4);
+}
+function rrays(cx,cy,r,R,n,f1,f2){
+  var s='',k,a,d=Math.PI/n*0.55;
+  for(k=0;k<n;k++){ a=(k*360/n-90)*Math.PI/180;
+    s+=rpoly([[cx+r*Math.cos(a-d),cy+r*Math.sin(a-d)],[cx+R*Math.cos(a),cy+R*Math.sin(a)],[cx+r*Math.cos(a+d),cy+r*Math.sin(a+d)]],k%2?f2:f1,1.4); }
+  return s;
+}
+function rflake(cx,cy,r,c,w){
+  var s='',k,a,x,y;
+  for(k=0;k<3;k++){ a=k*60*Math.PI/180; x=r*Math.cos(a); y=r*Math.sin(a);
+    s+='<path d="M'+(cx-x)+','+(cy-y)+' L'+(cx+x)+','+(cy+y)+'" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round"/>'; }
+  for(k=0;k<6;k++){ a=k*60*Math.PI/180; var bx=cx+r*.62*Math.cos(a), by=cy+r*.62*Math.sin(a);
+    s+='<path d="M'+bx+','+by+' l'+(r*.28*Math.cos(a+1)).toFixed(1)+','+(r*.28*Math.sin(a+1)).toFixed(1)+' M'+bx+','+by+' l'+(r*.28*Math.cos(a-1)).toFixed(1)+','+(r*.28*Math.sin(a-1)).toFixed(1)+'" stroke="'+c+'" stroke-width="'+(w*.8)+'" stroke-linecap="round"/>'; }
+  return s;
+}
+function rflame(cx,cy,s,f,g){
+  return '<g transform="translate('+cx+','+cy+') scale('+s+')">'+pth('M0,-16 Q-10,-4 -6,6 Q0,13 6,6 Q10,-2 3,-9 Q3,-3 0,-1 Q-1,-8 0,-16 Z',f,1.8)+'<path d="M0,-2 Q-4,3 -1,7 Q3,6 2,1 Z" fill="'+g+'" stroke="none"/></g>';
+}
+function rcres(cx,cy,s,f,rot){
+  return '<path transform="translate('+cx+','+cy+') rotate('+(rot||0)+') scale('+s+')" d="M7.3,-10.8 A13,13 0 1,0 7.3,10.8 A11,11 0 1,1 7.3,-10.8 Z" fill="'+f+'" stroke="'+OL+'" stroke-width="'+(1.8/s).toFixed(2)+'" stroke-linejoin="round"/>';
+}
+function rcrys(x,y,w,h,f,g){
+  var pp=[[x-w/2,y],[x-w*.38,y-h*.78],[x,y-h],[x+w*.38,y-h*.78],[x+w/2,y]];
+  return rpoly(pp,f,1.6)+(RK_SH?rkShP('M'+pp.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' L')+' Z',RK_I,1):'')+
+    '<path d="M'+x+','+(y-h)+' L'+x+','+y+'" stroke="'+g+'" stroke-width="1.1" fill="none" stroke-linecap="round" opacity=".85"/>';
+}
+function rdia(x,y,r,f,g){ return rpoly([[x,y-r],[x+r*.8,y],[x,y+r],[x-r*.8,y]],f,1.5)+'<path d="M'+x+','+(y-r)+' L'+x+','+(y+r)+' M'+(x-r*.8)+','+y+' L'+(x+r*.8)+','+y+'" stroke="'+g+'" stroke-width=".9" opacity=".85"/>'; }
+
+/* ---------- 무늬(질감): 사각형 영역 (x0,y0)-(x1,y1)을 랭크 질감으로 덮어요. 자르기는 부르는 쪽에서 해요 ---------- */
+function rsTex(i,x0,y0,x1,y1){
+  var c=RKS[i], id=c.id, s='', x, y, w=x1-x0, h=y1-y0, n;
+  if(id==='cop'){
+    for(y=y0+6,n=0;y<y1;y+=9,n++) for(x=x0+(n%2?9:4);x<x1;x+=10) s+=rlin('M'+(x-2.4)+','+y+' q2.4,2.6 4.8,0',c.dark,1.5,.55)+'<circle cx="'+(x-.6)+'" cy="'+(y-1.4)+'" r=".9" fill="'+c.hi+'"/>';
+    s+='<path d="M'+x0+','+y0+' q'+(w*.25)+',6 '+(w*.12)+',18 q-'+(w*.2)+',-3 -'+(w*.3)+',-15 Z" fill="'+c.acc+'" opacity=".85"/><ellipse cx="'+(x1-w*.2)+'" cy="'+(y1-h*.12)+'" rx="'+(w*.1)+'" ry="3.2" fill="'+c.acc+'" opacity=".8"/>';
+  }else if(id==='iro'){
+    s+=rlin('M'+x0+','+(y0+h*.35)+' H'+x1,c.dark,2.2,.8)+rlin('M'+x0+','+(y0+h*.72)+' H'+x1,c.dark,2,.6);
+    s+='<ellipse cx="'+(x0+w*.25)+'" cy="'+(y0+h*.8)+'" rx="'+(w*.12)+'" ry="4" fill="'+c.acc+'" opacity=".6"/><ellipse cx="'+(x1-w*.2)+'" cy="'+(y0+h*.2)+'" rx="'+(w*.09)+'" ry="3.2" fill="'+c.acc+'" opacity=".55"/>';
+    for(x=x0+6;x<x1;x+=12){ s+=circ(x,y0+h*.35+4,1.6,'#6A727A',1)+circ(x,y0+h*.72+4,1.6,'#6A727A',1); }
+  }else if(id==='bro'){
+    for(y=y0+7,n=0;y<y1;y+=9,n++) for(x=x0+(n%2?10:5);x<x1;x+=10) s+=circ(x,y,1.5,c.hi,0).replace('stroke="none"','stroke="none" opacity=".85"');
+    s+=rlin('M'+x0+','+(y0+h*.4)+' Q'+(x0+w*.5)+','+(y0+h*.5)+' '+x1+','+(y0+h*.4),c.dark,1.8,.45);
+  }else if(id==='sil'){
+    s+='<polygon points="'+(x0-6)+','+(y0+h*.1)+' '+(x0+w*.25)+','+(y0+h*.1)+' '+(x0+w*.05)+','+y1+' '+(x0-6)+','+y1+'" fill="#fff" opacity=".5"/>'+
+       '<polygon points="'+(x0+w*.42)+','+y0+' '+(x0+w*.5)+','+y0+' '+(x0+w*.28)+','+y1+' '+(x0+w*.2)+','+y1+'" fill="#fff" opacity=".42"/>'+
+       '<polygon points="'+(x0+w*.78)+','+y0+' '+(x0+w*.86)+','+y0+' '+(x0+w*.7)+','+(y0+h*.7)+' '+(x0+w*.62)+','+(y0+h*.7)+'" fill="#fff" opacity=".4"/>';
+  }else if(id==='gol'){
+    [[.2,.25],[.55,.15],[.82,.3],[.35,.55],[.7,.62],[.15,.8],[.5,.85],[.88,.82]].forEach(function(p){ var px=x0+w*p[0], py=y0+h*p[1];
+      s+=rpoly([[px-2.6,py+1],[px-1,py-2.4],[px+2,py-2],[px+2.8,py+1.2],[px,py+2.6]],c.hi,1.1); });
+  }else if(id==='pla'){
+    for(x=x0-h;x<=x1;x+=12) s+=rlin('M'+x+','+y0+' L'+(x+h*.7)+','+y1,c.trim,1.4,.75)+rlin('M'+x+','+y1+' L'+(x+h*.7)+','+y0,c.trim,1.4,.75);
+    s+='<polygon points="'+x0+','+y0+' '+(x0+w*.4)+','+y0+' '+x0+','+(y0+h*.4)+'" fill="#fff" opacity=".55"/>';
+  }else if(id==='mit'){
+    for(y=y0+4,n=0;y<y1;y+=7,n++) for(x=x0+(n%2?4.5:0);x<x1+4;x+=9) s+='<path d="M'+(x-4.5)+','+y+' q4.5,7.5 9,0" fill="'+c.main+'" stroke="'+c.dark+'" stroke-width="1.4" opacity=".95"/><path d="M'+(x-2.8)+','+(y+1.2)+' q2.8,3 5.6,0" stroke="'+c.hi+'" stroke-width=".9" fill="none"/>';
+  }else if(id==='ori'){
+    var cr=['M'+(x0+w*.45)+','+y0+' L'+(x0+w*.38)+','+(y0+h*.25)+' L'+(x0+w*.46)+','+(y0+h*.45)+' L'+(x0+w*.36)+','+(y0+h*.7)+' L'+(x0+w*.42)+','+y1,
+            'M'+(x0+w*.46)+','+(y0+h*.45)+' L'+(x0+w*.68)+','+(y0+h*.55)+' L'+(x0+w*.78)+','+(y0+h*.8),
+            'M'+(x0+w*.36)+','+(y0+h*.7)+' L'+(x0+w*.15)+','+(y0+h*.78)+' L'+(x0+w*.1)+','+(y0+h*.95)];
+    cr.forEach(function(d){ s+=rlin(d,c.glow,6,.3)+rlin(d,c.acc,2.2,1); });
+  }else{
+    s+='<polygon points="'+x0+','+y0+' '+(x0+w*.3)+','+y0+' '+(x0+w*.14)+','+(y0+h*.5)+' '+x0+','+(y0+h*.42)+'" fill="'+c.hi+'" opacity=".35"/><polygon points="'+x1+','+y0+' '+(x1-w*.28)+','+y0+' '+(x1-w*.1)+','+(y0+h*.55)+' '+x1+','+(y0+h*.5)+'" fill="'+c.hi+'" opacity=".28"/>';
+    [[.3,.3],[.72,.5],[.45,.82]].forEach(function(p){ s+=rlin('M'+(x0+w*p[0]-3)+','+(y0+h*p[1])+' h6 M'+(x0+w*p[0])+','+(y0+h*p[1]-3)+' v6',c.trim,1.4,.95); });
+  }
+  return s;
+}
+/* 문장(등 뒤 큰 그림·허리띠 버클 크기에 맞춰 k로 줄여요) */
+function rkEmblem(i,cx,cy,k){
+  var c=RKS[i], id=c.id, s='';
+  if(id==='cop'){ s=circ(0,0,12,c.trim,2.2)+'<g transform="rotate(-40)"><rect x="-1.8" y="-10" width="3.6" height="20" rx="1.8" fill="'+c.dark+'" stroke="'+OL+'" stroke-width="1.4"/><rect x="-7" y="-12" width="14" height="7" rx="2" fill="'+c.hi+'" stroke="'+OL+'" stroke-width="1.6"/></g>'+bStar(8,8,2.8,'#fff'); }
+  else if(id==='iro'){ s=rgear(0,0,12.5,c.hi); }
+  else if(id==='bro'){
+    var t,px,py; s=circ(0,0,4.8,c.hi,1.8);
+    [-1,1].forEach(function(sg){ for(t=0;t<.99;t+=.2){ px=sg*(5+10*Math.sin(t*1.5)); py=11-23*t; s+='<ellipse cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" rx="2.8" ry="5.2" transform="rotate('+(sg*(35+t*50)).toFixed(0)+' '+px.toFixed(1)+' '+py.toFixed(1)+')" fill="'+c.acc+'" stroke="'+OL+'" stroke-width="1.2"/>'; } }); }
+  else if(id==='sil'){ s=rcres(0,0,1,c.hi,0)+bStar(11,-9,2.8,'#fff'); }
+  else if(id==='gol'){ s=rrays(0,0,8,16,12,c.hi,c.trim)+circ(0,0,7.4,c.acc,1.9)+circ(-2,-2.2,2,'#FFE0B0',0); }
+  else if(id==='pla'){ s=rdia(0,0,15,c.trim,'#fff')+rdia(0,0,7,'#fff',c.trim); }
+  else if(id==='mit'){ s=circ(0,0,11,c.hi,2)+rflake(0,0,8.5,c.acc,1.8); }
+  else if(id==='ori'){ s=rflame(0,1,1.05,c.acc,c.hi); }
+  else { s=rcrys(0,12,12,26,c.hi,'#fff')+rcrys(-9,12,7,15,c.hi,'#fff')+rcrys(9,12,7,15,c.hi,'#fff')+bStar(-13,-8,2.6,c.trim)+bStar(14,-6,2.2,c.trim); }
+  return '<g transform="translate('+cx+','+cy+') scale('+k+')">'+s+'</g>';
+}
+
+/* ---------- 망토 ---------- */
+function rkHemBack(i){   /* 뒷모습 망토 아래 끝 모양 (왼쪽 -35,48 → 오른쪽 35,48) */
+  var id=RKS[i].id;
+  if(id==='ori') return ' L-30,44 L-26,54 L-20,42 L-14,56 L-8,43 L-2,57 L4,43 L10,56 L16,43 L22,55 L28,44 L35,48';
+  if(id==='ada') return ' L-28,57 L-21,48 L-14,57 L-7,48 L0,57 L7,48 L14,57 L21,48 L28,57 L35,48';
+  if(id==='mit') return ' Q-28,58 -21,48 Q-14,58 -7,48 Q0,58 7,48 Q14,58 21,48 Q28,58 35,48';
+  return ' L35,48';
+}
+function rkBackCape(eq){
+  var it=eq.cape, i=it.rk, c=RKS[i], uid=++RKU, cid='rkc'+uid;
+  var P='M-30,-20 Q-42,12 -35,48'+rkHemBack(i)+' Q42,12 30,-20 Q0,-30 -30,-20 Z';
+  var s='<g class="in-cape">'+pth(P,c.cloth,3)+'<clipPath id="'+cid+'"><path d="'+P+'"/></clipPath><g clip-path="url(#'+cid+')">'+rsTex(i,-44,-30,44,60)+'</g>';
+  /* 아래 끝 띠 */
+  s+='<g clip-path="url(#'+cid+')"><path d="M-44,40 H44 V70 H-44 Z" fill="none"/></g>';
+  s+=rlin('M-33,41 Q0,46 33,41',c.id==='ada'||c.id==='ori'?c.trim:c.dark,2.4,c.id==='ori'?0:.55);
+  s+=rkEmblem(i,0,12,1.0);
+  s+=rkShP(P,i,.9);
+  s+='<path d="M-24,-14 Q0,-8 24,-14" fill="none" stroke="rgba(43,33,56,.28)" stroke-width="2.4" stroke-linecap="round"/>';
+  s+=circ(-17,-14,2.6,c.trim,1.6)+circ(17,-14,2.6,c.trim,1.6);   /* 어깨 여밈 */
+  return s+'</g>';
+}
+function rkFrontCape(it){
+  var i=it.rk, c=RKS[i], uid=++RKU, cid='rkf'+uid, P='M-24,-16 Q-48,10 -36,42 L16,34 Z';
+  var s=pth(P,c.cloth,3)+'<clipPath id="'+cid+'"><path d="'+P+'"/></clipPath><g clip-path="url(#'+cid+')">'+rsTex(i,-52,-20,20,46)+'</g>';
+  s+=rlin('M-36,42 L16,34',c.id==='ada'||c.id==='ori'?c.trim:c.dark,3,.7);
+  s+=rkEmblem(i,-31,14,.5);
+  return s+rkShP(P,i,.9);
+}
+
+/* ---------- 깃털 (머리 장식: 투구 위 꼭대기 자리, 기본 깃털과 같은 자리) ---------- */
+function rkPlume(it){
+  var i=it.rk, c=RKS[i], id=c.id, s='';
+  var F='M2,-67 Q8,-94 40,-86 Q22,-80 10,-63 Z';
+  RK_I=i; RK_SH=1;
+  if(id==='cop'){ s=pth(F,c.main,2.6)+'<path d="M26,-84 Q36,-86 40,-86 Q32,-81 24,-79 Z" fill="'+c.acc+'" stroke="none"/>'+rlin('M5,-66 Q18,-82 34,-85',c.dark,1.6,.7)+rlin('M12,-72 l5,2 M17,-77 l5,2 M22,-81 l4,1.5',c.dark,1.4,.6); }
+  else if(id==='iro'){ s=pth(F,c.main,2.6)+rlin('M5,-66 Q18,-82 36,-86',c.dark,2,.8)+circ(14,-75,2,'#6A727A',1.1)+circ(24,-81,2,'#6A727A',1.1)+'<ellipse cx="12" cy="-70" rx="3.6" ry="2" fill="'+c.acc+'" opacity=".65"/>'; }
+  else if(id==='bro'){ s=pth('M2,-66 Q-4,-84 10,-92 Q14,-78 10,-64 Z',c.acc,2.4)+pth('M6,-66 Q10,-88 30,-92 Q24,-76 12,-64 Z',c.main,2.4)+pth('M10,-66 Q22,-84 42,-82 Q30,-72 14,-63 Z',c.acc,2.4)+rlin('M6,-66 Q12,-80 28,-90',c.hi,1.6,.9); }
+  else if(id==='sil'){ s=pth(F,c.main,2.6)+rlin('M5,-66 Q18,-84 36,-87','#fff',2.8,.95)+rcres(30,-90,.38,c.hi,-25)+bStar(14,-88,2.4,'#fff'); }
+  else if(id==='gol'){ s=pth(F,c.main,2.6)+rlin('M5,-66 Q18,-82 36,-86',c.hi,2.2,.95)+rrays(36,-86,3.4,9,6,c.hi,c.trim); }
+  else if(id==='pla'){ s=pth(F,c.main,2.6)+rlin('M5,-66 L18,-80 L38,-86 M18,-80 L14,-68 M18,-80 L28,-76',c.trim,1.5,.9)+'<polygon points="6,-66 18,-80 14,-68" fill="#fff" opacity=".6"/>'+rdia(34,-86,4.4,c.acc,'#fff'); }
+  else if(id==='mit'){ s=rcrys(-3,-65,5,14,c.trim,c.acc)+rcrys(4,-66,6,19,c.trim,c.acc)+rcrys(11,-65,8,29,c.trim,c.acc)+rcrys(18,-62,6,20,c.trim,c.acc); }
+  else if(id==='ori'){ s=pth('M0,-64 Q-9,-86 4,-102 Q8,-90 14,-94 Q16,-80 28,-78 Q20,-67 10,-62 Z',c.main,2.6)+pth('M5,-66 Q2,-80 8,-90 Q11,-81 15,-82 Q14,-72 10,-65 Z',c.acc,0)+pth('M7,-66 Q6,-74 10,-80 Q12,-74 12,-70 Q11,-67 9,-66 Z','#FFF3B0',0); }
+  else {
+    var G=c.trim;
+    function gc(x,y,w,h){   /* 금테두리 수정: 파란 수정 몸통 + 가장자리 금 선 + 금 끝 */
+      return rpoly([[x-w/2,y],[x-w*.38,y-h*.78],[x,y-h],[x+w*.38,y-h*.78],[x+w/2,y]],c.hi,1.8)+
+        rkShP('M'+(x-w/2)+','+y+' L'+(x-w*.38)+','+(y-h*.78)+' L'+x+','+(y-h)+' L'+(x+w*.38)+','+(y-h*.78)+' L'+(x+w/2)+','+y+' Z',i,1)+
+        '<path d="M'+x+','+(y-h*.55)+' L'+x+','+(y-1)+' M'+(x-w*.38+2.4)+','+(y-h*.7)+' L'+x+','+(y-h*.42)+' L'+(x+w*.38-2.4)+','+(y-h*.7)+'" stroke="#fff" stroke-width="1" fill="none" stroke-linecap="round" opacity=".85"/>'+
+        '<path d="M'+(x-w/2+1.1)+','+(y-.6)+' L'+(x-w*.38+.9)+','+(y-h*.78+.6)+' L'+x+','+(y-h+2.4)+' L'+(x+w*.38-.9)+','+(y-h*.78+.6)+' L'+(x+w/2-1.1)+','+(y-.6)+'" fill="none" stroke="'+G+'" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>'+
+        rpoly([[x-w*.2,y-h*.88],[x,y-h-.6],[x+w*.2,y-h*.88]],G,1.1);
+    }
+    s=gc(1,-66,10,28)+gc(11.5,-65,13,40)+gc(22,-62,10,27);
+    /* 금 깃대(대쪽): 수정 아래를 가로지르는 굵은 금 대 + 이음 고리 */
+    s+='<path d="M-4,-63 Q10,-59 25,-56" fill="none" stroke="'+OL+'" stroke-width="7" stroke-linecap="round"/><path d="M-4,-63 Q10,-59 25,-56" fill="none" stroke="'+G+'" stroke-width="4" stroke-linecap="round"/>'+
+         '<path d="M-3,-64 Q10,-60 24,-57" fill="none" stroke="#FFF3B0" stroke-width="1.2" stroke-linecap="round" opacity=".9"/>'+
+         circ(1,-62.4,2.6,G,1.5)+circ(11.5,-60.6,2.6,G,1.5)+circ(22,-58.4,2.6,G,1.5);
+  }
+  if(id==='cop'||id==='iro'||id==='sil'||id==='gol'||id==='pla') s+=rkShP(F,i,1);
+  else if(id==='bro') s+=rkShP('M2,-66 Q-4,-84 10,-92 Q14,-78 10,-64 Z',i,1)+rkShP('M6,-66 Q10,-88 30,-92 Q24,-76 12,-64 Z',i,1)+rkShP('M10,-66 Q22,-84 42,-82 Q30,-72 14,-63 Z',i,1);
+  else if(id==='ori') s+=rkShP('M0,-64 Q-9,-86 4,-102 Q8,-90 14,-94 Q16,-80 28,-78 Q20,-67 10,-62 Z',i,1);
+  RK_SH=0;
+  return s;
+}
+
+/* ---------- 장화 ---------- */
+function rkBoot(x,y,it,lw){
+  var i=it.rk, c=RKS[i], id=c.id, w=(lw||15)+4, s='';
+  var foot=(id==='ori'||id==='ada'||id==='iro')?c.cloth:c.main;
+  s+=ell(x,y,11.5,7,foot,2.5)+'<rect x="'+(x-w/2)+'" y="'+(y-14)+'" width="'+w+'" height="9" rx="3" fill="'+foot+'" stroke="'+OL+'" stroke-width="2.5"/>';
+  /* 윗단 띠 */
+  s+='<rect x="'+(x-w/2-1)+'" y="'+(y-16)+'" width="'+(w+2)+'" height="5" rx="2.4" fill="'+c.trim+'" stroke="'+OL+'" stroke-width="2"/>';
+  s+='<path d="M'+(x-w/2+3)+','+(y-9.5)+' H'+(x+w/2-3)+'" stroke="rgba(255,255,255,.4)" stroke-width="1.6" stroke-linecap="round"/>';
+  /* 앞코 반짝임 + 랭크 무늬 */
+  s+='<ellipse cx="'+(x+(x<0?-3:3))+'" cy="'+(y+1.6)+'" rx="4" ry="1.9" fill="'+c.hi+'" opacity=".75"/>';
+  var my=y-9;
+  if(id==='cop') s+=rlin('M'+(x-3)+','+my+' q3,3 6,0',c.dark,1.6)+circ(x+5,y+1,1.6,c.acc,0);
+  else if(id==='iro') s+=circ(x,my,2,'#6A727A',1.1)+circ(x-5,y+1,1.3,'#6A727A',.9)+circ(x+5,y+1,1.3,'#6A727A',.9);
+  else if(id==='bro') s+='<circle cx="'+x+'" cy="'+my+'" r="3.6" fill="none" stroke="'+c.hi+'" stroke-width="1.8" stroke-dasharray="0.1 3" stroke-linecap="round"/>'+circ(x,my,1.5,c.hi,.8);
+  else if(id==='sil') s+=rcres(x,my,.28,c.hi,0)+rlin('M'+(x-6)+','+(y-1)+' q4,-3 8,-2','#fff',1.6,.9);
+  else if(id==='gol') s+=rpoly([[x-3,my+1],[x-1.2,my-2.6],[x+2.2,my-2.2],[x+3.2,my+1],[x,my+3]],c.hi,1.1);
+  else if(id==='pla') s+=rdia(x,my,3.8,c.acc,'#fff');
+  else if(id==='mit') s+=rflake(x,my,3.8,c.acc,1);
+  else if(id==='ori') s+=rlin('M'+(x-3)+','+(my-2)+' L'+x+','+my+' L'+(x-1)+','+(my+3),c.acc,1.8)+'<ellipse cx="'+(x+1)+'" cy="'+(y+2)+'" rx="5" ry="2" fill="'+c.acc+'" opacity=".5"/>';
+  else s+=rcrys(x,my+3,4.4,8,c.hi,'#fff');
+  s+=rkShEl('ellipse','cx="'+x+'" cy="'+y+'" rx="11.5" ry="7"',i,1)+rkShEl('rect','x="'+(x-w/2)+'" y="'+(y-14)+'" width="'+w+'" height="9" rx="3"',i,1)+rkShEl('rect','x="'+(x-w/2-1)+'" y="'+(y-16)+'" width="'+(w+2)+'" height="5" rx="2.4"',i,1);
+  return s;
+}
+
+/* ---------- 허리띠 ---------- */
+function rkBelt(it,B,noPouch){
+  var i=it.rk, c=RKS[i], id=c.id, w=B.w, x=-w/2, y=B.y, h=B.h, s='', cy=y+h/2, k;
+  var bf=(id==='ori'||id==='ada'||id==='iro')?c.cloth:c.main;
+  s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3.4" fill="'+bf+'" stroke="'+OL+'" stroke-width="2.5"/>';
+  s+='<path d="M'+(x+3)+','+(y+2)+' H'+(-w/2+w-3)+'" stroke="rgba(255,255,255,.35)" stroke-width="1.4" stroke-linecap="round"/>';
+  s+=rkShEl('rect','x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3.4"',i,1);
+  /* 옆 장식 */
+  [-1,1].forEach(function(sg){
+    var px=sg*(w/2-8);
+    if(id==='cop') s+=circ(px,cy,1.4,c.hi,0);
+    else if(id==='iro') s+=circ(px,cy,1.5,'#6A727A',1);
+    else if(id==='bro') s+=circ(px,cy,1.7,c.hi,.9);
+    else if(id==='sil') s+=bStar(px,cy,2.2,'#fff');
+    else if(id==='gol') s+=rpoly([[px-2,cy+.8],[px-.8,cy-1.8],[px+1.6,cy-1.6],[px+2.2,cy+.9],[px,cy+2]],c.hi,.9);
+    else if(id==='pla') s+=rdia(px,cy,2.4,c.acc,'#fff');
+    else if(id==='mit') s+=rflake(px,cy,2.4,c.trim,.9);
+    else if(id==='ori') s+=circ(px,cy,1.5,c.acc,0);
+    else s+=rcrys(px,cy+2.6,3,5.6,c.hi,'#fff');
+  });
+  /* 버클 */
+  s+='<g transform="translate(0,'+cy+') scale('+(h/10.5).toFixed(2)+')">'+
+     (id==='cop'?circ(0,0,6.4,c.trim,2)+rlin('M-3,0 q3,3 6,0',c.dark,1.4):
+      id==='iro'?rgear(0,0,6.6,c.hi):
+      id==='bro'?circ(0,0,6.2,c.hi,2)+'<circle cx="0" cy="0" r="3.8" fill="none" stroke="'+c.dark+'" stroke-width="1.2" stroke-dasharray="0.1 2.4" stroke-linecap="round"/>':
+      id==='sil'?rcres(0,0,.46,c.hi,0):
+      id==='gol'?rrays(0,0,4.4,8.4,8,c.hi,c.trim)+circ(0,0,4,c.acc,1.4):
+      id==='pla'?rdia(0,0,7.6,c.trim,'#fff'):
+      id==='mit'?circ(0,0,6.2,c.hi,1.8)+rflake(0,0,4.6,c.acc,1.2):
+      id==='ori'?rflame(0,.6,.5,c.acc,c.hi):
+      rcrys(0,6,6.4,13,c.hi,'#fff'))+'</g>';
+  if(it.pouch && !noPouch) s+='';
+  return s;
+}
+
+
+/* ===== 랭크 세트 러닝 옆모습 (러닝 탭 `sdFrame` 계열에 끼워 넣는 그림) ===== */
+function rkSideCape(it,cw,p){
+  var i=it.rk, c=RKS[i], uid=++RKU, cid='rkq'+uid;
+  var ex=(-40-5*cw).toFixed(1), ey=(2+4*Math.cos(p)).toFixed(1);
+  var P='M-4,-20 Q-26,-18 '+ex+','+ey+' Q-30,14 -6,26 Q-8,4 -4,-20 Z';
+  var s=pth(P,c.cloth,3)+'<clipPath id="'+cid+'"><path d="'+P+'"/></clipPath><g clip-path="url(#'+cid+')">'+rsTex(i,-52,-24,-2,30)+'</g>';
+  s+=rlin('M'+ex+','+ey+' Q-30,14 -6,26',(c.id==='ada'||c.id==='ori')?c.trim:c.dark,2.6,.7);
+  s+=rkEmblem(i,-24,2,.42);
+  s+=rkShP(P,i,.9);
+  return s;
+}
+function rkSideLeaf(pl,sw,tf){
+  return '<g transform="'+tf+'"><g transform="translate(-2,2) rotate('+(14+3*sw).toFixed(1)+' -6 -64) scale(-1,1)">'+rkPlume(pl)+'</g></g>';
+}
+function rkSideBoot(x,y,ps,it){
+  var i=it.rk, c=RKS[i], id=c.id, foot=(id==='ori'||id==='ada'||id==='iro')?c.cloth:c.main;
+  var FP='M-6,-7 L4,-7 L11,1 Q13,7 7,8 L-7,8 Q-10,0 -6,-7 Z', CP='M-8,-12 L5,-12 L5,-4 L-9,-4 Z', s='';
+  s+=pth(FP,foot,2.6)+pth(CP,c.trim,2.4)+'<path d="M-7,-9 H4" stroke="rgba(255,255,255,.4)" stroke-width="1.4" stroke-linecap="round"/>';
+  if(id==='cop') s+=circ(-2,-8,1.7,c.acc,0);
+  else if(id==='iro') s+=circ(-2,-8,1.8,'#6A727A',1);
+  else if(id==='bro') s+=circ(-2,-8,1.9,c.hi,.9);
+  else if(id==='sil') s+=bStar(-2,-8,2.6,'#fff');
+  else if(id==='gol') s+=rpoly([[-4.4,-7],[-3,-10],[-.4,-9.6],[.6,-7],[-2,-5.6]],c.hi,1);
+  else if(id==='pla') s+=rdia(-2,-8,3.2,c.acc,'#fff');
+  else if(id==='mit') s+=rflake(-2,-8,3.2,c.acc,.9);
+  else if(id==='ori') s+=rlin('M-4,-10 L-2,-8 L-3,-5',c.acc,1.6);
+  else s+=rcrys(-2,-5.4,3.6,7,c.hi,'#fff');
+  s+=rkShP(FP,i,1)+rkShP(CP,i,1);
+  s+='<path d="M-8,5 H10" stroke="rgba(43,33,56,.35)" stroke-width="2" stroke-linecap="round"/>';
+  return '<g transform="translate('+x.toFixed(1)+','+y.toFixed(1)+') rotate('+(ps*35).toFixed(1)+')">'+s+'</g>';
+}
+
+/* ---------- 세트 부품 (장비 한 벌 = 망토·깃털·장화·허리띠, it.rk가 있으면 위의 랭크 그림을 써요) ---------- */
+var RKSP=[];
+function rkSetParts(i){
+  if(RKSP[i]) return RKSP[i];
+  var c=RKS[i];
+  return RKSP[i]={cape:{slot:'cape',rk:i,fill:c.cloth,name:c.n+' 망토'},plume:{slot:'plume',rk:i,fill:c.main,name:c.n+' 깃털'},shoes:{slot:'shoes',rk:i,fill:c.main,name:c.n+' 장화'},belt:{slot:'belt',rk:i,fill:c.main,name:c.n+' 허리띠'}};
+}
+function rkPartIcons(i){
+  var eq=rkSetParts(i);
+  return [['망토','-46 -28 92 90','<g>'+backCapeArt({cape:eq.cape})+'</g>'],['깃털','-4 -106 52 48',plumeArt(eq.plume)],['장화','-18 -22 36 34',bootItemArt(0,0,eq.shoes,15)],['허리띠','-30 -4 60 22',beltItemArt(eq.belt,{w:52,y:2,h:9},true)]];
+}
+function rkSetIconInner(i){   /* 도감 카드 그림: 지금 캐릭터가 세트만 입은 모습 */
+  return '<ellipse cx="0" cy="56" rx="44" ry="6" fill="#000" opacity=".22"/>'+heroArt({who:curChar(),expr:'cheer',arms:HP.stand.arms,legs:HP.stand.legs,eq:rkSetParts(i)});
+}
+function rkSetFig(i){   /* 획득 연출 그림: 지금 입은 다른 장비는 그대로 두고 세트만 입혀 보여 줘요 */
+  var eq=curEq(), k, o={}, sp=rkSetParts(i);
+  for(k in eq){ if(k!=='pj' && k!=='set') o[k]=eq[k]; }
+  o.cape=sp.cape; o.plume=sp.plume; o.shoes=sp.shoes; o.belt=sp.belt;
+  return '<svg viewBox="-76 -108 152 170" aria-hidden="true"><ellipse cx="0" cy="56" rx="44" ry="6" fill="#000" opacity=".22"/>'+heroArt({who:curChar(),expr:'cheer',arms:HP.stand.arms,legs:HP.stand.legs,eq:o})+'</svg>';
+}
+
 /* 구름·새·소품 */
 function wlCloud(x,y,k,f){ return '<g transform="translate('+x+','+y+') scale('+k+')" fill="'+f+'" opacity=".92"><ellipse cx="0" cy="0" rx="26" ry="9"/><ellipse cx="-10" cy="-8" rx="12" ry="9"/><ellipse cx="8" cy="-10" rx="14" ry="11"/></g>'; }
 function wlBird(x,y,d,dur){ return '<g class="in-bird" style="animation-duration:'+dur+'s;animation-delay:'+d+'s"><g transform="translate('+x+','+y+')"><g class="in-flap"><path d="M0,0 q4,-5 8,0 q4,-5 8,0" fill="none" stroke="'+OL+'" stroke-width="2" stroke-linecap="round"/></g></g></g>'; }
@@ -5367,6 +5696,7 @@ function evScene(n){
 var rnOpen={list:false};
 /* 달리는 모습: 옆모습(오른쪽을 보고 달림) 8프레임을 빠르게 번갈아 보여 줘요 */
 function sdBoot(x,y,ps,fill){
+  if(fill&&typeof fill==='object'&&fill.rk!=null) return rkSideBoot(x,y,ps,fill);
   var it=(fill&&typeof fill==='object')?fill:null, f=it?it.fill:fill, ex='';
   if(it){
     ex+=pth('M-8,-11 L5,-11 L5,-4 L-9,-4 Z',f,2.4);
@@ -5397,6 +5727,7 @@ function sdPjCap(){
     '<path d="M-29,-38 Q0,-52 27,-46" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>'+bStar(-12,-62,3,'#FFF3B0');
 }
 function sdLeaf(pl,sw,tf){
+  if(pl&&pl.rk!=null) return rkSideLeaf(pl,sw,tf);
   return '<g transform="'+tf+'">'+pth('M-6,-64 Q-24,-74 -38,'+(-62+3*sw).toFixed(1)+' Q-24,-62 -10,-56 Z',(pl&&pl.fill)||'#3DD6A0',2.4)+'</g>';
 }
 function sdHead(kind,p,eq){
@@ -5440,7 +5771,7 @@ function sdFrame(kind,p,eq){
   var cw=Math.sin(p), s='<g transform="translate(0,'+(dy-1.5*(1-Math.abs(cw))).toFixed(1)+')">';
   /* 뒤로 휘날리는 것들 */
   var capeIt=eq.cape||(kind==='hero'?{fill:'#F6C445'}:null);
-  if(!pj && capeIt) s+=pth('M-4,-20 Q-26,-18 '+(-40-5*cw).toFixed(1)+','+(2+4*Math.cos(p)).toFixed(1)+' Q-30,14 -6,26 Q-8,4 -4,-20 Z',capeIt.fill,3);
+  if(!pj && capeIt) s+=(capeIt.rk!=null?rkSideCape(capeIt,cw,p):pth('M-4,-20 Q-26,-18 '+(-40-5*cw).toFixed(1)+','+(2+4*Math.cos(p)).toFixed(1)+' Q-30,14 -6,26 Q-8,4 -4,-20 Z',capeIt.fill,3));
   if(!pj && kind==='mage') s+=pth('M-4,-20 Q-30,-14 '+(-44-5*cw).toFixed(1)+','+(14+4*Math.cos(p)).toFixed(1)+' Q-30,34 -4,36 Q-8,8 -4,-20 Z',MC.dark,3);
   if(!pj && kind==='elf') s+='<g transform="translate(-12,-14) rotate(-30)">'+compQuiver(eq.equiver)+'</g>';
   s+=B.svg+armF.svg;
@@ -6658,9 +6989,13 @@ function homeChest(){
 function dogCards(list){
   var h='<div class="items cmp">';
   list.forEach(function(it){
-    var has=!!(S.inv&&S.inv[it.id]), worn=isWorn(it);
+    var has=!!(S.inv&&S.inv[it.id]), worn=isWorn(it), nm=has?it.name:'???', sm=SLOTN[it.slot]+(it.special?' · 특별':' · '+RARN[it.rar])+(worn?' · 착용 중':'');
+    if(it.rkset!=null){   /* v1.62.0 랭크 세트 카드: 이름은 랭크 이름만, 아래 줄에 종류와 상태 (못 받은 세트는 어느 랭크에서 받는지) */
+      nm=has?RANKS[it.rkset+1].n:'???';
+      sm=has?'세트<br>'+(worn?'착용 중':'특별장비'):RANKS[it.rkset+1].n+' 랭크에서<br>받아요';
+    }
     h+='<button type="button" class="item r-'+it.rar+(has?'':' lock')+(worn?' worn':'')+'" data-a="equip" data-id="'+it.id+'"'+(has?'':' disabled')+'>'+
-       '<span class="ii">'+itemIcon(it,has)+'</span><b>'+(has?it.name:'???')+'</b><small>'+SLOTN[it.slot]+(it.special?' · 특별':' · '+RARN[it.rar])+(worn?' · 착용 중':'')+'</small></button>';
+       '<span class="ii">'+itemIcon(it,has)+'</span><b>'+nm+'</b><small>'+sm+'</small></button>';
   });
   return h+'</div>';
 }
@@ -6693,7 +7028,7 @@ function homeDogam(){
   h+='</div>';
   on=!!dogOpen.special;
   h+='<div class="dgs'+(on?' open':'')+'">'+dogHead('special','특별장비',dogHave(special),special.length,on);
-  if(on) h+='<p class="dgn">첫 일요일 신전 방문을 마치면 한 번만 받아요. 입으면 무기를 뺀 모든 장비 칸을 대신해요(전용 무기는 파자마를 입어도 함께 입어요). 눌러서 입고 벗어요.</p>'+dogCards(special);
+  if(on) h+='<p class="dgn">첫 일요일 신전 방문을 마치면 파자마를 한 번만 받아요. 입으면 무기를 뺀 모든 장비 칸을 대신해요(전용 무기는 파자마를 입어도 함께 입어요). 랭크 세트는 승급하면 받아요. 망토, 깃털, 장화, 허리띠를 한 번에 입고, 한 칸만 바꿀 수는 없어요. 눌러서 입고 벗어요.</p>'+dogCards(special);
   h+='</div>';
   return h;
 }
@@ -7064,6 +7399,30 @@ var LFX=(function(){
   '@media (max-width:360px){#lfx .lfx-skip{right:10px;padding:7px 12px;font-size:13px}}'+
   /* 화면 움직임 줄이기: 교본·카드·망치·불꽃 이동·고리 확대·회전 광선·흔들림 없이 제자리에서 나타났다 사라져요 */
   '@media (prefers-reduced-motion: reduce){#lfx .lfx-par{animation:none;transform:none}#lfx .lfx-card{animation:none;opacity:1;transform:translate(-50%,-50%)}#lfx.lfx-stamped .lfx-stamp{animation:none;opacity:1;transform:translate(-50%,-50%) rotate(-8deg)}#lfx.lfx-stamped .lfx-book,#lfx.lfx-shake .lfx-stage{animation:none}#lfx .lfx-hm{animation:none !important}#lfx .lfx-item.lfx-pulse{animation:none}#lfx .lfx-sp i{animation:lfxBlink .6s ease-out forwards;transform:translate(var(--dx),var(--dy)) scale(.6)}#lfx .lfx-ring.lfx-go{animation:lfxBlink .7s ease-out forwards;opacity:.95;transform:scale(2.4)}#lfx .lfx-rays.lfx-go{animation:lfxFade 1.1s ease-out}}';
+
+  /* v1.62.0 랭크 세트 획득 연출 */
+  css.textContent+=
+  '#lfx.lfx-sg{background:radial-gradient(ellipse at 50% 42%,var(--g2,#2c4272) 0%,#141c36 62%,#0a0f1f 100%)}'+
+  '#lfx .lfx-sg-rays{position:absolute;left:-30%;top:-30%;width:160%;height:160%;opacity:0;background:repeating-conic-gradient(from 0deg at 50% 44%,var(--g1,rgba(255,255,255,.2)) 0 7deg,rgba(0,0,0,0) 7deg 22deg);-webkit-mask-image:radial-gradient(circle at 50% 44%,#000 8%,transparent 62%);mask-image:radial-gradient(circle at 50% 44%,#000 8%,transparent 62%);pointer-events:none}'+
+  '#lfx .lfx-sg-hd{position:absolute;top:calc(22px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;color:#FFE9A8;font-size:16px;font-weight:700;opacity:0}'+
+  '#lfx .lfx-sg-cl{position:absolute;left:50%;top:44%;width:min(66%,300px);transform:translate(-50%,-50%);display:grid;grid-template-columns:1fr 1fr;gap:10px}'+
+  '#lfx .lfx-sg-part{background:rgba(255,246,220,.96);border:3px solid #2B2138;border-radius:14px;padding:6px 4px;text-align:center;color:#2B2138;opacity:0;box-shadow:0 5px 0 rgba(0,0,0,.25)}'+
+  '#lfx .lfx-sg-part svg{display:block;width:100%;height:62px;overflow:visible}'+
+  '#lfx .lfx-sg-part b{display:block;font-size:13px;margin-top:2px}'+
+  '#lfx .lfx-sg-flash{position:absolute;left:0;top:0;right:0;bottom:0;background:radial-gradient(circle at 50% 44%,#fff 0%,rgba(255,255,255,.55) 30%,rgba(255,255,255,0) 70%);opacity:0;pointer-events:none}'+
+  '#lfx .lfx-sg-hero{position:absolute;left:50%;top:44%;width:min(56%,260px);transform:translate(-50%,-50%);opacity:0}'+
+  '#lfx .lfx-sg-hero svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 0 14px var(--g1,rgba(255,255,255,.4)))}'+
+  '#lfx .lfx-sg-spk{position:absolute;width:20px;height:20px;opacity:0;pointer-events:none}'+
+  '#lfx .lfx-sg-ti{position:absolute;left:50%;top:70%;width:min(94%,400px);transform:translateX(-50%);text-align:center;opacity:0}'+
+  '#lfx .lfx-sg-ti b{display:block;font-size:25px;line-height:1.25;color:#FFE9A8;text-shadow:0 2px 0 rgba(0,0,0,.45);text-wrap:balance}'+
+  '#lfx .lfx-sg-ti span{display:block;margin-top:4px;font-size:14px;color:#D5DEEE;text-wrap:balance}'+
+  '#lfx .lfx-sg-bt{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(92%,380px);transform:translateX(-50%);display:flex;gap:8px;opacity:0}'+
+  '#lfx .lfx-sg-bt button{flex:1;margin:0;width:auto;border:3px solid #2B2138;border-radius:14px;font:inherit;font-size:16px;font-weight:900;padding:11px 8px;min-height:48px;box-shadow:0 4px 0 rgba(0,0,0,.3);touch-action:manipulation}'+
+  '#lfx .lfx-sg-bt .lfx-sg-go{background:#F6C445;color:#2B2000}'+
+  '#lfx .lfx-sg-bt .lfx-sg-later{background:#E9EEF7;color:#2B2138}'+
+  '#lfx.lfx-sg.lfx-sg-end .lfx-sg-hd,#lfx.lfx-sg.lfx-sg-end .lfx-sg-ti,#lfx.lfx-sg.lfx-sg-end .lfx-sg-bt,#lfx.lfx-sg.lfx-sg-end .lfx-sg-hero{opacity:1}'+
+  '#lfx.lfx-sg.lfx-sg-end .lfx-sg-rays{opacity:.8}'+
+  '#lfx.lfx-sg.lfx-sg-end .lfx-sg-cl,#lfx.lfx-sg.lfx-sg-end .lfx-skip{display:none}';
   document.head.appendChild(css);
 
   function T(fn,ms){ tm.push(setTimeout(function(){ try{ fn(); }catch(e){} },ms)); }
@@ -7168,7 +7527,57 @@ var LFX=(function(){
       T(finish,tEnd);
     }catch(e){ finish(); }
   }
-  return {lesson:lesson, forge:forge, skip:finish, on:function(){ return !!el; }};
+
+  /* ---------- ③ 랭크 세트 획득 (승급 연출 다음에 한 번, 앱을 열었을 때 이미 오른 랭크의 세트를 받을 때도 한 번) ----------
+     spec={top:가장 높은 새 세트,low:가장 낮은 새 세트,n:새 세트 수,late:지난 보상이면 true}. 받은 세트는 미리 S.inv에 담겨 있고, 여기서는 보여 주기만 해요. */
+  function setGet(spec,done){
+    var red=reduceMotion(), i=spec&&spec.top, c, n, late, head, title, hint, P, h, k, sp, from, fs, st, A;
+    if(el || i==null){ if(done) done(); return; }
+    try{
+      c=RKS[i]; n=spec.n||1; late=!!spec.late;
+      head=late?'지난 승급 보상':'승급 보상';
+      title=(late&&n>1)?'세트 '+n+'벌이 도착했어요!':c.n+' 세트를 얻었어요!';
+      hint=(late&&n>1)?RKS[spec.low].n+' 세트부터 '+c.n+' 세트까지 받았어요':'망토, 깃털, 장화, 허리띠를 한 번에 입어요';
+      open('lfx-sg','랭크 세트 획득 연출',done);
+      el.style.setProperty('--g1',c.glow+'66'); el.style.setProperty('--g2',c.cloth);
+      P=rkPartIcons(i);
+      h='<div class="lfx-sg-rays"></div><button type="button" class="lfx-skip">건너뛰기</button><div class="lfx-sg-hd">'+head+'</div><div class="lfx-sg-cl">';
+      for(k=0;k<4;k++) h+='<div class="lfx-sg-part"><svg viewBox="'+P[k][1]+'" aria-hidden="true">'+P[k][2]+'</svg><b>'+P[k][0]+'</b></div>';
+      h+='</div><div class="lfx-sg-flash"></div><div class="lfx-sg-hero">'+rkSetFig(i)+'</div>';
+      sp=[[14,22],[82,26],[10,56],[88,58],[24,70],[76,72]];
+      for(k=0;k<sp.length;k++) h+='<div class="lfx-sg-spk" style="left:'+sp[k][0]+'%;top:'+sp[k][1]+'%"><svg viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9Z" fill="'+(k%2?c.hi:'#fff')+'"/></svg></div>';
+      h+='<div class="lfx-sg-ti"><b>'+title+'</b><span>'+hint+'</span></div><div class="lfx-sg-bt"><button type="button" class="lfx-sg-go">입어 보기</button><button type="button" class="lfx-sg-later">나중에</button></div>';
+      el.innerHTML=h;
+      el.querySelector('.lfx-skip').onclick=finish;
+      el.querySelector('.lfx-sg-go').onclick=function(){
+        S.eq=S.eq||{}; delete S.eq.pj; S.eq.set='rkset'+i; save(); render(); toast(c.n+' 세트를 입었어요'); finish();
+      };
+      el.querySelector('.lfx-sg-later').onclick=function(){ toast('도감의 특별장비에서 언제든 입을 수 있어요'); finish(); };
+      st=el; snd('blip',0.3,0.5,function(){ tone(523,0,0.1,0.06); });
+      if(red || !st.animate){
+        st.classList.add('lfx-sg-end'); snd('win',1.4,0.4,function(){ fanfare(); });
+        return;
+      }
+      A=function(node,kf,o){ return node.animate(kf,{duration:o.d,delay:o.dl||0,fill:'forwards',easing:o.e||'ease-out'}); };
+      A(st.querySelector('.lfx-sg-rays'),[{opacity:0},{opacity:.85}],{d:900});
+      st.querySelector('.lfx-sg-rays').animate([{transform:'rotate(0deg)'},{transform:'rotate(360deg)'}],{duration:26000,iterations:Infinity});
+      A(st.querySelector('.lfx-sg-hd'),[{opacity:0},{opacity:1}],{d:400,dl:250});
+      from=[['-130%','-30%','-20deg'],['40%','-140%','18deg'],['-120%','60%','14deg'],['130%','40%','-16deg']];
+      st.querySelectorAll('.lfx-sg-part').forEach(function(node,idx){
+        A(node,[{opacity:0,transform:'translate('+from[idx][0]+','+from[idx][1]+') rotate('+from[idx][2]+') scale(.5)'},{opacity:1,transform:'translate(0,0) rotate(0) scale(1)'}],{d:520,dl:450+idx*380});
+        T(function(){ snd('blip',0.12,0.45,function(){ tone(600+idx*60,0,0.07,0.05); }); },450+idx*380+200);
+      });
+      A(st.querySelector('.lfx-sg-cl'),[{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:'translate(-50%,-50%) scale(.12) rotate(30deg)',opacity:0}],{d:380,dl:2250,e:'ease-in'});
+      A(st.querySelector('.lfx-sg-flash'),[{opacity:0},{opacity:.95,offset:.35},{opacity:0}],{d:640,dl:2500});
+      A(st.querySelector('.lfx-sg-hero'),[{opacity:0,transform:'translate(-50%,-50%) scale(.55)'},{opacity:1,transform:'translate(-50%,-50%) scale(1.06)',offset:.7},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],{d:640,dl:2560});
+      st.querySelectorAll('.lfx-sg-spk').forEach(function(node,idx){ A(node,[{opacity:0,transform:'scale(0) rotate(0deg)'},{opacity:1,transform:'scale(1.2) rotate(40deg)',offset:.5},{opacity:0,transform:'scale(0) rotate(90deg)'}],{d:900,dl:2700+idx*110}); });
+      A(st.querySelector('.lfx-sg-ti'),[{opacity:0,transform:'translateX(-50%) translateY(18px)'},{opacity:1,transform:'translateX(-50%) translateY(0)'}],{d:420,dl:3200});
+      A(st.querySelector('.lfx-sg-bt'),[{opacity:0,transform:'translateX(-50%) translateY(14px)'},{opacity:1,transform:'translateX(-50%) translateY(0)'}],{d:380,dl:3800});
+      T(function(){ snd('win',1.4,0.4,function(){ fanfare(); }); vib([60,40,90]); },2560);
+      T(function(){ var b=el&&el.querySelector('.lfx-skip'); if(b) b.style.display='none'; },3800);
+    }catch(e){ finish(); }
+  }
+  return {lesson:lesson, forge:forge, setGet:setGet, skip:finish, on:function(){ return !!el; }};
 })();
 /* v1.48.0 레벨업 연출(가벼운 별도 연출): 번쩍이는 고리·별가루·튀어 오르는 새 레벨 숫자 */
 function lvFxHtml(from,to,solo){
@@ -7872,8 +8281,13 @@ app.addEventListener('click',function(e){
     var dgi=t.getAttribute('data-g'); dogOpen[dgi]=!dogOpen[dgi]; render();
   }else if(a==='equip'){
     var iid=t.getAttribute('data-id'), eit=itemById(iid);
-    if(eit && S.inv && S.inv[iid]){ S.eq=S.eq||{}; var wasOn=isWorn(eit); if(wasOn) delete S.eq[eit.slot]; else{ if(eit.slot!=='pj' && !isWeaponSlot(eit.slot)) delete S.eq.pj; S.eq[eit.slot]=iid; } save(); render();
-      if(!wasOn && eit.job && eit.job!==curChar()) toast(CHARN[eit.job]+' 전용 장비예요 · 캐릭터를 '+CHARN[eit.job]+'로 바꾸면 보여요'); }
+    if(eit && S.inv && S.inv[iid]){ S.eq=S.eq||{};
+      if(SETCOV.indexOf(eit.slot)>=0 && S.eq.set && S.inv[S.eq.set]){ toast('세트를 입는 중이에요. 세트를 벗으면 바꿀 수 있어요'); }   /* v1.62.0 세트를 입은 채 한 칸만 바꿀 수 없어요 */
+      else{
+        var wasOn=isWorn(eit); if(wasOn) delete S.eq[eit.slot]; else{ if(eit.slot!=='pj' && !isWeaponSlot(eit.slot)) delete S.eq.pj; if(eit.slot==='pj') delete S.eq.set; S.eq[eit.slot]=iid; } save(); render();
+        if(!wasOn && eit.slot==='set') toast(RANKS[eit.rkset+1].n+' 세트를 입었어요');
+        else if(!wasOn && eit.job && eit.job!==curChar()) toast(CHARN[eit.job]+' 전용 장비예요 · 캐릭터를 '+CHARN[eit.job]+'로 바꾸면 보여요');
+      } }
   }else if(a==='chest-open'){
     openChest();
   }else if(a==='kb'){
@@ -11016,6 +11430,7 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   /* 건물 개방 알림 · 환급 알림 · 길드 승급 알림(한 번씩) */
   function openPending(){
     if(kdRefund) return 'refund';
+    if(rkSetPending()) return 'rkset';
     if(bOpen('train') && kdSpent('train')===0 && !bdHas('open_train')) return 'train';
     if(bOpen('forge') && kdSpent('forge')===0 && !bdHas('open_forge')) return 'forge';
     if(bOpen('trade') && kdSpent('trade')===0 && !bdHas('open_trade')) return 'trade';
@@ -11031,6 +11446,7 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
       showOverlay({k:'ADJUSTED',t:'자재를 돌려드렸어요',b:'<p class="bnote">건물 복구 비용이 바뀌어서<br>넣어 둔 자재를 돌려드렸어요.</p><p class="bnote"><b>'+parts.join(' · ')+'</b></p>',mode:'info'});
       return;
     }
+    if(kd==='rkset'){ rkSetShow(); return; }
     bdMark('open_'+kd);
     if(kd==='guild'){
       showOverlay({k:'FIRST VICTORY',t:'첫 승리를 거뒀어요!',b:'<p class="bnote">마왕을 쓰러뜨려 <b>카퍼</b> 랭크의<br>승급 시험을 볼 수 있게 됐어요.</p>'+(bOpen('forge')?'':'<p class="bnote">카퍼 랭크가 되면 왕국에<br><b>대장간</b>도 개방돼요!</p>'),mode:'win',confirm:function(){ startOpenFlow('guild'); }});

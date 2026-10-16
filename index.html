@@ -1780,8 +1780,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.61.2', APP_DATE='2026-10-16', showChg=false;
+var APP_VER='1.61.3', APP_DATE='2026-10-16', showChg=false;
 var CHANGES=[
+['1.61.3','폰 뒤로가기를 누를 때 화면이 맨 위로 잠깐 튀던 것을 고쳤어요'],
 ['1.61.2','시작 로고 화면의 길이를 약 5.5초로 줄였어요(끝의 여운 부분을 줄였어요)'],
 ['1.61.1','시작 로고 화면의 소리를 없애고 무음으로 바꿨어요(다른 앱의 음악이 끊기지 않아요)'],
 ['1.61.0','시작 로고 화면을 새 로고로 바꿨어요(입체 달·금속 광택 높은음자리표와 글씨·빛나는 별, 왼쪽에서 번지며 나타나는 등장, 하프 소리, 약 6초)'],
@@ -11089,7 +11090,7 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
    2초 안에 한 번 더 누르면 history.back()으로 앱을 나가요. 다른 페이지 안(액자)에서는 켜지 않아요. 한 단계 뒤로 가는 일은 화면의 돌아가기 버튼을 그대로 눌러서 해요(같은 동작).
    닫히면 안 되는 것(첫 실행 질문·랭크업·처형 컷씬·확정 대기 창·시험 측정 중·클라우드 선택창)은 아무 일도 안 하고 보초만 다시 세워요. */
 (function(){
-var bkOn=false, bkAt=0;
+var bkOn=false, bkAt=0, bkY=null;
 function bkVis(el){ return !!el && !el.hidden; }
 function bkArm(){ try{ history.pushState({mj:1},'',location.href); }catch(e){} }   /* 처음 한 번만 써요 */
 function bkFwd(){ try{ history.forward(); }catch(e){} }   /* 보초는 새로 쌓지 않고, 지워진 보초 칸으로 앞으로 돌아가요(Chrome이 사용자가 안 만진 새 기록을 뒤로가기에서 건너뛰어서) */
@@ -11114,14 +11115,14 @@ return false;
 }
 window.addEventListener('popstate',function(e){
 if(!bkOn) return;
-if(e && e.state && e.state.mj===1) return;   /* 보초 칸으로 돌아온 것(앞으로 가기)은 무시 */
+if(e && e.state && e.state.mj===1){ if(bkY!==null){ try{ window.scrollTo(0,bkY); }catch(x){} bkY=null; } return; }   /* 보초 칸으로 돌아온 것(앞으로 가기)은 무시. v1.61.3 그때 브라우저가 0으로 돌려 놓은 스크롤 위치를 되돌려요 */
 if(window.__nmSplash){ bkFwd(); return; }   /* v1.60.0 시작 로고 화면이 떠 있는 동안 뒤로가기는 아무 일도 안 해요 */
-try{ if(bkAct()){ bkFwd(); return; } }catch(er){ bkFwd(); return; }
+try{ if(bkAct()){ bkY=window.pageYOffset; bkFwd(); return; } }catch(er){ bkFwd(); return; }
 var now=Date.now();
 if(now-bkAt<2000){ bkOn=false; try{ history.back(); }catch(e){} return; }
 bkAt=now; bkHi('한 번 더 누르면 앱이 닫혀요'); bkFwd();
 });
-try{ if(window.top===window && window.history && history.pushState){ history.replaceState({mj:0},'',location.href); bkArm(); bkOn=true; } }catch(e){}   /* 다른 페이지 안(미리보기 같은 액자)에서는 켜지 않아요 */
+try{ if(window.top===window && window.history && history.pushState){ history.replaceState({mj:0},'',location.href); try{ history.scrollRestoration='manual'; }catch(x){} bkArm(); bkOn=true; } }catch(e){}   /* 다른 페이지 안(미리보기 같은 액자)에서는 켜지 않아요 */
 })();
 })();
 </script>

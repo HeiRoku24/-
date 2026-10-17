@@ -1780,8 +1780,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.62.0', APP_DATE='2026-10-16', showChg=false;
+var APP_VER='1.62.1', APP_DATE='2026-10-17', showChg=false;
 var CHANGES=[
+['1.62.1','피버모드: 동작과 동작 사이 자세를 바꾸는 시간을 30초에서 20초로 줄였어요. 플랭크처럼 정해진 초 동안 버티는 운동은 속도를 바꿔도 원래 시간 그대로 가요(훈련장 피버모드도 같아요). 승급 시험을 볼 수 있게 되면(아이언부터 아다만타이트 복귀까지) 반디가 한 번 알려 줘요'],
 ['1.62.0','랭크 세트 추가: 승급하면 카퍼부터 아다만타이트까지 랭크마다 공용장비 세트(망토·깃털·장화·허리띠)를 받고 획득 연출이 나와요. 이미 오른 랭크의 세트는 앱을 열면 한꺼번에 받아요. 도감의 특별장비에서 입고 벗고(한 칸만 바꿀 수 없어요), 정면·옆·뒷모습과 러닝 모습에 모두 나와요'],
 ['1.61.4','시작 로고 화면 전체 속도를 조금 빠르게 해서 약 5초로 맞췄어요(내용은 그대로 다 나와요)'],
 ['1.61.3','폰 뒤로가기를 누를 때 화면이 맨 위로 잠깐 튀던 것을 고쳤어요'],
@@ -7728,14 +7729,15 @@ var FEVB={
 };
 var FEV_VB='24 4 146 117';   /* v1.46.23 운동 그림 칸을 실제 그려지는 영역(전 동작 합집합 가로 136×세로 112)에 맞춘 보임 창 */
 var FEV_VOL=3;   /* v1.46.21 메트로놈·카운트다운 소리 크기 배율(소리가 작으면 올리고, 크면 내려요) */
-var FEV_PREP=4, FEV_TRANS=30, FEV_REST=60, FEV_SWITCH=6;   /* 시작 전 준비 · 동작 사이 전환 · 라운드 사이 휴식 · 좌우 바꾸는 시간(초) */
+var FEV_PREP=4, FEV_TRANS=20, FEV_REST=60, FEV_SWITCH=6;   /* 시작 전 준비 · 동작 사이 전환 · 라운드 사이 휴식 · 좌우 바꾸는 시간(초) */
 var FEV_NOTE_Q='<span>용사의 안내에 따라 메인퀘스트를 진행해요.</span><span>동작을 한 세트씩 돌아가며, 박자 소리와 숫자에 맞춰 따라 하면 세트가 끝날 때마다 자동으로 체크돼요.</span><span>일시정지는 할 수 있고, 닫아도 마친 세트는 그대로 체크돼 있어요. 소리는 설정의 효과음 크기를 따라가요.</span>';
 var FEV_NOTE_FREE='<span>고른 운동을 담은 순서대로 돌아가며 해요.</span><span>세트가 끝날 때마다 훈련 기록이 남아요.</span><span>일시정지는 할 수 있고, 닫아도 마친 세트는 기록에 남아 있어요. 소리는 설정의 효과음 크기를 따라가요.</span>';
 var fv=null, fevOn=false, fevEl=null, fevTm=null, fevLock=null, fevSpd=1;
 /* v1.49.5 사용자가 고르는 진행 속도: 10분의 1 단위 정수(5~15 = 0.5×~1.5×). 동작하는 박자(work 단계)에만 적용되고 준비·전환·휴식은 그대로예요. 기기별 로컬 저장(momjjang-fevspd). fevSpd는 미리보기 전용 빨리 감기(전체 단계)라 따로 둬요 */
 var fevUS=fevUsLoad();
 function fevUsLoad(){ var v=10; try{ v=parseInt(localStorage.getItem('momjjang-fevspd'),10); }catch(e){} return (v>=5 && v<=15)?v:10; }
-function fevEff(p){ return fevSpd*((p && p.t==='work')?fevUS/10:1); }
+function fevUsOf(sp){ return (sp && sp.h)?10:fevUS; }   /* v1.62.1 초 단위로 버티는 운동(플랭크 등, h:1)은 속도를 바꿔도 원래 시간 그대로예요 */
+function fevEff(p){ return fevSpd*((p && p.t==='work')?fevUsOf(p.sp)/10:1); }
 var FEV_ICO_PAUSE='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5v14M15.5 5v14" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/></svg>';
 var FEV_ICO_PLAY='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 function fevStage(k){ var dfc=diffOn(k); return (dfc==='sprout')?Math.min(stageIdx(),1):stageIdx(); }
@@ -7762,7 +7764,7 @@ function fevPhases(items,k){
   }
   return ph;
 }
-function fevSecs(ph){ var s=0; ph.forEach(function(p){ s+=(p.t==='work')?p.len*10/fevUS:p.len; }); return s; }
+function fevSecs(ph){ var s=0; ph.forEach(function(p){ s+=(p.t==='work')?p.len*10/fevUsOf(p.sp):p.len; }); return s; }
 function fevMinText(ph){ return '약 '+Math.max(1,Math.round(fevSecs(ph)/60))+'분'; }
 /* 퀘스트 화면 버튼: 오늘, 아직 안 끝나고 잠기지 않은 날, 운동이 남아 있을 때만 */
 function fevHtml(k,dk,p,L,lockM){
@@ -7823,9 +7825,9 @@ function fevResync(){   /* 속도를 바꾸면 운동 그림도 새 박자로 �
   p=fv.ph[fv.i]; spec=p.sp||fevSpec(p.it.id,fv.st);
   if(!spec.dur) return;
   box=document.getElementById('fvfig'); if(!box) return;
-  d=Math.round(spec.dur*10/fevUS*1000)/1000;
+  d=Math.round(spec.dur*10/fevUsOf(spec)*1000)/1000;
   box.innerHTML=fevFig(p.it.id,d);
-  if(p.t==='work'){ try{ sv=box.querySelector('svg'); if(sv && sv.setCurrentTime) sv.setCurrentTime((fv.t%spec.dur)*10/fevUS); }catch(e){} }
+  if(p.t==='work'){ try{ sv=box.querySelector('svg'); if(sv && sv.setCurrentTime) sv.setCurrentTime((fv.t%spec.dur)*10/fevUsOf(spec)); }catch(e){} }
   if(fv.paused || fv.hold) fevAnim(false);
 }
 function fevDom(){
@@ -8095,7 +8097,7 @@ function fevPaint(force){
   if(fv.fig!==fk){
     fv.fig=fk;
     var spec=sp||fevSpec(it.id,fv.st);
-    document.getElementById('fvfig').innerHTML=fevFig(it.id,spec.dur?Math.round(spec.dur*10/fevUS*1000)/1000:spec.dur);
+    document.getElementById('fvfig').innerHTML=fevFig(it.id,spec.dur?Math.round(spec.dur*10/fevUsOf(spec)*1000)/1000:spec.dur);
     if(fv.paused) fevAnim(false);
   }
   if(p.t==='ready'){
@@ -11260,6 +11262,9 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
     {t:'여기가 용사님의 «랭크»예요. 승리를 쌓을수록 한 단계씩 올라가요!', els:one('.card.rk-hero'), late:true, noPrev:true},
     {t:'응시 조건을 채웠어요! «길드로 승급시험 보러가기»를 눌러 보세요.', els:one('[data-a="goguild"]'), tap:function(){ return q1('[data-a="goguild"]'); }, late:true}
   ].concat(TOURS.b_guild.map(function(s,i){ var c={}, k; for(k in s) c[k]=s[k]; c.late=true; c.when=function(){ return !bdHas('guild'); }; if(i===0) c.noPrev=true; return c; }));
+  /* v1.62.1 승급 시험 응시 안내: 첫 승리(카퍼, o_guild) 뒤의 모든 승급·아다만타이트 복귀 재응시에서, 조건을 처음 채운 순간 한 번만 나와요(랭크마다 따로) */
+  var rkexT='';
+  TOURS.o_rkex=[{t:function(){ return rkexT; }, els:one('.hud .rkb'), tap:function(){ return q1('.hud .rkb'); }}].concat(TOURS.o_guild.slice(2).map(function(s,i){ var c={}, k; for(k in s) c[k]=s[k]; if(i===0) c.noPrev=true; return c; }));
 
   var on=false, idx=0, list=[], cur=null, raf=0, PAD=6, tourTab=null, tkTry=0, tkTimer=null;
   var TK_KEY={today:'today',run:'run',home:'kingdom',ach:'diary',boss:'boss'};   /* 탭 첫 방문 기록은 예전 반디 안내가 쓰던 S.bdSeen 칸을 그대로 써요(저장·백업·클라우드 합치기가 이미 되어 있어요) */
@@ -11437,7 +11442,17 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
     if(rkCur()===0 && rkWins()>=1 && !bdHas('open_guild')) return 'guild';
     if(trainBuilt() && lsRankOk(1) && !lsHave(1) && !bdHas('open_ls1')) return 'ls1';
     if(trainBuilt() && lsHave(1) && lsRankOk(2) && !lsHave(2) && !bdHas('open_ls2')) return 'ls2';
+    if(rkexKey() && !bdHas(rkexKey())) return 'rkex';
     return null;
+  }
+  /* v1.62.1 승급 시험 응시 조건을 채운 상태의 기록 키(랭크마다 한 번, 아다만타이트 복귀 재응시는 내려온 날짜마다 한 번). 카퍼(첫 승리)는 'guild' 안내가 맡아요 */
+  function rkexKey(){
+    var ri=rkCur(), ad=rkAda(), nx;
+    if(ri<1) return null;
+    if(ad.st==='elig') return 'rkex_adab_'+ad.down;
+    if(ad.st==='down') return null;
+    nx=RANKS[ri+1]; if(!nx) return null;
+    return (rkWins()>=nx.w)?'rkex_'+nx.id:null;
   }
   function showOpen(kd){
     if(kd==='refund'){
@@ -11447,6 +11462,13 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
       return;
     }
     if(kd==='rkset'){ rkSetShow(); return; }
+    if(kd==='rkex'){
+      var kx=rkexKey(), ad2=rkAda(), nx2=RANKS[rkCur()+1]; if(!kx) return;
+      bdMark(kx);
+      rkexT=(ad2.st==='elig')?'«아다만타이트» 복귀 시험을 볼 수 있어요! «랭크 배지»를 눌러 확인해 봐요.':'«'+nx2.n+'» 승급 시험을 볼 수 있어요! «랭크 배지»를 눌러 확인해 봐요.';
+      startOpenFlow('rkex');
+      return;
+    }
     bdMark('open_'+kd);
     if(kd==='guild'){
       showOverlay({k:'FIRST VICTORY',t:'첫 승리를 거뒀어요!',b:'<p class="bnote">마왕을 쓰러뜨려 <b>카퍼</b> 랭크의<br>승급 시험을 볼 수 있게 됐어요.</p>'+(bOpen('forge')?'':'<p class="bnote">카퍼 랭크가 되면 왕국에<br><b>대장간</b>도 개방돼요!</p>'),mode:'win',confirm:function(){ startOpenFlow('guild'); }});
@@ -11462,10 +11484,10 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
   }
   function startOpenFlow(kd){
     armed=false;
-    if(kd==='guild'){
+    if(kd==='guild' || kd==='rkex'){
       if(!q1('.hud .rkb')){ tab='today'; sel=TODAY; npcOpen={}; render(); }   /* 랭크 배지가 보이는 화면에서 시작해요(퀘스트 탭) */
       window.scrollTo(0,0);
-      var needG=!bdHas('guild'); start('o_guild',true); if(needG) bdMark('guild');
+      var needG=!bdHas('guild'); start(kd==='rkex'?'o_rkex':'o_guild',true); if(needG) bdMark('guild');
       return;
     }
     tab='home'; kv='map'; npcOpen={}; render(); window.scrollTo(0,0);

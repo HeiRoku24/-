@@ -132,12 +132,12 @@ body{margin:0; background:var(--bg); color:var(--ink);
 button{font:inherit; color:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent;}
 button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--gold); outline-offset:2px;}
 .wrap{max-width:560px; margin:0 auto; padding:18px 16px 170px;}
-.eyebrow{color:var(--muted); font-size:14px; margin:0 2px 4px; font-weight:500; min-height:36px; display:flex; align-items:center; padding-right:46px;}
+.eyebrow{color:var(--muted); font-size:14px; margin:0 2px 4px; font-weight:500; min-height:36px; display:flex; align-items:center; padding-right:52px;}
 .wrap{position:relative;}
 body.title-up #app,body.title-up #nav{display:none !important;}   /* 시작화면이 떠 있는 동안 뒤의 앱 화면은 멈춰 둬요(시작화면 움직임이 끊기지 않게) */
-.gearbtn{position:absolute; top:5px; right:16px; z-index:5; width:40px; height:40px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid var(--line); background:var(--surface); color:var(--muted); box-shadow:0 2px 0 var(--edge);}
-.gearbtn svg{width:22px; height:22px; fill:currentColor;}
-.gearbtn:active{background:var(--soft);}
+
+
+
 h1{font-family:var(--disp); font-weight:400; font-size:36px; line-height:1.15; margin:0;}
 h1.ph{margin:22px 2px 6px;}
 h2{font-family:var(--disp); font-weight:400; font-size:19px; margin:26px 2px 10px; padding-left:10px; border-left:4px solid var(--gold); line-height:1.2;}
@@ -348,7 +348,7 @@ svg.chart{width:100%; height:auto; display:block;}
 
 /* timer, toast, nav, overlay */
 .timer{position:fixed; left:50%; transform:translateX(-50%); width:calc(100% - 24px); max-width:536px;
-  bottom:calc(88px + env(safe-area-inset-bottom,0px)); background:var(--surface); border:2px solid var(--gold); color:var(--ink);
+  bottom:calc(104px + env(safe-area-inset-bottom,0px)); background:var(--surface); border:2px solid var(--gold); color:var(--ink);
   border-radius:18px; padding:10px 14px; display:flex; align-items:center; gap:12px; z-index:20; box-shadow:0 4px 0 var(--edge);}
 .timer[hidden]{display:none;}
 .tlab{font-size:13px; color:var(--muted); font-weight:700;}
@@ -372,11 +372,9 @@ body{text-wrap:pretty;}
 .cht{background:var(--gold); border:2px solid var(--gold-ink); border-radius:16px 16px 4px 16px; padding:8px 12px; font-size:14px; font-weight:700; line-height:1.4; color:var(--gold-ink); box-shadow:0 3px 0 var(--edge);}
 .toast.show{animation:tin .25s ease-out;}
 @keyframes tin{from{transform:translate(-50%,-14px); opacity:0;}to{transform:translate(-50%,0); opacity:1;}}
-.nav{position:fixed; left:50%; transform:translateX(-50%); width:calc(100% - 24px); max-width:536px;
-  bottom:calc(10px + env(safe-area-inset-bottom,0px)); display:flex; gap:6px; padding:6px;
-  background:var(--surface); border:2px solid var(--line); border-radius:22px; box-shadow:0 4px 0 var(--edge); z-index:30;}
-.nav button{flex:1; min-height:52px; border:0; border-radius:16px; background:none; font-family:var(--disp); font-size:19px; color:var(--muted);}
-.nav button[aria-current="page"]{background:var(--gold); color:var(--gold-ink);}
+
+
+
 .ov{position:fixed; inset:0; z-index:50; background:rgba(3,10,9,.8); display:grid; place-items:center; padding:20px;}
 .ov[hidden]{display:none;}
 #cf{position:absolute; inset:0; width:100%; height:100%; pointer-events:none;}
@@ -489,9 +487,9 @@ body{text-wrap:pretty;}
 .dcard{display:block; width:100%; text-align:left; background:var(--surface); border:2px solid var(--line); border-radius:14px; padding:10px 12px; margin:0 0 8px; color:var(--ink);}
 .dcard b{display:block; font-size:16px;} .dcard span{display:block; font-size:13px; margin-top:2px;} .dcard small{display:block; font-size:12px; color:var(--muted); margin-top:3px;}
 .dcard.on{border-color:var(--gold); box-shadow:0 0 0 2px rgba(246,196,69,.35);}
-.bdbtn{position:absolute; top:5px; right:64px; z-index:5; width:40px; height:40px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid var(--line); background:var(--surface); box-shadow:0 2px 0 var(--edge);}
-.bdbtn svg{width:36px; height:30px; display:block;}
-.bdbtn:active{background:var(--soft);}
+
+
+
 .bdq{font-size:17px; line-height:1.6; margin:8px 2px 12px; text-align:center; word-break:keep-all; font-weight:600;}
 .bdsm{font-size:13px; line-height:1.55; color:var(--muted); margin:8px 2px 0; text-align:center; word-break:keep-all;}
 .bdans{font-size:15px; line-height:1.7; margin:4px 2px 10px; text-align:left; word-break:keep-all;}
@@ -708,30 +706,30 @@ body{text-wrap:pretty;}
 .lootr{margin:0; font-size:13px; color:var(--muted);}
 .lootpv{width:150px; margin:0 auto 10px; background:var(--soft); border-radius:16px;}
 .comfort{font-family:var(--disp); font-size:19px; line-height:1.5; margin:10px 4px 4px;}
-.nav button{font-size:17px;}
-.nav{gap:4px;}
-.nav button{font-size:16px; min-width:0; padding:0 2px;}
+
+
+
 /* v1.65.0 하단 메뉴 6번째 탭(마왕전) */
-.nav{gap:4px;}
-.nav button{font-size:16px; padding:0 2px;}
-@media (max-width:350px){ .nav button{font-size:14.5px;} }
-.nav button[hidden]{display:none;}
-.nav button.dot{position:relative;}
-.nav button.dot:after{content:''; position:absolute; top:6px; right:5px; width:8px; height:8px; border-radius:50%; background:var(--boss); border:1.5px solid var(--surface);}
+
+
+
+
+
+
 
 /* v1.69.0 하단 메뉴 5탭 · 마왕전 탭 보라색(입장 가능 점·입장 불가 자물쇠) · 일지는 위쪽 버튼 */
-.nav button.dm{color:var(--dmv);}
-.nav button.dm[aria-current="page"]{background:linear-gradient(180deg,#4B2F8A,#6B3FB5); color:#fff;}
-.nav button.dm.lk{color:var(--muted); opacity:.85; position:relative;}
-.nav button.dm.lk:after{content:''; position:absolute; top:5px; right:4px; width:14px; height:14px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='7' width='10' height='7' rx='1.5' fill='%236C7F7B'/%3E%3Cpath d='M5 7V5a3 3 0 0 1 6 0v2' fill='none' stroke='%236C7F7B' stroke-width='1.6'/%3E%3C/svg%3E") center/contain no-repeat;}
+
+
+
+
 /* v1.70.0 레드닷: 일지 버튼·왕국 건물 점(보라 점은 없앴어요) */
-.achbtn.dot:after{content:''; position:absolute; top:-1px; right:-1px; width:11px; height:11px; border-radius:50%; background:var(--boss); border:2px solid var(--surface);}
+
 .kb .rdt{position:absolute; top:0; right:0; width:14px; height:14px; border-radius:50%; background:var(--boss); border:2px solid var(--surface); pointer-events:none; z-index:2;}
-.achbtn{position:absolute; top:5px; right:112px; z-index:5; width:40px; height:40px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid var(--line); background:var(--surface); color:var(--muted); box-shadow:0 2px 0 var(--edge);}
-.achbtn svg{width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
-.achbtn:active{background:var(--soft);}
-.achbtn.on{background:var(--gold); color:var(--gold-ink); border-color:var(--gold);}
-.achtop .eyebrow{padding-right:142px; white-space:nowrap;}
+
+
+
+
+.achtop .eyebrow{padding-right:160px; white-space:nowrap;}
 @media (max-width:350px){ .achtop .eyebrow{font-size:12.5px;} }
 /* v1.69.0 동작 미리 보기(마왕전·승급 시험) */
 .dmx .dmpv2{display:block; width:100%; margin:0 0 12px; padding:11px 0; border-radius:14px; border:2px solid #8E5BD9; background:transparent; color:#F4EEF8; font-family:var(--disp); font-size:17px;}
@@ -788,7 +786,7 @@ body{text-wrap:pretty;}
 @keyframes dmcTxt{from{opacity:0; transform:translateY(8px);}to{opacity:1; transform:none;}}
 @media (prefers-reduced-motion: reduce){ #dmcut .dmc-sky,#dmcut .dmc-art,#dmcut .dmc-boss,#dmcut .dmc-t{animation:none; opacity:1; transform:none;} #dmcut .dmc-boss{opacity:.9;} }
 .sets.fvonly .set{opacity:.55;}
-.nav[hidden]{display:none;}
+
 .dmx{--surface:#FFF9EC; --ink:#2B2138; --muted:#6B5E7C; --line:#D9D0E4; --soft:#F3ECDD; --gold:#F6C445; --gold-ink:#2B2138; --edge:#2B2138;
   position:fixed; inset:0; z-index:20; background:linear-gradient(#1D1535,#2B1F4B 55%,#3B2A5C); color:#F4EEF8; overflow:auto; padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(28px + env(safe-area-inset-bottom,0px));}
 .dmx .top{display:flex; justify-content:space-between; align-items:center; margin:0 0 6px;}
@@ -1578,6 +1576,87 @@ button.q.trfv{display:flex; align-items:center; gap:12px; width:100%; min-height
 .bk2 .primary,.bk2 .ghost{box-sizing:border-box; flex:1 1 0; min-width:0; width:auto; height:46px; min-height:46px; margin:0; padding:0 6px; white-space:nowrap; font-size:clamp(14px,4vw,16px); border-radius:14px; }
 .bk2 .primary{border:2px solid transparent}
 
+
+/* v1.72.0 하단 메뉴: 화면 아래에 딱 붙는 프레임 · 입체 버튼 · 아이콘 · 마왕전 액체 구슬(뿔·쇠사슬·자물쇠) · 위쪽 버튼 3개도 같은 입체 재질 */
+.nav{position:fixed; left:0; right:0; bottom:0; display:flex; gap:3px; box-sizing:border-box; z-index:30;
+  padding:6px max(6px,calc(50% - 274px)) calc(6px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,#3a5457 0%,#1f3438 45%,#0f1d20 100%); border-top:2px solid var(--edge);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.18), 0 -6px 14px rgba(0,0,0,.45);}
+.nav[hidden]{display:none;}
+.nav button{flex:1; min-width:0; height:56px; padding:0 1px; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  border:1px solid #070E0D; border-radius:15px; background:linear-gradient(180deg,#2c4448 0%,#182a2d 100%);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.2), inset 0 -3px 0 rgba(0,0,0,.4), 0 2px 0 #070E0D;
+  font-family:var(--disp); font-size:14px; line-height:16px; color:#8FAEAA; text-shadow:0 1px 0 #000; -webkit-tap-highlight-color:transparent;}
+.nav button[hidden]{display:none;}
+.nav button:active{transform:translateY(1px);}
+.nav button[aria-current="page"]{background:linear-gradient(180deg,#FFE58F 0%,#F6C445 52%,#D9A21E 100%); border-color:#7a5a0c; color:var(--gold-ink); text-shadow:0 1px 0 rgba(255,255,255,.4);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.6), inset 0 -3px 0 rgba(120,80,0,.5), 0 2px 0 #6e500a, 0 0 12px rgba(246,196,69,.4);}
+.nav .ni{display:block; width:28px; height:28px; filter:drop-shadow(0 2px 1px rgba(0,0,0,.6));}
+.nav button[aria-current="page"] .ni{filter:drop-shadow(0 1px 0 rgba(255,255,255,.5));}
+.ico svg{display:block; width:100%; height:100%; overflow:visible;}
+.ico .m{fill:var(--m);} .ico .ms{fill:none; stroke:var(--m); stroke-linecap:round; stroke-linejoin:round;}
+.ico .d{fill:var(--d);} .ico .ds{fill:none; stroke:var(--d); stroke-linecap:round;}
+.ico .x{fill:var(--x);} .ico .xs{fill:none; stroke:var(--x); stroke-linecap:round;} .ico .st{fill:var(--s);}
+.nav [data-tab="week"],.nav [data-tab="today"],.nav [data-tab="run"],.nav [data-tab="home"],.nav [data-tab="ach"]{--s:#2B2000;}
+.nav [data-tab="week"]{--m:#E9C98B; --d:#7A5B2A; --x:#FF6A5B;}
+.nav [data-tab="today"]{--m:#F6F2E6; --d:#E5483B; --x:#A39880;}
+.nav [data-tab="run"]{--m:#46E0A5;}
+.nav [data-tab="home"]{--m:#C7D3D1; --d:#14262A; --x:#FF6A5B;}
+.nav [data-tab="ach"]{--m:#F6C445; --d:#C99A1E; --x:#FF6A5B;}
+.nav [data-tab="week"][aria-current="page"]{--m:#2B2000; --d:#F6C445; --x:#F6C445;}
+.nav [data-tab="today"][aria-current="page"]{--m:#FFF3C9; --d:#2B2000; --x:#2B2000;}
+.nav [data-tab="run"][aria-current="page"]{--m:#2B2000;}
+.nav [data-tab="home"][aria-current="page"]{--m:#2B2000; --d:#F6C445; --x:#F6C445;}
+.nav [data-tab="ach"][aria-current="page"]{--m:#2B2000; --d:#5a4300; --x:#F6C445; --s:#F6C445;}
+.nav button.dot:after{content:''; position:absolute; top:3px; right:6px; width:12px; height:12px; box-sizing:border-box; border-radius:50%; background:var(--boss); border:2px solid #14262A;}
+/* 마왕전 구슬 */
+.nav button.dm{flex:0 0 94px; overflow:visible; border:0; background:none; box-shadow:none; color:#D9C2FF; z-index:2;}
+.nav button.dm:active{transform:none;}
+.nav button.dm[aria-current="page"]{background:none; border:0; box-shadow:none; color:#D9C2FF; text-shadow:0 1px 0 #000;}
+.nav button.dm.lk{color:#8FAEAA;}
+.nav button.dm:before{content:''; position:absolute; left:50%; top:-34px; width:90px; height:90px; margin-left:-45px; box-sizing:border-box; border-radius:50%; z-index:0;
+  background:linear-gradient(180deg,#3a5457 0%,#1f3438 55%,#162528 100%); border:2.5px solid #070E0D;
+  box-shadow:inset 0 2.5px 0 rgba(255,255,255,.18), inset 0 -2px 0 rgba(0,0,0,.35), 0 -3px 8px rgba(0,0,0,.3);}
+.nav button.dm .orb{position:absolute; left:50%; top:-36.2px; width:76px; height:85.1px; margin-left:-38px; z-index:1; overflow:visible;}
+.nav button.dm[aria-current="page"] .orb{filter:drop-shadow(0 0 6px #B58CFF);}
+.nav button.dm .nl{position:absolute; left:0; right:0; bottom:1px; z-index:2; line-height:14px; font-size:13px; text-align:center;}
+.nav button.dm.dot:after{top:-14px; right:9px; z-index:3;}
+.dmliq{transform:translateY(74px); transition:transform .6s ease;}
+.nav button.dm:not(.lk) .dmchain,.nav button.dm:not(.lk) .dmlock{display:none;}
+.nav button.dm .dmlock{filter:drop-shadow(0 1.4px 1px rgba(0,0,0,.5));}
+.dmflash,.dmring,.dmspark,.dmopen{opacity:0;}
+.nav button.dm:not(.lk):not([aria-current="page"]) .dmopen{opacity:.45;}
+.nav button.dm .halo{display:none;}
+.nav button.dm[aria-current="page"] .halo{display:block;}
+/* 1000 XP를 채우는 순간(약 2초): 자물쇠가 흔들리고 → 걸쇠가 열리고 → 사슬이 풀리며 빛이 터져요 */
+@media (prefers-reduced-motion: no-preference){
+.nav button.dm.unl .dmlock{transform-box:view-box; transform-origin:50px 59px; animation:dmLock 1.9s linear .35s both;}
+.nav button.dm.unl .dmshk{transform-box:view-box; transform-origin:60px 50px; animation:dmShk 1.9s linear .35s both;}
+.nav button.dm.unl .dmchain{transform-box:view-box; transform-origin:50px 54px; animation:dmChain 1.9s linear .35s both;}
+.nav button.dm.unl .dmflash{animation:dmFlash 1.9s linear .35s both;}
+.nav button.dm.unl .dmring{transform-box:view-box; transform-origin:50px 54px; animation:dmRing 1.9s linear .35s both;}
+.nav button.dm.unl .dmspark{animation:dmSpark 1.9s linear .35s both;}
+}
+@keyframes dmLock{0%{transform:none;opacity:1}5%{transform:rotate(-8deg)}10%{transform:rotate(8deg)}15%{transform:rotate(-5deg)}19%{transform:rotate(0)}28%{transform:translate(0,2px);opacity:1}62%{transform:translate(7px,22px) rotate(26deg);opacity:0}100%{transform:translate(7px,22px) rotate(26deg);opacity:0}}
+@keyframes dmShk{0%,18%{transform:none}26%,100%{transform:translate(0,-8px) rotate(-42deg)}}
+@keyframes dmChain{0%,22%{opacity:1;transform:scale(1)}62%,100%{opacity:0;transform:scale(1.2)}}
+@keyframes dmFlash{0%,10%{opacity:0}22%{opacity:.8}50%{opacity:.25}80%{opacity:.1}100%{opacity:0}}
+@keyframes dmRing{0%,12%{opacity:0;transform:scale(.92)}28%{opacity:.9;transform:scale(1.04)}70%{opacity:.35;transform:scale(1.07)}100%{opacity:0;transform:scale(1.07)}}
+@keyframes dmSpark{0%,16%{opacity:0}28%{opacity:1}55%{opacity:.6}85%,100%{opacity:0}}
+/* 위쪽 버튼 3개(일지·반디·설정): 하단 메뉴와 같은 입체 재질 */
+.gearbtn,.bdbtn,.achbtn{position:absolute; top:2px; z-index:5; width:46px; height:46px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:50%;
+  border:2px solid var(--edge); background:linear-gradient(180deg,#3a5457 0%,#1c3034 55%,#0f1d20 100%);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.22), inset 0 -3px 0 rgba(0,0,0,.45), 0 3px 0 var(--edge), 0 6px 10px rgba(0,0,0,.45); -webkit-tap-highlight-color:transparent;}
+.gearbtn{right:16px; color:#C7D3D1;} .bdbtn{right:70px;} .achbtn{right:124px; --m:#F6C445; --d:#C99A1E; --x:#FF6A5B; --s:#2B2000;}
+.gearbtn svg{width:26px; height:26px; fill:currentColor; filter:drop-shadow(0 2px 1px rgba(0,0,0,.6));}
+.bdbtn svg{width:36px; height:30px; display:block; filter:drop-shadow(0 2px 1px rgba(0,0,0,.6));}
+.achbtn .ico{display:block; width:26px; height:26px; filter:drop-shadow(0 2px 1px rgba(0,0,0,.6));}
+.gearbtn:active,.bdbtn:active,.achbtn:active{transform:translateY(1px);}
+.achbtn.on{background:linear-gradient(180deg,#FFE58F 0%,#F6C445 52%,#D9A21E 100%); border-color:#7a5a0c; --m:#2B2000; --d:#5a4300; --x:#F6C445; --s:#F6C445;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.6), inset 0 -3px 0 rgba(120,80,0,.5), 0 3px 0 #6e500a, 0 0 12px rgba(246,196,69,.4);}
+.achbtn.on .ico{filter:drop-shadow(0 1px 0 rgba(255,255,255,.5));}
+.achbtn.dot:after{content:''; position:absolute; top:-2px; right:-2px; width:12px; height:12px; box-sizing:border-box; border-radius:50%; background:var(--boss); border:2px solid var(--surface);}
+@media (max-width:350px){ .gearbtn,.bdbtn,.achbtn{width:42px; height:42px; top:4px;} .bdbtn{right:64px;} .achbtn{right:112px;} .gearbtn svg{width:24px; height:24px;} .bdbtn svg{width:33px; height:27px;} .achbtn .ico{width:24px; height:24px;} .achtop .eyebrow{padding-right:146px;} }
 </style>
 </head>
 <body>
@@ -1773,12 +1852,12 @@ setTimeout(guard,7000);
   <button type="button" id="tskip">건너뛰기</button>
 </div>
 <nav class="nav" id="nav" aria-label="화면 이동">
-  <button type="button" data-tab="week">지도</button>
-  <button type="button" data-tab="today">퀘스트</button>
-  <button type="button" class="dm" data-tab="demon" id="navdemon" hidden>마왕전</button>
-  <button type="button" data-tab="run">러닝</button>
-  <button type="button" data-tab="home">왕국</button>
-  <button type="button" data-tab="ach" id="navach">일지</button>
+  <button type="button" data-tab="week"><span class="ni ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="m" d="M3 6.5l6-2 6 2 6-2v13l-6 2-6-2-6 2z"/><path class="ds" stroke-width="1.5" d="M9 4.5v13M15 6.5v13"/><path class="xs" stroke-width="1.9" d="M10.8 10l2.4 2.4M13.2 10l-2.4 2.4"/></svg></span><span class="nl">지도</span></button>
+  <button type="button" data-tab="today"><span class="ni ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect class="m" x="5.8" y="6.4" width="12.4" height="11.2"/><rect class="x" x="3.2" y="3.2" width="17.6" height="4" rx="2"/><ellipse class="m" cx="18.9" cy="5.2" rx="1" ry="1.3"/><rect class="x" x="3.2" y="16.8" width="17.6" height="4" rx="2"/><ellipse class="m" cx="18.9" cy="18.8" rx="1" ry="1.3"/><path class="ds" stroke-width="2.4" d="M12 8.8v4.4"/><circle class="d" cx="12" cy="15.6" r="1.25"/></svg></span><span class="nl">퀘스트</span></button>
+  <button type="button" class="dm" data-tab="demon" id="navdemon" hidden><svg class="orb" viewBox="0 -8 100 112" aria-hidden="true" focusable="false"><defs><linearGradient id="dmM" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a7392"/><stop offset=".5" stop-color="#2f2a42"/><stop offset="1" stop-color="#15111f"/></linearGradient><radialGradient id="dmL" cx=".4" cy=".35" r=".85"><stop offset="0" stop-color="#E3CBFF"/><stop offset=".35" stop-color="#A070FF"/><stop offset=".7" stop-color="#5B2FB0"/><stop offset="1" stop-color="#2a1160"/></radialGradient><radialGradient id="dmG" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#241447"/><stop offset="1" stop-color="#0a0614"/></radialGradient><radialGradient id="dmV" cx=".5" cy=".5" r=".5"><stop offset=".62" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient><radialGradient id="dmF" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".55" stop-color="#E6D2FF" stop-opacity=".55"/><stop offset="1" stop-color="#B58CFF" stop-opacity="0"/></radialGradient><linearGradient id="dmS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f3fc"/><stop offset=".22" stop-color="#cfc9e2"/><stop offset=".5" stop-color="#8f88a8"/><stop offset=".68" stop-color="#bdb6d3"/><stop offset="1" stop-color="#6d6687"/></linearGradient><linearGradient id="dmK" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f3fc"/><stop offset=".5" stop-color="#cbc5de"/><stop offset="1" stop-color="#8a83a3"/></linearGradient><clipPath id="dmC"><circle cx="50" cy="54" r="37"/></clipPath></defs><path d="M21 28C8 22 7 6 22 -6C20 6 28 10 38 15z" fill="url(#dmM)" stroke="#0c0818" stroke-width="2" stroke-linejoin="round"/><path d="M79 28C92 22 93 6 78 -6C80 6 72 10 62 15z" fill="url(#dmM)" stroke="#0c0818" stroke-width="2" stroke-linejoin="round"/><path d="M13 16C15 10 18 4 22 -3" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1.6" stroke-linecap="round"/><path d="M87 16C85 10 82 4 78 -3" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1.6" stroke-linecap="round"/><circle cx="50" cy="54" r="46" fill="url(#dmM)" stroke="#0c0818" stroke-width="3"/><circle cx="50" cy="54" r="41.5" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.6"/><circle cx="50" cy="54" r="39.5" fill="#0c0818"/><circle cx="93.8" cy="54.0" r="1.5" fill="#9c95b3"/><circle cx="81.0" cy="85.0" r="1.5" fill="#9c95b3"/><circle cx="50.0" cy="97.8" r="1.5" fill="#9c95b3"/><circle cx="19.0" cy="85.0" r="1.5" fill="#9c95b3"/><circle cx="6.2" cy="54.0" r="1.5" fill="#9c95b3"/><circle cx="19.0" cy="23.0" r="1.5" fill="#9c95b3"/><circle cx="50.0" cy="10.2" r="1.5" fill="#9c95b3"/><circle cx="81.0" cy="23.0" r="1.5" fill="#9c95b3"/><circle cx="50" cy="54" r="37" fill="url(#dmG)"/><g clip-path="url(#dmC)"><g class="dmliq" id="dmLiq"><path d="M8 17 q10 -5 20 0 t20 0 t20 0 t20 0 t20 0 V100 H8z" fill="url(#dmL)"/><path d="M8 17 q10 -5 20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#F2E6FF" stroke-opacity=".75" stroke-width="1.5"/><circle cx="36" cy="72" r="2.2" fill="#fff" fill-opacity=".35"/><circle cx="61" cy="64" r="1.6" fill="#fff" fill-opacity=".35"/><circle cx="67" cy="78" r="2.4" fill="#fff" fill-opacity=".3"/><circle cx="45" cy="50" r="1.3" fill="#fff" fill-opacity=".3"/></g></g><g transform="translate(27.80 33.28) scale(1.85)"><path d="M6 9.4C3 8 2.4 4.4 5.2 1.4C5 4 7 5.6 9.6 6.3z" fill="#1a0f33"/><path d="M18 9.4C21 8 21.6 4.4 18.8 1.4C19 4 17 5.6 14.4 6.3z" fill="#1a0f33"/><path d="M5.5 10.3c0-2.8 2.9-4.5 6.5-4.5s6.5 1.7 6.5 4.5v3c0 3.6-2.6 6.4-6.5 6.4s-6.5-2.8-6.5-6.4z" fill="#1a0f33"/><path d="M7.6 11l3.3 1.6-3.3 1z" fill="#EBDDFF"/><path d="M16.4 11l-3.3 1.6 3.3 1z" fill="#EBDDFF"/><path d="M9.6 16.7h4.8" fill="none" stroke="#EBDDFF" stroke-width="1.6" stroke-linecap="round"/></g><g class="dmchain"><g transform="translate(17.5 21.5) rotate(45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(22.9 26.9) rotate(45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(28.3 32.3) rotate(45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(33.8 37.8) rotate(45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(39.2 43.2) rotate(45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(44.6 48.6) rotate(45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(50.0 54.0) rotate(45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(55.4 59.4) rotate(45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(60.8 64.8) rotate(45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(66.2 70.2) rotate(45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(71.7 75.7) rotate(45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(77.1 81.1) rotate(45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(82.5 86.5) rotate(45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(82.5 21.5) rotate(-45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(77.1 26.9) rotate(-45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(71.7 32.3) rotate(-45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(66.2 37.8) rotate(-45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(60.8 43.2) rotate(-45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(55.4 48.6) rotate(-45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(50.0 54.0) rotate(-45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(44.6 59.4) rotate(-45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(39.2 64.8) rotate(-45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(33.8 70.2) rotate(-45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(28.3 75.7) rotate(-45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><g transform="translate(22.9 81.1) rotate(-45)"><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="#0c0818" stroke-width="3.6"/><rect x="-4.6" y="-2.7" width="9.2" height="5.4" rx="2.7" fill="none" stroke="url(#dmK)" stroke-width="1.9"/><circle cx="-2.7" cy="-1.7" r=".75" fill="#fff" fill-opacity=".85"/></g><g transform="translate(17.5 86.5) rotate(-45)"><path d="M-3.4 0H3.4" stroke="#0c0818" stroke-width="4" stroke-linecap="round"/><path d="M-3.4 0H3.4" stroke="#b3accb" stroke-width="2.3" stroke-linecap="round"/><path d="M-2.6 -.75H2.6" stroke="#fff" stroke-opacity=".32" stroke-width=".8" stroke-linecap="round"/></g><circle cx="17.5" cy="21.5" r="2.8" fill="#9c95b3" stroke="#0c0818" stroke-width="1.6"/><circle cx="82.5" cy="21.5" r="2.8" fill="#9c95b3" stroke="#0c0818" stroke-width="1.6"/><circle cx="17.5" cy="86.5" r="2.8" fill="#9c95b3" stroke="#0c0818" stroke-width="1.6"/><circle cx="82.5" cy="86.5" r="2.8" fill="#9c95b3" stroke="#0c0818" stroke-width="1.6"/><path d="M33.8 35.8 L34.36 37.24 L35.8 37.8 L34.36 38.36 L33.8 39.8 L33.24 38.36 L31.799999999999997 37.8 L33.24 37.24z" fill="#fff" fill-opacity="0.8"/><path d="M66.2 68.4 L66.70 69.70 L68.0 70.2 L66.70 70.70 L66.2 72.0 L65.70 70.70 L64.4 70.2 L65.70 69.70z" fill="#fff" fill-opacity="0.7"/></g><g class="dmlock"><g class="dmshk"><path d="M40 49.7V45.7a10 10 0 0 1 20 0V49.7" fill="none" stroke="#0c0818" stroke-width="6.4" stroke-linecap="round"/><path d="M40 49.7V45.7a10 10 0 0 1 20 0V49.7" fill="none" stroke="#d9d4e8" stroke-width="4" stroke-linecap="round"/><path d="M40 49.7V45.7a10 10 0 0 1 20 0V49.7" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.1" stroke-linecap="round" transform="translate(-.9 -.9)"/></g><rect x="34" y="49.7" width="32" height="19" rx="4" fill="url(#dmS)" stroke="#0c0818" stroke-width="2"/><rect x="35.2" y="50.9" width="29.6" height="16.6" rx="3" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width=".8"/><path d="M35 63.2h30v1.5a4 4 0 0 1-4 4H39a4 4 0 0 1-4-4z" fill="#1a1626" fill-opacity=".22"/><path d="M37.5 53.7h25" stroke="#fff" stroke-opacity=".45" stroke-width="1.6" stroke-linecap="round"/><circle cx="50" cy="58.3" r="2.5" fill="#25212f"/><path d="M50 58.7v5" stroke="#25212f" stroke-width="2.2" stroke-linecap="round"/><path d="M36.4 48.2 L37.04 49.86 L38.699999999999996 50.5 L37.04 51.14 L36.4 52.8 L35.76 51.14 L34.1 50.5 L35.76 49.86z" fill="#fff" fill-opacity="0.9"/><path d="M62.5 52.690000000000005 L62.50 52.70 L62.51 52.7 L62.50 52.70 L62.5 52.71 L62.50 52.70 L62.49 52.7 L62.50 52.70z" fill="#fff" fill-opacity="0"/></g><circle class="dmflash" cx="50" cy="54" r="40" fill="url(#dmF)"/><circle class="dmopen" cx="50" cy="54" r="49.5" fill="none" stroke="#D9C2FF" stroke-width="2"/><circle cx="50" cy="54" r="37" fill="url(#dmV)"/><ellipse cx="36" cy="35" rx="14" ry="7.5" transform="rotate(-32 36 35)" fill="#fff" fill-opacity=".34"/><ellipse cx="64" cy="78" rx="6" ry="2.2" fill="#fff" fill-opacity=".14"/><circle class="dmring" cx="50" cy="54" r="50.5" fill="none" stroke="#F2E6FF" stroke-width="3.2"/><g class="dmspark"><path d="M24 20 L25.68 24.32 L30 26 L25.68 27.68 L24 32 L22.32 27.68 L18 26 L22.32 24.32z" fill="#fff"/><path d="M78 25 L79.40 28.60 L83 30 L79.40 31.40 L78 35 L76.60 31.40 L73 30 L76.60 28.60z" fill="#fff"/><path d="M70 77.5 L71.26 80.74 L74.5 82 L71.26 83.26 L70 86.5 L68.74 83.26 L65.5 82 L68.74 80.74z" fill="#fff"/><path d="M30 74 L31.12 76.88 L34 78 L31.12 79.12 L30 82 L28.88 79.12 L26 78 L28.88 76.88z" fill="#fff"/><path d="M50 14 L51.12 16.88 L54 18 L51.12 19.12 L50 22 L48.88 19.12 L46 18 L48.88 16.88z" fill="#fff"/></g><circle class="halo" cx="50" cy="54" r="49.5" fill="none" stroke="#F2E6FF" stroke-width="2.4"/></svg><span class="nl">마왕전</span></button>
+  <button type="button" data-tab="run"><span class="ni ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle class="m" cx="15.3" cy="4.3" r="2.25"/><path class="ms" stroke-width="3.6" d="M13.3 8.3L10.9 13.5"/><path class="ms" stroke-width="2.7" d="M13.4 8.5L17.2 10.6 20 7.8"/><path class="ms" stroke-width="3" d="M10.9 13.5L15.2 15.5 12.9 20.4"/><path class="ms" stroke-width="3" d="M10.9 13.5L7.6 17 4 20.2"/><path class="ms" stroke-width="2.7" d="M13 8.7L7.8 10 5.4 13.4"/></svg></span><span class="nl">러닝</span></button>
+  <button type="button" data-tab="home"><span class="ni ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="m" d="M3.5 9h4.5v11H3.5z"/><path class="m" d="M3.5 9V6.8h1.5v1h1.5v-1H8V9z"/><path class="m" d="M16 9h4.5v11H16z"/><path class="m" d="M16 9V6.8h1.5v1H19v-1h1.5V9z"/><path class="m" d="M8 7.6h8V20H8z"/><path class="m" d="M8 7.6V5.4h2v1h1v-1h2v1h1v-1h2v2.2z"/><path class="ms" stroke-width="1.4" d="M12 5.4V1.6"/><path class="x" d="M12 1.6l4 1.5-4 1.5z"/><path class="d" d="M10.2 20v-3.4a1.8 1.8 0 0 1 3.6 0V20z"/></svg></span><span class="nl">왕국</span></button>
+  <button type="button" id="navach" data-tab="ach"><span class="ni ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="m" d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path class="d" d="M5 5a2 2 0 0 1 2-2h1.4v18H7a2 2 0 0 1-2-2z"/><path class="st" d="M13.40,10.30 L14.22,12.47 L16.54,12.58 L14.73,14.03 L15.34,16.27 L13.40,15.00 L11.46,16.27 L12.07,14.03 L10.26,12.58 L12.58,12.47z"/><path class="x" d="M15 2.2v7.4l1.7-1.4 1.7 1.4V2.2z"/></svg></span><span class="nl">일지</span></button>
 </nav>
 <div class="ov" id="ov" hidden role="dialog" aria-modal="true" aria-labelledby="ovt">
   <canvas id="cf" aria-hidden="true"></canvas>
@@ -2538,8 +2617,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.71.0', APP_DATE='2026-10-22', showChg=false;
+var APP_VER='1.72.0', APP_DATE='2026-10-22', showChg=false;
 var CHANGES=[
+['1.72.0','하단 메뉴가 화면 아래에 붙고 버튼마다 그림이 생겼어요. 마왕전은 액체가 담긴 구슬이 되어, 이번 주 XP만큼 차오르고 1000이 되기 전까지는 사슬과 자물쇠가 걸려 있어요. 1000이 되는 순간 사슬이 풀리며 열려요. 위쪽 버튼 세 개도 같은 입체 모양으로 바뀌었어요'],
 ['1.71.0','실내 유산소가 새로워졌어요. 러닝 아래의 «실내 유산소» 버튼을 누르면 밖에서 하기 어려운 이유를 고르고(비·눈 오는 날은 자동), 동작을 미리 본 뒤 피버모드 화면에서 타이머 안내에 따라 진행해요. 속도를 바꾸면 박자만 달라지고 시간은 그대로예요(마왕전은 1.0× 고정). 끝까지 마치면 오늘 러닝이 완료되고, 중간에 닫아도 마친 반복까지는 오늘 저장돼서 이어서 할 수 있어요. 새 동작은 버트 킥·스텝 잭·하이니·점핑잭·인치웜 + 푸시업이에요'],
 ['1.70.0','설치한 앱(홈 화면 아이콘)이 아니면 설치 안내 화면이 먼저 나와요. 지도·마왕전·왕국·건물·일지에 레드닷(아직 확인 안 한 알림)이 생겼고 확인하면 꺼져요. 마왕전 탭의 보라 점은 없어졌고, 자물쇠는 이번 주 확정 XP가 1000이 되기 전까지만 붙어요'],
 ['1.69.0','하단 메뉴가 지도·퀘스트·마왕전·러닝·왕국 5개가 되어 마왕전이 가운데에 와요(마왕전이 열리는 10월 26일부터). 마왕전 탭은 보라색이고, 들어갈 수 있는 날은 보라 점, 오늘은 못 들어갈 때는 자물쇠가 붙어요. 일지는 화면 위쪽(반디 왼쪽)의 책 버튼으로 옮겼어요. 마왕전 입구·전용 화면에 «오늘의 동작 미리 보기», 승급 시험에 «시험 동작 자세 보기»와 종목별 «자세» 버튼이 생겨서 시작하기 전에 그림·자세 팁·영상으로 자세를 익힐 수 있어요. 일지를 보던 분께는 반디가 일지 버튼의 새 위치를 한 번 알려 줘요'],
@@ -4630,6 +4710,25 @@ function demonLockOn(st){   /* 자물쇠 = 이번 주 마왕전 도전 자격이
   if(st==='won' || st==='free' || st==='going') return false;
   if(firstWeekFree(TODAY)) return false;
   return demonConfirmedXP(TODAY)<SAT_GOAL;
+}
+/* v1.72.0 마왕전 구슬: 액체 높이 = 이번 주 확정 XP ÷ 1000(자물쇠 기준과 같은 값) · 잠김이면 X 사슬+자물쇠 · 확정 XP가 1000이 되는 순간(앱이 켜져 있을 때) 풀리는 연출을 한 번 보여요.
+   앱을 켤 때 이미 열려 있으면 연출 없이 바로 열린 구슬이에요. 미리보기에서는 window.__pvDmXp(숫자)로 XP를 바꿔 봐요. */
+var dmPrevLk=null, dmUnlBusy=false, dmUnlT=0;
+function dmXpNow(){ var v=window.__pvDmXp; return (typeof v==='number')?v:demonConfirmedXP(TODAY); }
+function dmReduce(){ try{ return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; } }
+function dmUnlEnd(b){ clearTimeout(dmUnlT); b.classList.remove('unl'); b.classList.remove('lk'); dmUnlBusy=false; dmPrevLk=false; }
+function dmUnlGo(b){
+  if(document.querySelector('.ov:not([hidden])') || document.body.classList.contains('title-up') || !b.getClientRects().length){ dmUnlT=setTimeout(function(){ dmUnlGo(b); },500); return; }   /* 알림 창이 닫히고 하단 메뉴가 보일 때까지 기다려요 */
+  if(dmReduce()){ dmUnlEnd(b); return; }
+  b.classList.add('unl'); dmUnlT=setTimeout(function(){ dmUnlEnd(b); },2650);
+}
+function dmOrbSync(b,lockNow){
+  var xp=dmXpNow(), p=Math.max(0,Math.min(1,xp/SAT_GOAL)), lq=document.getElementById('dmLiq');
+  if(typeof window.__pvDmXp==='number') lockNow=(xp<SAT_GOAL);
+  if(lq) lq.style.transform='translateY('+((1-p)*74).toFixed(1)+'px)';
+  if(dmUnlBusy) return;
+  if(dmPrevLk===true && !lockNow){ dmUnlBusy=true; dmPrevLk=false; b.classList.add('lk'); dmUnlGo(b); return; }
+  b.classList.toggle('lk',lockNow); dmPrevLk=lockNow;
 }
 function adaDotOn(){   /* 아다만타이트(이번 주 마왕전을 아직 못 이긴 사람)가 확정 XP 1000을 채운 순간 한 번 */
   var a, mon;
@@ -8179,7 +8278,7 @@ function render(){
   document.getElementById('nav').hidden=(tab==='demonrun');   /* 마왕전 전용 화면은 하단 메뉴를 숨겨요 */
   var bs=document.querySelectorAll('#nav button'), dmOn=demonShown(), dmSt=dmOn?demonState().st:'';
   app.classList.toggle('achtop',dmOn);
-  if(dmOn && tab!=='set' && tab!=='rank' && tab!=='exam' && tab!=='demonrun') app.insertAdjacentHTML('afterbegin','<button type="button" class="achbtn'+(tab==='ach'?' on':'')+((RD.ach && tab!=='ach')?' dot':'')+'" data-a="ach-open" aria-label="일지" aria-pressed="'+(tab==='ach'?'true':'false')+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg></button>');
+  if(dmOn && tab!=='set' && tab!=='rank' && tab!=='exam' && tab!=='demonrun') app.insertAdjacentHTML('afterbegin','<button type="button" class="achbtn'+(tab==='ach'?' on':'')+((RD.ach && tab!=='ach')?' dot':'')+'" data-a="ach-open" aria-label="일지" aria-pressed="'+(tab==='ach'?'true':'false')+'"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="m" d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path class="d" d="M5 5a2 2 0 0 1 2-2h1.4v18H7a2 2 0 0 1-2-2z"/><path class="st" d="M13.40,10.30 L14.22,12.47 L16.54,12.58 L14.73,14.03 L15.34,16.27 L13.40,15.00 L11.46,16.27 L12.07,14.03 L10.26,12.58 L12.58,12.47z"/><path class="x" d="M15 2.2v7.4l1.7-1.4 1.7 1.4V2.2z"/></svg></span></button>');
   for(var i=0;i<bs.length;i++){
     if(bs[i].getAttribute('data-tab')===tab) bs[i].setAttribute('aria-current','page');
     else bs[i].removeAttribute('aria-current');
@@ -8187,7 +8286,7 @@ function render(){
     if(bs[i].getAttribute('data-tab')==='demon'){
       var dmWn=dmOn && RD.ada && tab!=='demon';
       bs[i].hidden=!dmOn; bs[i].classList.toggle('dot',dmWn);   /* 아다만타이트가 확정 XP 1000을 채워 자격을 얻은 순간의 빨간 점(마왕전 탭에 들어가면 꺼져요) */
-      bs[i].classList.toggle('lk',dmOn && !dmWn && tab!=='demon' && demonLockOn(dmSt));   /* 자물쇠: 이번 주 도전 자격이 아직 없어요(확정 XP 1000 미만). 보라 점은 v1.70.0에서 없앴어요 */
+      dmOrbSync(bs[i], dmOn && !dmWn && demonLockOn(dmSt));   /* 자물쇠: 이번 주 도전 자격이 아직 없어요(확정 XP 1000 미만). 보라 점은 v1.70.0에서 없앴어요 */
     }
     if(bs[i].getAttribute('data-tab')==='week'){ bs[i].classList.toggle('dot',RD.map && tab!=='week'); }
     if(bs[i].getAttribute('data-tab')==='home'){ bs[i].classList.toggle('dot',RD.k && tab!=='home'); }

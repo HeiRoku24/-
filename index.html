@@ -1186,8 +1186,8 @@ body{text-wrap:pretty;}
 .achm .ai.bimg{width:44px; height:34px; background:none; border-radius:0;}
 .achm .ai.bimg svg{height:34px; width:auto;}
 .achm .amt{flex:1; min-width:0;}
-.achm b{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-family:var(--disp); font-weight:400; font-size:14px; line-height:1.25; word-break:keep-all;}
-.achm small{display:block; font-size:11px; color:var(--muted); line-height:1.3; margin-top:1px;}
+.achm b{display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; font-family:var(--disp); font-weight:400; font-size:14px; line-height:1.25; word-break:keep-all; text-wrap:balance;}
+.achm small{display:block; font-size:11px; color:var(--muted); line-height:1.3; margin-top:1px;} @media (max-width:340px){ .achg{gap:6px;} .achm{padding:6px 6px; gap:6px;} }
 .achp{text-align:center;}
 .achp .ai{margin:0 auto 8px; display:grid;}
 .achp .ai.big{width:60px; height:60px; font-size:30px;}
@@ -2717,8 +2717,12 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.75.1', APP_DATE='2026-10-23', showChg=false;
+var APP_VER='1.75.5', APP_DATE='2026-10-23', showChg=false;
 var CHANGES=[
+['1.75.5','폭이 좁은 폰에서 업적 «현자 마법사 합류»가 «현자 마법사 / 합류»로 나뉘던 것을 «현자 / 마법사 합류»로 나뉘게 고쳤어요'],
+['1.75.4','몸짱일지의 업적 이름이 두 줄로 나뉠 때 끝줄에 두 글자만 덩그러니 남던 것을 줄을 고르게 나눠서 줄였어요'],
+['1.75.3','몸짱일지의 업적 이름이 길어서 세 줄이 될 때 끝부분(예: «토벌 5회»)이 잘리던 것을 고쳤어요. 이름을 세 줄까지 보여 줘요'],
+['1.75.2','폭이 아주 좁은 폰(폭 320 안팎)에서 몸짱일지의 업적 칸이 화면 오른쪽으로 조금 튀어나오던 것을 고쳤어요. 좁은 폰에서만 칸 안쪽 여백과 간격을 조금 줄였어요'],
 ['1.75.1','여관 안을 걸어 다니는 캐릭터가 끊기거나 깜빡이는 문제를 줄이려고, 그 캐릭터에는 장비 질감을 빼고 원래 그림으로 보여요. 다른 화면의 장비 질감은 그대로예요'],
 ['1.75.0','공용장비 24종(망토·깃털·장화·허리띠)에도 소재에 맞는 입체감과 질감이 생겼어요. 망토·깃털은 천처럼 부드럽게, 장화·허리띠는 가죽처럼, 금빛 버클은 금속처럼 보여요. 랭크 세트는 그대로예요'],
 ['1.74.0','전용장비 96종(몸짱용사·드워프 전사·엘프 궁수·현자 마법사)에 소재에 맞는 입체감과 광택이 생겼어요. 금속은 반짝이고 나무·가죽·천·수정은 소재에 맞게 부드러운 입체가 살아나요. 도감·대장간 아이콘과 캐릭터가 입은 정면·옆·뒷모습·러닝 모습에 모두 나와요'],
@@ -4717,7 +4721,7 @@ var ACH = [
   {id:'w3',n:'몸 기록 3회',d:'체중을 3번 기록',t:function(c){return c.weights>=3;}},
   {id:'cp_dwarf',n:'드워프 전사 합류',d:'길 위에서 드워프 전사를 만나 동료로 맞이하기',b:'char:dwarf',t:function(c){return c.joined.dwarf;}},
   {id:'cp_elf',n:'엘프 궁수 합류',d:'길 위에서 엘프 궁수를 만나 동료로 맞이하기',b:'char:elf',t:function(c){return c.joined.elf;}},
-  {id:'cp_mage',n:'현자 마법사 합류',d:'길 위에서 현자 마법사를 만나 동료로 맞이하기',b:'char:mage',t:function(c){return c.joined.mage;}},
+  {id:'cp_mage',n:'현자 마법사\u00a0합류',d:'길 위에서 현자 마법사를 만나 동료로 맞이하기',b:'char:mage',t:function(c){return c.joined.mage;}},
   {id:'cp_all',n:'전원 집결',d:'드워프 전사, 엘프 궁수, 현자 마법사를 모두 동료로 맞이하기',t:function(c){return c.joined.dwarf&&c.joined.elf&&c.joined.mage;}},
   {id:'cs_cape',n:'망토 수집가',d:'망토 6종을 모두 모으기',t:function(c){return c.eqs.cs.cape>=6;}},
   {id:'cs_plume',n:'깃털 수집가',d:'깃털 6종을 모두 모으기',t:function(c){return c.eqs.cs.plume>=6;}},

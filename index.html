@@ -2717,8 +2717,10 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.73.0', APP_DATE='2026-10-22', showChg=false;
+var APP_VER='1.75.0', APP_DATE='2026-10-23', showChg=false;
 var CHANGES=[
+['1.75.0','공용장비 24종(망토·깃털·장화·허리띠)에도 소재에 맞는 입체감과 질감이 생겼어요. 망토·깃털은 천처럼 부드럽게, 장화·허리띠는 가죽처럼, 금빛 버클은 금속처럼 보여요. 랭크 세트는 그대로예요'],
+['1.74.0','전용장비 96종(몸짱용사·드워프 전사·엘프 궁수·현자 마법사)에 소재에 맞는 입체감과 광택이 생겼어요. 금속은 반짝이고 나무·가죽·천·수정은 소재에 맞게 부드러운 입체가 살아나요. 도감·대장간 아이콘과 캐릭터가 입은 정면·옆·뒷모습·러닝 모습에 모두 나와요'],
 ['1.73.0','몸짱일지에 몸짱달력이 생겼어요. 날짜를 누르면 그날 기록을 볼 수 있어요'],
 ['1.72.0','하단 메뉴가 화면 아래에 붙고 버튼마다 그림이 생겼어요. 마왕전은 액체가 담긴 구슬이 되어, 이번 주 XP만큼 차오르고 1000이 되기 전까지는 사슬과 자물쇠가 걸려 있어요. 1000이 되는 순간 사슬이 풀리며 열려요. 위쪽 버튼 세 개도 같은 입체 모양으로 바뀌었어요'],
 ['1.71.0','실내 유산소가 새로워졌어요. 러닝 아래의 «실내 유산소» 버튼을 누르면 밖에서 하기 어려운 이유를 고르고(비·눈 오는 날은 자동), 동작을 미리 본 뒤 피버모드 화면에서 타이머 안내에 따라 진행해요. 속도를 바꾸면 박자만 달라지고 시간은 그대로예요(마왕전은 1.0× 고정). 끝까지 마치면 오늘 러닝이 완료되고, 중간에 닫아도 마친 반복까지는 오늘 저장돼서 이어서 할 수 있어요. 새 동작은 버트 킥·스텝 잭·하이니·점핑잭·인치웜 + 푸시업이에요'],
@@ -3026,6 +3028,134 @@ function isWorn(it){ var e=(typeof S!=='undefined'&&S)?S.eq:null; if(!e||e[it.sl
 var SETCOV=['cape','plume','shoes','belt'];   /* 랭크 세트가 대신 입는 칸 (v1.62.0, 1-A99) */
 var COMMON_SLOTS=['cape','plume','shoes','belt'];                         /* 공용장비 칸 (네 캐릭터 모두 입어요) */
 var JOB_SLOTS={hero:['sword','helm','armor','shield'],dwarf:['axe','dhelm','dmail','dbeard'],elf:['bow','ehead','etunic','equiver'],mage:['staff','mhat','mrobe','mbook']};
+
+/* ===== v1.74.0 전용장비 입체·메탈릭 질감 (HeiRoku 시안 확정 2026-10-23, 1-A122) + v1.75.0 공용장비 24종 포함(1-A123) =====
+   전용장비 96종(`it.job`이 있는 장비)과 공용장비 24종(망토·깃털·장화·허리띠, 랭크 세트는 제외)의 그림에 소재별 광택·입체감 덮개를 얹어요. 원래 그림은 그대로 두고 도형마다 덮개(기울기 칠 + 안쪽 테두리 빛)를 바로 뒤에 더해요.
+   소재는 장비 이름으로 정하고(gxPrim), 한 장비 안에서 갈색 부분은 나무·가죽, 금빛 부분은 금속으로 나눠요(gxShapeMat). 세기는 일반 ×0.8 · 희귀 ×1.05 · 전설 ×1.4.
+   같은 그림은 한 번만 계산해요(GX_C). 기울기 id는 `§`를 자리표시로 두었다가 부를 때마다 새 번호로 바꿔서 화면 안에서 겹치지 않게 해요. 저장하는 값은 없어요. ===== */
+var GX_RAR={n:.8,r:1.05,l:1.4}, GX_C={}, GX_SZ=0, GXU=0;
+var GX_DROP={fill:1,stroke:1,'stroke-width':1,'stroke-linejoin':1,'stroke-linecap':1,opacity:1,'class':1,'stroke-dasharray':1,style:1};
+var GX_MAT={
+ gold:{k:'metal',S:0.806,hi:'#FFF4C2',sh:'#6A3C00',rim:1},
+ silver:{k:'metal',S:0.806,hi:'#FFFFFF',sh:'#3E4C66',rim:1},
+ steel:{k:'metal',S:0.715,hi:'#EAF6FF',sh:'#1D3552',rim:1},
+ copper:{k:'metal',S:0.715,hi:'#FFD4A8',sh:'#5A2408',rim:1},
+ iron:{k:'metal',S:0.65,hi:'#F2F5FA',sh:'#222A38',rim:.9},
+ chain:{k:'metal',S:.34,hi:'#FFFFFF',sh:'#232B38',rim:.7},
+ stone:{k:'matte',S:.34,hi:'#FFFFFF',sh:'#2A2A33',rim:.5},
+ lava:{k:'metal',S:0.754,hi:'#FFD59A',sh:'#4A0A00',rim:1},
+ frost:{k:'metal',S:0.754,hi:'#F2FDFF',sh:'#1B4A74',rim:1},
+ runic:{k:'metal',S:0.702,hi:'#E9E2FF',sh:'#241A5A',rim:1},
+ bolt:{k:'metal',S:0.728,hi:'#FFFBD0',sh:'#2A2A66',rim:1},
+ leather:{k:'soft',S:.46,hi:'#FFE2B8',sh:'#3A1E0A',rim:.6},
+ wood:{k:'cyl',S:.52,hi:'#FFE9C4',sh:'#2E1A08',rim:.5},
+ cloth:{k:'soft',S:.40,hi:'#FFFFFF',sh:'#1A1530',rim:.5},
+ satin:{k:'satin',S:.30,hi:'#FFFFFF',sh:'#14102E',rim:.4},
+ leaf:{k:'soft',S:.42,hi:'#F2FFD8',sh:'#10341C',rim:.5},
+ crystal:{k:'gem',S:.60,hi:'#FFFFFF',sh:'#10204A',rim:.9},
+ book:{k:'soft',S:.46,hi:'#FFE9C8',sh:'#2A1608',rim:.7},
+ parchment:{k:'soft',S:.34,hi:'#FFFFFF',sh:'#4A3612',rim:.5}
+};
+var GX_COM={cape:1,plume:1,shoes:1,belt:1};   /* 공용장비 칸 (랭크 세트 `it.rk`는 제외) */
+function gxPrim(it){
+  var n=it.name, s=it.slot;
+  if(!it.job){ if(s==='cape') return /별빛|불꽃/.test(n)?'satin':'cloth'; if(s==='plume') return /무지개|은빛|불꽃/.test(n)?'satin':'cloth'; if(s==='shoes'||s==='belt') return 'leather'; }
+  var cl=(s==='etunic'||s==='ehead'||s==='mhat'||s==='mrobe'||(s==='dbeard'&&/땋기/.test(n)));
+  if(cl){ if(/가죽/.test(n)) return 'leather'; if(s==='ehead') return /달빛|이슬|세계수/.test(n)?'satin':'leaf'; return /별|달빛|은하|은빛|세계수|번개/.test(n)?'satin':'cloth'; }
+  if(/나무/.test(n)&&s!=='bow'&&s!=='equiver') return 'wood';
+  if(s==='mbook'){ if(/구슬/.test(n)) return 'crystal'; if(/두루마리/.test(n)) return 'parchment'; return 'book'; }
+  if(/황금/.test(n)) return 'gold';
+  if(/은빛|은 /.test(n)||/^은 /.test(n)) return 'silver';
+  if(/청강/.test(n)) return 'steel';
+  if(/구리/.test(n)) return 'copper';
+  if(/사슬/.test(n)) return 'chain';
+  if(/쇠|철/.test(n)) return 'iron';
+  if(/^돌 /.test(n)) return 'stone';
+  if(/장작/.test(n)) return 'iron';
+  if(/용암/.test(n)) return 'lava';
+  if(/서리|얼음/.test(n)) return 'frost';
+  if(/룬/.test(n)) return 'runic';
+  if(/번개/.test(n)) return (s==='mhat')?'satin':'bolt';
+  if(/불꽃/.test(n)) return 'lava';
+  if(/가죽/.test(n)) return 'leather';
+  if(s==='ehead') return /달빛|이슬|세계수/.test(n)?'satin':'leaf';
+  if(s==='etunic') return /달빛|은빛|세계수/.test(n)?'satin':(/가죽/.test(n)?'leather':'cloth');
+  if(s==='mhat'||s==='mrobe') return /별|달빛|은하/.test(n)?'satin':'cloth';
+  if(s==='bow'||s==='equiver'||s==='staff'||s==='axe') return 'wood';
+  if(s==='dbeard') return 'cloth';
+  if(s==='helm'||s==='armor'||s==='shield'||s==='sword'||s==='axe'||s==='dhelm'||s==='dmail') return 'steel';
+  return 'cloth';
+}
+function gxHsl(c){
+  c=c.replace('#',''); if(c.length===3) c=c.charAt(0)+c.charAt(0)+c.charAt(1)+c.charAt(1)+c.charAt(2)+c.charAt(2);
+  var r=parseInt(c.substr(0,2),16)/255, g=parseInt(c.substr(2,2),16)/255, b=parseInt(c.substr(4,2),16)/255;
+  var mx=Math.max(r,g,b), mn=Math.min(r,g,b), h=0, s=0, l=(mx+mn)/2, d=mx-mn;
+  if(d){ s=l>.5?d/(2-mx-mn):d/(mx+mn); h=mx===r?((g-b)/d+(g<b?6:0)):(mx===g?((b-r)/d+2):((r-g)/d+4)); h*=60; }
+  return {h:h,s:s,l:l};
+}
+function gxShapeMat(prim,slot,tag,q){
+  if(slot==='staff'&&(tag==='ellipse'||tag==='circle')&&q.s>.45&&q.l>.6&&q.h>=170&&q.h<=290) return 'crystal';
+  if(q.s>.35&&q.h>=18&&q.h<=40&&q.l>.18&&q.l<.55) return (prim==='leather'||prim==='book')?'leather':'wood';
+  if(q.s>.55&&q.h>=38&&q.h<=52&&q.l>.45&&q.l<.75) return 'gold';
+  return prim;
+}
+function gxStops(a){ var o='', i; for(i=0;i<a.length;i++) o+='<stop offset="'+a[i][0]+'" stop-color="'+a[i][1]+'" stop-opacity="'+Math.max(0,Math.min(1,a[i][2])).toFixed(3)+'"/>'; return o; }
+function gxLin(id,x1,y1,x2,y2,a){ return '<linearGradient id="'+id+'" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'">'+gxStops(a)+'</linearGradient>'; }
+function gxBody(id,m,S,slot){
+  var k=m.k, hi=m.hi, sh=m.sh;
+  if(k==='metal'){
+    if(slot==='sword') return gxLin(id,0,0,1,0,[[0,hi,0],[.18,hi,S*1.1],[.42,hi,0],[.55,sh,0],[.78,sh,S*.7],[1,sh,S*.25]]);
+    return gxLin(id,0,0,1,1,[[0,hi,0],[.12,hi,S],[.24,hi,S*.15],[.30,hi,0],[.40,hi,S*.30],[.44,hi,0],[.56,sh,0],[.76,sh,S*.55],[.92,hi,S*.18],[1,hi,0]]);
+  }
+  if(k==='cyl') return gxLin(id,0,0,1,0,[[0,sh,S*.55],[.22,hi,S*.55],[.42,hi,0],[.6,sh,0],[1,sh,S*.75]]);
+  if(k==='soft') return gxLin(id,0,0,.4,1,[[0,hi,S*.55],[.38,hi,0],[.62,sh,0],[1,sh,S*.62]]);
+  if(k==='satin') return gxLin(id,0,0,1,1,[[0,hi,S*.4],[.2,hi,S*.8],[.34,hi,0],[.6,sh,0],[.8,sh,S*.55],[1,sh,S*.2]]);
+  return gxLin(id,0,0,.3,1,[[0,hi,S*.5],[.4,hi,0],[.65,sh,0],[1,sh,S*.7]]);
+}
+function gxRim(id,m,S){ return gxLin(id,0,0,1,1,[[0,m.hi,Math.min(.95,S*1.35*m.rim)],[.45,m.hi,0],[.55,m.sh,0],[1,m.sh,Math.min(.9,S*1.1*m.rim)]]); }
+function gxGem(id,m,S){ return '<radialGradient id="'+id+'" cx=".32" cy=".28" r=".75"><stop offset="0" stop-color="#fff" stop-opacity="'+Math.min(.95,S*1.2)+'"/><stop offset=".35" stop-color="#fff" stop-opacity="'+(S*.2)+'"/><stop offset=".6" stop-color="'+m.sh+'" stop-opacity="0"/><stop offset="1" stop-color="'+m.sh+'" stop-opacity="'+S*.6+'"/></radialGradient>'; }
+/* 그림 문자열 안의 도형마다 덮개를 더해요. cols가 있으면 그 색의 도형에만(인라인 튜닉·로브용), 없으면 모두(장비 그림 전체용) */
+function gxBuild(str,it,cols,uid){
+  var prim=gxPrim(it), mult=GX_RAR[it.rar]||1, defs='', n=0, olu=OL.toUpperCase();
+  var out=str.replace(/<(path|rect|circle|ellipse|polygon)\b([^>]*?)\/>/g,function(m,tag,att,off){
+    var re=/([\w:-]+)="([^"]*)"/g, a, o={}, keep=[];
+    while((a=re.exec(att))){ o[a[1]]=a[2]; if(!GX_DROP[a[1]]) keep.push(a[0]); }
+    var f=o.fill;
+    if(!f||!/^#[0-9a-fA-F]{3,6}$/.test(f)) return m;
+    var fu=f.toUpperCase(); if(fu===olu) return m;
+    if(cols&&cols.indexOf(fu)<0) return m;
+    if(cols&&/^<(?:path|rect|circle|ellipse|polygon)\b[^>]*?fill="url\(#fxg/.test(str.substr(off+m.length,300))) return m;   /* 이미 덮개가 붙은 도형은 건너뛰어요 */
+    if(o.opacity!==undefined&&parseFloat(o.opacity)<.85) return m;
+    var q=gxHsl(f); if(q.l>.97) return m;
+    var mt=GX_MAT[gxShapeMat(prim,it.slot,tag,q)], S=mt.S*mult, k=++n, sfx=uid||'§';
+    var id='fxg'+k+'_'+sfx, rid='fxr'+k+'_'+sfx, cid='fxc'+k+'_'+sfx, kp=keep.join(' ');
+    defs+=(mt.k==='gem'?gxGem(id,mt,S):gxBody(id,mt,S,it.slot))+gxRim(rid,mt,S)+'<clipPath id="'+cid+'"><'+tag+' '+kp+'/></clipPath>';
+    return m+'<'+tag+' '+kp+' fill="url(#'+id+')" stroke="none"/><'+tag+' '+kp+' fill="none" stroke="url(#'+rid+')" stroke-width="'+(mt.k==='gem'?2.4:3)+'" clip-path="url(#'+cid+')"/>';
+  });
+  return defs?('<defs>'+defs+'</defs>'+out):str;
+}
+function gxRender(str,it){
+  var key=it.id+'|'+str, t=GX_C[key];
+  if(t===undefined){ if(GX_SZ>2000000){ GX_C={}; GX_SZ=0; } t=GX_C[key]=gxBuild(str,it,null); GX_SZ+=key.length+t.length; }
+  return t.indexOf('§')<0?t:t.replace(/§/g,String(++GXU));
+}
+function gxColor(str,it){
+  var cols=[it.main,it.low,it.dark], i, c=[];
+  for(i=0;i<3;i++) if(cols[i]) c.push(String(cols[i]).toUpperCase());
+  return gxBuild(str,it,c,String(++GXU));
+}
+function gxOk(it){ return !!(it&&it.id&&(it.job||(GX_COM[it.slot]&&it.rk==null))); }
+function gxWrap(fn,idx){ return function(){ var it=arguments[idx], r=fn.apply(this,arguments); return gxOk(it)?gxRender(r,it):r; }; }
+function gxWrapBack(fn){ return function(){ var e=arguments[0], it=e&&e.cape, r=fn.apply(this,arguments); return (gxOk(it)&&!it.job)?gxRender(r,it):r; }; }
+function gxCloth(fn,pick){ return function(){ var r=fn.apply(this,arguments), eq=pick(arguments), t, b, c; if(!eq) return r; t=eq.etunic; b=eq.mrobe; c=eq.cape; if(t&&t.job) r=gxColor(r,t); if(b&&b.job) r=gxColor(r,b); if(c&&gxOk(c)&&!c.job&&c.fill) r=gxColor(r,{id:c.id,slot:c.slot,name:c.name,rar:c.rar,main:c.fill}); return r; }; }   /* 옆모습 망토는 그림 안에서 색으로만 그려져서 색으로 찾아요 */
+helmArt=gxWrap(helmArt,0); armorArt=gxWrap(armorArt,0); shieldArt=gxWrap(shieldArt,0); swordArt=gxWrap(swordArt,3);
+dwarfHelmArt=gxWrap(dwarfHelmArt,0); dwarfHelmSide=gxWrap(dwarfHelmSide,0); dmailArt=gxWrap(dmailArt,0); dmailBack=gxWrap(dmailBack,0); dbeardArt=gxWrap(dbeardArt,0);
+eheadArt=gxWrap(eheadArt,0); mageHatArt=gxWrap(mageHatArt,0); mbookArt=gxWrap(mbookArt,0); compQuiver=gxWrap(compQuiver,0); compWeaponInner=gxWrap(compWeaponInner,1);
+capeArt=gxWrap(capeArt,0); plumeArt=gxWrap(plumeArt,0); bootItemArt=gxWrap(bootItemArt,2); beltItemArt=gxWrap(beltItemArt,0); backCapeArt=gxWrapBack(backCapeArt);
+compArt=gxCloth(compArt,function(a){ var o=a[1]; return (o&&o.eq)||curEq(); });
+compBack=gxCloth(compBack,function(a){ return a[1]; });
+sdFrame=gxCloth(sdFrame,function(a){ return a[2]; });
+/* ===== /v1.74.0 전용장비 질감 ===== */
 var JOBW={hero:'sword',dwarf:'axe',elf:'bow',mage:'staff'};   /* 직업별 무기 칸 */
 (function(){
   function A(id,slot,job,rar,name,o){ var it={id:id,slot:slot,craft:1,job:job,rar:rar,name:name},k; for(k in o) it[k]=o[k]; ITEMS.push(it); }
@@ -3171,6 +3301,7 @@ function itemIcon(it,on){
   else if(it.slot==='belt'){ vb='-30 -12 60 36'; inner=beltItemArt(it,{w:52,y:2,h:9},false); }
   else if(it.slot==='set'){ vb='-76 -108 152 170'; inner=rkSetIconInner(it.rkset); }
   else { vb='-42 -66 84 100'; inner=pjIconArt(); }
+  if(it.job&&(it.slot==='dbeard'||it.slot==='etunic'||it.slot==='mrobe')) inner=gxRender(inner,it);   /* v1.74.0: 이 세 칸은 그림 함수가 아니라 여기서 바로 그려서 전체에 덮개를 입혀요 */
   return '<svg viewBox="'+vb+'" aria-hidden="true">'+inner+'</svg>';
 }
 function heroPreview(eq,who){

@@ -1580,18 +1580,18 @@ button.q.trfv{display:flex; align-items:center; gap:12px; width:100%; min-height
 /* v1.72.0 하단 메뉴: 화면 아래에 딱 붙는 프레임 · 입체 버튼 · 아이콘 · 마왕전 액체 구슬(뿔·쇠사슬·자물쇠) · 위쪽 버튼 3개도 같은 입체 재질 */
 .nav{position:fixed; left:0; right:0; bottom:0; display:flex; gap:3px; box-sizing:border-box; z-index:30;
   padding:6px max(6px,calc(50% - 274px)) calc(6px + env(safe-area-inset-bottom,0px));
-  background:linear-gradient(180deg,#3a5457 0%,#1f3438 45%,#0f1d20 100%); border-top:2px solid var(--edge);
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.18), 0 -6px 14px rgba(0,0,0,.45);}
+  background:var(--nvF); border-top:2px solid var(--edge);
+  box-shadow:var(--nvFS);}
 .nav[hidden]{display:none;}
 .nav button{flex:1; min-width:0; height:56px; padding:0 1px; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-  border:1px solid #070E0D; border-radius:15px; background:linear-gradient(180deg,#2c4448 0%,#182a2d 100%);
-  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.2), inset 0 -3px 0 rgba(0,0,0,.4), 0 2px 0 #070E0D;
-  font-family:var(--disp); font-size:14px; line-height:16px; color:#8FAEAA; text-shadow:0 1px 0 #000; -webkit-tap-highlight-color:transparent;}
+  border:1px solid var(--nvBB); border-radius:15px; background:var(--nvB);
+  box-shadow:var(--nvBS);
+  font-family:var(--disp); font-size:14px; line-height:16px; color:var(--nvT); text-shadow:var(--nvTS); -webkit-tap-highlight-color:transparent;}
 .nav button[hidden]{display:none;}
 .nav button:active{transform:translateY(1px);}
 .nav button[aria-current="page"]{background:linear-gradient(180deg,#FFE58F 0%,#F6C445 52%,#D9A21E 100%); border-color:#7a5a0c; color:var(--gold-ink); text-shadow:0 1px 0 rgba(255,255,255,.4);
   box-shadow:inset 0 2px 0 rgba(255,255,255,.6), inset 0 -3px 0 rgba(120,80,0,.5), 0 2px 0 #6e500a, 0 0 12px rgba(246,196,69,.4);}
-.nav .ni{display:block; width:28px; height:28px; filter:drop-shadow(0 2px 1px rgba(0,0,0,.6));}
+.nav .ni{display:block; width:28px; height:28px; filter:var(--nvIF);}
 .nav button[aria-current="page"] .ni{filter:drop-shadow(0 1px 0 rgba(255,255,255,.5));}
 .ico svg{display:block; width:100%; height:100%; overflow:visible;}
 .ico .m{fill:var(--m);} .ico .ms{fill:none; stroke:var(--m); stroke-linecap:round; stroke-linejoin:round;}
@@ -1608,15 +1608,15 @@ button.q.trfv{display:flex; align-items:center; gap:12px; width:100%; min-height
 .nav [data-tab="run"][aria-current="page"]{--m:#2B2000;}
 .nav [data-tab="home"][aria-current="page"]{--m:#2B2000; --d:#F6C445; --x:#F6C445;}
 .nav [data-tab="ach"][aria-current="page"]{--m:#2B2000; --d:#5a4300; --x:#F6C445; --s:#F6C445;}
-.nav button.dot:after{content:''; position:absolute; top:3px; right:6px; width:12px; height:12px; box-sizing:border-box; border-radius:50%; background:var(--boss); border:2px solid #14262A;}
+.nav button.dot:after{content:''; position:absolute; top:3px; right:6px; width:12px; height:12px; box-sizing:border-box; border-radius:50%; background:var(--boss); border:2px solid var(--nvDB);}
 /* 마왕전 구슬 */
-.nav button.dm{flex:0 0 94px; overflow:visible; border:0; background:none; box-shadow:none; color:#D9C2FF; z-index:2;}
+.nav button.dm{flex:0 0 94px; overflow:visible; border:0; background:none; box-shadow:none; color:var(--nvDM); z-index:2;}
 .nav button.dm:active{transform:none;}
-.nav button.dm[aria-current="page"]{background:none; border:0; box-shadow:none; color:#D9C2FF; text-shadow:0 1px 0 #000;}
-.nav button.dm.lk{color:#8FAEAA;}
+.nav button.dm[aria-current="page"]{background:none; border:0; box-shadow:none; color:var(--nvDM); text-shadow:var(--nvTS);}
+.nav button.dm.lk{color:var(--nvT);}
 .nav button.dm:before{content:''; position:absolute; left:50%; top:-34px; width:90px; height:90px; margin-left:-45px; box-sizing:border-box; border-radius:50%; z-index:0;
-  background:linear-gradient(180deg,#3a5457 0%,#1f3438 55%,#162528 100%); border:2.5px solid #070E0D;
-  box-shadow:inset 0 2.5px 0 rgba(255,255,255,.18), inset 0 -2px 0 rgba(0,0,0,.35), 0 -3px 8px rgba(0,0,0,.3);}
+  background:var(--nvSk); border:2.5px solid var(--nvBB);
+  box-shadow:var(--nvSs);}
 .nav button.dm .orb{position:absolute; left:50%; top:-36.2px; width:76px; height:85.1px; margin-left:-38px; z-index:1; overflow:visible;}
 .nav button.dm[aria-current="page"] .orb{filter:drop-shadow(0 0 6px #B58CFF);}
 .nav button.dm .nl{position:absolute; left:0; right:0; bottom:1px; z-index:2; line-height:14px; font-size:13px; text-align:center;}
@@ -1645,18 +1645,114 @@ button.q.trfv{display:flex; align-items:center; gap:12px; width:100%; min-height
 @keyframes dmSpark{0%,16%{opacity:0}28%{opacity:1}55%{opacity:.6}85%,100%{opacity:0}}
 /* 위쪽 버튼 3개(일지·반디·설정): 하단 메뉴와 같은 입체 재질 */
 .gearbtn,.bdbtn,.achbtn{position:absolute; top:2px; z-index:5; width:46px; height:46px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:50%;
-  border:2px solid var(--edge); background:linear-gradient(180deg,#3a5457 0%,#1c3034 55%,#0f1d20 100%);
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.22), inset 0 -3px 0 rgba(0,0,0,.45), 0 3px 0 var(--edge), 0 6px 10px rgba(0,0,0,.45); -webkit-tap-highlight-color:transparent;}
-.gearbtn{right:16px; color:#C7D3D1;} .bdbtn{right:70px;} .achbtn{right:124px; --m:#F6C445; --d:#C99A1E; --x:#FF6A5B; --s:#2B2000;}
-.gearbtn svg{width:26px; height:26px; fill:currentColor; filter:drop-shadow(0 2px 1px rgba(0,0,0,.6));}
-.bdbtn svg{width:36px; height:30px; display:block; filter:drop-shadow(0 2px 1px rgba(0,0,0,.6));}
-.achbtn .ico{display:block; width:26px; height:26px; filter:drop-shadow(0 2px 1px rgba(0,0,0,.6));}
+  border:2px solid var(--edge); background:var(--nvTB);
+  box-shadow:var(--nvTBS); -webkit-tap-highlight-color:transparent;}
+.gearbtn{right:16px; color:var(--nvGear);} .bdbtn{right:70px;} .achbtn{right:124px; --m:#F6C445; --d:#C99A1E; --x:#FF6A5B; --s:#2B2000;}
+.gearbtn svg{width:26px; height:26px; fill:currentColor; filter:var(--nvIF);}
+.bdbtn svg{width:36px; height:30px; display:block; filter:var(--nvIF);}
+.achbtn .ico{display:block; width:26px; height:26px; filter:var(--nvIF);}
 .gearbtn:active,.bdbtn:active,.achbtn:active{transform:translateY(1px);}
 .achbtn.on{background:linear-gradient(180deg,#FFE58F 0%,#F6C445 52%,#D9A21E 100%); border-color:#7a5a0c; --m:#2B2000; --d:#5a4300; --x:#F6C445; --s:#F6C445;
   box-shadow:inset 0 2px 0 rgba(255,255,255,.6), inset 0 -3px 0 rgba(120,80,0,.5), 0 3px 0 #6e500a, 0 0 12px rgba(246,196,69,.4);}
 .achbtn.on .ico{filter:drop-shadow(0 1px 0 rgba(255,255,255,.5));}
 .achbtn.dot:after{content:''; position:absolute; top:-2px; right:-2px; width:12px; height:12px; box-sizing:border-box; border-radius:50%; background:var(--boss); border:2px solid var(--surface);}
 @media (max-width:350px){ .gearbtn,.bdbtn,.achbtn{width:42px; height:42px; top:4px;} .bdbtn{right:64px;} .achbtn{right:112px;} .gearbtn svg{width:24px; height:24px;} .bdbtn svg{width:33px; height:27px;} .achbtn .ico{width:24px; height:24px;} .achtop .eyebrow{padding-right:146px;} }
+/* v1.72.0 밝은 테마 보정: 하단 메뉴·구슬 소켓·위쪽 버튼 3개의 재질 색을 테마별로 나눠요(어두운 값은 v1.72.0 그대로) */
+:root{--nvF:linear-gradient(180deg,#3a5457 0%,#1f3438 45%,#0f1d20 100%); --nvFS:inset 0 2px 0 rgba(255,255,255,.18), 0 -6px 14px rgba(0,0,0,.45);
+  --nvB:linear-gradient(180deg,#2c4448 0%,#182a2d 100%); --nvBB:#070E0D; --nvBS:inset 0 1.5px 0 rgba(255,255,255,.2), inset 0 -3px 0 rgba(0,0,0,.4), 0 2px 0 #070E0D;
+  --nvT:#8FAEAA; --nvTS:0 1px 0 #000; --nvIF:drop-shadow(0 2px 1px rgba(0,0,0,.6)); --nvDB:#14262A; --nvDM:#D9C2FF;
+  --nvSk:linear-gradient(180deg,#3a5457 0%,#1f3438 55%,#162528 100%); --nvSs:inset 0 2.5px 0 rgba(255,255,255,.18), inset 0 -2px 0 rgba(0,0,0,.35), 0 -3px 8px rgba(0,0,0,.3);
+  --nvTB:linear-gradient(180deg,#3a5457 0%,#1c3034 55%,#0f1d20 100%); --nvTBS:inset 0 2px 0 rgba(255,255,255,.22), inset 0 -3px 0 rgba(0,0,0,.45), 0 3px 0 var(--edge), 0 6px 10px rgba(0,0,0,.45); --nvGear:#C7D3D1;}
+@media (prefers-color-scheme: light){
+:root:not([data-theme="dark"]){--nvF:linear-gradient(180deg,#FFFFFF 0%,#EAF3F0 45%,#D3E3DE 100%); --nvFS:inset 0 2px 0 rgba(255,255,255,.9), 0 -6px 14px rgba(40,80,72,.22);
+  --nvB:linear-gradient(180deg,#FFFFFF 0%,#E1EDE9 100%); --nvBB:#8FA9A2; --nvBS:inset 0 1.5px 0 rgba(255,255,255,.95), inset 0 -3px 0 rgba(60,100,92,.22), 0 2px 0 #8FA9A2;
+  --nvT:#3F5C57; --nvTS:0 1px 0 rgba(255,255,255,.9); --nvIF:drop-shadow(0 1.5px 1px rgba(40,70,64,.45)); --nvDB:#FFFFFF; --nvDM:#6B3FB5;
+  --nvSk:linear-gradient(180deg,#FFFFFF 0%,#E1EDE9 55%,#D3E3DE 100%); --nvSs:inset 0 2.5px 0 rgba(255,255,255,.95), inset 0 -2px 0 rgba(60,100,92,.22), 0 -3px 8px rgba(40,80,72,.18);
+  --nvTB:linear-gradient(180deg,#FFFFFF 0%,#E6F0ED 55%,#D3E3DE 100%); --nvTBS:inset 0 2px 0 rgba(255,255,255,.95), inset 0 -3px 0 rgba(60,100,92,.22), 0 3px 0 var(--edge), 0 6px 10px rgba(40,80,72,.25); --nvGear:#4D6964;}
+:root:not([data-theme="dark"]) .nav [data-tab="week"]:not([aria-current="page"]){--m:#D9AE62; --x:#E0483B;}
+:root:not([data-theme="dark"]) .nav [data-tab="today"]:not([aria-current="page"]){--m:#FFFFFF; --x:#9C9179;}
+:root:not([data-theme="dark"]) .nav [data-tab="today"]:not([aria-current="page"]) .ni{filter:drop-shadow(0 0 1px rgba(30,55,50,.85)) drop-shadow(0 1.5px 1px rgba(40,70,64,.4));}
+:root:not([data-theme="dark"]) .nav [data-tab="run"]:not([aria-current="page"]){--m:#17A673;}
+:root:not([data-theme="dark"]) .nav [data-tab="home"]:not([aria-current="page"]){--m:#8AA19C; --x:#E0483B;}
+:root:not([data-theme="dark"]) .nav [data-tab="ach"]:not([aria-current="page"]){--m:#E8B62C; --d:#B8860B; --x:#E0483B;}
+:root:not([data-theme="dark"]) .achbtn:not(.on){--m:#E8B62C; --d:#B8860B; --x:#E0483B;}
+}
+:root[data-theme="light"]{--nvF:linear-gradient(180deg,#FFFFFF 0%,#EAF3F0 45%,#D3E3DE 100%); --nvFS:inset 0 2px 0 rgba(255,255,255,.9), 0 -6px 14px rgba(40,80,72,.22);
+  --nvB:linear-gradient(180deg,#FFFFFF 0%,#E1EDE9 100%); --nvBB:#8FA9A2; --nvBS:inset 0 1.5px 0 rgba(255,255,255,.95), inset 0 -3px 0 rgba(60,100,92,.22), 0 2px 0 #8FA9A2;
+  --nvT:#3F5C57; --nvTS:0 1px 0 rgba(255,255,255,.9); --nvIF:drop-shadow(0 1.5px 1px rgba(40,70,64,.45)); --nvDB:#FFFFFF; --nvDM:#6B3FB5;
+  --nvSk:linear-gradient(180deg,#FFFFFF 0%,#E1EDE9 55%,#D3E3DE 100%); --nvSs:inset 0 2.5px 0 rgba(255,255,255,.95), inset 0 -2px 0 rgba(60,100,92,.22), 0 -3px 8px rgba(40,80,72,.18);
+  --nvTB:linear-gradient(180deg,#FFFFFF 0%,#E6F0ED 55%,#D3E3DE 100%); --nvTBS:inset 0 2px 0 rgba(255,255,255,.95), inset 0 -3px 0 rgba(60,100,92,.22), 0 3px 0 var(--edge), 0 6px 10px rgba(40,80,72,.25); --nvGear:#4D6964;}
+:root[data-theme="light"] .nav [data-tab="week"]:not([aria-current="page"]){--m:#D9AE62; --x:#E0483B;}
+:root[data-theme="light"] .nav [data-tab="today"]:not([aria-current="page"]){--m:#FFFFFF; --x:#9C9179;}
+:root[data-theme="light"] .nav [data-tab="today"]:not([aria-current="page"]) .ni{filter:drop-shadow(0 0 1px rgba(30,55,50,.85)) drop-shadow(0 1.5px 1px rgba(40,70,64,.4));}
+:root[data-theme="light"] .nav [data-tab="run"]:not([aria-current="page"]){--m:#17A673;}
+:root[data-theme="light"] .nav [data-tab="home"]:not([aria-current="page"]){--m:#8AA19C; --x:#E0483B;}
+:root[data-theme="light"] .nav [data-tab="ach"]:not([aria-current="page"]){--m:#E8B62C; --d:#B8860B; --x:#E0483B;}
+:root[data-theme="light"] .achbtn:not(.on){--m:#E8B62C; --d:#B8860B; --x:#E0483B;}
+/* v1.73.0 달력형 일지: 색은 변수(밝은·어두운 테마)로만 정해요 */
+:root{--calR:#FF6A5B; --calB:#6FA8FF; --calX:#FF6A5B; --emIn:#0F1D20; --emIcG:#FBE08A; --emIcB:#F6B57C; --emIcC:#6FE9BE; --emIcS:#E3ECEF; --emIcR:#F2A29A; --emIcD:#D9C2FF;}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--calR:#B02A20; --calB:#2563C8; --calX:#C8352A; --emIn:#F6FBF9; --emIcG:#8A5A00; --emIcB:#8A3A0E; --emIcC:#0F6B50; --emIcS:#4C5C64; --emIcR:#8E241B; --emIcD:#4F2D95;}}
+:root[data-theme="light"]{--calR:#B02A20; --calB:#2563C8; --calX:#C8352A; --emIn:#F6FBF9; --emIcG:#8A5A00; --emIcB:#8A3A0E; --emIcC:#0F6B50; --emIcS:#4C5C64; --emIcR:#8E241B; --emIcD:#4F2D95;}
+.card.calc{position:relative; padding:10px 8px 12px;}
+.calhd{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; padding-left:6px;}
+.calttl{font-family:var(--disp); font-size:19px; color:var(--ink);}
+.calnav{display:flex; align-items:center; gap:4px;}
+.calbtn{width:44px; height:44px; padding:0; border:0; border-radius:50%; background:var(--soft); color:var(--ink); display:flex; align-items:center; justify-content:center;}
+.calbtn svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round;}
+.calbtn.caltoday{width:auto; min-width:48px; padding:0 10px; border-radius:22px; background:transparent; border:1.5px solid var(--line); font-size:13px; font-weight:700; color:var(--muted);}
+.calbtn:disabled{opacity:.4; cursor:default;}
+.calbtn.caltoday:disabled{opacity:.55;}
+.calwk,.calgrid{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:3px;}
+.calwk{margin-bottom:2px;}
+.calwk span{text-align:center; font-size:12px; font-weight:700; color:var(--muted); line-height:20px;}
+.calwk span:first-child{color:var(--calR);} .calwk span:last-child{color:var(--calB);}
+.calc2{height:52px; padding:0; margin:0; border:0; border-radius:12px; background:transparent; color:var(--ink); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font:inherit;}
+.calc2.sel{background:var(--soft); box-shadow:inset 0 0 0 2px var(--link);}
+.calc2.out{justify-content:flex-start; padding-top:4px; opacity:.35; pointer-events:none;}
+.calnum{font-size:13px; font-weight:700; line-height:18px; color:var(--ink);}
+.calnum.sun{color:var(--calR);} .calnum.sat{color:var(--calB);} .calnum.pre{opacity:.5;}
+.calc2.out .calnum{font-weight:500;}
+.calnum.today{display:inline-block; min-width:22px; padding:0 5px; border-radius:999px; background:var(--gold); color:var(--gold-ink); text-align:center;}
+.cmk{display:block; width:18px; height:18px; flex:none;}
+.calleg{display:flex; flex-wrap:wrap; gap:4px 12px; margin:10px 4px 0; padding-top:10px; border-top:1px solid var(--line);}
+.calleg span{display:inline-flex; align-items:center; gap:5px; font-size:12px; color:var(--muted); line-height:18px;}
+.calleg .cmk{width:14px; height:14px;}
+.calhelp{font-size:12px; color:var(--muted); margin:8px 4px 10px; line-height:1.5;}
+.calpop{position:absolute; left:8px; right:8px; bottom:8px; min-height:122px; box-sizing:border-box; padding:6px 6px 10px 14px; background:var(--surface); border:2px solid var(--link); border-radius:18px; box-shadow:0 -6px 18px rgba(0,0,0,.22); z-index:3;}
+.calpop.in{animation:calpopIn .18s ease-out;}
+@keyframes calpopIn{from{opacity:0; transform:translateY(12px);}to{opacity:1; transform:none;}}
+.calph{display:flex; align-items:flex-start; justify-content:space-between; gap:6px;}
+.caldtt{margin:8px 0 0; font-family:var(--disp); font-size:18px; line-height:1.3; color:var(--ink);}
+.calx{flex:none;}
+.calpop .caldtl{margin-top:2px; padding-right:8px;}
+.calgrid.fxn{animation:calfxn .16s ease-out;}
+.calgrid.fxp{animation:calfxp .16s ease-out;}
+@keyframes calfxn{from{opacity:0; transform:translateX(14px);}to{opacity:1; transform:none;}}
+@keyframes calfxp{from{opacity:0; transform:translateX(-14px);}to{opacity:1; transform:none;}}
+.calc2{transition:transform .08s ease-out, background .12s;}
+.calc2:active{transform:scale(.94);}
+@media (prefers-reduced-motion: reduce){ .calpop.in,.calgrid.fxn,.calgrid.fxp{animation:none;} .calc2{transition:none;} .calc2:active{transform:none;} }
+.calsum{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin:10px 2px 0;}
+.calst{text-align:center; min-width:0; padding:2px 0;}
+.calst+.calst{border-left:1px solid var(--line);}
+.calst b{display:block; white-space:nowrap; font-family:var(--disp); font-weight:400; font-size:22px; line-height:1.1; color:var(--ink);}
+.calst b.cx{font-size:18px;}
+.calst b.cxx{font-size:14px;}
+.calst b small{font-family:'Noto Sans KR',system-ui,sans-serif; font-size:12px; font-weight:700; color:var(--muted); margin-left:2px;}
+.calst span{display:block; font-size:12px; color:var(--muted); line-height:1.3; margin-top:2px;}
+.card.caltot{padding:12px 10px;}
+.caltiles{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px 6px;}
+.cem{min-width:0; text-align:center;}
+.cemb{position:relative; width:76px; height:88px; margin:0 auto;}
+.cems{position:absolute; left:0; top:0; width:100%; height:100%; display:block; filter:drop-shadow(0 2px 2px rgba(0,0,0,.28));}
+.cemv{position:absolute; left:6px; right:6px; top:38px; display:flex; flex-direction:column; align-items:center; font-family:var(--disp); font-size:20px; line-height:1.05; color:var(--ink); white-space:nowrap;}
+.cemv small{font-family:'Noto Sans KR',system-ui,sans-serif; font-size:11px; font-weight:700; color:var(--muted); line-height:1.25;}
+.cemv.cx{font-size:16px;} .cemv.cxx{font-size:13px;}
+.cemt{display:block; margin-top:6px; font-size:12px; color:var(--muted); line-height:1.3;}
+.calbadge{display:inline-block; margin-left:8px; padding:0 8px; border:1.5px solid var(--calR); border-radius:999px; font-family:'Noto Sans KR',system-ui,sans-serif; font-size:12px; font-weight:700; line-height:18px; color:var(--calR); vertical-align:3px;}
+.caldtl{display:flex; align-items:center; gap:8px; font-size:14px; line-height:1.5; color:var(--ink);}
+@media (max-width:430px){ .calleg{display:grid; grid-template-columns:1fr 1fr; gap:4px 12px;} }
+@media (max-width:350px){ .card.calc{padding:10px 4px 12px;} .calwk,.calgrid{gap:2px;} .calst b{font-size:20px;} .calst b.cx{font-size:17px;} .calst b.cxx{font-size:13px;} .calst b small{margin-left:1px;} .cemb{width:68px; height:79px;} .cemv{top:34px; font-size:18px;} .cemv small{font-size:10px;} .cemv.cx{font-size:14px;} .cemv.cxx{font-size:12px;} }
 </style>
 </head>
 <body>
@@ -2617,8 +2713,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.72.0', APP_DATE='2026-10-22', showChg=false;
+var APP_VER='1.73.0', APP_DATE='2026-10-22', showChg=false;
 var CHANGES=[
+['1.73.0','몸짱일지에 몸짱달력이 생겼어요. 날짜를 누르면 그날 기록을 볼 수 있어요'],
 ['1.72.0','하단 메뉴가 화면 아래에 붙고 버튼마다 그림이 생겼어요. 마왕전은 액체가 담긴 구슬이 되어, 이번 주 XP만큼 차오르고 1000이 되기 전까지는 사슬과 자물쇠가 걸려 있어요. 1000이 되는 순간 사슬이 풀리며 열려요. 위쪽 버튼 세 개도 같은 입체 모양으로 바뀌었어요'],
 ['1.71.0','실내 유산소가 새로워졌어요. 러닝 아래의 «실내 유산소» 버튼을 누르면 밖에서 하기 어려운 이유를 고르고(비·눈 오는 날은 자동), 동작을 미리 본 뒤 피버모드 화면에서 타이머 안내에 따라 진행해요. 속도를 바꾸면 박자만 달라지고 시간은 그대로예요(마왕전은 1.0× 고정). 끝까지 마치면 오늘 러닝이 완료되고, 중간에 닫아도 마친 반복까지는 오늘 저장돼서 이어서 할 수 있어요. 새 동작은 버트 킥·스텝 잭·하이니·점핑잭·인치웜 + 푸시업이에요'],
 ['1.70.0','설치한 앱(홈 화면 아이콘)이 아니면 설치 안내 화면이 먼저 나와요. 지도·마왕전·왕국·건물·일지에 레드닷(아직 확인 안 한 알림)이 생겼고 확인하면 꺼져요. 마왕전 탭의 보라 점은 없어졌고, 자물쇠는 이번 주 확정 XP가 1000이 되기 전까지만 붙어요'],
@@ -4250,12 +4347,34 @@ function migrateLog(log){
   return changed;
 }
 function fresh(){return {start:fmt(TODAY),log:{},body:[]};}
-function load(){
+/* v1.72.0 기록 보호: 저장된 기록을 읽다가 문제가 생겨도 옛 기록을 버리지 않아요.
+   ① 읽을 수 없거나 항목이 빠진 기록은 원본 글을 다른 이름(LOSTKEY)으로 먼저 보관해요(처음 것은 LOSTKEY, 그다음 것은 LOSTKEY2).
+   ② 기록은 읽히는데 log·body·start 중 일부가 빠진 경우에는 그 항목만 기본값으로 채워서 나머지 기록을 살려요.
+   ③ 예전 기록을 새 규칙으로 옮기는 단계(migrate)에서 오류가 나도 기록은 버리지 않고 옮기기 전 상태로 써요. */
+var LOSTKEY='home-training-v1-lost';
+function lostKeep(raw){
   try{
-    var raw = localStorage.getItem(KEY);
-    if(raw){var o=JSON.parse(raw); if(o && o.log && o.body && o.start){ if(migrateLog(o.log)) o.dirty=true; if(migrateRest(o)) o.dirty=true; return o; }}
+    if(!raw) return;
+    var a=localStorage.getItem(LOSTKEY);
+    if(a===raw || localStorage.getItem(LOSTKEY+'2')===raw) return;
+    localStorage.setItem(a?LOSTKEY+'2':LOSTKEY, raw);
   }catch(e){}
-  return fresh();
+}
+function load(){
+  var raw=null;
+  try{ raw=localStorage.getItem(KEY); }catch(e){}
+  if(!raw) return fresh();
+  var o=null;
+  try{ o=JSON.parse(raw); }catch(e){ o=null; }
+  if(!o || typeof o!=='object' || Array.isArray(o)){ lostKeep(raw); return fresh(); }
+  var fixed=false;
+  if(!o.log || typeof o.log!=='object' || Array.isArray(o.log)){ o.log={}; fixed=true; }
+  if(!Array.isArray(o.body)){ o.body=[]; fixed=true; }
+  if(typeof o.start!=='string' || !o.start){ var ks=Object.keys(o.log).sort(); o.start=ks.length?ks[0]:fmt(TODAY); fixed=true; }
+  if(fixed){ lostKeep(raw); o.dirty=true; }
+  try{ if(migrateLog(o.log)) o.dirty=true; }catch(e){}
+  try{ if(migrateRest(o)) o.dirty=true; }catch(e){}
+  return o;
 }
 var CL={ready:false,fail:false,user:null,busy:false,again:false,timer:null,stat:'',msg:'',err:false,last:0};
 var noDirty=false;
@@ -4266,6 +4385,8 @@ function save(){
   if(!noDirty && CL.user) cloudSchedule();
 }
 noDirty=true; save(); noDirty=false;
+/* v1.72.0 저장 공간 보호: 폰이 이 앱의 저장 공간을 마음대로 정리하지 못하게 한 번 요청해요(지원하지 않거나 거절돼도 아무 일 없어요) */
+try{ if(navigator.storage && navigator.storage.persist){ navigator.storage.persisted().then(function(p){ if(!p) return navigator.storage.persist(); }).catch(function(){}); } }catch(e){}
 
 var tab = 'today';
 var prevTab = 'today';   /* 톱니바퀴로 설정에 들어가기 전의 탭 */
@@ -8085,8 +8206,195 @@ function achPopup(x){
   var body=ic+'<p class="achd">'+x.desc+'</p><p class="achs2 ok">'+achDate(x.at)+' 달성</p>';
   return {k:'ACHIEVED',t:x.name,b:'<div class="achp">'+body+'</div>',mode:'info'};
 }
+/* ===== v1.73.0 달력형 일지(HeiRoku 시안 확정 2026-10-22): 몸짱일지 위쪽 «달력». 읽기 전용이라 새 저장 항목이 없어요(월·선택한 날은 저장하지 않아요).
+   날짜별 결과는 기존 dayResult·dayXP·resLabel을 그대로 읽고, 접속 날짜(S.vis)는 쓰지 않아요(6장 규칙). 일요일 시작 · 일요일·공휴일 빨강 · 토요일 파랑.
+   공휴일은 나라 코드별 표(CAL_HOL)로 앱 안에 담아요(지금은 KR 하나, 우주항공청 월력요항 기준 2026~2027). 새 해·임시공휴일은 표에 한 줄씩 더해요. ===== */
+var CAL_CC='KR';
+var CAL_HOL={KR:{
+  '2026-01-01':'신정','2026-02-16':'설날 연휴','2026-02-17':'설날','2026-02-18':'설날 연휴','2026-03-01':'삼일절','2026-03-02':'대체공휴일','2026-05-01':'노동절','2026-05-05':'어린이날','2026-05-24':'부처님오신날','2026-05-25':'대체공휴일','2026-06-03':'지방선거','2026-06-06':'현충일','2026-07-17':'제헌절','2026-08-15':'광복절','2026-08-17':'대체공휴일','2026-09-24':'추석 연휴','2026-09-25':'추석','2026-09-26':'추석 연휴','2026-10-03':'개천절','2026-10-05':'대체공휴일','2026-10-09':'한글날','2026-12-25':'성탄절',
+  '2027-01-01':'신정','2027-02-06':'설날 연휴','2027-02-07':'설날','2027-02-08':'설날 연휴','2027-02-09':'대체공휴일','2027-03-01':'삼일절','2027-05-01':'노동절','2027-05-03':'대체공휴일','2027-05-05':'어린이날','2027-05-13':'부처님오신날','2027-06-06':'현충일','2027-07-17':'제헌절','2027-07-19':'대체공휴일','2027-08-15':'광복절','2027-08-16':'대체공휴일','2027-09-14':'추석 연휴','2027-09-15':'추석','2027-09-16':'추석 연휴','2027-10-03':'개천절','2027-10-04':'대체공휴일','2027-10-09':'한글날','2027-10-11':'대체공휴일','2027-12-25':'성탄절','2027-12-27':'대체공휴일'
+}};
+var calYM=null, calSel=null;
+function calHol(k){ var t=CAL_HOL[CAL_CC]; return (t&&t[k])||''; }
+function calIdx(o){ return o.y*12+o.m; }
+function calBounds(){
+  var first=S.start||fmt(TODAY), mx={y:TODAY.getFullYear(),m:TODAY.getMonth()}, last='', t=CAL_HOL[CAL_CC]||{}, p, q;
+  Object.keys(S.log||{}).forEach(function(k){ if(k<first) first=k; });
+  p=parse(first);
+  Object.keys(t).forEach(function(k){ if(k>last) last=k; });
+  if(last){ q=parse(last); if(q.getFullYear()*12+q.getMonth()>calIdx(mx)) mx={y:q.getFullYear(),m:q.getMonth()}; }
+  return {mn:{y:p.getFullYear(),m:p.getMonth()}, mx:mx};
+}
+function calRes(k){   /* {mk: 표시 종류(done·fail·win·free), r: dayResult} · 결과 없는 날은 mk '' */
+  var r=null, dem, mk;
+  try{ r=dayResult(parse(k)); }catch(e){ r=null; }
+  if(!r) return {mk:'',r:null};
+  dem=isDemon(k);
+  if(r.res==='lose') mk='fail';
+  else if(dem) mk=(r.res==='win')?'win':(r.res==='free'?'free':'fail');
+  else mk='done';   /* 토벌 완료·가호·행운은 모두 «해낸 날» */
+  return {mk:mk,r:r};
+}
+function calName(k){ if(isDemon(k)) return k<demonFrom()?QN.sat:'마왕전'; return qnOf(dkAt(k),k); }
+function calMk(mk){
+  var a='<svg class="cmk" viewBox="0 0 18 18" aria-hidden="true">';
+  if(mk==='done') return a+'<circle cx="9" cy="9" r="8" style="fill:var(--clear)"/><path d="M5.2 9.3l2.6 2.6 5-5.4" style="fill:none;stroke:var(--clear-ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/></svg>';
+  if(mk==='fail') return a+'<path d="M4.5 4.5l9 9M13.5 4.5l-9 9" style="fill:none;stroke:var(--calX);stroke-width:2.4;stroke-linecap:round"/></svg>';
+  if(mk==='win') return a+'<path d="M9 .8l8.2 8.2L9 17.2.8 9z" style="fill:var(--dmv)"/><path d="M5.6 9.2l2.4 2.4 4.4-4.8" style="fill:none;stroke:#FFFFFF;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"/></svg>';
+  if(mk==='free') return a+'<path d="M9 1.9l7.1 7.1L9 16.1 1.9 9z" style="fill:none;stroke:var(--dmv);stroke-width:2;stroke-linejoin:round"/></svg>';
+  return '';
+}
+function calGrid(){
+  var now={y:TODAY.getFullYear(),m:TODAY.getMonth()}, b=calBounds(), y, mo, off, dim, rows, total, i, dt, k, dow, hol, inM, cells='', todayK=fmt(TODAY), startK=S.start||'', cls, res, lab, nh, pre, sel;
+  if(!calYM) calYM={y:now.y,m:now.m};
+  if(calIdx(calYM)<calIdx(b.mn)) calYM={y:b.mn.y,m:b.mn.m};
+  if(calIdx(calYM)>calIdx(b.mx)) calYM={y:b.mx.y,m:b.mx.m};
+  y=calYM.y; mo=calYM.m; off=new Date(y,mo,1).getDay(); dim=new Date(y,mo+1,0).getDate(); rows=Math.ceil((off+dim)/7); total=rows*7;
+  for(i=0;i<total;i++){
+    inM=(i>=off && i-off<dim);
+    dt=inM?new Date(y,mo,i-off+1):(i<off?new Date(y,mo,1-(off-i)):new Date(y,mo+1,i-off-dim+1));
+    k=fmt(dt); dow=i%7; hol=calHol(k);
+    cls='calnum'+((dow===0||hol)?' sun':(dow===6?' sat':''));
+    if(!inM){ cells+='<div class="calc2 out" aria-hidden="true"><span class="'+cls+'">'+dt.getDate()+'</span></div>'; continue; }
+    res=calRes(k); pre=(k<startK && !(S.log&&S.log[k])); sel=(calSel===k);
+    lab=(mo+1)+'월 '+dt.getDate()+'일'+(hol?' '+hol:'')+(res.r?' '+calName(k)+' '+resLabel(dkAt(k),res.r.res,k):(k===todayK?' 오늘':''));
+    nh=(k===todayK)?'<span class="calnum today">'+dt.getDate()+'</span>':'<span class="'+cls+(pre?' pre':'')+'">'+dt.getDate()+'</span>';
+    cells+='<button type="button" class="calc2'+(sel?' sel':'')+'" data-a="cal-day" data-k="'+k+'" aria-label="'+lab+'" aria-pressed="'+(sel?'true':'false')+'">'+nh+(res.mk?calMk(res.mk):'<span class="cmk blank" aria-hidden="true"></span>')+'</button>';
+  }
+  return {html:cells,y:y,mo:mo,atMin:calIdx(calYM)<=calIdx(b.mn),atMax:calIdx(calYM)>=calIdx(b.mx),isCur:(y===now.y&&mo===now.m)};
+}
+/* v1.73.0 달력 팝업(HeiRoku 요청 2026-10-22): 날짜를 누르면 달력 카드 안에서 팝업이 떠요(아래로 카드가 늘어나지 않아요). 열고 닫는 것은 화면을 다시 그리지 않고 그 자리에서만 바꿔요.
+   닫기: ✕ 버튼 · 같은 날을 다시 누르기 · 팝업 밖을 누르기 · Esc. «동작 줄이기»에서는 움직임이 모두 꺼져요. */
+function calKm(x){ return String(Math.round(x*100)/100); }
+function calCx(v){ var n=String(v).length; return n>=8?' class="cx cxx"':(n>=5?' class="cx"':''); }   /* 숫자가 길면 칸 안에 들어가도록 글자를 조금 줄여요 */
+function calStats(y,mo){   /* 그 달의 보스 토벌 수·최장 연속(그 달 안에서만)·달린 거리. 보스 토벌은 누적 기록과 같은 기준(평일 보스+심폐짱: gstats의 killTotal) */
+  var dim=new Date(y,mo+1,0).getDate(), d, k, kills=0, run=0, best=0, km=0, dk;
+  for(d=1; d<=dim; d++){
+    k=fmt(new Date(y,mo,d));
+    if(S.log[k] && isDone(parse(k))){
+      run++; if(run>best) best=run;
+      dk=shk(dkAt(k),k);
+      if(dk==='mon'||dk==='tue'||dk==='wed'||dk==='thu'||dk==='fri'||dk==='meadow') kills++;
+    } else run=0;
+    km+=runKmOn(k);
+  }
+  return {kills:kills,best:best,km:Math.round(km*100)/100};
+}
+function calStatHtml(y,mo){
+  var st=calStats(y,mo), nb='\u00a0';
+  var kmS=calKm(st.km);
+  return '<div class="calsum"><div class="calst"><b>'+st.kills+'<small>회</small></b><span>보스'+nb+'토벌</span></div><div class="calst"><b>'+st.best+'<small>일</small></b><span>최장'+nb+'연속</span></div><div class="calst"><b'+calCx(kmS)+'>'+kmS+'<small>km</small></b><span>달린'+nb+'거리</span></div></div>';
+}
+function calPopHtml(k,anim){
+  var dt=parse(k), res=calRes(k), hol=calHol(k), nb='\u00a0', h, xp, rl, km;
+  h='<div class="calpop'+(anim?' in':'')+'" role="dialog" aria-label="선택한 날의 기록"><div class="calph"><p class="caldtt">'+(dt.getMonth()+1)+'월'+nb+dt.getDate()+'일'+nb+DAYS[dt.getDay()]+'요일'+(hol?'<span class="calbadge">'+hol.replace(/ /g,nb)+'</span>':'')+'</p>'+
+    '<button type="button" class="calbtn calx" data-a="cal-close" aria-label="닫기"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button></div>';
+  if(res.r){
+    xp=dayXP(k); rl=resLabel(dkAt(k),res.r.res,k); km=runKmOn(k); km=(km>0)?(Math.round(km*100)/100):0;   /* 그날 달린(걸은) 거리: 누적 거리에 세는 값 runKmOn과 같아요 */
+    h+='<div class="caldtl">'+calMk(res.mk)+'<span>'+calName(k).replace(/ /g,nb)+nb+'· '+rl.replace(/ /g,nb)+(km>0?nb+'· '+km+nb+'km':'')+(xp>0?nb+'· '+xp+nb+'XP':'')+'</span></div>';
+  }
+  return h+'</div>';
+}
+function calPick(k){   /* 날짜 누르기: 그 자리에서 팝업만 바꿔요(같은 날을 다시 누르면 닫아요) */
+  var card=document.querySelector('.card.calc'), old, cell, x;
+  if(!card){ calSel=k; render(); return; }
+  old=card.querySelector('.calpop'); if(old) old.remove();
+  Array.prototype.forEach.call(card.querySelectorAll('.calc2.sel'),function(e){ e.classList.remove('sel'); e.setAttribute('aria-pressed','false'); });
+  if(calSel===k){ calSel=null; return; }
+  calSel=k;
+  cell=card.querySelector('.calc2[data-k="'+k+'"]'); if(cell){ cell.classList.add('sel'); cell.setAttribute('aria-pressed','true'); }
+  card.insertAdjacentHTML('beforeend',calPopHtml(k,true));
+  x=card.querySelector('.calx'); if(x){ try{ x.focus({preventScroll:true}); }catch(e){} }
+}
+function calShut(refocus){
+  var old, sel;
+  if(!calSel) return;
+  calSel=null; old=document.querySelector('.calpop'); if(old) old.remove();
+  sel=document.querySelector('.calc2.sel');
+  if(sel){ sel.classList.remove('sel'); sel.setAttribute('aria-pressed','false'); if(refocus){ try{ sel.focus({preventScroll:true}); }catch(e){} } }
+}
+var calFx='';   /* 월을 넘길 때의 움직임 방향: n(다음)·p(이전), 한 번 쓰고 비워요 */
+function calSection(){
+  try{
+    var g=calGrid(), wk='', i, chev=function(d){ return '<svg viewBox="0 0 18 18" aria-hidden="true"><path d="'+d+'"/></svg>'; }, fx=calFx; calFx='';
+    for(i=0;i<7;i++) wk+='<span>'+DAYS[i]+'</span>';
+    return '<h2>몸짱달력</h2><div class="card calc"><div class="calhd"><span class="calttl">'+g.y+'년\u00a0'+(g.mo+1)+'월</span><div class="calnav">'+
+      '<button type="button" class="calbtn caltoday" data-a="cal-today" aria-label="오늘로 돌아가기"'+(g.isCur?' disabled':'')+'>오늘</button>'+
+      '<button type="button" class="calbtn" data-a="cal-prev" aria-label="이전 달"'+(g.atMin?' disabled':'')+'>'+chev('M11.5 3.5L6 9l5.5 5.5')+'</button>'+
+      '<button type="button" class="calbtn" data-a="cal-next" aria-label="다음 달"'+(g.atMax?' disabled':'')+'>'+chev('M6.5 3.5L12 9l-5.5 5.5')+'</button></div></div>'+
+      '<div class="calwk">'+wk+'</div><div class="calgrid'+(fx?' fx'+fx:'')+'">'+g.html+'</div>'+
+      '<div class="calleg"><span>'+calMk('done')+'해낸 날</span><span>'+calMk('fail')+'토벌 실패</span><span>'+calMk('win')+'마왕전 승리</span><span>'+calMk('free')+'연습전</span></div>'+
+      calStatHtml(g.y,g.mo)+(calSel?calPopHtml(calSel,false):'')+'</div>'+
+      '<p class="calhelp">날짜를 누르면 그날 기록을 볼 수 있어요.</p>';
+  }catch(e){ return ''; }
+}
+function calAct(a,t){
+  var y=window.scrollY, now={y:TODAY.getFullYear(),m:TODAY.getMonth()}, before;
+  if(a==='cal-day'){ calPick(t.getAttribute('data-k')); return; }
+  if(a==='cal-close'){ calShut(true); return; }
+  if(!calYM) calYM={y:now.y,m:now.m};
+  before=calIdx(calYM);
+  if(a==='cal-prev'){ calYM={y:calYM.y+(calYM.m===0?-1:0),m:calYM.m===0?11:calYM.m-1}; calFx='p'; }
+  else if(a==='cal-next'){ calYM={y:calYM.y+(calYM.m===11?1:0),m:calYM.m===11?0:calYM.m+1}; calFx='n'; }
+  else if(a==='cal-today'){ calYM={y:now.y,m:now.m}; calFx=(calIdx(calYM)>before)?'n':'p'; }
+  calSel=null; render(); window.scrollTo(0,y);
+}
+document.addEventListener('click',function(e){   /* 팝업 밖을 누르면 닫아요 */
+  var t=e.target;
+  if(!calSel || tab!=='ach') return;
+  if(t && t.closest && (t.closest('.calpop') || t.closest('.calc2'))) return;
+  calShut(false);
+});
+document.addEventListener('keydown',function(e){ if(e.key==='Escape' && calSel && tab==='ach'){ calShut(true); } });
+/* ===== v1.73.0 누적 기록(HeiRoku 2026-10-22): 몸짱일지 맨 아래, 읽기 전용(새 저장 항목 없음). «승급 시험 최고 기록»은 HeiRoku 결정으로 뺐어요(종목이 계급마다 달라서) ===== */
+/* 누적 기록 칸을 방패 엠블럼으로(HeiRoku 요청 2026-10-22): 금속 테두리·안쪽 판·위쪽 문장 + 숫자·단위·이름. 색은 변수(--emIn·--emIc*)로 밝은·어두운 테마에 맞춰요. */
+var CAL_EM={
+  fork:{g:'G',r1:'#FBE08A',r2:'#B8860B',ed:'#7A5200',p:'<rect x="3" y="2" width="1.4" height="7" rx=".7"/><rect x="5.3" y="2" width="1.4" height="7" rx=".7"/><rect x="7.6" y="2" width="1.4" height="7" rx=".7"/><path d="M3 8h6v1.2c0 1.1-1 2-3 2s-3-.9-3-2z"/><rect x="5.1" y="10.5" width="1.8" height="8" rx=".9"/><path d="M13.8 2.2c2.4 1.2 3.4 4.2 3 8.3h-3z"/><rect x="14.2" y="10.5" width="2.4" height="8" rx="1.2"/>'},
+  flame:{g:'B',r1:'#F6B57C',r2:'#C2571A',ed:'#7A3410',p:'<path d="M10 1.5c.7 3.1-3 4.5-3 8.2 0 1.2.5 2.1 1.3 2.7-.1-1.7.9-2.5 1.8-3.6.8 1.7 2.8 2.7 2.8 5.2 0 2.3-1.9 3.9-4.2 3.9s-4.4-1.6-4.4-4.2C4.3 9 10 7 10 1.5z"/>'},
+  steps:{g:'C',r1:'#6FE9BE',r2:'#1D9F78',ed:'#0F6B50',p:'<ellipse cx="6.5" cy="13" rx="2.8" ry="4"/><circle cx="4.8" cy="6.9" r="1"/><circle cx="6.6" cy="6.1" r="1"/><circle cx="8.4" cy="6.7" r="1"/><ellipse cx="13.5" cy="9" rx="2.8" ry="4"/><circle cx="11.8" cy="2.9" r="1"/><circle cx="13.6" cy="2.1" r="1"/><circle cx="15.4" cy="2.7" r="1"/>'},
+  bell:{g:'S',r1:'#F1F6F7',r2:'#8696A0',ed:'#5B6B73',p:'<rect x="1.5" y="7" width="3" height="6" rx="1"/><rect x="4.5" y="5" width="2.6" height="10" rx="1"/><rect x="7.1" y="9" width="5.8" height="2"/><rect x="12.9" y="5" width="2.6" height="10" rx="1"/><rect x="15.5" y="7" width="3" height="6" rx="1"/>'},
+  sword:{g:'R',r1:'#F2A29A',r2:'#B63A30',ed:'#6E1E18',p:'<path d="M10 1l2.2 3v8H7.8V4z"/><rect x="5" y="12" width="10" height="2" rx="1"/><rect x="9" y="14" width="2" height="3.4"/><circle cx="10" cy="18.2" r="1.3"/>'},
+  crown:{g:'D',r1:'#D9C2FF',r2:'#6B3FB5',ed:'#43267A',p:'<path d="M2.5 16V7l4.2 4L10 3.5l3.3 7.5L17.5 7v9z"/><rect x="2.5" y="16.5" width="15" height="1.8" rx=".9"/>'}
+};
+function calDietDays(){   /* 누적 식단: 점심 챙기기·운동 후 식사·물 2L를 모두 체크한 날(오늘의 연회를 쓴 날은 제외) */
+  var n=0;
+  Object.keys(S.log||{}).forEach(function(k){ var L=S.log[k], d=L&&L.diet; if(d && d.lunch && d.post && d.water && !L.out) n++; });
+  return n;
+}
+function calEmHtml(kind,val,unit,lab){
+  var e=CAL_EM[kind];
+  return '<div class="cem" role="group" aria-label="'+lab+' '+val+unit+'"><div class="cemb"><svg class="cems" viewBox="0 0 76 88" aria-hidden="true">'+
+    '<path d="M38 3L70 12v32c0 19-14 33-32 41C20 77 6 63 6 44V12z" style="fill:url(#emg'+e.g+');stroke:'+e.ed+';stroke-width:1.6;stroke-linejoin:round"/>'+
+    '<path d="M38 9.5L64 17v27c0 15-12 27-26 34C24 71 12 59 12 44V17z" style="fill:var(--emIn);stroke:'+e.ed+';stroke-width:1;stroke-linejoin:round"/>'+
+    '<path d="M11 15.5L38 7.5" style="fill:none;stroke:#fff;stroke-opacity:.55;stroke-width:1.6;stroke-linecap:round"/>'+
+    '<g transform="translate(26 12) scale(1.2)" style="fill:var(--emIc'+e.g+')">'+e.p+'</g></svg>'+
+    '<div class="cemv'+(calCx(val).indexOf('cxx')>0?' cx cxx':(calCx(val)?' cx':''))+'">'+val+(unit?'<small>'+unit+'</small>':'')+'</div></div><span class="cemt">'+lab+'</span></div>';
+}
+function calTotalHtml(){
+  try{
+    var g=gstats(), nb='\u00a0', h;
+    h='<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>'+
+      Object.keys(CAL_EM).map(function(k){ var e=CAL_EM[k]; return '<linearGradient id="emg'+e.g+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+e.r1+'"/><stop offset="1" stop-color="'+e.r2+'"/></linearGradient>'; }).join('')+'</defs></svg>'+
+      '<h2>누적 기록</h2><div class="card caltot"><div class="caltiles">'+
+      calEmHtml('fork',calDietDays(),'일','누적'+nb+'식단')+
+      calEmHtml('flame',g.best,'일','최장'+nb+'연속')+
+      calEmHtml('steps',calKm(g.km),'km','총'+nb+'달린'+nb+'거리')+
+      calEmHtml('bell',g.sets,'','세트'+nb+'수')+
+      calEmHtml('sword',g.killTotal,'회','보스'+nb+'토벌')+
+      calEmHtml('crown',g.boss,'회','마왕전'+nb+'승리')+
+      '</div></div>';
+    return h;
+  }catch(e){ return ''; }
+}
+var wtOpen=false;
+function wtToggle(btn){   /* «체중 변화» 접고 펴기: 그 자리에서만 바꿔요 */
+  var box=document.getElementById('wtch'), ic;
+  wtOpen=!wtOpen;
+  if(box) box.hidden=!wtOpen;
+  if(btn){ btn.setAttribute('aria-expanded',wtOpen?'true':'false'); ic=btn.querySelector('i'); if(ic) ic.textContent=wtOpen?'▴':'▾'; }
+}
 function viewAch(){
-  var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<div class="phrow tab"><h1 class="ph">몸짱일지</h1><span class="phsub">체중 기록과 업적</span></div>';
+  var h='<p class="eyebrow">나의 성장 기록</p>'+hud()+'<div class="phrow tab"><h1 class="ph">몸짱일지</h1><span class="phsub">몸짱달력과 체중 기록, 업적</span></div>';
   var list=achList(), ah='';
   ah+='<h2>업적 <span class="cnt">'+list.length+'개</span></h2>';
   if(list.length){
@@ -8098,12 +8406,18 @@ function viewAch(){
   }else ah+='<p class="note">아직 달성한 업적이 없어요. 모험을 이어가면 이곳에 하나씩 쌓여요.</p>';
   var body=S.body.slice().sort(function(a,b){return a.date<b.date?-1:1;}).filter(function(b){return b.weight!=null;});
   var wpts=body.map(function(b){return {v:b.weight,d:b.date};});
-  h+='<h2>체중 기록하기</h2><div class="card" style="padding:10px 16px 16px">'+
+  var wlast=wpts.length?(wpts[wpts.length-1].v+'kg'):'';
+  /* v1.73.0 체중 기록(구역 이름은 HeiRoku 요청으로 «체중 기록하기»에서 «체중 기록»으로 바꿨어요)과 체중 변화를 한 카드로(HeiRoku B안 2026-10-22): 입력 칸이 맨 위, 그래프는 «체중 변화»를 눌러 펴요(기본 접힘, 저장하지 않아요).
+     접고 펴는 것은 화면을 다시 그리지 않아서(wtToggle) 입력하던 값이 사라지지 않아요. */
+  h+='<h2>체중 기록</h2><div class="card" style="padding:10px 16px 6px">'+
     '<div class="field"><label>날짜<input type="date" id="bd" value="'+fmt(TODAY)+'"></label>'+
     '<label>체중(kg)<input type="number" id="bw" inputmode="decimal" step="0.1" placeholder="70"></label></div>'+
-    '<button type="button" class="primary" data-a="addbody">기록 저장</button></div>';
-  h+='<h2>체중 변화</h2><div class="card"><div class="chart-title"><b>체중</b><span>'+(wpts.length?wpts[wpts.length-1].v+'kg':'')+'</span></div>'+chart(wpts,'체중','kg',true)+'</div>';
-  h+='<div class="divider"></div>'+ah;   /* 업적은 맨 아래로 */
+    '<button type="button" class="primary" data-a="addbody">기록 저장</button>'+
+    '<button type="button" class="wtog" data-a="wt-tog" aria-expanded="'+(wtOpen?'true':'false')+'" aria-controls="wtch"><span>체중 변화</span><span class="wtv">'+wlast+(wlast?' ':'')+'<i aria-hidden="true">'+(wtOpen?'▴':'▾')+'</i></span></button>'+
+    '<div class="wtch" id="wtch"'+(wtOpen?'':' hidden')+'>'+chart(wpts,'체중','kg',true)+'</div></div>';
+  h+=calSection();   /* 체중 칸은 맨 위 그대로, 몸짱달력은 그 바로 아래(HeiRoku A안) */
+  h+='<div class="divider"></div>'+ah;
+  h+=calTotalHtml();   /* 업적 아래: 누적 기록 */
   return h;
 }
 var dogOpen={};
@@ -10000,6 +10314,10 @@ app.addEventListener('click',function(e){
     id=t.getAttribute('data-id'); openEx[id]=!openEx[id]; render();
   }else if(a==='day'){
     sel=parse(t.getAttribute('data-d')); tab='today'; render(); window.scrollTo(0,0);
+  }else if(a==='wt-tog'){
+    wtToggle(t);
+  }else if(a==='cal-day'||a==='cal-prev'||a==='cal-next'||a==='cal-today'||a==='cal-close'){
+    calAct(a,t);
   }else if(a==='addbody'){
     before=snap();
     var d=document.getElementById('bd').value||fmt(TODAY);
@@ -13002,8 +13320,8 @@ execRecover();   /* v1.43.0 확정 전에 앱을 닫았다면 마지막 체크 �
     ],
     ach:[
       {t:"이곳은 «몸짱일지»예요. «체중 기록»을 하고, 달성한 «업적»을 모아 볼 수 있어요. 하나씩 같이 둘러볼까요?", intro:true},
-      {t:"«날짜»와 «체중»을 적고 저장하면 체중이 기록돼요. 매일 쓰지 않아도 되고, 필요할 때만 적어도 괜찮아요!", els:h2plus('체중 기록하기',1)},
-      {t:"기록이 2개 이상이면 체중이 어떻게 변했는지 «그래프»로 보여 줘요. 점을 누르면 그날 기록한 정확한 체중을 볼 수 있고, 지울 수도 있어요!", els:h2plus('체중 변화',1)},
+      {t:"«날짜»와 «체중»을 적고 저장하면 체중이 기록돼요. 매일 쓰지 않아도 되고, 필요할 때만 적어도 괜찮아요!", els:h2plus('체중 기록',1)},
+      {t:"«체중 변화»를 누르면 체중이 어떻게 변했는지 «그래프»로 볼 수 있어요. 기록이 2개 이상이어야 하고, 점을 누르면 그날 기록한 정확한 체중을 볼 수 있고, 지울 수도 있어요!", els:one('.wtog')},
       {t:"모험을 이어가며 달성한 «업적»이 여기 쌓여요. 눌러서 달성한 날짜와 설명을 볼 수 있어요!", els:h2plus('업적',1)}
     ]
   };

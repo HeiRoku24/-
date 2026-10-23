@@ -2717,8 +2717,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.75.0', APP_DATE='2026-10-23', showChg=false;
+var APP_VER='1.75.1', APP_DATE='2026-10-23', showChg=false;
 var CHANGES=[
+['1.75.1','여관 안을 걸어 다니는 캐릭터가 끊기거나 깜빡이는 문제를 줄이려고, 그 캐릭터에는 장비 질감을 빼고 원래 그림으로 보여요. 다른 화면의 장비 질감은 그대로예요'],
 ['1.75.0','공용장비 24종(망토·깃털·장화·허리띠)에도 소재에 맞는 입체감과 질감이 생겼어요. 망토·깃털은 천처럼 부드럽게, 장화·허리띠는 가죽처럼, 금빛 버클은 금속처럼 보여요. 랭크 세트는 그대로예요'],
 ['1.74.0','전용장비 96종(몸짱용사·드워프 전사·엘프 궁수·현자 마법사)에 소재에 맞는 입체감과 광택이 생겼어요. 금속은 반짝이고 나무·가죽·천·수정은 소재에 맞게 부드러운 입체가 살아나요. 도감·대장간 아이콘과 캐릭터가 입은 정면·옆·뒷모습·러닝 모습에 모두 나와요'],
 ['1.73.0','몸짱일지에 몸짱달력이 생겼어요. 날짜를 누르면 그날 기록을 볼 수 있어요'],
@@ -3144,14 +3145,16 @@ function gxColor(str,it){
   for(i=0;i<3;i++) if(cols[i]) c.push(String(cols[i]).toUpperCase());
   return gxBuild(str,it,c,String(++GXU));
 }
-function gxOk(it){ return !!(it&&it.id&&(it.job||(GX_COM[it.slot]&&it.rk==null))); }
+var GX_OFF=0;   /* 0이 아니면 질감 덮개를 붙이지 않아요(여관에서 돌아다니는 캐릭터처럼 위치가 계속 움직이는 그림, v1.75.1) */
+function gxOk(it){ return !GX_OFF&&!!(it&&it.id&&(it.job||(GX_COM[it.slot]&&it.rk==null))); }
 function gxWrap(fn,idx){ return function(){ var it=arguments[idx], r=fn.apply(this,arguments); return gxOk(it)?gxRender(r,it):r; }; }
 function gxWrapBack(fn){ return function(){ var e=arguments[0], it=e&&e.cape, r=fn.apply(this,arguments); return (gxOk(it)&&!it.job)?gxRender(r,it):r; }; }
-function gxCloth(fn,pick){ return function(){ var r=fn.apply(this,arguments), eq=pick(arguments), t, b, c; if(!eq) return r; t=eq.etunic; b=eq.mrobe; c=eq.cape; if(t&&t.job) r=gxColor(r,t); if(b&&b.job) r=gxColor(r,b); if(c&&gxOk(c)&&!c.job&&c.fill) r=gxColor(r,{id:c.id,slot:c.slot,name:c.name,rar:c.rar,main:c.fill}); return r; }; }   /* 옆모습 망토는 그림 안에서 색으로만 그려져서 색으로 찾아요 */
+function gxCloth(fn,pick){ return function(){ var r=fn.apply(this,arguments), eq=pick(arguments), t, b, c; if(!eq||GX_OFF) return r; t=eq.etunic; b=eq.mrobe; c=eq.cape; if(t&&t.job) r=gxColor(r,t); if(b&&b.job) r=gxColor(r,b); if(c&&gxOk(c)&&!c.job&&c.fill) r=gxColor(r,{id:c.id,slot:c.slot,name:c.name,rar:c.rar,main:c.fill}); return r; }; }   /* 옆모습 망토는 그림 안에서 색으로만 그려져서 색으로 찾아요 */
 helmArt=gxWrap(helmArt,0); armorArt=gxWrap(armorArt,0); shieldArt=gxWrap(shieldArt,0); swordArt=gxWrap(swordArt,3);
 dwarfHelmArt=gxWrap(dwarfHelmArt,0); dwarfHelmSide=gxWrap(dwarfHelmSide,0); dmailArt=gxWrap(dmailArt,0); dmailBack=gxWrap(dmailBack,0); dbeardArt=gxWrap(dbeardArt,0);
 eheadArt=gxWrap(eheadArt,0); mageHatArt=gxWrap(mageHatArt,0); mbookArt=gxWrap(mbookArt,0); compQuiver=gxWrap(compQuiver,0); compWeaponInner=gxWrap(compWeaponInner,1);
 capeArt=gxWrap(capeArt,0); plumeArt=gxWrap(plumeArt,0); bootItemArt=gxWrap(bootItemArt,2); beltItemArt=gxWrap(beltItemArt,0); backCapeArt=gxWrapBack(backCapeArt);
+scnWalkHero=(function(fn){ return function(){ GX_OFF++; try{ return fn.apply(this,arguments); }finally{ GX_OFF--; } }; })(scnWalkHero);   /* v1.75.1: 여관 안을 걸어 다니는 캐릭터는 그림 전체가 화면 위를 계속 움직여서 질감 덮개를 빼요(HeiRoku 폰에서 점멸·버벅임 보고) */
 compArt=gxCloth(compArt,function(a){ var o=a[1]; return (o&&o.eq)||curEq(); });
 compBack=gxCloth(compBack,function(a){ return a[1]; });
 sdFrame=gxCloth(sdFrame,function(a){ return a[2]; });

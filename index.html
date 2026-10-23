@@ -1508,7 +1508,7 @@ button.q.trfv{display:flex; align-items:center; gap:12px; width:100%; min-height
 .fv-hint{white-space:pre-line; min-height:2.7em; margin:0 4px 6px; font-size:14px; line-height:1.4; text-wrap:balance;}
 .fv-pain{margin:0; font-size:12px; color:var(--muted);}
 .fv-ctl{margin:6px 0 auto; padding:8px 0 6px; position:relative; z-index:3; background:var(--bg);}
-.fv-cb{display:flex; justify-content:center; align-items:center; gap:26px;}
+.fv-cb{display:flex; justify-content:center; align-items:center; gap:48px;}
 .fv-cb button{width:56px; height:56px; min-height:0; padding:0; border-radius:50%; border:2px solid var(--line); background:var(--surface); color:var(--ink); display:grid; place-items:center; box-shadow:0 3px 0 var(--edge); touch-action:manipulation;}
 .fv-cb button:active{transform:translateY(2px); box-shadow:0 1px 0 var(--edge);}
 .fv-cb .fv-pp{width:76px; height:76px; background:var(--gold); color:var(--gold-ink); border-color:var(--gold-ink);}
@@ -1534,8 +1534,9 @@ button.q.trfv{display:flex; align-items:center; gap:12px; width:100%; min-height
 #ask.dm .ovh,#ask.dm .bnote{color:#F4EEF8;}
 #ask.dm .ghost{border-color:#8E5BD9; color:#F4EEF8;}
 #ask.dm .primary{background:#F6C445; color:#2B2138;}
-.fv-cl{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; margin-top:8px; font-size:13px; color:var(--muted);}
-.fv-cl b{min-width:96px; font-size:14px; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums;}
+.fv-cl{display:flex; justify-content:center; align-items:center; gap:48px; margin-top:8px; font-size:13px; color:var(--muted);}
+.fv-cl span{flex:none; width:56px; text-align:center; white-space:nowrap;}   /* v1.75.13 «느리게»·«빠르게»를 속도 버튼(56px) 바로 아래 가운데에, 버튼 줄과 같은 간격(v1.75.14에서 버튼 사이 간격 26→36px, v1.75.15에서 48px) */
+.fv-cl b{flex:none; width:76px; display:flex; justify-content:center; white-space:nowrap; font-size:14px; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums;}
 .fv-dots{display:flex; justify-content:center; gap:6px; margin:8px 0 4px;}
 .fv-dots i{width:8px; height:8px; border-radius:50%; background:var(--soft); border:1px solid var(--line);}
 .fv-dots i.on{background:var(--gold); border-color:var(--gold);}
@@ -1543,12 +1544,14 @@ button.q.trfv{display:flex; align-items:center; gap:12px; width:100%; min-height
 .fv-cs{margin:0; font-size:12px; color:var(--muted);}
 @media (max-height:700px){
   .fv-ctl{margin-top:0; padding:4px 0 2px;}
-  .fv-cb{gap:20px;}
+  .fv-cb{gap:48px;}
   .fv-cb button{width:50px; height:50px;}
   .fv-cb .fv-pp{width:64px; height:64px;}
   .fv-cb svg{width:26px; height:26px;}
   .fv-cb .fv-pp svg{width:30px; height:30px;}
-  .fv-cl{margin-top:4px;}
+  .fv-cl{margin-top:4px; gap:48px;}
+  .fv-cl span{width:50px;}
+  .fv-cl b{width:64px;}
   .fv-dots,.fv-cs{display:none;}
 }
 .fv-endc{width:120px; margin:6px auto; padding-top:0;}
@@ -2214,7 +2217,7 @@ var FIG={
   crunch:{poses:[Q(LIEP,180,[[68,100],[72,100]],[[122,108],[125,108]],{ah:[0,-1],lh:[[0.2,-1],[0.2,-1]],h:[57,105]}),Q(LIEP,150,[[76,84],[79,85]],[[122,108],[125,108]],{ah:[-0.5,-1],lh:[[0.2,-1],[0.2,-1]]})]},
   legraise:{poses:[Q(LIEP,180,[[94,107],[96,107]],[[98,62],[100,62]],{ah:[0,1],lh:[[1,0],[1,0]],fd:[[0,-6],[0,-6]],h:[57,105]}),Q(LIEP,180,[[94,107],[96,107]],[[146,97],[149,97]],{ah:[0,1],lh:[[1,0],[1,0]],h:[57,105]})]},
   bicycle:{poses:[Q(LIEP,152,[[74,86],[78,86]],[[112,84],[140,97]],{ah:[0,-1],lh:[[0.3,-1],[1,0]]}),Q(LIEP,152,[[74,86],[78,86]],[[140,97],[112,84]],{ah:[0,-1],lh:[[1,0],[0.3,-1]]})]},
-  deadbug:{poses:[Q(LIEP,180,[[66,76],[70,76]],[[120,82],[123,82]],{ah:[1,0],lh:[[0.2,-1],[0.2,-1]],h:[57,105]}),Q(LIEP,180,[[38,101],[70,76]],[[121,84],[142,98]],{ah:[1,0],lh:[[0.2,-1],[1,0]],h:[57,105]})]},
+  deadbug:{poses:[Q(LIEP,180,[[66,76],[70,76]],[[120,82],[123,82]],{ah:[1,0],lh:[[0.2,-1],[0.2,-1]],h:[57,105]}),Q(LIEP,180,[[38,101],[70,76]],[[121,84],[142,98]],{ah:[1,0],lh:[[0.2,-1],[1,0]],h:[57,105]}),Q(LIEP,180,[[66,76],[70,76]],[[120,82],[123,82]],{ah:[1,0],lh:[[0.2,-1],[0.2,-1]],h:[57,105]}),Q(LIEP,180,[[66,76],[42,101]],[[139,98],[124,84]],{ah:[1,0],lh:[[1,0],[0.2,-1]],h:[57,105]})]},   /* v1.75.9 자세 4장: 올림 → 한쪽 팔·반대쪽 다리 뻗기 → 올림 → 반대쪽 팔·다리 뻗기(좌우 한 번 = 한 바퀴) */
   superman:{poses:[Q([90,104],0,[[149,104],[151,104]],[[38,105],[40,105]],{ah:[0,1],fd:[[-7,0],[-7,0]]}),Q([90,104],14,[[148,92],[150,92]],[[38,94],[40,95]],{ah:[0,1],fd:[[-7,0],[-7,0]]})]},
   snow:{poses:[Q([90,104],8,[[150,98],[152,98]],[[38,105],[40,105]],{ah:[0,1],fd:[[-7,0],[-7,0]]}),Q([90,104],8,[[93,101],[95,101]],[[38,105],[40,105]],{ah:[0,-1],fd:[[-7,0],[-7,0]]})]},
   ytw:{poses:[Q([90,104],0,[[149,104],[151,104]],[[38,105],[40,105]],{ah:[0,1],fd:[[-7,0],[-7,0]]}),Q([90,104],10,[[146,92],[148,93]],[[38,105],[40,105]],{ah:[0,1],fd:[[-7,0],[-7,0]]})]},
@@ -2718,8 +2721,16 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.75.7', APP_DATE='2026-10-23', showChg=false;
+var APP_VER='1.75.15', APP_DATE='2026-10-23', showChg=false;
 var CHANGES=[
+['1.75.15','피버모드 속도 버튼 세 개 사이 간격을 더 넓혔어요'],
+['1.75.14','피버모드 속도 버튼 세 개 사이 간격을 조금 넓혔어요'],
+['1.75.13','피버모드에서 «느리게»·«빠르게» 글자를 속도 버튼 바로 아래 가운데에 맞췄어요'],
+['1.75.12','러시안 트위스트를 좌우 한 번씩 1회로 세요(1회는 메트로놈 4번, 왼쪽 2번·오른쪽 2번)'],
+['1.75.11','리버스 크런치 그림을 다리를 직각으로 세웠다가 무릎을 가슴 쪽으로 끌어당기는 동작으로 고쳤어요'],
+['1.75.10','데드버그 1회(좌우 한 번)를 메트로놈 8번(왼쪽 4번·오른쪽 4번, 약 4초)으로 맞췄어요'],
+['1.75.9','피버모드의 데드버그 그림이 한쪽만 움직이던 것을 좌우를 번갈아 움직이게 고쳤어요'],
+['1.75.8','바이시클 크런치와 데드버그를 좌우 한 번씩 1회로 세요'],
 ['1.75.7','화면에 보이는 것은 그대로예요. 앱 안에서 더 이상 쓰지 않는 옛 시작화면용 코드를 조금 더 정리했어요'],
 ['1.75.6','화면에 보이는 것은 그대로예요. 앱 안에서 더 이상 쓰지 않는 옛 코드를 정리했고, 글꼴을 조금 더 빨리 불러올 수 있게 준비했어요'],
 ['1.75.5','폭이 좁은 폰에서 업적 «현자 마법사 합류»가 «현자 마법사 / 합류»로 나뉘던 것을 «현자 / 마법사 합류»로 나뉘게 고쳤어요'],
@@ -9548,11 +9559,11 @@ document.getElementById('tskip').addEventListener('click',function(){ stopTimer(
    세트가 끝날 때마다 기존 세트 체크와 같은 경로(actMark·battleHit·afterAction)로 자동 체크해요(보스 체력·XP·클리어는 그대로).
    일시정지는 있고 건너뛰기는 없어요. 닫으면 마친 세트까지만 인정(체크가 하나씩 남아 있어요). 일요일 스트레칭·러닝·식단은 대상이 아니에요. */
 /* 동작별 박자: HeiRoku가 "한번 너가 세팅해 줘"라고 해서 제가 정한 값이에요(폰에서 따라 해 보고 조정).
-   b: 한 번(1박)에 걸리는 초 · h:1 유지형(1초마다 셈) · m:'alt' 좌우 번갈아 하고 좌우 합계로 셈 / 'seq' 한쪽을 끝낸 뒤 반대쪽 · fl: 막대 인간 그림이 한 바퀴 도는 데 몇 박이 드는지 */
+   b: 한 번(1박)에 걸리는 초 · h:1 유지형(1초마다 셈) · m:'alt' 좌우 번갈아 하고 좌우 합계로 셈 / 'seq' 한쪽을 끝낸 뒤 반대쪽 · fl: 막대 인간 그림이 한 바퀴 도는 데 몇 박이 드는지 · pr:1 좌우 한 번씩을 1회로 세는 운동(v1.75.8 바이시클 크런치·데드버그, 이때 b는 1회(좌우 한 번)에 걸리는 초: 바이시클 2초=메트로놈 4번, 데드버그 4초=메트로놈 8번, 러시안 트위스트 2초=메트로놈 4번, v1.75.12) · ms: 메트로놈 한 마디의 초 */
 var FEVB={
   pushup:{b:3},pike:{b:3},dips:{b:3},plank:{b:1,h:1},
   squat:{b:3},lunge:{b:3.5,m:'alt'},bridge:{b:4},calf:{b:2},
-  crunch:{b:2},legraise:{b:4},bicycle:{b:2.5,m:'alt',fl:2},deadbug:{b:4,m:'alt',fl:2},
+  crunch:{b:2},legraise:{b:4},bicycle:{b:2,m:'rep',ms:2,pr:1},deadbug:{b:4,m:'rep',ms:4,pr:1},
   superman:{b:3},snow:{b:3},ytw:{b:6},mtn:{b:1,h:1,fl:2},
   bulg:{b:3,m:'seq',sw:8},wallsit:{b:1,h:1},sideplank:{b:1,h:1,m:'seq'},sidelift:{b:3,m:'seq'},
   inchworm:{b:6}
@@ -9582,7 +9593,7 @@ function fevSpec(id,st){
   var e=X[id], B=FEVB[id]||{b:3}, ds=String(doseOf(id,st)), m=ds.match(/\d+/g)||['10'], a=parseInt(m[0],10), c=(m.length>1)?parseInt(m[1],10):a, n=Math.ceil((a+c)/2);
   var mode=B.m||(ds.indexOf('한쪽')>=0?'seq':'rep');
   var sw=B.sw||FEV_SWITCH, len=(mode==='alt')?2*n*B.b:((mode==='seq')?2*n*B.b+sw:n*B.b);
-  return {id:id,name:e.n,n:n,b:B.b,sw:sw,h:!!B.h,mode:mode,len:len,unit:B.h?'초':'회',dur:(B.h&&!B.fl)?null:B.b*(B.fl||1)};
+  return {id:id,name:e.n,n:n,b:B.b,sw:sw,h:!!B.h,mode:mode,len:len,unit:B.h?'초':'회',dur:(B.h&&!B.fl)?null:B.b*(B.fl||1),pr:!!B.pr,ms:B.ms||0};
 }
 function fevPhases(items,k){
   var st=fevStage(k), ph=[], i, sp, nx;
@@ -9803,6 +9814,7 @@ function fevBeat(sp,t){
   x=Math.min(n,Math.floor(t/b)+1); return {key:'r'+x,n:x,tot:n,side:''};
 }
 function fevTarget(sp){
+  if(sp.pr) return '좌우 1번씩 '+sp.n+sp.unit;
   if(sp.mode==='alt') return '좌우 번갈아 총 '+(2*sp.n)+'회';
   if(sp.mode==='seq') return '한쪽 '+sp.n+sp.unit+'씩 · 왼쪽 다음 오른쪽';
   return sp.n+sp.unit;
@@ -9827,7 +9839,7 @@ function fevCheer(sp,bt){
    횟수로 세는 운동은 1회(1박) 길이가 한 마디예요: 2초=4/8, 2.5초=5/8, 3초=6/8, 3.5초=7/8, 4초=8/8, 6초=4/8.
    초로 세는 운동(플랭크·월 싯·사이드 플랭크·마운틴 클라이머), 좌우 바꾸는 시간, 동작 사이 전환, 라운드 사이 휴식은 모두 4/8이에요.
    준비 카운트(3·2·1·GO!)에는 메트로놈이 없어요. 소리는 오디오 시계에 미리 예약해서 박이 흔들리지 않게 해요. */
-function fevMetN(sp){ return sp.h?4:((sp.b<=4)?Math.round(sp.b*2):4); }
+function fevMetN(sp){ if(sp.ms) return Math.round(sp.ms*2); return sp.h?4:((sp.b<=4)?Math.round(sp.b*2):4); }   /* v1.75.8 sp.ms: 1회가 한 마디보다 긴 운동(데드버그 1회 8초=4초 마디 둘)은 마디 길이를 따로 줘요 */
 function fevMetAcc(p,t){   /* 단계 안의 t초 지점이 마디의 첫 음이면 true */
   var sp=p.sp, a, N;
   if(p.t!=='work') return Math.floor(t/0.5+1e-6)%4===0;
@@ -10859,10 +10871,10 @@ EASYS.russian=['발을 바닥에 둔 채로',' 해 봐요'];
 EASYS.sidecrunch=['무릎은 조금만 올리고',' 해 봐요'];
 EASYS.birddog=['다리만 뻗어서',' 해 봐요'];
 EASYS.backext=['팔을 몸 옆에 두고',' 해 봐요'];
-FEVB.heeltouch={b:2.5,m:'alt'}; FEVB.revcrunch={b:3}; FEVB.russian={b:2,m:'alt'}; FEVB.sidecrunch={b:3,m:'seq'}; FEVB.birddog={b:4,m:'seq'}; FEVB.backext={b:3};
+FEVB.heeltouch={b:2.5,m:'alt'}; FEVB.revcrunch={b:3}; FEVB.russian={b:2,m:'rep',ms:2,pr:1}; FEVB.sidecrunch={b:3,m:'seq'}; FEVB.birddog={b:4,m:'seq'}; FEVB.backext={b:3};
 FIT_GRP.heeltouch='core'; FIT_GRP.revcrunch='core'; FIT_GRP.russian='core'; FIT_GRP.sidecrunch='core'; FIT_GRP.birddog='full'; FIT_GRP.backext='full';
 FIG.heeltouch={poses:[Q(LIEP,180,[[94,107],[96,107]],[[122,108],[125,108]],{ah:[0,1],lh:[[0.2,-1],[0.2,-1]],h:[57,105]}),Q(LIEP,162,[[98,104],[101,104]],[[122,108],[125,108]],{ah:[0,1],lh:[[0.2,-1],[0.2,-1]]})]};
-FIG.revcrunch={poses:[Q(LIEP,180,[[94,107],[96,107]],[[116,84],[118,84]],{ah:[0,1],lh:[[0.4,-1],[0.4,-1]],fd:[[6,0],[6,0]],h:[57,105]}),Q([100,98],180,[[94,107],[96,107]],[[86,80],[88,80]],{ah:[0,1],lh:[[1,-0.4],[1,-0.4]],fd:[[5,-3],[5,-3]],h:[57,105]})]};
+FIG.revcrunch={poses:[Q(LIEP,180,[[94,107],[96,107]],[[119,82],[121,82]],{ah:[0,1],lh:[[0,-1],[0,-1]],fd:[[6,0],[6,0]],h:[57,105]}),Q([98,97],192,[[94,107],[96,107]],[[106.5,76],[108.5,76]],{ah:[0,1],lh:[[-0.6,-0.8],[-0.6,-0.8]],fd:[[6,0],[6,0]]})]};   /* v1.75.11 리버스 크런치: 허벅지를 직각으로 세운 자세 → 엉덩이가 살짝 뜨며 무릎이 가슴 쪽으로 */
 FIG.russian={poses:[Q([96,104],115,[[108,88],[110,88]],[[122,108],[125,108]],{ah:[0.5,1],lh:[[0.2,-1],[0.2,-1]]}),Q([96,104],115,[[100,100],[102,100]],[[122,108],[125,108]],{ah:[0.5,1],lh:[[0.2,-1],[0.2,-1]]})]};
 FIG.sidecrunch={poses:[Q([110,62],90,[[104,26],[116,26]],[[106,108],[114,108]],{ah:[-1,-0.6],fd:[[-3,0],[3,0]]}),Q([112,62],98,[[103,32],[111,32]],[[92,88],[116,108]],{ah:[-1,-0.6],lh:[[-1,0.2],[1,0]],fd:[[-3,0],[3,0]]})]};
 FIG.birddog={poses:[Q([84,80],3,[[118,108],[121,108]],[[60,108],[62,108]],{ah:[0.3,1],lh:[[1,0.5],[1,0.5]],fd:[[-3,3],[-3,3]],h:[124,84]}),Q([84,80],3,[[142,80],[121,108]],[[60,108],[40,82]],{ah:[0.3,1],lh:[[1,0.5],[1,0.5]],fd:[[-3,3],[-6,0]],h:[124,82]})]};

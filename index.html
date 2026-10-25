@@ -2721,8 +2721,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.75.16', APP_DATE='2026-10-25', showChg=false;
+var APP_VER='1.75.17', APP_DATE='2026-10-25', showChg=false;
 var CHANGES=[
+['1.75.17','시작화면 아래 글자를 «화면을 눌러 모험 시작» 하나로 통일했어요'],
 ['1.75.16','시작화면의 «화면을 눌러 …» 글자가 용사 그림과 겹치던 것을 모든 폰에서 그림 바로 아래로 맞췄어요'],
 ['1.75.15','피버모드 속도 버튼 세 개 사이 간격을 더 넓혔어요'],
 ['1.75.14','피버모드 속도 버튼 세 개 사이 간격을 조금 넓혔어요'],
@@ -12657,7 +12658,6 @@ function wxAfter(changed){ if(changed && tab==='week' && titleEl.hidden) render(
 function tsTapUpdate(){
   var tp=titleEl.querySelector('.ts-tap'); if(!tp||titleEl.hidden) return;
   var t='화면을 눌러 모험 시작';
-  if(bgmOn()){ if(tsSoundTried) t='한 번 더 누르면 모험 시작'; else if(!BGM.running()) t='화면을 눌러 음악 켜기'; }
   if(tp.textContent!==t) tp.textContent=t;
 }
 var tsScrollY=0;

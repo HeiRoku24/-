@@ -2721,8 +2721,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.75.15', APP_DATE='2026-10-23', showChg=false;
+var APP_VER='1.75.16', APP_DATE='2026-10-25', showChg=false;
 var CHANGES=[
+['1.75.16','시작화면의 «화면을 눌러 …» 글자가 용사 그림과 겹치던 것을 모든 폰에서 그림 바로 아래로 맞췄어요'],
 ['1.75.15','피버모드 속도 버튼 세 개 사이 간격을 더 넓혔어요'],
 ['1.75.14','피버모드 속도 버튼 세 개 사이 간격을 조금 넓혔어요'],
 ['1.75.13','피버모드에서 «느리게»·«빠르게» 글자를 속도 버튼 바로 아래 가운데에 맞췄어요'],
@@ -12337,7 +12338,7 @@ var titleBuildD=null;
     '.td-world{position:absolute;inset:0;overflow:hidden;}'+
     '.td-hill{position:absolute;inset:0;width:100%;height:100%;}'+
     '.td-mt{position:absolute;left:0;right:0;top:30vh;height:26vh;background-repeat:repeat-x,no-repeat;background-size:auto 17vh,100% 10vh;background-position:50% 0,0 16vh;}'+
-    '.td .ts-tap{bottom:calc(16px + var(--lift) * .55 + 4vh + env(safe-area-inset-bottom,0px));}'+
+    '.td .ts-tap{bottom:min(calc(16px + var(--lift) * .55 + 4vh),calc(40px + 6vh));}'+
     '.td-haze{position:absolute;left:0;right:0;top:'+(CR-5)+'vh;height:10vh;pointer-events:none;}'+
     '.td-dest{position:absolute;left:50%;bottom:calc(100% - 42.4vh);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}'+
     '.td-dest svg{display:block;width:100px;height:auto;margin-top:2px;}.td-dest svg.ddm{width:132px;}'+

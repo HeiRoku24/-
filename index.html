@@ -6,7 +6,7 @@
 <style id="nmpre">html:not(.nm-done){background:#0C1716}
 </style>
 <script>/* v1.75.20 시작 로고가 끝날 때까지 뒤 바탕을 로고 화면과 같은 어두운 색으로 둬요(밝은 테마에서 맨 위에 하얀 줄이 비치던 것). 끝나거나 안 쓰이면 원래 바탕으로 돌려요 */
-window.__nmDone=function(){ try{ document.documentElement.classList.add('nm-done'); }catch(e){} try{ if(window.__nmTc){ var tb=document.querySelector('meta[name="theme-color"]'); if(tb) tb.setAttribute('content',window.__nmTc); window.__nmTc=null; } }catch(e){} };   /* v1.75.21 밝은 테마의 상태 표시줄 색(theme-color)도 로고가 끝난 뒤에 바꿔요 */
+window.__nmDone=function(){ try{ document.documentElement.classList.add('nm-done'); }catch(e){} try{ if(typeof window.sbSync==='function') window.sbSync(); }catch(e){} };   /* 로고가 끝나면 상태 표시줄 색을 지금 화면에 맞춰요(sbSync, v1.75.26) */
 setTimeout(window.__nmDone,9000);
 </script>
 <meta name="color-scheme" content="light dark">
@@ -14,7 +14,7 @@ setTimeout(window.__nmDone,9000);
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0C1716">
 <script>/* 화면 모드(v1.46.9): 첫 화면이 그려지기 전에 저장된 밝게/어둡게 설정을 먼저 적용해요 */
-(function(){try{var m=localStorage.getItem('home-training-theme');if(m==='light'||m==='dark'){document.documentElement.setAttribute('data-theme',m);var a=document.querySelector('meta[name="color-scheme"]');if(a)a.setAttribute('content',m);var b=document.querySelector('meta[name="theme-color"]');if(b){ if(m==='light'){ window.__nmTc='#E8F1EE'; } else b.setAttribute('content','#0C1716'); }}}catch(e){}})();
+(function(){try{var m=localStorage.getItem('home-training-theme');if(m==='light'||m==='dark'){document.documentElement.setAttribute('data-theme',m);var a=document.querySelector('meta[name="color-scheme"]');if(a)a.setAttribute('content',m);var b=document.querySelector('meta[name="theme-color"]');if(b) b.setAttribute('content','#0C1716'); }}catch(e){}})();
 </script>
 <script>/* 설치 안내 화면(v1.70.0): 설치한 앱(홈 화면 아이콘)이 아니면 앱 대신 설치 안내만 보여요. 설치한 앱·미리보기 액자·로컬 주소·?nogate 에서는 안 나와요 */
 (function(){
@@ -2729,8 +2729,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.75.25', APP_DATE='2026-10-26', showChg=false;
+var APP_VER='1.75.26', APP_DATE='2026-10-26', showChg=false;
 var CHANGES=[
+['1.75.26','폰 맨 위 상태 표시줄 색이 지금 보이는 화면(로고·시작화면 하늘·본문·마왕전·승급 시험)에 맞춰 바뀌어요'],
 ['1.75.25','화면을 두 번 눌러도 확대되지 않아요'],
 ['1.75.24','아이폰 홈 화면 앱에서 화면 아래가 비고 위쪽이 흐려지던 것을 고쳤어요(상태 표시줄이 앱 위에 따로 놓여요. 아이폰은 앱을 지우고 다시 추가해야 적용돼요)'],
 ['1.75.22','밝은 테마에서 앱을 켤 때 폰 맨 위 상태 표시줄이 로고가 끝날 때까지 밝게 보이던 것을 어두운 색으로 맞췄어요'],
@@ -10661,9 +10662,38 @@ function themeApply(){
   try{
     if(m==='auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme',m);
     var a=document.querySelector('meta[name="color-scheme"]'); if(a) a.setAttribute('content',m==='auto'?'light dark':m);
-    var b=document.querySelector('meta[name="theme-color"]'); if(b) b.setAttribute('content',m==='light'?'#E8F1EE':'#0C1716');
   }catch(e){}
+  try{ sbSync(); }catch(e){}
 }
+/* ---------- 상태 표시줄 색(v1.75.26): 지금 보이는 화면의 맨 윗색을 theme-color와 html 바탕에 넣어요. 글자·아이콘 색은 폰이 밝기에 맞춰 정해요 ---------- */
+function sbSync(){
+  try{
+    var de=document.documentElement, meta=document.querySelector('meta[name="theme-color"]');
+    if(!de.classList.contains('nm-done')){ if(meta) meta.setAttribute('content','#0C1716'); return; }   /* 로고 중에는 로고 색 */
+    var vis=function(s){ var l=document.querySelectorAll(s), i, e; for(i=0;i<l.length;i++){ e=l[i]; if(!e.hidden && getComputedStyle(e).display!=='none') return e; } return null; };
+    var base=getComputedStyle(document.body).backgroundColor||'#0C1716', c=base, e;
+    if(vis('#excut')||vis('#rkup')) c=getComputedStyle(vis('#excut')||vis('#rkup')).backgroundColor;
+    else if(vis('#dmcut')) c='#0E0A1C';
+    else if((e=vis('.dmx'))) c='#1D1535';
+    else if((e=vis('#title'))) c=(getComputedStyle(e).getPropertyValue('--sk1')||'').trim()||base;
+    else if(vis('.fev')||vis('.pvw')) c=base;
+    if((e=vis('#lfx'))) c=sbBlend(c,getComputedStyle(e).backgroundColor);
+    else if((e=vis('.ov'))) c=sbBlend(c,getComputedStyle(e).backgroundColor);
+    c=sbHex(c); if(!c) return;
+    if(meta && meta.getAttribute('content')!==c) meta.setAttribute('content',c);
+    if(de.style.backgroundColor!==c) de.style.backgroundColor=c;
+  }catch(x){}
+}
+function sbRgb(s){ var m=/rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?/.exec(s||''); if(m) return [+m[1],+m[2],+m[3],m[4]==null?1:+m[4]];
+  m=/^#([0-9a-f]{6})$/i.exec((s||'').trim()); if(m){ var n=parseInt(m[1],16); return [n>>16&255,n>>8&255,n&255,1]; }
+  m=/^#([0-9a-f]{3})$/i.exec((s||'').trim()); if(m){ return [parseInt(m[1][0]+m[1][0],16),parseInt(m[1][1]+m[1][1],16),parseInt(m[1][2]+m[1][2],16),1]; } return null; }
+function sbHex(s){ var c=sbRgb(s); if(!c) return ''; var h=function(v){ v=Math.max(0,Math.min(255,Math.round(v))); return (v<16?'0':'')+v.toString(16); }; return '#'+h(c[0])+h(c[1])+h(c[2]); }
+function sbBlend(under,over){ var u=sbRgb(under), o=sbRgb(over); if(!u||!o) return under; var a=o[3]; return 'rgb('+(o[0]*a+u[0]*(1-a))+','+(o[1]*a+u[1]*(1-a))+','+(o[2]*a+u[2]*(1-a))+')'; }
+(function(){   /* 화면이 바뀔 때(요소가 보이고 숨고, 시작화면 하늘 클래스가 바뀔 때) 한 프레임에 한 번만 다시 맞춰요 */
+  var pend=false; function kick(){ if(pend) return; pend=true; requestAnimationFrame(function(){ pend=false; try{ sbSync(); }catch(e){} }); }
+  function start(){ try{ new MutationObserver(kick).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','class','style']}); }catch(e){} kick(); }
+  if(document.body) start(); else document.addEventListener('DOMContentLoaded',start);
+})();
 function themeSet(m){ try{ if(m==='light'||m==='dark') localStorage.setItem(THKEY,m); else localStorage.removeItem(THKEY); }catch(e){} themeApply(); }
 function themeCardHtml(){
   var m=themeMode(), o=[['auto','기기 설정'],['light','밝게'],['dark','어둡게']], h='<div class="field" style="margin:4px 0 6px"><label>화면 모드</label></div><div class="bk-btns" style="margin:0 0 4px">';

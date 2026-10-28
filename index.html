@@ -2729,8 +2729,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.75.26', APP_DATE='2026-10-26', showChg=false;
+var APP_VER='1.76.0', APP_DATE='2026-10-28', showChg=false;
 var CHANGES=[
+['1.76.0','왕국 한가운데의 성이 화려한 왕궁으로 바뀌었어요. 눌러 보면 굳게 닫힌 문이 보여요'],
 ['1.75.26','폰 맨 위 상태 표시줄 색이 지금 보이는 화면(로고·시작화면 하늘·본문·마왕전·승급 시험)에 맞춰 바뀌어요'],
 ['1.75.25','화면을 두 번 눌러도 확대되지 않아요'],
 ['1.75.24','아이폰 홈 화면 앱에서 화면 아래가 비고 위쪽이 흐려지던 것을 고쳤어요(상태 표시줄이 앱 위에 따로 놓여요. 아이폰은 앱을 지우고 다시 추가해야 적용돼요)'],
@@ -4878,7 +4879,7 @@ function snap(){var xp=totalXP(); return {xp:xp, lv:lvInfo(xp).L, ach:unlocked()
 
 /* ---------- 몸짱왕국 (v1.36): 건축 자재 · 건물 복구 · 훈련장 ---------- */
 var BLD=[
-  {id:'castle',n:'성',cost:0},
+  {id:'castle',n:'왕궁',cost:0},
   {id:'wall',n:'성벽',cost:10},
   {id:'train',n:'훈련장',cost:20},
   {id:'forge',n:'대장간',cost:200},
@@ -4896,7 +4897,7 @@ var pendSun=[];
 function bld(id){ var i; for(i=0;i<BLD.length;i++){ if(BLD[i].id===id) return BLD[i]; } return null; }
 function kdSpent(id){ var k=S.kingdom; return (k && k.spent && k.spent[id]>0)?Math.floor(k.spent[id]):0; }
 function bProg(id){ var b=bld(id); if(id==='inn'||id==='guild') return 1; if(!b||!b.cost) return 0; return Math.min(1,kdSpent(id)/b.cost); }
-function bState(id){ if(id==='inn'||id==='guild') return 'done'; if(id==='castle') return 'ruin'; var p=bProg(id); return p>=1?'done':(p>=0.5?'rest':'ruin'); }
+function bState(id){ if(id==='inn'||id==='guild') return 'done'; if(id==='castle') return 'ruin';  /* 왕궁은 복구 대상이 아니에요(그림은 늘 멀쩡, v1.76.0) */ var p=bProg(id); return p>=1?'done':(p>=0.5?'rest':'ruin'); }
 /* ---------- 건물 개방 (v1.47 시안): 개방 여부는 저장하지 않고 기록에서 매번 계산해요 ---------- */
 var FORGE_OPEN_RANK=1;   /* 대장간 개방: 길드 카퍼 랭크 달성(RANKS 번호 1) */
 var TRADE_OPEN_RANK=5;   /* 교역소 개방: 길드 골드 랭크 달성(RANKS 번호 5, 잠정 — 테스트 뒤 확정) */
@@ -5201,16 +5202,39 @@ function trainWeekInfo(){
 
 /* ---------- 건물 그림 (색·구도는 다음 단계에서 다듬어요) ---------- */
 function rc(x,y,w,h,f,r){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(r||0)+'" fill="'+f+'" stroke="'+OL+'" stroke-width="3" stroke-linejoin="round"/>';}
-function artCastle(){
-  var s=lmShadow(34);
-  s+=pth('M-17,40 L-17,-46 L-12,-50 L-8,-44 L-2,-52 L4,-43 L10,-48 L17,-42 L17,40 Z','#9BA3B3');
-  s+='<path d="M-17,-26 H17 M-17,-6 H17 M-17,14 H17 M-6,-26 V-6 M7,-6 V14 M-7,14 V40" stroke="#7E8798" stroke-width="2" stroke-linecap="round" fill="none"/>';
-  s+=pth('M-24,-44 L-7,-84 L-2,-76 L2,-102 L6,-80 L11,-84 L24,-44 Z','#8F6BB6');
-  s+='<path d="M-10,-52 L-2,-82 M8,-52 L5,-72" stroke="#6D4F96" stroke-width="2.2" stroke-linecap="round" fill="none"/>';
-  s+='<line x1="2" y1="-102" x2="2" y2="-118" stroke="'+OL+'" stroke-width="3" stroke-linecap="round"/>'+'<g class="an-flag">'+pth('M2,-118 L17,-113 L10,-110 L16,-106 L2,-106 Z','#8F6BB6',2.2)+'</g>';
-  s+=pth('M-5,-14 L-5,-24 Q0,-30 5,-24 L5,-14 Z','#2B2138',0)+pth('M-4,10 L-4,2 Q0,-3 4,2 L4,10 Z','#2B2138',0);
-  s+='<path d="M9,-40 L4,-30 L10,-20 L5,-10" fill="none" stroke="'+OL+'" stroke-width="2.4" stroke-linecap="round"/>';
-  s+=ell(-24,41,9,5,'#8E97A6',2.5)+ell(24,42,11,5,'#8E97A6',2.5)+ell(3,45,7,4,'#9BA3B3',2.5)+ell(-11,40,8,5,'#6FBF73',2.5)+ell(13,40,7,4,'#6FBF73',2.5);
+function artCastle(){  /* v1.76.0: 왕실이 지키는 화려한 왕궁(스토리 문서 4장 «왕실», 시작화면 언덕 위 성과 같은 색) */
+  var W='#FFF6E6', WD='#E9D9BC', B='#4A86E0', BD='#2F64B8', G='#F2C14E', GD='#C9962E', R='#D9564A', LIT='#FFE08A';
+  var s=lmShadow(46);
+  /* side towers */
+  [-32,32].forEach(function(x){
+    s+=pth('M'+(x-9)+',40 L'+(x-9)+',-40 L'+(x+9)+',-40 L'+(x+9)+',40 Z',W);
+    s+=pth('M'+(x-12)+',-40 L'+x+',-74 L'+(x+12)+',-40 Z',B);
+    s+='<path d="M'+(x+2)+',-70 L'+(x+9)+',-43" stroke="'+BD+'" stroke-width="2.2" stroke-linecap="round" fill="none"/>';
+    s+=circ(x,-77,3.2,G,2.2);
+    s+=pth('M'+(x-11)+',-40 H'+(x+11)+' V-36 H'+(x-11)+' Z',G,2.2);
+    s+=pth('M'+(x-3.5)+',-14 L'+(x-3.5)+',-22 Q'+x+',-27 '+(x+3.5)+',-22 L'+(x+3.5)+',-14 Z',LIT,2.2);
+  });
+  /* main hall */
+  s+=pth('M-24,40 L-24,-18 L24,-18 L24,40 Z',W);
+  s+='<path d="M-24,8 H24" stroke="'+WD+'" stroke-width="2" fill="none"/>';
+  s+=pth('M-26,-22 H26 V-15 H-26 Z',G,2.4);
+  /* crenellation on hall */
+  for(var i=-22;i<=18;i+=10) s+=pth('M'+i+',-22 V-27 H'+(i+5)+' V-22 Z',W,2.2);
+  /* central keep */
+  s+=pth('M-14,-22 L-14,-60 L14,-60 L14,-22 Z',W);
+  s+=pth('M-19,-60 L0,-102 L19,-60 Z',B);
+  s+='<path d="M3,-97 L14,-63" stroke="'+BD+'" stroke-width="2.2" stroke-linecap="round" fill="none"/>';
+  s+=pth('M-16,-60 H16 V-55 H-16 Z',G,2.2);
+  s+=pth('M-5,-30 L-5,-42 Q0,-48 5,-42 L5,-30 Z',LIT,2.2);
+  /* flag */
+  s+='<line x1="0" y1="-102" x2="0" y2="-118" stroke="'+OL+'" stroke-width="3" stroke-linecap="round"/>'+'<g class="an-flag">'+pth('M0,-118 L16,-113 L9,-110 L15,-106 L0,-106 Z',G,2.2)+'</g>';
+  /* banners */
+  s+=pth('M-19,-12 L-19,6 L-15,2 L-11,6 L-11,-12 Z',R,2.2)+pth('M11,-12 L11,6 L15,2 L19,6 L19,-12 Z',R,2.2);
+  /* gate */
+  s+=pth('M-8,40 L-8,22 Q0,12 8,22 L8,40 Z',G,2.6);
+  s+='<path d="M0,16 V40" stroke="'+GD+'" stroke-width="2" fill="none"/>';
+  /* lawn */
+  s+=ell(-40,42,9,5,'#6FBF73',2.5)+ell(41,42,9,5,'#6FBF73',2.5)+ell(-20,44,6,4,'#86C97E',2.5)+ell(21,44,6,4,'#86C97E',2.5);
   return s;
 }
 function wallRing(cx,cy,rx,ry,st,p,th){
@@ -5402,8 +5426,8 @@ function kingdomSvg(){
 /* 왕국 전경의 터치 영역: 건물 이름만 아래에 작게 표시해요 */
 function kBuildBtn(id){
   if(!bOpen(id)) return '';
-  var b=bld(id), st=bState(id), sub, nm=(id==='castle')?'성':b.n;
-  if(id==='castle') sub='알 수 없는 폐허';
+  var b=bld(id), st=bState(id), sub, nm=b.n;
+  if(id==='castle') sub='굳게 닫힌 문';
   else sub=BSTN[st];
   function pos(q){ return 'left:'+(q[0]*100/KW).toFixed(2)+'%;top:'+(q[1]*100/KH).toFixed(2)+'%;width:'+(q[2]*100/KW).toFixed(2)+'%;height:'+(q[3]*100/KH).toFixed(2)+'%'; }
   var lab=' aria-label="'+b.n+', '+sub+'"';
@@ -5476,7 +5500,7 @@ function placeholderView(id){
   return matBarHtml()+backBtn()+'<h1 class="ph" style="margin-top:8px">'+b.n+'</h1><div class="card kbuild"><div class="kbart live">'+bSvg(id)+'</div><p class="kbst">완성</p><p class="note" style="margin:6px 0 12px">'+txt+'</p></div>';
 }
 function castleView(){
-  return matBarHtml()+backBtn()+'<div class="phrow"><h1 class="ph">성</h1><span class="phsub">알 수 없는 폐허</span></div><div class="card scn"><svg class="scnsvg live" viewBox="0 0 340 250" role="img" aria-label="안개 낀 밤, 알 수 없는 폐허가 된 성의 탑">'+scnCastle()+'</svg></div>';
+  return matBarHtml()+backBtn()+'<div class="phrow"><h1 class="ph">왕궁</h1><span class="phsub">굳게 닫힌 문</span></div><div class="card scn"><svg class="scnsvg live" viewBox="0 0 340 250" role="img" aria-label="노을 진 하늘 아래 멀쩡하고 화려한 왕궁, 앞에는 무너진 집들">'+scnCastle()+'</svg></div>';
 }
 function viewTrain(){
   if(!npcOpen.train) trReset();
@@ -6911,26 +6935,48 @@ function viewWall(){
     '<p class="wallcap">'+wlCaption()+'</p><p class="note" style="margin:2px 2px 0">기능은 없고, 잠시 쉬어 가는 곳이에요. 시간과 날씨에 따라 풍경이 달라져요.</p>';
 }
 
-/* ===== 성 자리: 알 수 없는 폐허 ===== */
-function scnCastle(){
-  var s='', i;
-  s+='<defs><linearGradient id="cmSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B2552"/><stop offset=".7" stop-color="#6B4F8E"/><stop offset="1" stop-color="#C98FB0"/></linearGradient><radialGradient id="cmGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E6B8FF" stop-opacity=".7"/><stop offset="1" stop-color="#E6B8FF" stop-opacity="0"/></radialGradient></defs>';
-  s+='<rect width="340" height="250" fill="url(#cmSky)"/>';
-  [[30,30],[70,60],[120,24],[180,50],[240,28],[300,56],[320,20],[52,100],[270,96],[210,86]].forEach(function(p,k){ s+='<g class="an-twk'+(k%2?' b':'')+'" style="animation-delay:-'+(k*.4).toFixed(1)+'s">'+bStar(p[0],p[1],2.6,'#FFF6D0')+'</g>'; });
-  s+=sC(274,48,13,'#FFF6D0',1.6)+'<circle cx="279" cy="45" r="11" fill="#3A2F68"/>';
-  s+=sP('M0,190 L0,150 L40,130 L80,156 L130,120 L190,160 L250,128 L300,154 L340,134 L340,190 Z','#3B2F66',0)+sP('M0,200 L0,176 Q80,160 170,180 T340,170 L340,200 Z','#2A2350',0);
-  s+='<rect y="190" width="340" height="60" fill="#241E48"/>';
-  s+='<ellipse cx="170" cy="130" rx="90" ry="86" fill="url(#cmGlow)" class="an-glow"/>';
-  s+='<g transform="translate(170,206) scale(1.5)">'+artCastle()+'</g>';
-  s+='<g transform="translate(170,98)"><g class="in-hint">'+'<text text-anchor="middle" y="0" font-size="30" fill="#F3D9FF" stroke="'+OL+'" stroke-width="1.6" style="font-family:var(--disp)">?</text></g></g>';
-  [[24,214,.9],[316,218,1],[84,228,.7],[262,230,.8]].forEach(function(b,k){ s+=ksw(mBush(b[0],b[1],b[2]),k); });
-  for(i=0;i<9;i++) s+='<circle class="in-fly" style="animation-delay:-'+(i*.9).toFixed(1)+'s" cx="'+(40+i*32)+'" cy="'+(196+(i%3)*12)+'" r="1.8" fill="#E8FF8A"/>';
-  s+='<g class="in-fogd"><rect x="-60" y="176" width="460" height="46" fill="#C9B8E8" opacity=".28"/></g><g class="in-fogd b"><rect x="-80" y="206" width="460" height="40" fill="#D8C8F0" opacity=".22"/></g>';
-  s+='<rect width="340" height="250" fill="#120A2A" opacity=".1"/>';
+/* ===== 왕궁: 굳게 닫힌 문 (v1.76.0, 옛 «알 수 없는 폐허») ===== */
+function scnCastle(){  /* v1.76.0: 노을 아래 굳게 닫힌 왕궁과 앞쪽의 무너진 집들 */
+  var W='#FFF6E6', B='#4A86E0', BD='#2F64B8', G='#F2C14E', GD='#C9962E', R='#D9564A', LIT='#FFE08A';
+  var s='<defs><linearGradient id="pSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B3F7A"/><stop offset=".65" stop-color="#C77F8E"/><stop offset="1" stop-color="#F2B98A"/></linearGradient><radialGradient id="pGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE08A" stop-opacity=".55"/><stop offset="1" stop-color="#FFE08A" stop-opacity="0"/></radialGradient></defs>';
+  s+='<rect width="340" height="250" fill="url(#pSky)"/>';
+  [[40,30],[90,18],[270,26],[310,48],[220,14]].forEach(function(p){ s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="1.6" fill="#FFF3C4" opacity=".85"/>'; });
+  s+='<path d="M0,160 L60,120 L110,150 L170,112 L230,148 L290,118 L340,150 L340,250 L0,250 Z" fill="#7A5D8A" opacity=".55"/>';
+  s+='<ellipse cx="170" cy="120" rx="120" ry="90" fill="url(#pGlow)"/>';
+  /* palace (big, center) */
+  s+='<g transform="translate(170,200) scale(1.0)">';
+  [-46,46].forEach(function(x){
+    s+=pth('M'+(x-12)+',20 L'+(x-12)+',-62 L'+(x+12)+',-62 L'+(x+12)+',20 Z',W);
+    s+=pth('M'+(x-16)+',-62 L'+x+',-104 L'+(x+16)+',-62 Z',B);
+    s+='<path d="M'+(x+3)+',-99 L'+(x+12)+',-66" stroke="'+BD+'" stroke-width="2.2" stroke-linecap="round" fill="none"/>';
+    s+=circ(x,-107,3.4,G,2.2)+pth('M'+(x-14)+',-62 H'+(x+14)+' V-57 H'+(x-14)+' Z',G,2.2);
+    s+=pth('M'+(x-4)+',-28 L'+(x-4)+',-38 Q'+x+',-44 '+(x+4)+',-38 L'+(x+4)+',-28 Z',LIT,2.2);
+  });
+  s+=pth('M-34,20 L-34,-34 L34,-34 L34,20 Z',W);
+  s+=pth('M-36,-38 H36 V-31 H-36 Z',G,2.4);
+  for(var i=-32;i<=26;i+=11) s+=pth('M'+i+',-38 V-44 H'+(i+6)+' V-38 Z',W,2.2);
+  s+=pth('M-18,-38 L-18,-84 L18,-84 L18,-38 Z',W);
+  s+=pth('M-24,-84 L0,-132 L24,-84 Z',B);
+  s+='<path d="M4,-126 L18,-88" stroke="'+BD+'" stroke-width="2.2" stroke-linecap="round" fill="none"/>';
+  s+=pth('M-20,-84 H20 V-79 H-20 Z',G,2.2);
+  s+=pth('M-6,-50 L-6,-64 Q0,-71 6,-64 L6,-50 Z',LIT,2.2);
+  s+='<line x1="0" y1="-132" x2="0" y2="-150" stroke="'+OL+'" stroke-width="3" stroke-linecap="round"/><g class="an-flag">'+pth('M0,-150 L18,-144 L10,-141 L17,-137 L0,-137 Z',G,2.2)+'</g>';
+  s+=pth('M-28,-26 L-28,-4 L-23,-9 L-18,-4 L-18,-26 Z',R,2.2)+pth('M18,-26 L18,-4 L23,-9 L28,-4 L28,-26 Z',R,2.2);
+  /* closed gate with bars */
+  s+=pth('M-11,20 L-11,-2 Q0,-14 11,-2 L11,20 Z',G,2.6);
+  s+='<path d="M-6,20 V-6 M0,20 V-9 M6,20 V-6" stroke="'+GD+'" stroke-width="2.2" fill="none"/>';
+  s+='</g>';
+  /* ruined houses in foreground (dim) */
+  s+='<g opacity=".92">';
+  s+=pth('M10,250 L10,206 L26,194 L34,202 L40,196 L54,208 L54,250 Z','#8C7A8F');
+  s+=pth('M20,250 L20,230 L32,230 L32,250 Z','#5E4E66',0);
+  s+=pth('M286,250 L286,210 L300,200 L306,206 L318,198 L332,212 L332,250 Z','#8C7A8F');
+  s+=pth('M298,250 L298,232 L312,232 L312,250 Z','#5E4E66',0);
+  s+=pth('M62,250 L70,236 L88,240 L96,250 Z','#9B8A9C')+pth('M244,250 L252,238 L270,240 L278,250 Z','#9B8A9C');
+  s+='</g>';
+  s+='<rect y="228" width="340" height="22" fill="#5E4E66" opacity=".35"/>';
   return s;
 }
-
-
 function trainAfter(before,adding){
   var a=snap(), gain=a.xp-before.xp;
   var newAch=Object.keys(a.ach).filter(function(id){ return !before.ach[id]; });

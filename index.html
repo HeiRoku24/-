@@ -747,6 +747,30 @@ body{text-wrap:pretty;}
 @media (max-width:350px){ .exm-row{gap:6px;} .exm-pose{width:50px; font-size:15px;} .exm-row .exm-card{padding:8px 9px; gap:8px;} .exm-row .exm-no{width:30px; height:30px; font-size:17px;} }
 .pvw{position:fixed; inset:0; z-index:70; background:var(--bg); overflow:auto; overscroll-behavior:contain; padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(40px + env(safe-area-inset-bottom,0px));}
 .pvw .in{max-width:560px; margin:0 auto;}
+/* v1.77.0 반디 채팅 (1-B3 확정) */
+#bchat{position:fixed;top:0;left:0;right:0;height:100%;z-index:80;background:var(--bg);display:flex;flex-direction:column;color:var(--ink);word-break:keep-all;overscroll-behavior:contain;}
+#bchat .ch-hd{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 8px 10px 14px;background:var(--surface);border-bottom:2px solid var(--line);flex:none;}
+#bchat .ch-av{width:40px;height:40px;border-radius:50%;background:#E8F7FF;border:2px solid var(--line);display:grid;place-items:center;overflow:hidden;flex:none;}
+#bchat .ch-av svg{width:100%;height:100%;display:block;}
+#bchat .ch-nm{font-family:var(--disp);font-size:21px;flex:1;}
+#bchat .ch-x{width:44px;height:44px;border:0;background:none;color:var(--muted);font-size:22px;border-radius:12px;}
+#bchat .ch-log{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 12px 12px;display:flex;flex-direction:column;gap:10px;}
+#bchat .ch-row{display:flex;gap:8px;align-items:flex-end;}
+#bchat .ch-row .ch-av{width:32px;height:32px;}
+#bchat .ch-b{max-width:80%;background:var(--surface);border:2px solid var(--line);border-radius:18px 18px 18px 6px;padding:10px 13px;font-size:15px;line-height:1.65;text-align:left;}
+#bchat .ch-me{align-self:flex-end;max-width:78%;background:var(--gold);color:var(--gold-ink);border-radius:18px 18px 6px 18px;padding:10px 13px;font-size:15px;line-height:1.6;font-weight:500;overflow-wrap:anywhere;}
+#bchat .ch-note{align-self:center;font-size:12.5px;color:var(--muted);text-align:center;margin:0 16px;text-wrap:balance;}
+#bchat .ch-chips{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 0 40px;}
+#bchat .ch-chip{border:2px solid var(--line);background:var(--soft);color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:14px;line-height:1.3;text-align:left;}
+#bchat .ch-act{display:block;width:100%;margin-top:9px;min-height:46px;border:0;border-radius:14px;background:var(--gold);color:var(--gold-ink);font-family:var(--disp);font-size:17px;box-shadow:0 3px 0 var(--edge);}
+#bchat .ch-dots{display:flex;gap:5px;padding:4px 2px;}
+#bchat .ch-dots i{width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.5;}
+#bchat .ch-dots i:nth-child(2){opacity:.75}
+#bchat .ch-in{display:flex;gap:8px;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:2px solid var(--line);flex:none;}
+#bchat .ch-in input{flex:1;min-width:0;height:48px;border-radius:24px;border:2px solid var(--line);background:var(--soft);color:var(--ink);padding:0 16px;font:inherit;font-size:16px;}
+#bchat .ch-in input::placeholder{color:var(--muted);}
+#bchat .ch-send{flex:none;height:48px;padding:0 16px;border:0;border-radius:24px;background:var(--gold);color:var(--gold-ink);font-family:var(--disp);font-size:18px;box-shadow:0 3px 0 var(--edge);}
+.grecaptcha-badge{visibility:hidden!important;}   /* 리캡차 표시는 숨기고 반디 창 안에 «reCAPTCHA로 보호돼요» 한 줄을 둬요(구글 규칙) */
 .pvw .pvk{border:0; background:none; padding:8px 4px; font-size:15px; color:var(--muted);}
 .pvw h1{font-family:var(--disp); font-size:26px; font-weight:400; margin:2px 0 2px; line-height:1.25;}
 .pvw .pvs{color:var(--muted); font-size:13.5px; margin:0 0 12px; line-height:1.5; text-wrap:balance;}
@@ -2013,7 +2037,7 @@ setTimeout(guard,7000);
 <div id="tsflash" hidden aria-hidden="true"></div>
 <script type="module">
 (async function(){
-  var V='12.19.0', B='https://www.gstatic.com/firebasejs/'+V+'/';
+  var V='12.19.0', B='https://www.gstatic.com/firebasejs/'+V+'/', RC_KEY='6LdwAwYuAAAAAEKfZporHFg3nxulxv3FuAufSOCx', acP=null;
   var cfg={
     apiKey:"AIzaSyBD5y6xbJ3jmt5BYUjEqlpRElRSnmkeWNY",
     authDomain:"momjjang-soul.firebaseapp.com",
@@ -2032,7 +2056,12 @@ setTimeout(guard,7000);
       signOut:function(){return A.signOut(auth);},
       reset:function(e){return A.sendPasswordResetEmail(auth,e);},
       get:function(uid){return F.getDoc(F.doc(db,'users',uid)).then(function(s){return s.exists()?s.data():null;});},
-      set:function(uid,o){return F.setDoc(F.doc(db,'users',uid),o);}
+      set:function(uid,o){return F.setDoc(F.doc(db,'users',uid),o);},
+      /* v1.77.0 반디 채팅용 App Check 표(Fraud Defense = reCAPTCHA Enterprise). 반디 창을 처음 열 때만 불러와요. 기록 저장(Firestore)에는 적용(Enforce)하지 않았어요 */
+      appCheckToken:function(){
+        if(!acP) acP=import(B+'firebase-app-check.js').then(function(AC){ return AC.initializeAppCheck(app,{provider:new AC.ReCaptchaEnterpriseProvider(RC_KEY),isTokenAutoRefreshEnabled:true}); });
+        return acP.then(function(ac){ return import(B+'firebase-app-check.js').then(function(AC){ return AC.getToken(ac,false); }); }).then(function(r){ return r.token; });
+      }
     };
     window.dispatchEvent(new Event('fb-ready'));
   }catch(e){
@@ -2729,8 +2758,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.76.0', APP_DATE='2026-10-28', showChg=false;
+var APP_VER='1.77.0', APP_DATE='2026-10-29', showChg=false;
 var CHANGES=[
+['1.77.0','반디 버튼을 누르면 반디와 채팅하는 창이 열려요. 궁금한 걸 적어 보내면 반디가 대답해요(인터넷 연결 필요, 하루 20번까지)'],
 ['1.76.0','왕국 한가운데의 성이 화려한 왕궁으로 바뀌었어요. 눌러 보면 굳게 닫힌 문이 보여요'],
 ['1.75.26','폰 맨 위 상태 표시줄 색이 지금 보이는 화면(로고·시작화면 하늘·본문·마왕전·승급 시험)에 맞춰 바뀌어요'],
 ['1.75.25','화면을 두 번 눌러도 확대되지 않아요'],
@@ -10421,7 +10451,7 @@ app.addEventListener('click',function(e){
   }else if(a==='upd-check'){
     updCheck();
   }else if(a==='bandi'){
-    bandiOpen('help');
+    bchatOpen();   /* v1.77.0 반디 버튼은 채팅창을 열어요(옛 도움말 목록 화면은 «탭 안내 보기»의 탭 고르기에만 써요) */
   }else if(a==='bandi-ask'){
     bandiOpen('ask');
   }else if(a==='prev'||a==='next'){
@@ -10828,6 +10858,7 @@ var tourOn=false, tourSoon=function(){}, tourStart=function(){}, tourEnd=functio
 function bdBusy(){
   if(fevOn) return true;
   if(tourOn) return true;
+  if(bcEl) return true;   /* v1.77.0 반디 채팅이 열려 있는 동안은 다른 안내를 띄우지 않아요 */
   var ovs=document.querySelectorAll('.ov'), i, tm=document.getElementById('timer');
   for(i=0;i<ovs.length;i++){ if(!ovs[i].hidden) return true; }
   if(titleEl && !titleEl.hidden) return true;
@@ -11347,7 +11378,7 @@ function bdRender(){
   }else if(st==='tours'){
     h=BANDI.scene('도와주는 반디의 그림')+'<p class="bdq">어느 탭의 안내를 다시 볼까요?</p><div class="bdopts">'+
       [['today','퀘스트 탭'],['run','러닝 탭'],['home','왕국 탭'],['ach','일지 탭']].concat(freeOn(fmt(TODAY))?[['week','지도 탭']]:[]).concat(demonShown()?[['demon','마왕전 탭']]:[]).map(function(x){ return '<button type="button" class="dcard" data-b="tourgo" data-k="'+x[0]+'"><b>'+x[1]+'</b></button>'; }).join('')+
-      '</div><button type="button" class="skip" data-b="helpback">이전</button>';
+      '</div><button type="button" class="skip" data-b="'+(bd.chat?'tochat':'helpback')+'">이전</button>';
   }else if(st==='ans'){
     h=BANDI.scene('설명하는 반디의 그림')+'<p class="bdq">'+BANDI.help[bd.topic][0]+'</p><p class="bdans">'+glue(typeof BANDI.help[bd.topic][1]==='function'?BANDI.help[bd.topic][1]():BANDI.help[bd.topic][1])+'</p>'+
       '<div class="bdrow"><button type="button" class="ghost" data-b="helpback">다른 질문</button><button type="button" class="primary" data-b="close">알았어요</button></div>';
@@ -11390,11 +11421,182 @@ bdEl.addEventListener('click',function(e){
   else if(b==='rules'){ bandiClose(); introOpen(); }
   else if(b==='tours'){ bd.step='tours'; bdRender(); }
   else if(b==='tourgo'){ var tk=t.getAttribute('data-k'); bandiClose(); tourReplay(tk); }
+  else if(b==='tochat'){ bandiClose(); bchatOpen(); }   /* v1.77.0 채팅의 «탭 안내 보기»에서 왔으면 «이전»은 채팅으로 */
   else if(b==='close'){ bandiClose(); }
 });
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape' && !bdEl.hidden && bd.mode!=='first' && !bd.must) bandiClose();
 });
+
+/* ---------- 반디 채팅 (v1.77.0, 1-B3 확정 설계·문구) ----------
+   위쪽 반디 버튼을 누르면 화면 전체 대화창이 열려요. 다른 반디 창(첫 실행 질문·건물 안내 등)은 그대로예요.
+   질문은 반디 서버(클라우드플레어 워커, BC_URL)로 보내고, 서버가 Claude Haiku 5.5에게 물어 {id, reply}를 돌려줘요.
+   서버에는 API 키·반디 규칙(프롬프트)·도움말 글 사본이 있어요. 도움말(BANDI.help)을 고치면 서버의 kbList도 같이 고쳐요.
+   대화는 앱이 켜져 있는 동안만 기억해요(창을 닫아도 남고, 앱을 끄면 지워져요. 저장하지 않아요).
+   하루 질문 수: 이 기기에서 하루 BC_DAY번(성공한 답만 세요). 서버 전체 하루 한도는 서버가 정해요. */
+var BC_URL='https://bandi-chatbot.matues42.workers.dev/', BC_DAY=20, BC_DKEY='home-training-bandi-day';
+var BCSAY={
+  greet:'무엇이 궁금해요, 용사님? 편하게 물어봐요!',
+  ai:'반디의 답은 AI가 만들어서 틀릴 수도 있어요.',
+  rc:'이 대화는 reCAPTCHA로 보호돼요.',
+  faqBtn:'자주 묻는 질문 보기',
+  faqHead:'자주 묻는 질문이에요. 궁금한 걸 눌러 봐요!',
+  ph:'궁금한 걸 적어 주세요', send:'보내기',
+  offline:'지금은 반디가 대답하기 어려워요. 인터넷이 연결되면 다시 물어봐 주세요. 아래에서 골라도 돼요.',
+  limit:'오늘 물어볼 수 있는 만큼 다 물어봤어요. 내일 또 이야기해요, 용사님!',
+  rest:'반디가 잠시 숨을 고르고 있어요. 나중에 다시 물어봐 주세요, 용사님.'
+};
+/* 화면 여는 4가지: 정해진 말(대신 말)과 버튼 이름 */
+var BC_ACT={a_diff:['난이도를 다시 골라 볼까요?','난이도 다시 고르기'],a_fit:['운동량을 내 몸에 맞춰 볼까요?','운동량 맞추기'],a_rules:['게임 규칙을 다시 볼까요?','게임 규칙 보기'],a_tour:['탭 안내를 다시 볼까요?','탭 안내 보기']};
+var BC_IDS=['q0','q1','q2','q3','q4','q5','a_diff','a_fit','a_rules','a_tour','health','story','unknown','chat','crisis','block'];
+/* 대신 말: 반디가 답을 못 만들었거나 규칙을 어겼을 때만, 바로 앞 반디 말과 다른 것 */
+var BC_VAR={
+  story:['그건 모험을 하다 보면 알게 될 거예요!','음, 그건 아직 비밀이에요, 용사님!','그 이야기는 모험이 조금 더 이어지면 알게 될 거예요.'],
+  block:['그런 이야기는 반디가 대답하기 어려워요.','음, 그건 반디가 이야기하기 어려운 주제예요.','그런 이야기 대신 다른 걸 물어봐 줄래요?'],
+  unknown:['음, 그건 아직 잘 모르겠어요. 다른 궁금한 게 있으면 물어봐 주세요.','그건 반디도 아직 몰라요. 다른 건 뭐든 편하게 물어봐요!'],
+  crisis:['많이 힘들었군요, 용사님. 반디가 여기 있어요. 믿을 만한 사람이나 전문가에게도 꼭 이야기해 봐요.','그런 마음이 들 만큼 힘들었나 봐요, 용사님. 혼자 견디지 말고 믿을 만한 사람이나 전문가에게도 꼭 이야기해 봐요.'],
+  health:['무리하지 말아요, 용사님. ','아픈 곳은 꼭 쉬어 가요, 용사님. ']
+};
+var bcEl=null, bcMsgs=null, bcBusy=false, bcVV=null;
+function bcEsc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function bcPlain(h){ var d=document.createElement('div'); d.innerHTML=String(h||''); return (d.textContent||'').replace(/\u00a0/g,' '); }
+function bcHelpA(i){ var a=BANDI.help[i][1]; return typeof a==='function'?a():a; }
+function bcFaq(){ return {chips:BANDI.help.map(function(h,i){ return [h[0],'q'+i]; })}; }
+function bcInit(){
+  if(bcMsgs) return;
+  bcMsgs=[{b:BCSAY.greet},{note:BANDI.say.health},{note:BCSAY.ai+'<br>'+BCSAY.rc},{chips:[[BCSAY.faqBtn,'faq']]}];
+}
+function bcCount(){ try{ var o=JSON.parse(localStorage.getItem(BC_DKEY)||'null'); return (o && o.d===fmt(new Date()))?(o.n|0):0; }catch(e){ return 0; } }
+function bcCountUp(){ try{ localStorage.setItem(BC_DKEY,JSON.stringify({d:fmt(new Date()),n:bcCount()+1})); }catch(e){} }
+function bcLastB(){ for(var i=bcMsgs.length-1;i>=0;i--) if(bcMsgs[i].b) return bcPlain(bcMsgs[i].b); return ''; }
+function bcLastMe(){ for(var i=bcMsgs.length-1;i>=0;i--) if(bcMsgs[i].me) return bcPlain(bcMsgs[i].me); return ''; }
+function bcPick(key){ var a=BC_VAR[key], lb=bcLastB(), c=a.filter(function(t){ return t!==lb && t+BANDI.say.health!==lb; }); c=c.length?c:a; c=c[Math.floor(Math.random()*c.length)]; return key==='health'?c+BANDI.say.health:c; }
+/* 바꿔 말한 답의 숫자가 미리 쓴 글(또는 용사가 한 말)에 모두 있는지 */
+function bcNumsOk(t,src){ var n=String(t).match(/\d+(?:\.\d+)?/g)||[], i; for(i=0;i<n.length;i++){ if(src.indexOf(n[i])<0) return false; } return true; }
+/* 답 다듬기: 이모지 지우기, 문장 끝 ~는 마침표(또는 쉼표), 새어 나온 지시어 지우기, 앱 질문이 아닌 답의 «» 지우기 */
+function bcClean(t,id){
+  if(!t) return t;
+  t=t.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu,'').replace(/(\S)~+(?=\s|$)/g,function(m,c){ return c+(/[요다죠네까]/.test(c)?'.':','); }).replace(/(장난스럽게|다정하게) /g,'');
+  if(!/^q/.test(id)) t=t.replace(/[«»]/g,'');
+  return t.replace(/\s{2,}/g,' ').replace(/\.{2,}/g,'.').trim();
+}
+function bcReply(id,txt){
+  var lb=bcLastB(), qi, ok;
+  if(id==='chat'){ if(txt){ bcMsgs.push({b:bcEsc(txt)}); return; } id='unknown'; }
+  if(/^q[0-5]$/.test(id)){
+    qi=+id.charAt(1);
+    if(txt && bcNumsOk(txt,bcPlain(bcHelpA(qi))+' '+bcLastMe())) bcMsgs.push({b:bcEsc(txt)});
+    else bcMsgs.push({b:bcHelpA(qi)});
+    return;
+  }
+  if(id==='crisis'){ bcMsgs.push({b:bcEsc((txt && /(믿을 만한|전문가)/.test(txt) && !/\d/.test(txt) && txt!==lb)?txt:bcPick('crisis'))}); return; }
+  if(id==='health'){ bcMsgs.push({b:bcEsc((txt && /전문가/.test(txt) && !/\d/.test(txt))?txt:bcPick('health'))}); return; }
+  ok=!!txt && txt.length<=160 && !/\d/.test(txt) && txt!==lb;
+  if(BC_ACT[id]){ bcMsgs.push({b:bcEsc(ok?txt:BC_ACT[id][0]),act:id}); return; }
+  if(id==='story'||id==='block'){ bcMsgs.push({b:bcEsc(ok?txt:bcPick(id))}); return; }
+  bcMsgs.push({b:bcEsc(ok?txt:bcPick('unknown'))});
+}
+function bcAv(){ return '<div class="ch-av" aria-hidden="true"><svg viewBox="22 6 76 76">'+BANDI.art()+'</svg></div>'; }
+function bcLogHtml(){
+  var av=bcAv(), h='';
+  bcMsgs.forEach(function(m){
+    if(m.me) h+='<div class="ch-me">'+m.me+'</div>';
+    else if(m.note) h+='<p class="ch-note">'+m.note+'</p>';
+    else if(m.chips) h+='<div class="ch-chips">'+m.chips.map(function(c){ return '<button type="button" class="ch-chip" data-q="'+c[1]+'">'+c[0]+'</button>'; }).join('')+'</div>';
+    else if(m.dots) h+='<div class="ch-row">'+av+'<div class="ch-b" aria-label="반디가 생각하고 있어요"><div class="ch-dots"><i></i><i></i><i></i></div></div></div>';
+    else h+='<div class="ch-row">'+av+'<div class="ch-b">'+m.b+(m.act?'<button type="button" class="ch-act" data-k="'+m.act+'">'+BC_ACT[m.act][1]+'</button>':'')+'</div></div>';
+  });
+  return h;
+}
+function bcDraw(){
+  if(!bcEl) return;
+  var lg=bcEl.querySelector('.ch-log'); lg.innerHTML=bcLogHtml(); lg.scrollTop=lg.scrollHeight;
+}
+/* 자판이 올라오는 만큼 대화창도 줄어들게: 보이는 화면(visualViewport)에 맞춰요 */
+function bcFit(){
+  if(!bcEl) return;
+  var v=window.visualViewport, lg;
+  bcEl.style.height=(v?v.height:window.innerHeight)+'px'; bcEl.style.top=(v?v.offsetTop:0)+'px';
+  lg=bcEl.querySelector('.ch-log'); if(lg) lg.scrollTop=lg.scrollHeight;
+}
+/* App Check 표: 반디 창을 처음 열 때 불러와요(리캡차는 그때만 불러와요) */
+function bcToken(){
+  try{ if(window.__fb && window.__fb.appCheckToken) return window.__fb.appCheckToken(); }catch(e){}
+  return Promise.reject(new Error('nofb'));
+}
+function bchatOpen(){
+  if(tourOn) tourEnd(true);
+  bcInit(); bchatClose(true);
+  var el=document.createElement('div');
+  el.id='bchat'; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true'); el.setAttribute('aria-label','반디와 이야기하기');
+  el.innerHTML='<div class="ch-hd">'+bcAv()+'<div class="ch-nm">반디</div><button type="button" class="ch-x" aria-label="닫기">✕</button></div><div class="ch-log"></div>'+
+    '<div class="ch-in"><input type="text" maxlength="200" enterkeyhint="send" autocomplete="off" placeholder="'+BCSAY.ph+'" aria-label="반디에게 보낼 말"><button type="button" class="ch-send">'+BCSAY.send+'</button></div>';
+  document.body.appendChild(el); bcEl=el; document.body.style.overflow='hidden';
+  var inp=el.querySelector('.ch-in input'), sb=el.querySelector('.ch-send');
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter' && !e.isComposing){ e.preventDefault(); bcSend(); } });
+  sb.addEventListener('mousedown',function(e){ e.preventDefault(); });   /* 보내기를 눌러도 자판이 안 내려가게 */
+  sb.addEventListener('click',bcSend);
+  inp.addEventListener('focus',function(){ bcFit(); setTimeout(bcFit,150); setTimeout(bcFit,400); });
+  el.querySelector('.ch-x').addEventListener('click',function(){ bchatClose(); });
+  el.addEventListener('click',bcClick);
+  bcVV=function(){ bcFit(); };
+  if(window.visualViewport){ visualViewport.addEventListener('resize',bcVV); visualViewport.addEventListener('scroll',bcVV); }
+  window.addEventListener('resize',bcVV);
+  bcFit(); bcDraw();
+  bcToken().catch(function(){});   /* 첫 질문이 빨리 가게 미리 준비해요(실패해도 보낼 때 다시 해요) */
+}
+function bchatClose(keep){
+  if(bcVV){ if(window.visualViewport){ visualViewport.removeEventListener('resize',bcVV); visualViewport.removeEventListener('scroll',bcVV); } window.removeEventListener('resize',bcVV); bcVV=null; }
+  if(bcEl && bcEl.parentNode) bcEl.parentNode.removeChild(bcEl);
+  bcEl=null; if(!keep) document.body.style.overflow='';
+}
+function bcClick(e){
+  var t=e.target.closest?e.target.closest('.ch-chip,.ch-act'):null, q, k;
+  if(!t) return;
+  if(t.classList.contains('ch-chip')){
+    if(bcBusy) return;
+    q=t.getAttribute('data-q');
+    if(q==='faq'){ bcMsgs.push({b:BCSAY.faqHead}); bcMsgs.push(bcFaq()); }
+    else if(/^q[0-5]$/.test(q)){ bcMsgs.push({me:bcEsc(t.textContent)}); bcMsgs.push({b:bcHelpA(+q.charAt(1))}); }
+    bcDraw(); return;
+  }
+  k=t.getAttribute('data-k'); bchatClose();
+  if(k==='a_diff') bandiOpen('ask');
+  else if(k==='a_fit'){ bandiOpen('fit'); bd.fset=true; bdRender(); }
+  else if(k==='a_rules') introOpen();
+  else if(k==='a_tour'){ bandiOpen('help'); bd.step='tours'; bd.chat=true; bdRender(); }
+}
+function bcAsk(q,hist){
+  if(typeof window.__bcFake==='function') return Promise.resolve(window.__bcFake(q,hist));   /* 미리보기 도구 전용 */
+  if(navigator.onLine===false) return Promise.reject(new Error('offline'));
+  var tok0=Promise.race([bcToken(),new Promise(function(z,no){ setTimeout(function(){ no(new Error('token-timeout')); },15000); })]);   /* 표를 못 받고 멈추면 15초 뒤 «연결 안 될 때»로 */
+  return tok0.then(function(tok){
+    var ctl=window.AbortController?new AbortController():null, tm=setTimeout(function(){ if(ctl) ctl.abort(); },25000);
+    return fetch(BC_URL,{method:'POST',headers:{'Content-Type':'application/json','X-Firebase-AppCheck':tok},
+      body:JSON.stringify({q:q,hist:hist,km:runMinOn(fmt(TODAY))}),signal:ctl?ctl.signal:undefined})
+      .then(function(r){ clearTimeout(tm); return r.json().catch(function(){ return {ok:false,err:'busy'}; }); },function(er){ clearTimeout(tm); throw er; });
+  });
+}
+function bcSend(){
+  if(!bcEl || bcBusy) return;
+  var inp=bcEl.querySelector('.ch-in input'), q=String(inp.value||'').trim().slice(0,200), hist;
+  if(!q) return;
+  inp.value='';
+  hist=bcMsgs.filter(function(m){ return m.me||m.b; }).slice(-6).map(function(m){ return {me:!!m.me,text:bcPlain(m.me||m.b).replace(/\s+/g,' ').slice(0,200)}; });
+  bcMsgs.push({me:bcEsc(q)});
+  if(bcCount()>=BC_DAY){ bcMsgs.push({b:BCSAY.limit}); bcMsgs.push(bcFaq()); bcDraw(); return; }
+  bcBusy=true; bcMsgs.push({dots:1}); bcDraw();
+  var done=function(){ bcMsgs=bcMsgs.filter(function(m){ return !m.dots; }); bcBusy=false; };
+  bcAsk(q,hist).then(function(r){
+    done();
+    if(r && r.ok){
+      var id=BC_IDS.indexOf(r.id)>=0?r.id:'unknown';
+      bcCountUp(); bcReply(id,bcClean(typeof r.reply==='string'?r.reply.trim().slice(0,160):'',id));
+    }else if(r && r.err==='rest'){ bcMsgs.push({b:BCSAY.rest}); bcMsgs.push(bcFaq()); }
+    else { bcMsgs.push({b:BCSAY.offline}); bcMsgs.push(bcFaq()); }
+    bcDraw();
+  },function(){ done(); bcMsgs.push({b:BCSAY.offline}); bcMsgs.push(bcFaq()); bcDraw(); });
+}
 
 var INTRO_TXT=[
   "당신은 몸짱용사예요.\n각 모험지의 적들을 물리치며 마왕을 토벌할 힘을 길러 보세요.",
@@ -13836,6 +14038,7 @@ function bkFwd(){ try{ history.forward(); }catch(e){} }   /* 보초는 새로 �
 function bkHi(msg){ toast(msg); try{ toastEl.style.zIndex='1000'; setTimeout(function(){ toastEl.style.zIndex=''; },1900); }catch(e){} }
 function bkClick(sel){ var b=app.querySelector(sel); if(b){ b.click(); return true; } return false; }
 function bkAct(){
+if(bcEl){ bchatClose(); return true; }   /* v1.77.0 반디 채팅: 뒤로가기는 닫기(대화는 남아요) */
 if(cdoEl){ cdoBack(); return true; }   /* v1.71.0 실내 유산소 이유 고르기·동작 미리 보기: 뒤로가기는 한 단계 이전(첫 단계에서는 닫기) */
 if(pvwEl){ pvwClose(); return true; }   /* v1.69.0 동작 미리 보기 화면: 뒤로가기는 닫기예요 */
 if(dmCut){ demonCutTap(); return true; }   /* v1.65.0 마왕전 입장 컷: 뒤로가기는 터치와 같아요(마지막 장면으로) */

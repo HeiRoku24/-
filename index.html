@@ -4,6 +4,99 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style id="nmpre">html:not(.nm-done){background:#0C1716}
+
+/* v1.78.0 보스·모험지 움직임 (.live 안에서만) */
+.anx{transform-box:view-box;transform-origin:0 0}
+.anx-p,.anx-eye,.anx-win,.anx-bird{opacity:0}
+.anx-flip,.anx-flapV,.anx-batw,.anx-tw,.anx-splash{transform-box:fill-box;transform-origin:50% 50%}
+.anx-splash{transform-origin:50% 100%}
+.anx-wing{transform-box:view-box;transform-origin:-3px 0}
+.anx-bridge{transform-box:fill-box;transform-origin:50% 0}
+.live .anx-flexL{animation:axFlexL 3s ease-in-out infinite}
+.live .anx-flexR{animation:axFlexR 3s ease-in-out infinite;animation-delay:-1.5s}
+@keyframes axFlexL{0%,15%,85%,100%{transform:rotate(0)}40%,60%{transform:rotate(58deg)}}
+@keyframes axFlexR{0%,15%,85%,100%{transform:rotate(0)}40%,60%{transform:rotate(-58deg)}}
+.live .anx-snL{animation:axSnL 2.6s ease-out infinite}.live .anx-snR{animation:axSnR 2.6s ease-out infinite}
+@keyframes axSnL{0%{opacity:0;transform:translate(0,0) scale(.4)}8%{opacity:1}45%{opacity:0;transform:translate(-14px,12px) scale(1.5)}100%{opacity:0}}
+@keyframes axSnR{0%{opacity:0;transform:translate(0,0) scale(.4)}8%{opacity:1}45%{opacity:0;transform:translate(14px,12px) scale(1.5)}100%{opacity:0}}
+.anx-snL,.anx-snR,.anx-bullL,.anx-bullR,.anx-snD1,.anx-snD2,.anx-dustL,.anx-dustR,.anx-wisp,.anx-drop{transform-box:fill-box;transform-origin:50% 50%}
+.live .anx-drop{animation:axDrop 3.2s ease-in infinite}
+@keyframes axDrop{0%,55%{opacity:0;transform:translate(0,0)}58%{opacity:1}90%{opacity:0;transform:translate(8px,18px)}100%{opacity:0}}
+.live .anx-yo{animation:axYo 1.9s ease-in-out infinite alternate}
+@keyframes axYo{from{transform:translateY(0)}to{transform:translateY(-16px)}}
+.live .anx-legL{animation:axLegL .5s ease-in-out infinite alternate}.live .anx-legR{animation:axLegR .5s ease-in-out infinite alternate}
+@keyframes axLegL{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+@keyframes axLegR{from{transform:rotate(7deg)}to{transform:rotate(-7deg)}}
+.live .anx-bird{animation:axBird 9s ease-in-out infinite}
+@keyframes axBird{0%{opacity:1;transform:translate(-120px,-130px)}18%,30%{opacity:1;transform:translate(4px,-73px)}33%{transform:translate(9px,-80px)}36%,56%{transform:translate(12px,-73px)}76%{opacity:1;transform:translate(130px,-140px)}77%,100%{opacity:0;transform:translate(130px,-140px)}}
+.live .anx-wing{animation:axWing 9s linear infinite}
+@keyframes axWing{0.0%{transform:rotate(10deg)}1.5%{transform:rotate(-35deg)}3.0%{transform:rotate(10deg)}4.5%{transform:rotate(-35deg)}6.0%{transform:rotate(10deg)}7.5%{transform:rotate(-35deg)}9.0%{transform:rotate(10deg)}10.5%{transform:rotate(-35deg)}12.0%{transform:rotate(10deg)}13.5%{transform:rotate(-35deg)}15.0%{transform:rotate(10deg)}16.5%{transform:rotate(-35deg)}18.0%{transform:rotate(10deg)}19.5%{transform:rotate(0deg)}21.0%{transform:rotate(0deg)}22.5%{transform:rotate(0deg)}24.0%{transform:rotate(0deg)}25.5%{transform:rotate(0deg)}27.0%{transform:rotate(0deg)}28.5%{transform:rotate(0deg)}30.0%{transform:rotate(0deg)}31.5%{transform:rotate(0deg)}33.0%{transform:rotate(0deg)}34.5%{transform:rotate(0deg)}36.0%{transform:rotate(0deg)}37.5%{transform:rotate(0deg)}39.0%{transform:rotate(0deg)}40.5%{transform:rotate(0deg)}42.0%{transform:rotate(0deg)}43.5%{transform:rotate(0deg)}45.0%{transform:rotate(0deg)}46.5%{transform:rotate(0deg)}48.0%{transform:rotate(0deg)}49.5%{transform:rotate(0deg)}51.0%{transform:rotate(0deg)}52.5%{transform:rotate(0deg)}54.0%{transform:rotate(0deg)}55.5%{transform:rotate(0deg)}57.0%{transform:rotate(0deg)}58.5%{transform:rotate(-35deg)}60.0%{transform:rotate(10deg)}61.5%{transform:rotate(-35deg)}63.0%{transform:rotate(10deg)}64.5%{transform:rotate(-35deg)}66.0%{transform:rotate(10deg)}67.5%{transform:rotate(-35deg)}69.0%{transform:rotate(10deg)}70.5%{transform:rotate(-35deg)}72.0%{transform:rotate(10deg)}73.5%{transform:rotate(-35deg)}75.0%{transform:rotate(10deg)}76.5%{transform:rotate(0deg)}78.0%{transform:rotate(0deg)}79.5%{transform:rotate(0deg)}81.0%{transform:rotate(0deg)}82.5%{transform:rotate(0deg)}84.0%{transform:rotate(0deg)}85.5%{transform:rotate(0deg)}87.0%{transform:rotate(0deg)}88.5%{transform:rotate(0deg)}90.0%{transform:rotate(0deg)}91.5%{transform:rotate(0deg)}93.0%{transform:rotate(0deg)}94.5%{transform:rotate(0deg)}96.0%{transform:rotate(0deg)}97.5%{transform:rotate(0deg)}99.0%{transform:rotate(0deg)}}
+.live .anx-eye{animation:axEye 3s ease-in-out infinite}
+@keyframes axEye{0%,30%,100%{opacity:0}55%{opacity:.9}}
+.live .anx-tail{animation:axTail .45s ease-in-out infinite alternate}
+@keyframes axTail{from{transform:rotate(-16deg)}to{transform:rotate(14deg)}}
+.live .anx-earL{animation:axEarL 3.2s ease-in-out infinite}.live .anx-earR{animation:axEarR 3.2s ease-in-out infinite;animation-delay:-1.1s}
+@keyframes axEarL{0%,78%,100%{transform:rotate(0)}83%{transform:rotate(-20deg)}88%{transform:rotate(0)}93%{transform:rotate(-14deg)}97%{transform:rotate(0)}}
+@keyframes axEarR{0%,78%,100%{transform:rotate(0)}83%{transform:rotate(20deg)}88%{transform:rotate(0)}93%{transform:rotate(14deg)}97%{transform:rotate(0)}}
+.live .anx-ring{animation:axRing .9s ease-in-out infinite alternate}
+@keyframes axRing{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
+.live .anx-bullL{animation:axBullL 2.2s ease-out infinite}.live .anx-bullR{animation:axBullR 2.2s ease-out infinite}
+@keyframes axBullL{0%{opacity:0;transform:translate(0,0) scale(.4)}6%{opacity:1}45%{opacity:0;transform:translate(-20px,16px) scale(2)}100%{opacity:0}}
+@keyframes axBullR{0%{opacity:0;transform:translate(0,0) scale(.4)}6%{opacity:1}45%{opacity:0;transform:translate(20px,16px) scale(2)}100%{opacity:0}}
+.live .anx-dustL{animation:axDustL 2.2s ease-out infinite}.live .anx-dustR{animation:axDustR 2.2s ease-out infinite}
+@keyframes axDustL{0%{opacity:0;transform:scale(.5)}6%{opacity:.9}50%{opacity:0;transform:translate(-12px,-6px) scale(1.9)}100%{opacity:0}}
+@keyframes axDustR{0%{opacity:0;transform:scale(.5)}6%{opacity:.9}50%{opacity:0;transform:translate(12px,-6px) scale(1.9)}100%{opacity:0}}
+.live .anx-cape{animation:axCape 1.6s ease-in-out infinite alternate}
+@keyframes axCape{from{transform:skewX(0) scaleX(1)}to{transform:skewX(-9deg) scaleX(1.07)}}
+.live .anx-rune{animation:axRune 1.2s ease-in-out infinite alternate}
+@keyframes axRune{from{opacity:.45}to{opacity:1}}
+.live .anx-wisp{animation:axWisp 3s ease-out infinite}
+@keyframes axWisp{0%{opacity:0;transform:translate(0,0) scale(.6)}20%{opacity:.85}100%{opacity:0;transform:translate(0,-42px) scale(1.2)}}
+.live .anx-jog{animation:axJog .36s ease-in-out infinite alternate}
+@keyframes axJog{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+.live .anx-tie{animation:axTie .36s ease-in-out infinite alternate}
+@keyframes axTie{from{transform:rotate(-20deg)}to{transform:rotate(14deg)}}
+.live .anx-snD1{animation:axSnD1 1.8s ease-out infinite}.live .anx-snD2{animation:axSnD2 1.8s ease-out infinite}
+@keyframes axSnD1{0%{opacity:0;transform:scale(.4)}8%{opacity:1}45%{opacity:0;transform:translate(-12px,14px) scale(1.6)}100%{opacity:0}}
+@keyframes axSnD2{0%{opacity:0;transform:scale(.4)}8%{opacity:1}45%{opacity:0;transform:translate(12px,14px) scale(1.6)}100%{opacity:0}}
+.live .anx-patrol{animation:axPatrol 8s linear infinite}
+@keyframes axPatrol{0%{transform:translateX(-20px)}45%,50%{transform:translateX(20px)}95%,100%{transform:translateX(-20px)}}
+.live .anx-flip{animation:axFlip 8s steps(1) infinite}
+@keyframes axFlip{0%{transform:scaleX(1)}47.5%{transform:scaleX(-1)}97.5%{transform:scaleX(1)}}
+.live .anx-orbit{animation:axOrbit 6s linear infinite}
+@keyframes axOrbit{to{transform:rotate(360deg)}}
+.live .anx-flapV{animation:axFlapV .22s ease-in-out infinite alternate}
+@keyframes axFlapV{from{transform:scaleY(1)}to{transform:scaleY(-.6)}}
+.live .anx-win{animation:axWin 1.6s ease-in-out infinite alternate}
+@keyframes axWin{from{opacity:0}to{opacity:.85}}
+.live .anx-tw{animation:axTw 2.4s ease-in-out infinite}
+@keyframes axTw{0%,55%,100%{opacity:0;transform:scale(.2)}75%{opacity:1;transform:scale(1.15)}}
+.live .anx-bridge{animation:axBridge 1.8s ease-in-out infinite alternate}
+@keyframes axBridge{from{transform:rotate(-7deg) translateY(0)}to{transform:rotate(7deg) translateY(4px)}}
+.anx-rock,.anx-splash{transform-box:fill-box}
+.live .anx-rock{animation:axRock 5s ease-in infinite}
+@keyframes axRock{0%,58%{opacity:0;transform:translate(0,0)}60%{opacity:1;transform:translate(0,0)}70%{transform:translate(14px,8px)}82%{opacity:1;transform:translate(30px,52px)}83%,100%{opacity:0;transform:translate(30px,52px)}}
+.live .anx-splash{animation:axSplash 5s ease-out infinite}
+@keyframes axSplash{0%,81%{opacity:0;transform:scale(.3)}84%{opacity:1;transform:scale(.8)}96%,100%{opacity:0;transform:scale(1.5)}}
+.live .anx-bat{animation:axBat 1.1s ease-in-out infinite alternate}
+@keyframes axBat{from{transform:translateY(0)}to{transform:translate(3px,-5px)}}
+.live .anx-batw{animation:axBatW .18s ease-in-out infinite alternate}
+@keyframes axBatW{from{transform:scaleX(1)}to{transform:scaleX(.5)}}
+@media (prefers-reduced-motion:reduce){.live .anx,.live .anx-p,.live .anx-eye,.live .anx-win,.live .anx-bird,.live .anx-wing,.live .anx-flip,.live .anx-flapV,.live .anx-rune,.live .anx-bridge,.live .anx-tw,.live .anx-batw{animation:none}}
+
+.anx-smoke,.anx-mote{transform-box:fill-box;transform-origin:50% 50%}
+.live .anx-smoke{animation:axSmoke 3.6s ease-out infinite}
+@keyframes axSmoke{0%{opacity:0;transform:translate(0,0) scale(.5)}15%{opacity:.95}100%{opacity:0;transform:translate(10px,-30px) scale(1.7)}}
+.live .anx-core{animation:axCore 2.4s ease-in-out infinite alternate}
+@keyframes axCore{from{transform:translateY(2px)}to{transform:translateY(-4px)}}
+.anx-coreglow{transform-box:fill-box;transform-origin:50% 50%}
+.live .anx-coreglow{animation:axGlow2 1.2s ease-in-out infinite alternate}
+@keyframes axGlow2{from{opacity:.15;transform:scale(.85)}to{opacity:.55;transform:scale(1.15)}}
+.live .anx-mote{animation:axMote 3s ease-out infinite}
+@keyframes axMote{0%{opacity:0;transform:translate(0,0)}15%{opacity:1}100%{opacity:0;transform:translate(0,-34px)}}
+.anx-crumb{transform-box:fill-box}
+.live .anx-crumb{animation:axCrumb 4.4s ease-in infinite}
+@keyframes axCrumb{0%,62%{opacity:0;transform:translate(0,0) rotate(0)}64%{opacity:1}86%{opacity:1;transform:translate(-2px,56px) rotate(160deg)}87%,100%{opacity:0;transform:translate(-2px,56px)}}
 </style>
 <script>/* v1.75.20 시작 로고가 끝날 때까지 뒤 바탕을 로고 화면과 같은 어두운 색으로 둬요(밝은 테마에서 맨 위에 하얀 줄이 비치던 것). 끝나거나 안 쓰이면 원래 바탕으로 돌려요 */
 window.__nmDone=function(){ try{ document.documentElement.classList.add('nm-done'); }catch(e){} try{ if(typeof window.sbSync==='function') window.sbSync(); }catch(e){} };   /* 로고가 끝나면 상태 표시줄 색을 지금 화면에 맞춰요(sbSync, v1.75.26) */
@@ -2381,7 +2474,7 @@ function vidLink(name,cid){
 
 /* ---------- 게임 규칙 ---------- */
 var XP_SET = 10, XP_RUN = 30, XP_MEAL = 10, XP_CLEAR = 50, BOSS_WIN_XP = 150, MID_XP = 20;
-var QN = {mon:'상체 요새',tue:'하체의 숲',wed:'코어 성채',thu:'등어깨 협곡',fri:'허벅지 던전',sat:'마왕성',sun:'회복의 신전',meadow:'들바람 초원',spa:'구름 온천'};
+var QN = {mon:'상체 촌락',tue:'하체의 숲',wed:'코어 유적',thu:'등어깨 협곡',fri:'허벅지 던전',sat:'마왕성',sun:'회복의 신전',meadow:'들바람 초원',spa:'구름 온천'};
 /* v1.63.0 목적지 키: 운동·달리기 유무·설명·대체 동작 목록은 "목적지 키"에 매달려요. 키 이름은 몸짱의 길 기준 요일 이름 그대로예요(mon 상체 요새·tue 하체의 숲·wed 코어 성채·thu 등어깨 협곡·fri 허벅지 던전·sat 마왕성·sun 회복의 신전).
    고정형에서는 (난이도, 요일)로 목적지 키가 한 번에 정해져요(모험의 길만 목요일=fri 허벅지 던전·금요일=thu 등어깨 협곡). 선택형(4단계)이 생기면 사용자의 선택이 이 키를 정해요. 요일 키(DK)는 날짜·마왕전·회복일 판정에만 써요. */
 var SPROUT_FROM='2026-10-26';   /* v1.64.0 새싹의 길 재구성(근력 3곳 재배치·걷기=들바람 초원·XP B안)이 시작되는 날(월요일). 이 전 날짜는 예전 편성·XP 그대로예요(기록 보호) */
@@ -2530,11 +2623,11 @@ function freeInfo(){   /* 이번 주에 쓴 목적지와 오늘 고른 목적지
 function fxMd(k){ var d=parse(k); return (d.getMonth()+1)+'/'+d.getDate(); }
 
 /* ===== 선택형 지도 지형 배경 (v1.66.2): 주변 모험지에 따라 땅 모양이 이어지는 그림 + 움직임 ===== */
-var FX_COL={wed:'#C4DDF0',mon:'#B8BEAE',thu:'#E6B79A',tue:'#7FBF78',fri:'#A89387',meadow:'#D6EDB3',spa:'#D9CCEE',sun:'#D4EDBF'};
+var FX_COL={wed:'#E9D3A3',mon:'#CFC391',thu:'#E6B79A',tue:'#7FBF78',fri:'#A89387',meadow:'#D6EDB3',spa:'#D9CCEE',sun:'#D4EDBF'};
 /* 지역 소품(그 모험지 중심 기준 상대 위치): [종류,dx,dy,크기,(색1),(색2)] — mt 산, sp 붉은 암벽, ro 바위, pi 소나무, tr 나무, fl 꽃, to 횃불, st 김, la 등불, co 기둥 */
 var FX_PROP={
-  mon:[['mt',-46,-50,1,'#B8BEAE','#9AA18F'],['mt',-16,-72,.9,'#B8BEAE','#9AA18F'],['mt',36,-54,.8,'#B8BEAE','#9AA18F'],['mt',-42,50,.7,'#B8BEAE','#9AA18F'],['mt',44,50,.6,'#B8BEAE','#9AA18F'],['ro',58,40,.8,'#AAB09F','#C2C8B6']],
-  wed:[['mt',-70,-24,.8,'#CFE3F0','#A6C4DE'],['mt',70,-28,.7,'#CFE3F0','#A6C4DE'],['fl',-30,-44,.8,'#7FB6FF'],['fl',32,-40,.8,'#7FB6FF'],['fl',-48,16,.8,'#fff'],['fl',52,20,.8,'#fff']],
+  mon:[['pi',-50,-46,.9],['pi',-24,-66,.8],['pi',44,-52,.85],['to',-56,42,1],['to',58,40,1],['pi',-44,56,.7],['pi',46,58,.7]],
+  wed:[['co',-58,-30,.9],['co',62,-34,.8],['ro',-46,40,.9,'#D9C49A','#E8D6A8'],['ro',56,44,.8,'#D9C49A','#E8D6A8'],['co',-30,-58,.7],['ro',30,-58,.6,'#D9C49A','#E8D6A8']],
   thu:[['sp',-34,-50,.9],['sp',40,-36,.8],['sp',16,52,.7],['sp',-46,44,.6]],
   fri:[['mt',38,-40,1,'#9C8A80','#7E6E65'],['mt',-34,62,.9,'#9C8A80','#7E6E65'],['mt',28,76,.8,'#9C8A80','#7E6E65'],['mt',58,26,.7,'#9C8A80','#7E6E65'],['to',-58,40,1],['to',60,38,1]],
   tue:[['pi',-48,-36,.8],['pi',-24,-44,.92],['pi',-48,10,.8],['pi',-36,54,1],['pi',36,-40,.92],['pi',54,2,.8],['pi',42,54,.92],['pi',-16,70,.8],['pi',20,74,1]],
@@ -2758,8 +2851,9 @@ function bStar(cx,cy,r,fill){
   return '<polygon points="'+p.join(' ')+'" fill="'+fill+'" stroke="'+OL+'" stroke-width="2" stroke-linejoin="round"/>';
 }
 /* ---------- 앱 버전 ---------- */
-var APP_VER='1.77.0', APP_DATE='2026-10-29', showChg=false;
+var APP_VER='1.78.0', APP_DATE='2026-10-29', showChg=false;
 var CHANGES=[
+  ['1.78.0','보스와 모험지에 움직임이 늘었어요. 오우거는 팔을 번쩍 들고, 왕거미는 거미줄에 매달려 오르내리고, 골렘 머리에는 참새가 앉았다 가요. 워울프는 꼬리를 흔들고, 미노타우르스는 콧김을 뿜고, 멧돼지는 제자리에서 통통 뛰어요. 마왕은 새 뿔과 망토를 펄럭이고, 마왕성은 으스스하게 바뀌었어요. 상체 요새는 «상체 촌락», 코어 성채는 «코어 유적»으로 바뀌었고, 등어깨 협곡 다리가 더 크게 흔들려요'],
 ['1.77.0','반디 버튼을 누르면 반디와 채팅하는 창이 열려요. 궁금한 걸 적어 보내면 반디가 대답해요(인터넷 연결 필요, 하루 20번까지)'],
 ['1.76.0','왕국 한가운데의 성이 화려한 왕궁으로 바뀌었어요. 눌러 보면 굳게 닫힌 문이 보여요'],
 ['1.75.26','폰 맨 위 상태 표시줄 색이 지금 보이는 화면(로고·시작화면 하늘·본문·마왕전·승급 시험)에 맞춰 바뀌어요'],
@@ -3891,7 +3985,7 @@ function mFace(expr,ey,sp,my,w,o){
 }
 
 /* ===== 월 오우거 (상체 튼실) ===== */
-function mOgre(e){
+function mOgre0(e){
   var g='#7DBE5B', gd='#5C9A40', gl='#9AD77A', s='';
   s+=bLimb(-17,24,-19,38,18,gd)+bLimb(17,24,19,38,18,gd)+ell(-20,42,14,8,'#6B4A2B')+ell(20,42,14,8,'#6B4A2B');
   var A=e==='dead'?[[-76,-40],[76,-34]]:(e==='smug'?[[-72,-46],[78,-56]]:[[-68,22],[68,22]]);
@@ -3913,7 +4007,7 @@ function mOgre(e){
   return s;
 }
 /* ===== 화 거미괴물 (하체 튼실) ===== */
-function mSpider(e){
+function mSpider0(e){
   var p='#6B4A8E', pl='#8F6BB6', s='';
   var L=[[-26,-6,-62,-46,-88,-18],[-30,2,-74,-22,-98,16],[-30,10,-72,4,-92,42],[-26,18,-58,28,-72,48]];
   L.forEach(function(l){
@@ -3931,7 +4025,7 @@ function mSpider(e){
   return s;
 }
 /* ===== 들바람 초원 멧돼지 (심폐 튼튼, 이마에 빨간 띠를 맨 돌진형) ===== */
-function mBoar(e){
+function mBoar0(e){
   var fu='#A0714E', fd='#7A4E33', fl='#D8B184', sn='#F4A9A0', s='';
   s+=pth('M-27,-36 L-24,-58 L-15,-42 L-7,-64 L2,-44 L11,-62 L17,-42 L26,-56 L28,-34 Z',fd,2.6);
   [-1,1].forEach(function(g){ s+=bLimb(g*25,28,g*28,43,18,fd)+pth('M'+(g*28-10)+',43 h20 v6 h-20 Z','#3B2A26',2.2); });
@@ -3972,7 +4066,7 @@ function mCat(e){
   return s;
 }
 /* ===== 수 골렘 (코어 단단) ===== */
-function mGolem(e){
+function mGolem0(e){
   var st='#A9B3BF', sd='#8791A0', sl='#C3CCD6', s='';
   s+=pth('M-32,30 H-4 V47 H-32 Z',sd,3)+pth('M4,30 H32 V47 H4 Z',sd,3);
   var A=e==='dead'?[[-70,-38],[70,-30]]:(e==='smug'?[[-68,-46],[70,-54]]:[[-66,22],[66,22]]);
@@ -4001,7 +4095,7 @@ function mGolem(e){
   return s;
 }
 /* ===== 목 워울프 (등·어깨 우락부락) ===== */
-function mWolf(e){
+function mWolf0(e){
   var fu='#7B8296', fd='#5E6478', fl='#BCC2D2', s='';
   s+=bLimb(-15,24,-19,38,17,fd)+bLimb(15,24,19,38,17,fd)+ell(-21,42,13,7.5,fd)+ell(21,42,13,7.5,fd);
   var A=e==='dead'?[[-74,-38],[74,-30]]:(e==='smug'?[[-70,-46],[72,-56]]:[[-66,22],[66,22]]);
@@ -4020,7 +4114,7 @@ function mWolf(e){
   return s;
 }
 /* ===== 금 미노타우르스 (코어 튼튼) ===== */
-function mMino(e){
+function mMino0(e){
   var sk='#B77A44', sd='#8C5A31', sl='#D9A56E', s='';
   /* 허벅지짱: 둥글게 부풀리지 않고, 다리를 굵게 키우고 허벅지 근육 선만 표시 */
   [-1,1].forEach(function(g){
@@ -4045,7 +4139,7 @@ function mMino(e){
   return s;
 }
 /* ===== 토 몸짱 마왕 (전신이 튼실한 보디빌더 마왕) ===== */
-function mDemon(e){
+function mDemon0(e){
   var sk='#9A62C8', sd='#6C3F98', s='';
   s+=pth('M-42,-20 Q-70,22 -48,52 L48,52 Q70,22 42,-20 Z','#3B1F5C');
   s+=bLimb(-12,20,-16,38,17,sk)+bLimb(12,20,16,38,17,sk)+pth('M-29,38 h23 l-3,9 h-17 Z M6,38 h23 l-3,9 h-17 Z','#2B2138',2.4);
@@ -4083,13 +4177,15 @@ function godArt(o){
   return s;
 }
 
+function gwa(n){var c=n.charCodeAt(n.length-1); return (c>=0xAC00&&c<=0xD7A3&&((c-0xAC00)%28)!==0)?'과':'와';}   /* v1.78.0 받침에 맞춘 와/과 */
 function eul(n){var c=n.charCodeAt(n.length-1); return (c>=0xAC00&&c<=0xD7A3&&((c-0xAC00)%28)!==0)?'을':'를';}
 
 /* ---------- 모험 지도 일러스트 ---------- */
 var MW=360, MH=1370;
 var MPOS=[[120,90],[240,265],[120,440],[240,615],[120,790],[232,1030],[120,1240]];
 function lmShadow(w){return '<ellipse cx="0" cy="42" rx="'+w+'" ry="8" fill="#000" opacity=".16"/>';}
-function lmFort(){
+function lmFort(){ return AX_VILLAGE; }
+function lmFort0(){
   var s=lmShadow(62)+'<g stroke="'+OL+'" stroke-width="3" stroke-linejoin="round">';
   s+='<rect x="-56" y="-26" width="28" height="66" fill="#AEB8CC"/><rect x="28" y="-26" width="28" height="66" fill="#AEB8CC"/>';
   s+='<rect x="-38" y="-2" width="76" height="42" fill="#C7D0E0"/>';
@@ -4100,7 +4196,8 @@ function lmFort(){
   s+='<line x1="42" y1="-35" x2="42" y2="-60"/><g class="an-flag"><path d="M42,-60 L64,-52 L42,-44 Z" fill="#FF6A5B"/></g></g>';
   return s;
 }
-function lmCanyon(){
+function lmCanyon(){ return AX_CANYON; }
+function lmCanyon0(){
   var s=lmShadow(62)+'<g stroke="'+OL+'" stroke-width="3" stroke-linejoin="round">';
   s+='<path d="M-60,40 L-60,-18 L-46,-32 L-36,-16 L-25,-24 L-14,40 Z" fill="#E39A63"/>';
   s+='<path d="M60,40 L60,-18 L46,-32 L36,-16 L25,-24 L14,40 Z" fill="#E39A63"/>';
@@ -4109,7 +4206,8 @@ function lmCanyon(){
   s+='<g class="an-bridge" stroke="'+OL+'" stroke-width="3" stroke-linecap="round" fill="none"><path d="M-25,-20 Q0,-6 25,-20" stroke="#8B5A2B" stroke-width="4"/><path d="M-16,-11 v6 M-8,-8 v6 M0,-7 v6 M8,-8 v6 M16,-11 v6" stroke="#8B5A2B" stroke-width="3"/></g>';
   return s;
 }
-function lmCitadel(){
+function lmCitadel(){ return AX_RUINS; }
+function lmCitadel0(){
   var s=lmShadow(60)+'<g stroke="'+OL+'" stroke-width="3" stroke-linejoin="round">';
   s+='<rect x="-30" y="10" width="60" height="30" fill="#EADBC0"/>';
   s+='<rect x="-54" y="-8" width="26" height="48" fill="#F2E6D0"/><rect x="28" y="-8" width="26" height="48" fill="#F2E6D0"/>';
@@ -4149,7 +4247,8 @@ function lmDungeon(){
   s+='</g>';
   return s;
 }
-function lmDemon(){
+function lmDemon(){ return AX_DCASTLE.replace(/__X__/g,axId()); }
+function lmDemon0(){
   var s=lmShadow(70)+'<g stroke="'+OL+'" stroke-width="3" stroke-linejoin="round">';
   s+='<rect x="-58" y="-10" width="116" height="50" fill="#5B4B7A"/>';
   s+='<rect x="-66" y="-30" width="28" height="70" fill="#4B3D68"/><rect x="38" y="-30" width="28" height="70" fill="#4B3D68"/>';
@@ -4237,6 +4336,115 @@ function lmSpa(){
   });
   return s;
 }
+
+/* ---------- v1.78.0 보스·모험지 움직임과 새 디자인 (시안 확정 2026-10-29) ----------
+   축 감싸기(axPv): (x,y)를 중심으로 움직이게 translate로 감싸고, 움직이는 g는 transform-box:view-box·transform-origin:0 0이에요.
+   움직임은 .live 안에서만 돌아요(anx-* CSS). 정의(defs)가 있는 그림은 그릴 때마다 id를 새로 붙여요(axIdN). */
+var axIdN=0;
+function axId(){ axIdN=(axIdN+1)%100000; return 'x'+axIdN; }
+function axPv(x,y,cls,inner,st){ return '<g transform="translate('+x+','+y+')"><g class="anx '+cls+'"'+(st?' style="'+st+'"':'')+'><g transform="translate('+(-x)+','+(-y)+')">'+inner+'</g></g></g>'; }
+function axPuff(x,y,cls,r){ return '<circle class="anx-p '+cls+'" cx="'+x+'" cy="'+y+'" r="'+(r||4)+'" fill="#FFFFFF" stroke="'+OL+'" stroke-width="1.6"/>'; }
+var AX_HORN="<defs><linearGradient id=\"hornM__X__\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#7a7392\"/><stop offset=\".5\" stop-color=\"#2f2a42\"/><stop offset=\"1\" stop-color=\"#15111f\"/></linearGradient></defs><defs><clipPath id=\"hornClip__X__\"><path d=\"M-18,-55 C-36,-56 -44,-74 -34,-98 C-33,-82 -25,-70 -6,-63 Z\"/></clipPath><linearGradient id=\"hornG__X__\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#FFF1B8\"/><stop offset=\".5\" stop-color=\"#F6C445\"/><stop offset=\"1\" stop-color=\"#B07A12\"/></linearGradient><filter id=\"hornGlow__X__\" x=\"-1\" y=\"-1\" width=\"3\" height=\"3\"><feGaussianBlur stdDeviation=\".9\" result=\"b\"/><feMerge><feMergeNode in=\"b\"/><feMergeNode in=\"SourceGraphic\"/></feMerge></filter></defs><g transform=\"scale(1,1)\"><path d=\"M-18,-55 C-36,-56 -44,-74 -34,-98 C-33,-82 -25,-70 -6,-63 Z\" fill=\"url(#hornM__X__)\" stroke=\"#0c0818\" stroke-width=\"3\" stroke-linejoin=\"round\"/><g clip-path=\"url(#hornClip__X__)\"><path d=\"M-29.1,-73.9 L-25.7,-68.8 L-29.1,-63.7 L-32.5,-68.8 Z\" class=\"anx-rune\" fill=\"#B88CFF\" stroke=\"#2a1160\" stroke-width=\".8\" filter=\"url(#hornGlow__X__)\"/><path d=\"M-32.2,-78.5 L-29.2,-74.0 L-32.2,-69.5 L-35.2,-74.0 Z\" class=\"anx-rune\" fill=\"#B88CFF\" stroke=\"#2a1160\" stroke-width=\".8\" filter=\"url(#hornGlow__X__)\"/><path d=\"M-34.2,-84.0 L-31.8,-80.4 L-34.2,-76.8 L-36.6,-80.4 Z\" class=\"anx-rune\" fill=\"#B88CFF\" stroke=\"#2a1160\" stroke-width=\".8\" filter=\"url(#hornGlow__X__)\"/></g><path d=\"M-33.7,-62.9 C-37.9,-72.8 -37.9,-84.4 -35.8,-93.1\" transform=\"translate(2.5,0)\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\".3\" stroke-width=\"1.8\" stroke-linecap=\"round\"/></g><g transform=\"scale(-1,1)\"><path d=\"M-18,-55 C-36,-56 -44,-74 -34,-98 C-33,-82 -25,-70 -6,-63 Z\" fill=\"url(#hornM__X__)\" stroke=\"#0c0818\" stroke-width=\"3\" stroke-linejoin=\"round\"/><g clip-path=\"url(#hornClip__X__)\"><path d=\"M-29.1,-73.9 L-25.7,-68.8 L-29.1,-63.7 L-32.5,-68.8 Z\" class=\"anx-rune\" fill=\"#B88CFF\" stroke=\"#2a1160\" stroke-width=\".8\" filter=\"url(#hornGlow__X__)\"/><path d=\"M-32.2,-78.5 L-29.2,-74.0 L-32.2,-69.5 L-35.2,-74.0 Z\" class=\"anx-rune\" fill=\"#B88CFF\" stroke=\"#2a1160\" stroke-width=\".8\" filter=\"url(#hornGlow__X__)\"/><path d=\"M-34.2,-84.0 L-31.8,-80.4 L-34.2,-76.8 L-36.6,-80.4 Z\" class=\"anx-rune\" fill=\"#B88CFF\" stroke=\"#2a1160\" stroke-width=\".8\" filter=\"url(#hornGlow__X__)\"/></g><path d=\"M-33.7,-62.9 C-37.9,-72.8 -37.9,-84.4 -35.8,-93.1\" transform=\"translate(2.5,0)\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\".3\" stroke-width=\"1.8\" stroke-linecap=\"round\"/></g>";
+var AX_DCASTLE="<defs><radialGradient id=\"dcAura__X__\" cx=\".5\" cy=\".55\" r=\".5\"><stop offset=\"0\" stop-color=\"#9A6BE0\" stop-opacity=\".45\"/><stop offset=\"1\" stop-color=\"#9A6BE0\" stop-opacity=\"0\"/></radialGradient></defs><ellipse cx=\"0\" cy=\"-30\" rx=\"86\" ry=\"84\" fill=\"url(#dcAura__X__)\"/><ellipse cx=\"0\" cy=\"40\" rx=\"70\" ry=\"7\" fill=\"#000\" opacity=\".18\"/><ellipse cx=\"-30\" cy=\"38\" rx=\"46\" ry=\"8\" fill=\"#8C6FB8\" opacity=\".28\"/><ellipse cx=\"34\" cy=\"37\" rx=\"42\" ry=\"7\" fill=\"#8C6FB8\" opacity=\".24\"/><g stroke=\"#2B2138\" stroke-width=\"3\" stroke-linejoin=\"round\"><path d=\"M-68,40 L-63,-30 L-40,-27 L-42,40 Z\" fill=\"#2E2442\"/><path d=\"M-69,-30 L-58,-62 L-53,-54 L-48,-68 L-36,-26 Z\" fill=\"#1E1630\"/><path d=\"M40,40 L42,-38 L66,-35 L64,40 Z\" fill=\"#2E2442\"/><path d=\"M37,-38 Q50,-64 61,-96 Q59,-64 70,-34 Z\" fill=\"#1E1630\"/><path d=\"M-42,40 V-4 L-36,-12 L-30,-4 L-24,-12 L-18,-4 L18,-4 L24,-12 L30,-4 L36,-12 L42,-4 V40 Z\" fill=\"#3A2E52\"/><rect x=\"-22\" y=\"-58\" width=\"44\" height=\"98\" fill=\"#3A2E52\"/><path d=\"M-30,-58 L-24,-74 L-14,-64 L0,-114 L14,-64 L24,-74 L30,-58 Z\" fill=\"#1E1630\"/><path d=\"M-14,-50 L-9,-42 L-13,-34 M12,-22 L8,-14 L13,-8 M-60,0 L-55,8 L-58,16 M52,-10 L56,-2 L52,6\" fill=\"none\" stroke-width=\"1.8\" opacity=\".85\"/><circle cx=\"0\" cy=\"-36\" r=\"8.5\" fill=\"#B88CFF\"/><circle cx=\"0\" cy=\"-36\" r=\"3.5\" fill=\"#EBDDFF\" stroke=\"none\"/><path d=\"M0,-44.5 V-27.5 M-8.5,-36 H8.5\" stroke-width=\"1.8\"/><path d=\"M-57.5,-2 V-12 L-54,-18 L-50.5,-12 V-2 Z\" fill=\"#B88CFF\" stroke-width=\"2\"/><path d=\"M49.5,-6 V-16 L53,-22 L56.5,-16 V-6 Z\" fill=\"#B88CFF\" stroke-width=\"2\"/><path d=\"M-13.5,4 V-6 L-10,-12 L-6.5,-6 V4 Z\" fill=\"#B88CFF\" stroke-width=\"2\"/><path d=\"M6.5,4 V-6 L10,-12 L13.5,-6 V4 Z\" fill=\"#B88CFF\" stroke-width=\"2\"/><path d=\"M-16,40 V12 Q0,-8 16,12 V40 Z\" fill=\"#120C1C\"/><path d=\"M-11,40 V16 Q0,2 11,16 V40 Z\" fill=\"#6B44B8\" opacity=\".55\" stroke=\"none\"/><path d=\"M-8,40 V9 M0,40 V3 M8,40 V9 M-14,22 H14\" stroke-width=\"2.2\" fill=\"none\"/><path d=\"M-10,34 L-8,40 L-6,34 M-2,34 L0,40 L2,34 M6,34 L8,40 L10,34\" stroke-width=\"1.8\" fill=\"none\"/><line x1=\"0\" y1=\"-114\" x2=\"0\" y2=\"-130\"/><g class=\"an-flag\"><path d=\"M0,-130 L22,-126 L15,-122 L22,-117 L12,-116 L0,-114 Z\" fill=\"#7A1F2E\"/></g></g><g transform=\"translate(-30,-92)\"><g class=\"anx anx-bat\" style=\"animation-delay:-0.40s\"><g class=\"anx anx-batw\"><path transform=\"scale(1)\" d=\"M0,0 Q-5,-6 -12,-4 Q-8,-1 -9,3 Q-5,0 -2,3 L0,1 L2,3 Q5,0 9,3 Q8,-1 12,-4 Q5,-6 0,0 Z\" fill=\"#2B2138\"/></g></g></g><g transform=\"translate(34,-108)\"><g class=\"anx anx-bat\" style=\"animation-delay:-1.20s\"><g class=\"anx anx-batw\"><path transform=\"scale(0.8)\" d=\"M0,0 Q-5,-6 -12,-4 Q-8,-1 -9,3 Q-5,0 -2,3 L0,1 L2,3 Q5,0 9,3 Q8,-1 12,-4 Q5,-6 0,0 Z\" fill=\"#2B2138\"/></g></g></g><g transform=\"translate(-46,-78)\"><g class=\"anx anx-bat\" style=\"animation-delay:-0.80s\"><g class=\"anx anx-batw\"><path transform=\"scale(0.7)\" d=\"M0,0 Q-5,-6 -12,-4 Q-8,-1 -9,3 Q-5,0 -2,3 L0,1 L2,3 Q5,0 9,3 Q8,-1 12,-4 Q5,-6 0,0 Z\" fill=\"#2B2138\"/></g></g></g><ellipse cx=\"-4\" cy=\"41\" rx=\"60\" ry=\"5\" fill=\"#B49AD8\" opacity=\".3\"/><ellipse class=\"an-flash\" cx=\"0\" cy=\"-30\" rx=\"80\" ry=\"80\" fill=\"#FFF3B0\"/><g class=\"an-bolt\"><polyline points=\"-46,-92 -38,-78 -46,-76 -36,-58\" fill=\"none\" stroke=\"#FFD95E\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><polyline points=\"50,-104 44,-90 51,-88 42,-70\" fill=\"none\" stroke=\"#FFD95E\" stroke-width=\"3.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"display:var(--b2,none)\"/></g>";
+var AX_VILLAGE="<ellipse cx=\"0\" cy=\"42\" rx=\"64\" ry=\"8\" fill=\"#000\" opacity=\".16\"/><circle class=\"anx-p anx-smoke\" style=\"animation-delay:0s\" cx=\"22\" cy=\"-44\" r=\"5\" fill=\"#E9E2CC\" stroke=\"#2B2138\" stroke-width=\"1.6\"/><circle class=\"anx-p anx-smoke\" style=\"animation-delay:-1.2s\" cx=\"23\" cy=\"-44\" r=\"5\" fill=\"#E9E2CC\" stroke=\"#2B2138\" stroke-width=\"1.6\"/><circle class=\"anx-p anx-smoke\" style=\"animation-delay:-2.4s\" cx=\"21\" cy=\"-44\" r=\"5\" fill=\"#E9E2CC\" stroke=\"#2B2138\" stroke-width=\"1.6\"/><g stroke=\"#2B2138\" stroke-width=\"3\" stroke-linejoin=\"round\"><path d=\"M-6,-4 L22,-42 L54,-4 Z\" fill=\"#E3B24A\"/><path d=\"M4,-10 L22,-36 M16,-6 L24,-34 M36,-8 L26,-34\" stroke=\"#B98A2E\" stroke-width=\"2\" fill=\"none\"/><rect x=\"18\" y=\"-48\" width=\"8\" height=\"8\" fill=\"#8B5A2B\" stroke-width=\"2.4\"/><path d=\"M-54,40 L-50,-34 M-30,40 L-34,-34\" stroke=\"#8B5A2B\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M-54,40 L-50,-34 M-30,40 L-34,-34\" stroke=\"#2B2138\" stroke-width=\"1\" fill=\"none\" opacity=\"0\"/><path d=\"M-51,30 L-33,6 M-33,30 L-51,6\" stroke=\"#8B5A2B\" stroke-width=\"3\" fill=\"none\"/><rect x=\"-58\" y=\"-38\" width=\"32\" height=\"7\" rx=\"2\" fill=\"#C98F57\"/><path d=\"M-61,-38 L-42,-64 L-23,-38 Z\" fill=\"#E3B24A\"/><path d=\"M-50,-42 L-42,-60 M-34,-42 L-42,-60\" stroke=\"#B98A2E\" stroke-width=\"2\" fill=\"none\"/><line x1=\"-42\" y1=\"-64\" x2=\"-42\" y2=\"-80\"/></g><g class=\"an-flag\" style=\"animation-delay:-.3s\"><path d=\"M-42,-80 L-22,-76 L-26,-72 L-22,-68 L-42,-70 Z\" fill=\"#D9483B\" stroke=\"#2B2138\" stroke-width=\"3\" stroke-linejoin=\"round\"/></g><g stroke=\"#2B2138\" stroke-width=\"2.6\" stroke-linejoin=\"round\"><path d=\"M-62,40 V-4 L-57,-10 L-52,-4 V40 Z\" fill=\"#B5683F\"/><path d=\"M-52,40 V2 L-47,-4 L-42,2 V40 Z\" fill=\"#B5683F\"/><path d=\"M-42,40 V-4 L-37,-10 L-32,-4 V40 Z\" fill=\"#B5683F\"/><path d=\"M-32,40 V2 L-27,-4 L-22,2 V40 Z\" fill=\"#B5683F\"/><path d=\"M-22,40 V-4 L-17,-10 L-12,-4 V40 Z\" fill=\"#B5683F\"/><path d=\"M18,40 V2 L23,-4 L28,2 V40 Z\" fill=\"#B5683F\"/><path d=\"M28,40 V2 L33,-4 L38,2 V40 Z\" fill=\"#B5683F\"/><path d=\"M38,40 V2 L43,-4 L48,2 V40 Z\" fill=\"#B5683F\"/><path d=\"M48,40 V2 L53,-4 L58,2 V40 Z\" fill=\"#B5683F\"/><path d=\"M58,40 V2 L63,-4 L68,2 V40 Z\" fill=\"#B5683F\"/></g><path d=\"M-62,12 H-16 M14,12 H62 M-62,26 H-16 M14,26 H62\" stroke=\"#8B5A2B\" stroke-width=\"3\" stroke-linecap=\"round\"/><g stroke=\"#2B2138\" stroke-width=\"3\" stroke-linejoin=\"round\"><rect x=\"-17\" y=\"-20\" width=\"8\" height=\"60\" fill=\"#B5683F\"/><rect x=\"9\" y=\"-20\" width=\"8\" height=\"60\" fill=\"#B5683F\"/><rect x=\"-22\" y=\"-24\" width=\"44\" height=\"8\" rx=\"3\" fill=\"#C98F57\"/><rect x=\"-9\" y=\"-16\" width=\"18\" height=\"56\" fill=\"#3B2A1E\"/><path d=\"M-9,40 V-2 H0 V40 Z\" fill=\"#8B5A2B\" stroke-width=\"2.4\"/><path d=\"M-9,8 H0 M-9,24 H0\" stroke-width=\"2\"/></g><path d=\"M-6,-24 Q-14,-30 -12,-38 Q-6,-30 -1,-26 Z M6,-24 Q14,-30 12,-38 Q6,-30 1,-26 Z\" fill=\"#F3ECD6\" stroke=\"#2B2138\" stroke-width=\"2.2\"/><line x1=\"-24\" y1=\"40\" x2=\"-24\" y2=\"2\" stroke=\"#2B2138\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"-24\" y1=\"40\" x2=\"-24\" y2=\"2\" stroke=\"#8B5A2B\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><g class=\"an-fire\"><path d=\"M-24,2 q-5,-7 0,-15 q5,8 0,15 Z\" fill=\"#FF9A3D\" stroke=\"#2B2138\" stroke-width=\"2\"/></g><g class=\"an-fire b\"><path d=\"M-24,1 q-2,-4 0,-8 q2,4 0,8 Z\" fill=\"#FFE066\"/></g><line x1=\"24\" y1=\"40\" x2=\"24\" y2=\"2\" stroke=\"#2B2138\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"24\" y1=\"40\" x2=\"24\" y2=\"2\" stroke=\"#8B5A2B\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><g class=\"an-fire b\"><path d=\"M24,2 q-5,-7 0,-15 q5,8 0,15 Z\" fill=\"#FF9A3D\" stroke=\"#2B2138\" stroke-width=\"2\"/></g><g class=\"an-fire b\"><path d=\"M24,1 q-2,-4 0,-8 q2,4 0,8 Z\" fill=\"#FFE066\"/></g>";
+var AX_RUINS="<ellipse cx=\"0\" cy=\"42\" rx=\"64\" ry=\"8\" fill=\"#000\" opacity=\".16\"/><g stroke=\"#2B2138\" stroke-width=\"3\" stroke-linejoin=\"round\"><path d=\"M-64,40 Q-40,26 -10,30 Q20,24 64,34 V40 Z\" fill=\"#E8D3A3\"/><rect x=\"-56\" y=\"-30\" width=\"16\" height=\"66\" fill=\"#C3CCD6\"/><rect x=\"-60\" y=\"-40\" width=\"24\" height=\"10\" rx=\"2\" fill=\"#A9B3BF\"/><path d=\"M-52,-30 V34 M-44,-30 V34\" stroke=\"#8791A0\" stroke-width=\"1.6\" opacity=\".8\"/><path d=\"M-50,-16 L-46,-8 L-50,0\" fill=\"none\" stroke-width=\"1.8\"/><rect x=\"-28\" y=\"-8\" width=\"11\" height=\"46\" fill=\"#A9B3BF\"/><rect x=\"17\" y=\"-4\" width=\"11\" height=\"42\" fill=\"#A9B3BF\"/><path d=\"M-30,-8 Q-28,-30 -8,-36 L-6,-27 Q-19,-23 -19,-8 Z\" fill=\"#C3CCD6\"/><path d=\"M30,-4 Q30,-20 18,-28 L14,-20 Q20,-14 19,-4 Z\" fill=\"#C3CCD6\"/><path d=\"M36,36 V0 L40,-6 L43,2 L47,-4 L50,4 V36 Z\" fill=\"#C3CCD6\"/><path d=\"M41,8 V34 M45,8 V34\" stroke=\"#8791A0\" stroke-width=\"1.6\" opacity=\".8\"/><rect x=\"30\" y=\"26\" width=\"32\" height=\"12\" rx=\"6\" fill=\"#A9B3BF\"/><ellipse cx=\"30\" cy=\"32\" rx=\"3.5\" ry=\"6\" fill=\"#C3CCD6\" stroke-width=\"2.4\"/><rect x=\"-12\" y=\"20\" width=\"24\" height=\"18\" rx=\"2\" fill=\"#8791A0\"/><rect x=\"-15\" y=\"16\" width=\"30\" height=\"6\" rx=\"2\" fill=\"#A9B3BF\"/><rect x=\"-44\" y=\"31\" width=\"9\" height=\"7\" rx=\"1.5\" fill=\"#A9B3BF\" stroke-width=\"2.2\"/><rect x=\"-35\" y=\"33\" width=\"7\" height=\"5\" rx=\"1.5\" fill=\"#C3CCD6\" stroke-width=\"2.2\"/><rect x=\"22\" y=\"31\" width=\"7\" height=\"6\" rx=\"1.5\" fill=\"#C3CCD6\" stroke-width=\"2.2\"/></g><ellipse cx=\"-48\" cy=\"-38\" rx=\"9\" ry=\"3\" fill=\"#6FC17B\"/><ellipse cx=\"-24\" cy=\"10\" rx=\"5\" ry=\"2.4\" fill=\"#6FC17B\"/><ellipse cx=\"44\" cy=\"26\" rx=\"8\" ry=\"2.6\" fill=\"#6FC17B\"/><ellipse cx=\"-22\" cy=\"-30\" rx=\"6\" ry=\"2.4\" fill=\"#6FC17B\"/><g class=\"anx anx-core\"><ellipse class=\"anx-coreglow\" cx=\"0\" cy=\"-4\" rx=\"16\" ry=\"16\" fill=\"#5CE1FF\" opacity=\".35\"/><path d=\"M0,-18 L9,-4 L0,10 L-9,-4 Z\" fill=\"#5CE1FF\" stroke=\"#2B2138\" stroke-width=\"2.6\" stroke-linejoin=\"round\"/><path d=\"M0,-18 L3,-4 L0,10 M-9,-4 H9\" stroke=\"#E6FBFF\" stroke-width=\"1.4\" fill=\"none\"/></g><circle class=\"anx-p anx-mote\" style=\"animation-delay:0s\" cx=\"-6\" cy=\"14\" r=\"2\" fill=\"#5CE1FF\"/><circle class=\"anx-p anx-mote\" style=\"animation-delay:-1s\" cx=\"5\" cy=\"14\" r=\"2\" fill=\"#5CE1FF\"/><circle class=\"anx-p anx-mote\" style=\"animation-delay:-2s\" cx=\"0\" cy=\"14\" r=\"2\" fill=\"#5CE1FF\"/><g class=\"anx-p anx-crumb\"><rect x=\"-8\" y=\"-28\" width=\"5\" height=\"4\" rx=\"1\" fill=\"#A9B3BF\" stroke=\"#2B2138\" stroke-width=\"1.6\"/></g>";
+var AX_CANYON="<ellipse cx=\"0\" cy=\"42\" rx=\"62\" ry=\"8\" fill=\"#000\" opacity=\".16\"/><g stroke=\"#2B2138\" stroke-width=\"3\" stroke-linejoin=\"round\"><path d=\"M-60,40 L-60,-18 L-46,-32 L-36,-16 L-25,-24 L-14,40 Z\" fill=\"#E39A63\"/><path d=\"M60,40 L60,-18 L46,-32 L36,-16 L25,-24 L14,40 Z\" fill=\"#E39A63\"/><path d=\"M-14,40 L-14,22 Q0,34 14,22 L14,40 Z\" fill=\"#7FD3F5\"/></g><path class=\"an-water\" d=\"M-11,32 Q-5,29 0,32 T11,31\" stroke=\"#FFFFFF\" stroke-width=\"2.2\" fill=\"none\" stroke-linecap=\"round\" stroke-dasharray=\"5 5\"/><path class=\"an-water\" d=\"M-10,37.5 Q-4,35 1,37.5 T10,37\" stroke=\"#D5F2FF\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-dasharray=\"4 6\" style=\"animation-duration:1.1s\"/><g stroke=\"#C9784A\" stroke-width=\"3\" stroke-linecap=\"round\" opacity=\".8\"><path d=\"M-54,-2 H-34 M-54,14 H-26 M-54,29 H-20 M54,-2 H34 M54,14 H26 M54,29 H20\"/></g><g class=\"anx-bridge\" stroke=\"#2B2138\" stroke-width=\"3\" stroke-linecap=\"round\" fill=\"none\"><path d=\"M-25,-20 Q0,-6 25,-20\" stroke=\"#8B5A2B\" stroke-width=\"4\"/><path d=\"M-16,-11 v6 M-8,-8 v6 M0,-7 v6 M8,-8 v6 M16,-11 v6\" stroke=\"#8B5A2B\" stroke-width=\"3\"/></g><g class=\"anx-p anx-rock\"><circle cx=\"-30\" cy=\"-22\" r=\"3.2\" fill=\"#C9784A\" stroke=\"#2B2138\" stroke-width=\"1.6\"/></g><g class=\"anx-p anx-splash\"><path d=\"M-6,30 q-3,-6 -1,-10 M0,30 v-12 M6,30 q3,-6 1,-10\" stroke=\"#FFFFFF\" stroke-width=\"2.2\" fill=\"none\" stroke-linecap=\"round\"/></g>";
+var AX_SPARROW="<g stroke=\"#2B2138\" stroke-width=\"1.8\" stroke-linejoin=\"round\"><path d=\"M-12,1 L-20,-3 L-18,4 Z\" fill=\"#8A5A36\"/><ellipse cx=\"0\" cy=\"0\" rx=\"12\" ry=\"8\" fill=\"#B07A4C\"/><ellipse cx=\"2\" cy=\"3\" rx=\"7\" ry=\"4.5\" fill=\"#F3E3C8\" stroke=\"none\"/><circle cx=\"10\" cy=\"-6\" r=\"6.5\" fill=\"#B07A4C\"/><path d=\"M15.5,-7 L21,-5 L15.5,-3.6 Z\" fill=\"#F4A340\"/><circle cx=\"11.5\" cy=\"-7.2\" r=\"1.4\" fill=\"#2B2138\" stroke=\"none\"/><g class=\"anx anx-wing\"><path d=\"M-3,-3 Q-10,-16 -16,-12 Q-12,-4 -3,1 Z\" fill=\"#8A5A36\"/></g><path d=\"M0,8 v5 M4,8 v5\" stroke-width=\"1.6\"/></g>";
+/* 오우거: 양팔을 번갈아 들어 올리기 + 콧김 + 땀방울 (팔 위치는 표정마다 예전 그대로) */
+function mOgre(e){
+  var g='#7DBE5B', gd='#5C9A40', gl='#9AD77A', s='';
+  s+=bLimb(-17,24,-19,38,18,gd)+bLimb(17,24,19,38,18,gd)+ell(-20,42,14,8,'#6B4A2B')+ell(20,42,14,8,'#6B4A2B');
+  var A=e==='dead'?[[-76,-40],[76,-34]]:(e==='smug'?[[-72,-46],[78,-56]]:[[-68,22],[68,22]]);
+  [[-46,-10,A[0],'anx-flexL'],[46,-10,A[1],'anx-flexR']].forEach(function(a){
+    var sx=a[0],sy=a[1],hx=a[2][0],hy=a[2][1],mx=sx+(hx-sx)*0.38,my=sy+(hy-sy)*0.38;
+    s+=axPv(sx,sy,a[3],bLimb(sx,sy,hx,hy,24,g)+circ(mx,my,15.5,g,2.6)+circ(hx,hy,14,g,3)+
+       '<path d="M'+(hx-7)+','+(hy-2)+' q3,-4 6,0 M'+(hx+1)+','+(hy-2)+' q3,-4 6,0" stroke="'+gd+'" stroke-width="2" fill="none"/>');
+  });
+  s+=pth('M-56,-16 Q-64,10 -30,36 L30,36 Q64,10 56,-16 Q0,-36 -56,-16 Z',g);
+  s+=ell(0,16,22,16,gl,0)+'<path d="M-4,-10 Q-22,-2 -42,-16 M4,-10 Q22,-2 42,-16" stroke="'+gd+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  s+=pth('M-32,26 L32,26 L26,46 L0,39 L-26,46 Z','#B9763A');
+  s+=ell(-24,-52,9,12,g,2.6)+ell(24,-52,9,12,g,2.6);
+  s+=ell(0,-46,25,21,g);
+  s+=pth('M-15,-64 Q-8,-80 0,-66 Q8,-82 15,-64 Q0,-58 -15,-64 Z','#5B3A28',2.6);
+  s+=ell(0,-44,6.5,5,gd,2);
+  s+=mFace(e,-52,11,-34,11,{fang:null});
+  s+=pth('M-15,-36 L-11,-24 L-6,-36 Z',"#FFF3D6",2.4)+pth('M15,-36 L11,-24 L6,-36 Z',"#FFF3D6",2.4);
+  if(e==='smug'){ s+='<g transform="translate(80,-60) rotate(18)">'+pth('M-6,0 L6,0 L11,-50 L-11,-50 Z','#8B5A2B',3)+pth('M-11,-50 Q0,-64 11,-50 Z','#A26A34',3)+'</g>'; }
+  s+=axPuff(-4,-41,'anx-snL',4.5)+axPuff(4,-41,'anx-snR',4.5);
+  s+='<path class="anx-p anx-drop" d="M30,-66 q5,7 0,11 q-5,-4 0,-11 Z" fill="#7FD3F5" stroke="'+OL+'" stroke-width="1.6"/>';
+  return s;
+}
+/* 왕거미: 거미줄에 매달려 오르락내리락 + 다리 꼼지락 (쓰러졌을 때는 줄 없음) */
+function mSpider(e){
+  var p='#6B4A8E', pl='#8F6BB6', s='';
+  var L=[[-26,-6,-62,-46,-88,-18],[-30,2,-74,-22,-98,16],[-30,10,-72,4,-92,42],[-26,18,-58,28,-72,48]];
+  L.forEach(function(l,i){
+    [1,-1].forEach(function(sg){
+      var hx=l[0]*sg, hy=l[1], kx=l[2]*sg, ky=l[3], fx=l[4]*sg, fy=l[5];
+      if(e==='dead'){ fx=kx*1.02; fy=ky-26; }
+      s+=axPv(hx,hy,sg>0?'anx-legR':'anx-legL',bLimb(hx,hy,kx,ky,15,p)+ell((hx+kx)/2,(hy+ky)/2,11,8,pl,2.4)+bLimb(kx,ky,fx,fy,9,p)+circ(fx,fy,4.5,'#4E3370',2),'animation-delay:'+(-i*0.18-(sg>0?0.09:0)).toFixed(2)+'s');
+    });
+  });
+  s+=circ(0,-6,34,p)+'<circle cx="-12" cy="-16" r="5" fill="'+pl+'"/><circle cx="12" cy="-20" r="4" fill="'+pl+'"/><circle cx="0" cy="-28" r="4.5" fill="'+pl+'"/>';
+  s+=circ(0,14,27,pl);
+  s+=circ(-22,2,3.6,OL,0)+circ(22,2,3.6,OL,0)+circ(-16,-6,3,OL,0)+circ(16,-6,3,OL,0);
+  s+=mFace(e,8,10,24,9,{fang:null});
+  s+=pth('M-9,27 L-6,40 L-1,28 Z',"#FFF3D6",2.4)+pth('M9,27 L6,40 L1,28 Z',"#FFF3D6",2.4);
+  if(e==='dead') return s;
+  return '<g class="anx anx-yo"><line x1="0" y1="-38" x2="0" y2="-220" stroke="#FFFFFF" stroke-width="3"/><line x1="0" y1="-38" x2="0" y2="-220" stroke="'+OL+'" stroke-width="1.6" opacity=".7"/>'+s+'</g>';
+}
+/* 골렘: 참새가 날아와 머리에 앉았다 날아감 + 눈 불빛 */
+function mGolem(e){
+  var s=mGolem0(e);
+  if(e==='dead') return s;
+  s+='<g class="anx-eye">'+[-9,9].map(function(x){ return '<rect x="'+(x-7)+'" y="-51" width="14" height="12" rx="5" fill="#5CE1FF" opacity=".55"/>'; }).join('')+'</g>';
+  return s+'<g class="anx anx-bird">'+AX_SPARROW+'</g>';
+}
+/* 워울프: 꼬리 살랑 + 귀 쫑긋 (팔 위치는 표정마다 예전 그대로) */
+function mWolf(e){
+  var fu='#7B8296', fd='#5E6478', fl='#BCC2D2', s='';
+  s+=axPv(34,14,'anx-tail',pth('M34,20 Q72,26 86,-6 Q92,-28 78,-38 Q82,-12 62,0 Q48,10 32,8 Z',fu)+'<path d="M78,-38 Q90,-28 86,-8" stroke="'+fl+'" stroke-width="5" fill="none" stroke-linecap="round"/>');
+  s+=bLimb(-15,24,-19,38,17,fd)+bLimb(15,24,19,38,17,fd)+ell(-21,42,13,7.5,fd)+ell(21,42,13,7.5,fd);
+  var A=e==='dead'?[[-74,-38],[74,-30]]:(e==='smug'?[[-70,-46],[72,-56]]:[[-66,22],[66,22]]);
+  [[-52,-8,A[0]],[52,-8,A[1]]].forEach(function(a){
+    var hx=a[2][0],hy=a[2][1];
+    s+=bLimb(a[0],a[1],hx,hy,22,fu)+circ(a[0]+(hx-a[0])*0.3,a[1]+(hy-a[1])*0.3,15,fu,2.6)+circ(hx,hy,12,fu,3)+
+       pth('M'+(hx-7)+','+(hy+8)+' l-2,9 l6,-6 Z M'+(hx-1)+','+(hy+10)+' l0,10 l5,-8 Z M'+(hx+5)+','+(hy+8)+' l2,9 l3,-9 Z','#FFF3D6',2);
+  });
+  s+=pth('M-16,-36 Q-50,-44 -64,-10 L-58,-2 L-66,6 Q-62,22 -36,36 L36,36 Q62,22 66,6 L58,-2 L64,-10 Q50,-44 16,-36 Z',fu);
+  s+='<path d="M-14,-32 Q-34,-30 -44,-8 M14,-32 Q34,-30 44,-8 M-20,-24 Q-30,-14 -30,0 M20,-24 Q30,-14 30,0" stroke="'+fd+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  s+=ell(0,16,20,18,fl,0);
+  s+=axPv(-11,-60,'anx-earL',pth('M-18,-56 L-27,-82 L-4,-64 Z',fu)+pth('M-16,-60 L-22,-74 L-9,-64 Z','#E8A0B4',0));
+  s+=axPv(11,-60,'anx-earR',pth('M18,-56 L27,-82 L4,-64 Z',fu)+pth('M16,-60 L22,-74 L9,-64 Z','#E8A0B4',0));
+  s+=ell(0,-47,22,18,fu)+ell(0,-38,12,9,fl,2.6)+ell(0,-43,4.5,3.4,OL,0);
+  s+=mFace(e,-52,10,-33,9,{ec:'#FFE68A',pc:OL});
+  s+=pth('M-8,-33 L-5,-25 L-2,-33 Z M8,-33 L5,-25 L2,-33 Z','#fff',0);
+  return s;
+}
+/* 미노타우르스: 검은 뿔 + 거센 콧김 + 코뚜레 흔들 + 발밑 흙먼지 */
+function mMino(e){
+  var s=mMino0(e).replace(/(<path d="M-?20,-52 Q-?48,-52 -?46,-80 Q-?32,-64 -?14,-58 Z" fill=")#FFE9B8/g,'$1#3A3442');
+  s=s.replace('<circle cx="0" cy="-30" r="4.4" fill="none" stroke="#F6C445" stroke-width="2.8"/>',axPv(0,-34,'anx-ring','<circle cx="0" cy="-30" r="4.4" fill="none" stroke="#F6C445" stroke-width="2.8"/>'));
+  return axPuff(-20,47,'anx-dustL',5)+axPuff(20,47,'anx-dustR',5)+s+axPuff(-5,-35,'anx-bullL',5)+axPuff(5,-35,'anx-bullR',5);
+}
+/* 마왕: 쇳빛 뿔(보랏빛 룬) + 망토 펄럭 + 룬 깜빡 + 보랏빛 기운 */
+function mDemon(e){
+  var s=mDemon0(e), id=axId(), i, j, w='';
+  s=s.replace(/<path d="M-16,-58 Q-46,-58 -42,-90 Q-28,-72 -12,-62 Z"[^>]*\/>/,'__H__').replace(/<path d="M16,-58 Q46,-58 42,-90 Q28,-72 12,-62 Z"[^>]*\/>/,'');
+  s=s.replace('__H__',AX_HORN.replace(/__X__/g,id));
+  i=s.indexOf('<path d="M-42,-20'); j=s.indexOf('/>',i)+2;
+  if(i>=0) s=s.slice(0,i)+axPv(0,-20,'anx-cape',s.slice(i,j))+s.slice(j);
+  if(e!=='dead') [[-52,20,0],[50,10,-1.3],[-30,40,-2.1],[34,42,-0.7]].forEach(function(q){ w+='<path class="anx-p anx-wisp" style="animation-delay:'+q[2]+'s" d="M'+q[0]+','+q[1]+' q-5,-8 0,-14 q5,6 0,14 Z" fill="#8A5BD6" stroke="#2a1160" stroke-width="1.4" opacity=".9"/>'; });
+  return w+s;
+}
+/* 멧돼지: 제자리 통통 + 콧김 + 머리띠 끈 펄럭 */
+function mBoar(e){
+  var s=mBoar0(e);
+  s=s.replace(/<path d="M22,-40 l15,-6 l-4,11 l11,5 l-16,0 Z"[^>]*\/>/,function(m){ return axPv(22,-38,'anx-tie',m); });
+  if(e==='dead') return s;
+  return '<g class="anx anx-jog">'+s+axPuff(-8,8,'anx-snD1',4)+axPuff(8,8,'anx-snD2',4)+'</g>';
+}
+
 var LMS=[lmFort,lmForest,lmCitadel,lmCanyon,lmDungeon,lmDemon,lmTemple,lmMeadow,lmSpa];   /* 8번째는 새싹의 길 걷기 모험지 들바람 초원(목적지 키 meadow) */
 var BKEY=['ogre','spider','golem','wolf','mino','demon','god','boar','cat'];
 var DIDX={mon:0,tue:1,wed:2,thu:3,fri:4,sat:5,sun:6,meadow:7,spa:8};   /* 목적지 키 → 그림 번호(LMS·BKEY·LTF·BSC) */
@@ -4249,7 +4457,7 @@ var LTF=[.98,1.02,.8,.98,1.0,.68,.94,.96,.98];
 var BSC=[.66,.56,.64,.64,.64,.7,.68,.62,.66];
 function lmIcon(i,dead,live,nm){
   var ls=LTF[i], bs=BSC[i];
-  return '<svg class="qimg'+(live?' live':'')+'" viewBox="0 0 300 132" role="img" aria-label="'+(nm||QN[ORDER[i]])+(i===8?'과 수호자':'와 보스')+' 그림">'+
+  return '<svg class="qimg'+(live?' live':'')+'" viewBox="0 0 300 132" role="img" aria-label="'+(nm||QN[ORDER[i]])+gwa(nm||QN[ORDER[i]])+(i===8?' 수호자':' 보스')+' 그림">'+
     '<rect y="122" width="300" height="10" fill="var(--line)"/>'+
     '<g transform="translate(92,'+(122-42*ls)+') scale('+ls+')">'+LMS[i]()+'</g>'+
     '<g transform="translate(216,'+(122-46*bs+(dead?5:0))+') '+(dead?'rotate(18) ':'')+'scale('+bs+')">'+bossLive(BKEY[i],dead?'dead':'idle')+'</g></svg>';
@@ -12681,6 +12889,11 @@ var titleBuildD=null;
     mushroom:function(){ return ['-18 -32 36 36',sR(-4.5,-13,9,13,'#F6EAD3',3,2.2)+sP('M-15,-11 Q-15,-31 0,-31 Q15,-31 15,-11 Z','#E5484D',2.4)+circ(-6,-22,2.6,'#fff',0)+circ(5,-19,2.2,'#fff',0)+circ(1,-27,1.8,'#fff',0),2.6]; },
     log:function(){ return ['-38.5 -26 77 30',sR(-32,-18,64,18,'#8B5A2B',8,2.5)+ell(32,-9,5,9,'#D6A66B',2)+sL(-24,-12,22,-12,'rgba(43,33,56,.35)',1.6)+sL(-18,-6,26,-6,'rgba(43,33,56,.3)',1.6)+sP('M-16,-18 Q-12,-26 -6,-18 Z','#6FC17B',1.6),2.6]; },
     fern:function(){ var s=''; [[-14,-26,-8],[0,-34,0],[14,-26,8],[-8,-20,-4],[8,-20,4]].forEach(function(p){ s+=sP('M0,0 Q'+(p[0]*.5)+','+(p[1]*.7)+' '+p[0]+','+p[1]+' Q'+(p[0]*.4+p[2])+','+(p[1]*.4)+' 0,0 Z','#4FB070',2); }); return ['-22 -38 44 42',s,2.8]; },
+    /* 유적 (v1.78.0 코어 유적) */
+    colb:function(){ return ['-18 -78 36 82',sR(-13,-6,26,8,'#C9B98E',1,2.4)+sP('M-9,-6 V-52 L-5,-58 L-1,-50 L3,-60 L9,-52 V-6 Z','#E2D3AA',2.4)+sL(-3,-48,-3,-8,'rgba(43,33,56,.2)',2)+sL(3,-50,3,-8,'rgba(43,33,56,.2)',2)+ell(-4,-50,6,2.4,'#6FC17B',0),2.2]; },
+    rubble:function(){ return ['-30 -26 60 30',sR(-24,-12,16,12,'#D6C59A',2,2.2)+sR(-6,-18,14,18,'#E2D3AA',2,2.2)+sR(10,-10,14,10,'#C9B98E',2,2.2)+sR(-14,-22,10,8,'#C9B98E',2,2),2.5]; },
+    mossrock:function(){ return ['-22 -20 44 24','<path d="M-18,0 L-14,-12 L-2,-18 L12,-12 L18,0 Z" fill="#CDBB8C" '+OLs()+'/>'+ell(-2,-15,9,3,'#6FC17B',0),2.6]; },
+    arch:function(){ return ['-44 -96 88 100',sR(-38,-62,16,62,'#D6C59A',1,2.6)+sR(22,-48,16,48,'#D6C59A',1,2.6)+sP('M-40,-62 Q-38,-92 -6,-94 L-4,-82 Q-24,-80 -24,-62 Z','#E2D3AA',2.6)+sP('M40,-48 Q40,-70 24,-78 L18,-68 Q24,-62 24,-48 Z','#E2D3AA',2.6)+ell(-30,-64,8,2.6,'#6FC17B',0),1.9]; },
     /* 성채 */
     pillar:function(){ return ['-18 -82 36 86',sR(-13,-6,26,8,'#E9E1CF',1,2.4)+sR(-9,-68,18,62,'#F3ECDD',1,2.4)+sL(-3,-66,-3,-8,'rgba(43,33,56,.18)',2)+sL(3,-66,3,-8,'rgba(43,33,56,.18)',2)+sR(-14,-76,28,9,'#E9E1CF',1,2.4),2.2]; },
     hedge:function(){ var s=sR(-28,-28,56,28,'#3FA76A',9,2.6); [[-16,-18],[-2,-10],[12,-20],[20,-8],[-8,-24]].forEach(function(p){ s+=circ(p[0],p[1],2.6,'#FF8FA3',0); }); return ['-32 -34 64 38',s,2.5]; },
@@ -12763,6 +12976,10 @@ var titleBuildD=null;
       s+='<path d="M0,210 L0,130 C60,96 120,92 190,128 S320,100 400,120 S560,92 640,126 L640,210 Z" fill="'+c1+'"/>';
       s+='<path d="M0,210 L0,166 C80,138 150,150 230,168 S380,136 470,160 S590,150 640,164 L640,210 Z" fill="'+c2+'"/>';
       s+='<path d="M0,166 C80,138 150,150 230,168 S380,136 470,160 S590,150 640,164" fill="none" stroke="'+OL+'" stroke-width="3" opacity=".4"/>';
+    }else if(kind==='ruins'){   /* v1.78.0 코어 유적: 모래 언덕 + 무너진 기둥 실루엣 */
+      s+='<path d="M0,210 L0,132 Q80,104 170,124 Q260,96 350,118 Q450,92 540,114 Q600,106 640,120 L640,210 Z" fill="'+c1+'"/>';
+      [[96,112,16,44],[124,118,16,28],[300,104,18,52],[332,110,16,20],[476,100,16,48],[506,108,16,32],[580,110,14,26]].forEach(function(p){ s+='<rect x="'+p[0]+'" y="'+(p[1]-p[3])+'" width="'+p[2]+'" height="'+p[3]+'" fill="'+c2+'" opacity=".75"/><rect x="'+(p[0]-3)+'" y="'+(p[1]-p[3]-5)+'" width="'+(p[2]+6)+'" height="6" fill="'+c2+'" opacity=".75"/>'; });
+      s+='<path d="M0,210 L0,160 Q120,140 240,156 Q380,136 500,152 Q580,146 640,154 L640,210 Z" fill="'+c2+'" opacity=".5"/>';
     }else if(kind==='towers'){
       s+='<g transform="translate(0,12)">';
       s+='<path d="M0,210 L0,120 L70,66 L130,112 L210,34 L300,120 L360,84 L440,138 L520,54 L600,114 L640,122 L640,210 Z" fill="'+c1+'"/>';
@@ -12779,12 +12996,12 @@ var titleBuildD=null;
 
   /* ---------- 요일별 컨셉 ---------- */
   var TH={
-    mon:{n:'상체 요새',sky:['#6FB7F0','#DDEBFA'],back:['peaks','#A3B0C4','#8D9BB2'],g:['#9EC98E','#7FAE75'],mound:'#A9D09A',road:'#D3BE98',stripe:'rgba(168,140,98,.55)',dash:'#F4E9CF',haze:'rgba(255,255,255,.3)',
+    mon:{n:'상체 촌락',sky:['#6FB7F0','#DDEBFA'],back:['peaks','#A3B0C4','#8D9BB2'],g:['#9EC98E','#7FAE75'],mound:'#A9D09A',road:'#D3BE98',stripe:'rgba(168,140,98,.55)',dash:'#F4E9CF',haze:'rgba(255,255,255,.3)',
       A:['banner','rock','stake','bush','barricade','pine','rock','banner','bush','stake'],B:['stake','pine','rock','barricade','banner','bush','pine','rock','stake','bush'],C:['watch','pine2','stake','pine2','watch'],D:['pine2','watch','pine2','barricade','pine2'],fx:null},
     tue:{n:'하체의 숲',sky:['#8FD1B4','#E6F6D8'],back:['forest','#4F9970','#3B7F5C'],g:['#74BE7C','#4F9A5E'],mound:'#6FB878',road:'#CDA871',stripe:'rgba(140,104,60,.5)',dash:'#EEDDB0',haze:'rgba(220,255,200,.34)',
       A:['fern','mushroom','pine','log','fern','bigtree','mushroom','fern','pine','log'],B:['bigtree','fern','mushroom','pine','log','fern','pine','mushroom','fern','bigtree'],C:['bigtree','bigtree','pine2','bigtree','pine2'],D:['pine2','bigtree','bigtree','pine2','bigtree'],fx:'leaves'},
-    wed:{n:'코어 성채',sky:['#7FB4F5','#E8EEFF'],back:['towers','#B9C9EA','#9DB3E0'],g:['#A9D79A','#86C381'],mound:'#B2DEA4',road:'#DAD3C6',stripe:'rgba(176,168,150,.5)',dash:'#FFFFFF',haze:'rgba(255,255,255,.34)',
-      A:['lamp','hedge','pennant','statue','hedge','lamp','flower','pennant','hedge','statue'],B:['hedge','pennant','lamp','hedge','statue','flower','lamp','hedge','pennant','hedge'],C:['pillar','wallc','pillar','wallc','pillar'],D:['wallc','pillar','wallc','pillar','wallc'],fx:'motes'},
+    wed:{n:'코어 유적',sky:['#8EC2F0','#F2ECDC'],back:['ruins','#E3CFA0','#CDB37E'],g:['#E3CF9E','#CDB37E'],mound:'#E8D6A8',road:'#D9C49A',stripe:'rgba(170,140,90,.45)',dash:'#FFF6E0',haze:'rgba(255,248,230,.3)',
+      A:['rubble','colb','mossrock','rubble','colb','rock','mossrock','colb','rubble','rock'],B:['colb','rubble','rock','mossrock','colb','rubble','rock','colb','mossrock','rubble'],C:['colb','arch','colb','arch','colb'],D:['arch','colb','arch','colb','arch'],fx:'motes'},
     thu:{n:'등어깨 협곡',sky:['#F5B87A','#FFE9C8'],back:['mesa','#E2A06E','#C98650'],g:['#DDAA6E','#BE8049'],mound:'#E3B27A',road:'#EBCB98',stripe:'rgba(176,128,70,.5)',dash:'#FFF1D0',haze:'rgba(255,214,170,.34)',
       A:['cactus','boulder','dry','boulder','cactus','dry','boulder','cactus','dry','boulder'],B:['dry','cactus','boulder','dry','cactus','boulder','dry','cactus','boulder','dry'],C:['spire','mesa','spire','mesa','spire'],D:['mesa','spire','mesa','spire','mesa'],fx:'dust'},
     fri:{n:'허벅지 던전',sky:['#6A7A94','#B8C2D2'],back:['cave','#566676','#3E4C5A'],g:['#6F8394','#4C5E6E'],mound:'#7B8FA0',road:'#8E96A6',stripe:'rgba(60,70,90,.45)',dash:'#C8D0E0',haze:'rgba(150,170,200,.34)',
